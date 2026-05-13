@@ -1,0 +1,25 @@
+* {
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace !important;
+}
+
+th {
+  background: #312925;
+  padding: 10px !important;
+  color: #F4805D !important;
+}
+
+th strong { color: #F4805D !important; }
+
+.border { border-style: dashed; }
+
+.callout[data-callout-type="note"] {
+  background-color: rgba(52,211,153,0.3) !important;
+  border-color: #34D399 !important;
+}
+
+.callout[data-callout-type="note"] svg.dark:text-blue-300 {
+  color: #34D399 !important;
+  fill: #34D399 !important;
+}
+
+.callout[data-callout-type="note"] .prose { color: #34D399 !important; }

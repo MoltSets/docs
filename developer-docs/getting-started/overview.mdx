@@ -1,0 +1,88 @@
+---
+title: "Overview"
+description: "What moltsets is, how it works, and where to start."
+---
+
+MoltSets is an identity resolution API. You give it a piece of data — an email address, LinkedIn URL, IP address, or hashed email — and it returns enriched contact and company information. Every tool follows the same request and response structure, so once you've made one call, you know how to make all of them.
+
+## Base URL
+
+All API requests go to:
+
+```
+https://api.moltsets.com/api/v1/tools/
+```
+
+Each tool has its own endpoint path. For example:
+
+```
+POST https://api.moltsets.com/api/v1/tools/enrich_email
+POST https://api.moltsets.com/api/v1/tools/ip_to_company
+POST https://api.moltsets.com/api/v1/tools/get_account
+```
+
+## How a request works
+
+Every request is a `POST` with a JSON body, an `Authorization` header, and a `Content-Type` header:
+
+```bash
+curl -X POST https://api.moltsets.com/api/v1/tools/enrich_email \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"linkedin_url": "https://linkedin.com/in/retentionadam"}'
+```
+
+## How a response works
+
+All responses return HTTP `200` with a consistent envelope:
+
+```json
+{
+  "results": { ... },
+  "status": "ok",
+  "metadata": {
+    "tokens_charged": 1,
+    "tokens_remaining": 206
+  }
+}
+```
+
+- **`results`** — the data returned by the tool. Empty object `{}` or empty array `[]` when no data is found.
+- **`status`** — always `"ok"` on a successful request, even when no data is found.
+- **`metadata.tokens_charged`** — credits consumed. Always `0` when no data is returned.
+- **`metadata.tokens_remaining`** — your remaining credit balance after this request.
+
+## Credits
+
+MoltSets uses credit-based billing. Credits are only consumed when a tool returns data — you are never charged for an empty result.
+
+| Plan | Credits | Price |
+|---|---|---|
+| Free | 250 / month | $0 |
+| Starter | 3,000 / month | $149 / month |
+| Growth | 10,000 / month | $299 / month |
+| Unlimited | Unlimited | $499 / month |
+
+Use `get_billing` to check credit costs per tool, and `get_usage` to see your consumption breakdown.
+
+## Available tools
+
+| Category | Tools |
+|---|---|
+| **Account** | `get_account`, `get_billing`, `get_usage` |
+| **Email** | `enrich_email`, `enrich_personal_email`, `linkedin_to_best_personal_email`, `hem_to_email`, `business_email_to_personal_hem` |
+| **LinkedIn** | `linkedin_slug_search`, `linkedin_to_hashed_emails`, `linkedin_to_business_profile` |
+| **Phone** | `enrich_phone` |
+| **HEM Resolution** | `hem_to_linkedin`, `hem_to_best_linkedin`, `hem_to_business_profile`, `hem_to_maid` |
+| **IP Resolution** | `ip_to_hem`, `ip_to_maid`, `ip_to_company` |
+
+## What to do next
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/getting-started/authentication">
+    Get your API key and learn how to authenticate requests.
+  </Card>
+  <Card title="Rate Limits" icon="gauge" href="/getting-started/rate-limits">
+    Understand the limits that apply to all plans.
+  </Card>
+</CardGroup>

@@ -1,0 +1,106 @@
+---
+title: "HEM to Email"
+api: 'POST /hem_to_email'
+description: "Resolve a hashed email (MD5) to the plaintext email address and SHA-256 hash."
+---
+
+## Connection
+
+| | |
+|---|---|
+| **Method** | `POST` |
+| **URL** | `https://api.moltsets.com/api/v1/tools/hem_to_email` |
+| **Auth** | `Authorization: Bearer YOUR_API_KEY` |
+| **Content-Type** | `application/json` |
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `md5` | string | Yes | MD5 hashed email address |
+
+## Request
+
+```bash
+curl -X POST https://api.moltsets.com/api/v1/tools/hem_to_email \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"md5": "5d41402abc4b2a76b9719d91101XXXXX"}'
+```
+
+## Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `results.email` | string | Resolved plaintext email address |
+| `results.md5_email` | string | MD5 hash of the resolved email |
+| `results.sha256_email` | string | SHA-256 hash of the resolved email |
+| `metadata.tokens_charged` | integer | Credits consumed by this request |
+| `metadata.tokens_remaining` | integer | Credits remaining after this request |
+
+<Info>
+  Credits are only charged when a result is found. If the hash cannot be resolved, `tokens_charged` will be `0` and `results` will be empty.
+</Info>
+
+## Responses
+
+<AccordionGroup>
+  <Accordion title="200 — Success">
+    ```json
+    {
+      "results": {
+        "md5_email": "3018fe3a783fad1db0370ee3faXXXXX",
+        "sha256_email": "54a0a34d989f1ffe0ee7020ebfa2c250fc6037d45bcb887b18e5790a6bXXXXX",
+        "email": "john.smith@example.com"
+      },
+      "status": "ok",
+      "metadata": {
+        "tokens_charged": 1,
+        "tokens_remaining": 206
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="200 — No data found">
+    ```json
+    {
+      "results": {},
+      "status": "ok",
+      "metadata": {
+        "tokens_charged": 0,
+        "tokens_remaining": 206
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="401 — Unauthorized">
+    ```json
+    {
+      "error": "Unauthorized",
+      "message": "Invalid API key."
+    }
+    ```
+  </Accordion>
+  <Accordion title="422 — Invalid Input">
+    ```json
+    {
+      "error": {
+        "code": "invalid_input",
+        "message": "Message describing the nature of the invalid input"
+      },
+      "metadata": {
+        "tokens_charged": 0,
+        "tokens_remaining": 189
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="429 — Rate Limit Exceeded">
+    ```json
+    {
+      "error": "Too Many Requests",
+      "message": "Rate limit exceeded. Maximum 100 requests per second."
+    }
+    ```
+  </Accordion>
+</AccordionGroup>

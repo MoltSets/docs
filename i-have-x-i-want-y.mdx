@@ -1,0 +1,83 @@
+---
+title: "I Have X, I Want Y"
+description: "Find the right moltsets tool based on what data you have and what you need."
+---
+
+Pick your starting point and pass the right tool to the API.
+
+## Email & HEM
+
+| I have… | I want… | Tell Claude Code… | Tool |
+| --- | --- | --- | --- |
+| Business email | Personal hashed email (HEM) | "Convert [john@acme.com](mailto:john@acme.com) to a personal HEM" | [`business_email_to_personal_hem`](/api-reference/hem-resolution/business-email-to-personal-hem) |
+| HEM (MD5) | Plaintext email \+ SHA-256 | "Resolve this HEM to an email address" | [`hem_to_email`](/api-reference/hem-resolution/hem-to-email) |
+| HEM (MD5) or email | LinkedIn slug | "Find the LinkedIn slug for this HEM" | [`hem_to_linkedin`](/api-reference/hem-resolution/hem-to-linkedin) |
+| HEM (MD5) or email | Best-match LinkedIn profile URL | "Find the best LinkedIn profile for this HEM" | [`hem_to_best_linkedin`](/api-reference/hem-resolution/hem-to-best-linkedin) |
+| HEM (MD5) or email | Business profile \+ company data | "Get the business profile for this HEM" | [`hem_to_business_profile`](/api-reference/hem-resolution/hem-to-business-profile) |
+| HEM (MD5) or email | Mobile advertising ID (MAID) | "Resolve this HEM to a MAID" | [`hem_to_maid`](/api-reference/hem-resolution/hem-to-maid) |
+
+## LinkedIn
+
+| I have… | I want… | Tell Claude Code… | Tool |
+| --- | --- | --- | --- |
+| Name \+ company domain | LinkedIn slug | "Find the LinkedIn profile for John Smith at acme.com" | [`linkedin_slug_search`](/api-reference/linkedin/linkedin-slug-search) |
+| LinkedIn slug or URL | Business email | "Find the business email for linkedin.com/in/adam-robinson" | [`enrich_email`](/api-reference/enrichment/enrich-email) |
+| LinkedIn slug or URL | Personal email address | "Find the personal email for adam-robinson on LinkedIn" | [`enrich_personal_email`](/api-reference/enrichment/enrich-personal-email) |
+| LinkedIn slug or URL | Best personal email | "Find the best personal email for this LinkedIn profile" | [`linkedin_to_best_personal_email`](/api-reference/linkedin/linkedin-to-best-personal-email) |
+| LinkedIn slug or URL | All known personal emails | "Get all personal emails for linkedin.com/in/adam-robinson" | [`linkedin_to_personal_email`](/api-reference/linkedin/linkedin-to-personal-email) |
+| LinkedIn slug or URL | Phone number | "Find the phone number for adam-robinson on LinkedIn" | [`enrich_phone`](/api-reference/enrichment/enrich-phone) |
+| LinkedIn slug or URL | Mobile phone number | "Get the mobile phone for this LinkedIn profile" | [`linkedin_to_mobile_phone`](/api-reference/linkedin/linkedin-to-mobile-phone) |
+| LinkedIn slug or URL | All known HEMs | "Get all hashed emails for this LinkedIn profile" | [`linkedin_to_hashed_emails`](/api-reference/linkedin/linkedin-to-hashed-emails) |
+| LinkedIn slug or URL | Business profile \+ company data | "Get the full business profile for adam-robinson" | [`linkedin_to_business_profile`](/api-reference/linkedin/linkedin-to-business-profile) |
+
+## IP Address
+
+| I have… | I want… | Tell Claude Code… | Tool |
+| --- | --- | --- | --- |
+| IP address | Hashed emails (HEMs) ranked by confidence | "Resolve 8.8.8.8 to a HEM" | [`ip_to_hem`](/api-reference/ip-resolution/ip-to-hem) |
+| IP address | Mobile advertising IDs (MAIDs) | "Resolve 8.8.8.8 to a MAID" | [`ip_to_maid`](/api-reference/ip-resolution/ip-to-maid) |
+| IP address | Company associated with the IP | "Which company is behind IP address 8.8.8.8?" | [`ip_to_company`](/api-reference/ip-resolution/ip-to-company) |
+
+## Account
+
+| I have… | I want… | Tell Claude Code… | Tool |
+| --- | --- | --- | --- |
+| API key | Account details, plan, and credit balance | "Show me my moltsets account details" | [`get_account`](/api-reference/account/get-account) |
+| API key | Billing plan, renewal date, and credit costs per tool | "What is my current billing plan and credit costs?" | [`get_billing`](/api-reference/account/get-billing) |
+| API key | Credit usage breakdown | "How many credits have I used this month?" | [`get_usage`](/api-reference/account/get-usage) |
+
+## Common starting points
+
+**I have a website visitor IP and want to know who it is**
+
+"Identify the company behind IP 8.8.8.8, then find a contact and get their email."
+
+Start with [`ip_to_company`](/api-reference/ip-resolution/ip-to-company) to identify the company, then [`ip_to_hem`](/api-reference/ip-resolution/ip-to-hem) to get a HEM you can resolve further with [`hem_to_email`](/api-reference/hem-resolution/hem-to-email) or [`hem_to_best_linkedin`](/api-reference/hem-resolution/hem-to-best-linkedin).
+
+**I have a business email and want to find someone on LinkedIn**
+
+"Find the LinkedIn profile for [john@acme.com](mailto:john@acme.com)."
+
+Use [`business_email_to_personal_hem`](/api-reference/hem-resolution/business-email-to-personal-hem) to get a HEM, then [`hem_to_best_linkedin`](/api-reference/hem-resolution/hem-to-best-linkedin) for the profile URL.
+
+**I have a name and company and want contact details**
+
+"Find contact details for John Smith at acme.com."
+
+Use [`linkedin_slug_search`](/api-reference/linkedin/linkedin-slug-search) to get their LinkedIn slug, then pass it to [`enrich_email`](/api-reference/enrichment/enrich-email), [`enrich_phone`](/api-reference/enrichment/enrich-phone), or [`linkedin_to_business_profile`](/api-reference/linkedin/linkedin-to-business-profile).
+
+**I have a LinkedIn profile and want a phone number for outreach**
+
+"Get the mobile number and personal email for adam-robinson on LinkedIn."
+
+Use [`linkedin_to_mobile_phone`](/api-reference/linkedin/linkedin-to-mobile-phone) and [`linkedin_to_best_personal_email`](/api-reference/linkedin/linkedin-to-best-personal-email) in parallel.
+
+**I have a list of HEMs from an ad platform and want to build a contact list**
+
+"Resolve these HEMs to emails and business profiles."
+
+Resolve each HEM with [`hem_to_email`](/api-reference/hem-resolution/hem-to-email) and [`hem_to_business_profile`](/api-reference/hem-resolution/hem-to-business-profile) to get personal contact info and company context in two calls.
+
+<Note>
+  Not sure where to start? Look at what you already have — email, LinkedIn slug or URL, IP address, or HEM — and find it in the "I have…" column above. Or just tell Claude Code what you have and what you need, and it will pick the right tool.
+</Note>

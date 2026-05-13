@@ -1,0 +1,110 @@
+---
+title: "IP to Company"
+api: 'POST /ip_to_company'
+description: "Resolve an IP address to the company or companies associated with it."
+---
+
+Best suited for B2B use cases where the visitor's IP maps to a corporate network. Consumer ISP IPs will typically not resolve to a company.
+
+## Connection
+
+| | |
+|---|---|
+| **Method** | `POST` |
+| **URL** | `https://api.moltsets.com/api/v1/tools/ip_to_company` |
+| **Auth** | `Authorization: Bearer YOUR_API_KEY` |
+| **Content-Type** | `application/json` |
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `ip_address` | string | Yes | IPv4 address to resolve |
+
+## Request
+
+```bash
+curl -X POST https://api.moltsets.com/api/v1/tools/ip_to_company \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"ip_address": "8.8.8.8"}'
+```
+
+## Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `results.companies` | array | List of matched companies |
+| `results.companies[].domain` | string | Company domain |
+| `results.companies[].percentage` | string | Confidence score between `0` and `1` — higher is more confident |
+| `metadata.tokens_charged` | integer | Credits consumed by this request |
+| `metadata.tokens_remaining` | integer | Credits remaining after this request |
+
+<Info>
+  Credits are only charged when a company is matched. Consumer ISP IPs and unrecognised addresses return an empty `companies` array with `tokens_charged: 0`.
+</Info>
+
+## Responses
+
+<AccordionGroup>
+  <Accordion title="200 — Success">
+    ```json
+    {
+      "results": {
+        "companies": [
+          { "domain": "acme.com", "percentage": "1.0" }
+        ]
+      },
+      "status": "ok",
+      "metadata": {
+        "tokens_charged": 1,
+        "tokens_remaining": 206
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="200 — No data found">
+    ```json
+    {
+      "results": {
+        "companies": []
+      },
+      "status": "ok",
+      "metadata": {
+        "tokens_charged": 0,
+        "tokens_remaining": 206
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="401 — Unauthorized">
+    ```json
+    {
+      "error": "Unauthorized",
+      "message": "Invalid API key."
+    }
+    ```
+  </Accordion>
+  <Accordion title="422 — Invalid Input">
+    ```json
+    {
+      "error": {
+        "code": "invalid_input",
+        "message": "Message describing the nature of the invalid input"
+      },
+      "metadata": {
+        "tokens_charged": 0,
+        "tokens_remaining": 189
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="429 — Rate Limit Exceeded">
+    ```json
+    {
+      "error": "Too Many Requests",
+      "message": "Rate limit exceeded. Maximum 100 requests per second."
+    }
+    ```
+  </Accordion>
+</AccordionGroup>

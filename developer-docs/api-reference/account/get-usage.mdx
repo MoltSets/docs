@@ -1,0 +1,108 @@
+---
+title: "Get Usage"
+api: 'POST /get_usage'
+description: "Get your account's credit usage for today, this week, this month, or the current billing cycle."
+---
+
+## Connection
+
+| | |
+|---|---|
+| **Method** | `POST` |
+| **URL** | `https://api.moltsets.com/api/v1/tools/get_usage` |
+| **Auth** | `Authorization: Bearer YOUR_API_KEY` |
+| **Content-Type** | `application/json` |
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `period` | string | No | Time window to report on. One of: `today`, `week`, `month`, `billing_cycle`. Defaults to `today`. |
+
+## Request
+
+```bash
+curl -X POST https://api.moltsets.com/api/v1/tools/get_usage \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"period": "month"}'
+```
+
+## Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `results.period` | string | The period that was queried |
+| `results.start_date` | string | Start of the period (`YYYY-MM-DD`) |
+| `results.end_date` | string | End of the period (`YYYY-MM-DD`) |
+| `results.credit_balance` | integer | Current credit balance at time of request |
+| `results.days` | array | Per-day breakdown of usage |
+| `results.days[].date` | string | Date (`YYYY-MM-DD`) |
+| `results.days[].calls` | integer | Total API calls on that date |
+| `results.days[].credits` | integer | Credits consumed on that date |
+| `results.days[].with_data` | integer | Calls that returned data |
+| `results.days[].without_data` | integer | Calls that returned no data |
+| `results.days[].failed` | integer | Failed calls |
+| `results.totals` | object | Aggregated totals across the period (same fields as a day entry) |
+| `metadata.tokens_charged` | integer | Credits consumed — always `0` for this tool |
+| `metadata.tokens_remaining` | integer | Credits remaining after this request |
+
+## Responses
+
+<AccordionGroup>
+  <Accordion title="200 — Success">
+    ```json
+    {
+      "results": {
+        "period": "month",
+        "start_date": "2026-04-01",
+        "end_date": "2026-04-29",
+        "credit_balance": 250,
+        "days": [
+          {
+            "date": "2026-04-16",
+            "calls": 2,
+            "credits": 0,
+            "with_data": 2,
+            "without_data": 0,
+            "failed": 0
+          }
+        ],
+        "totals": {
+          "calls": 2,
+          "credits": 0,
+          "with_data": 2,
+          "without_data": 0,
+          "failed": 0
+        }
+      },
+      "status": "ok",
+      "metadata": {
+        "tokens_charged": 0,
+        "tokens_remaining": 250
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="400">
+    ```json
+    Parameters were passed which caused the error. Remove all parameters.
+    ```
+  </Accordion>
+  <Accordion title="401 — Unauthorized">
+    ```json
+    {
+      "error": "Unauthorized",
+      "message": "Invalid API key."
+    }
+    ```
+  </Accordion>
+  <Accordion title="429 — Rate Limit Exceeded">
+    ```json
+    {
+      "error": "Too Many Requests",
+      "message": "Rate limit exceeded. Maximum 100 requests per second."
+    }
+    ```
+  </Accordion>
+</AccordionGroup>

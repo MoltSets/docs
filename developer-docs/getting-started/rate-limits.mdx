@@ -1,0 +1,55 @@
+---
+title: "Rate Limits"
+description: "Understand the request limits that apply across all MoltSets plans."
+---
+
+All MoltSets plans share the same rate limit: **100 requests per second, per API key.**
+
+There are no separate limits per plan — Free, Starter, Growth, and Unlimited accounts all operate under the same ceiling.
+
+## What counts as a request
+
+Every API call counts toward the rate limit, regardless of whether it returns data. Empty results and account management calls (`get_account`, `get_billing`, `get_usage`) all count as requests.
+
+## Rate limit errors
+
+When you exceed 50 requests per second on a given endpoint, the API returns a `429 Too Many Requests` response:
+
+```json
+{
+  "error": "Too Many Requests",
+  "message": "Rate limit exceeded. Maximum 100 requests per second."
+}
+```
+
+The request is not retried automatically — your client is responsible for handling `429` responses.
+
+## Handling rate limits
+
+**Exponential backoff** is the recommended approach. When you receive a `429`, wait before retrying:
+
+```javascript
+async function callWithBackoff(fn, retries = 4) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await fn();
+    } catch (err) {
+      if (err.status !== 429 || i === retries - 1) throw err;
+      await new Promise(r => setTimeout(r, Math.pow(2, i) * 200));
+    }
+  }
+}
+```
+
+**Multiple API keys** can be used to distribute load if a single endpoint is a bottleneck. Each key shares the same per-endpoint limit, but you can spread requests across keys for high-throughput pipelines.
+
+**Batch endpoints** where available (e.g. `enrich_phone` supports up to 100 `linkedin_urls` per call) let you reduce total request count significantly.
+
+## Limits summary
+
+| Limit | Value |
+|---|---|
+| Requests per second | 50 |
+| Scope | Per endpoint |
+| Applies to | All plans |
+| Batch size (enrich_phone) | Up to 100 URLs per request |

@@ -1,0 +1,102 @@
+---
+title: "LinkedIn to Business Email"
+api: 'POST /enrich_email'
+description: "Business Email Enrichment — find the verified business email address for a LinkedIn profile."
+---
+
+## Connection
+
+| | |
+|---|---|
+| **Method** | `POST` |
+| **URL** | `https://api.moltsets.com/api/v1/tools/enrich_email` |
+| **Auth** | `Authorization: Bearer YOUR_API_KEY` |
+| **Content-Type** | `application/json` |
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `linkedin_url` | string | Yes | Full LinkedIn profile URL or slug (e.g. `https://linkedin.com/in/john-smith-123`) |
+
+## Request
+
+```bash
+curl -X POST https://api.moltsets.com/api/v1/tools/enrich_email \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"linkedin_url": "https://linkedin.com/in/john-smith-123"}'
+```
+
+## Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `results.email` | string | Verified business email address |
+| `metadata.tokens_charged` | integer | Credits consumed by this request |
+| `metadata.tokens_remaining` | integer | Credits remaining after this request |
+
+<Info>
+  Credits are only charged when a result is found. If no email is found, `tokens_charged` will be `0` and `results` will be empty.
+</Info>
+
+## Responses
+
+<AccordionGroup>
+  <Accordion title="200 — Success">
+    ```json
+    {
+      "results": {
+        "email": "john.smith@example.com"
+      },
+      "status": "ok",
+      "metadata": {
+        "tokens_charged": 1,
+        "tokens_remaining": 206
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="200 — No data found">
+    ```json
+    {
+      "results": {},
+      "status": "ok",
+      "metadata": {
+        "tokens_charged": 0,
+        "tokens_remaining": 206
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="401 — Unauthorized">
+    ```json
+    {
+      "error": "Unauthorized",
+      "message": "Invalid API key."
+    }
+    ```
+  </Accordion>
+  <Accordion title="422 — Invalid Input">
+    ```json
+    {
+      "error": {
+        "code": "invalid_input",
+        "message": "Message describing the nature of the invalid input"
+      },
+      "metadata": {
+        "tokens_charged": 0,
+        "tokens_remaining": 189
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="429 — Rate Limit Exceeded">
+    ```json
+    {
+      "error": "Too Many Requests",
+      "message": "Rate limit exceeded. Maximum 100 requests per second."
+    }
+    ```
+  </Accordion>
+</AccordionGroup>

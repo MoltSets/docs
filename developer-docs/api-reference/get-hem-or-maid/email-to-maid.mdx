@@ -1,0 +1,110 @@
+---
+title: "Email to MAID"
+api: 'POST /hem_to_maid'
+description: "Resolve a plaintext email to mobile advertising IDs (MAIDs) associated with it."
+---
+
+## Connection
+
+| | |
+|---|---|
+| **Method** | `POST` |
+| **URL** | `https://api.moltsets.com/api/v1/tools/hem_to_maid` |
+| **Auth** | `Authorization: Bearer YOUR_API_KEY` |
+| **Content-Type** | `application/json` |
+
+## Parameters
+
+<Tip>
+  Pass either `email` or `md5` — not both.
+</Tip>
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `email` | string | Conditional | Plaintext email address |
+| `md5` | string | Conditional | MD5 hash of the email address |
+
+## Request
+
+```bash
+curl -X POST https://api.moltsets.com/api/v1/tools/hem_to_maid \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"email": "john.smith@example.com"}'
+```
+
+## Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `results` | array | List of matched MAID objects |
+| `results[].device_id` | string | Mobile advertising ID (IDFA or AAID) |
+| `results[].device_type` | string | ID type — `AAID` (Android) or `IDFA` (iOS) |
+| `metadata.tokens_charged` | integer | Credits consumed by this request |
+| `metadata.tokens_remaining` | integer | Credits remaining after this request |
+
+<Info>
+  Credits are only charged when results are found. If no MAIDs are found, `tokens_charged` will be `0` and `results` will be an empty array.
+</Info>
+
+## Responses
+
+<AccordionGroup>
+  <Accordion title="200 — Success">
+    ```json
+    {
+      "results": [
+        { "device_id": "b8c747bb-96c5-453f-b770-9d64889XXXXX", "device_type": "AAID" },
+        { "device_id": "3daa5b91-0699-4cf0-a75a-af5231XXXXX", "device_type": "AAID" }
+      ],
+      "status": "ok",
+      "metadata": {
+        "tokens_charged": 1,
+        "tokens_remaining": 206
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="200 — No data found">
+    ```json
+    {
+      "results": [],
+      "status": "ok",
+      "metadata": {
+        "tokens_charged": 0,
+        "tokens_remaining": 206
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="401 — Unauthorized">
+    ```json
+    {
+      "error": "Unauthorized",
+      "message": "Invalid API key."
+    }
+    ```
+  </Accordion>
+  <Accordion title="422 — Invalid Input">
+    ```json
+    {
+      "error": {
+        "code": "invalid_input",
+        "message": "Message describing the nature of the invalid input"
+      },
+      "metadata": {
+        "tokens_charged": 0,
+        "tokens_remaining": 189
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="429 — Rate Limit Exceeded">
+    ```json
+    {
+      "error": "Too Many Requests",
+      "message": "Rate limit exceeded. Maximum 100 requests per second."
+    }
+    ```
+  </Accordion>
+</AccordionGroup>

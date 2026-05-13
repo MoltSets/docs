@@ -1,0 +1,161 @@
+---
+title: "MoltSets MCP"
+---
+
+# MCP Server
+
+> Legacy enrichment tools are form-based and manual. MoltSets is prompt-and-go. It's an MCP built specifically for AI agents — so your agent can de-anonymize website visitors, resolve hashed emails (HEMs) to real identities, enrich contacts from LinkedIn, and connect the dots between IP addresses, MAIDs, and people. The full identity graph, accessible in a single tool call.
+
+## What is the MoltSets MCP Server?
+
+The [Model Context Protocol (MCP)](https://modelcontextprotocol.io) is an open standard that lets AI assistants connect directly to external tools and data sources instead of relying on their training data.
+
+The **MoltSets MCP Server** gives any compatible AI tool direct access to MoltSets enrichment capabilities — every endpoint, parameter, and response schema — so your agent can enrich contacts, resolve identities, and look up visitor data without leaving the conversation.
+
+**MCP Server URL**
+
+```text
+https://mcp.moltsets.com/mcp
+```
+
+---
+
+## Why Use It?
+
+AI models are trained on static snapshots of the internet. When they generate code for an API, they often:
+
+- Hallucinate endpoints that don't exist
+- Use outdated parameter names
+- Return incorrect response shapes
+
+With the MoltSets MCP Server connected:
+
+| Without MCP | With MCP |
+| :-- | :-- |
+| AI guesses endpoint URLs | AI reads the real API reference |
+| Outdated parameter names | Always up-to-date parameter schemas |
+| Incorrect response shapes | Accurate response structures from source |
+| Back-and-forth corrections | Correct code on the first try |
+
+---
+
+## Setup
+
+<Tabs>
+  <Tab title="Claude (claude.ai)">
+    1. In Claude.ai, go to **Settings → Connectors → Add Custom Connector**.
+    2. Paste the following URL into **Remote MCP server URL**:
+       ```text
+       https://mcp.moltsets.com/mcp
+       ```
+    3. Under **Advanced Settings**, enter your MoltSets Connector credentials:
+       - **OAuth Client ID:** your Client ID
+       - **OAuth Client Secret:** your Client Secret
+
+    <Note>
+      To get your credentials, log into [app.moltsets.com](https://app.moltsets.com) and go to **Connectors** to create a new connector.
+    </Note>
+  </Tab>
+  <Tab title="Claude Desktop">
+    Claude Desktop is configured via a JSON file rather than the Claude.ai UI.
+
+    1. Open your Claude Desktop config file. On Mac: `~/Library/Application Support/Claude/claude_desktop_config.json`. On Windows: `%APPDATA%\Claude\claude_desktop_config.json`.
+    2. Add the following entry under `mcpServers`, replacing the placeholder values with your credentials:
+
+    ```json
+    {
+      "mcpServers": {
+        "moltsets": {
+          "type": "http",
+          "url": "https://mcp.moltsets.com/mcp",
+          "clientId": "your-client-id",
+          "clientSecret": "your-client-secret"
+        }
+      }
+    }
+    ```
+
+    3. Save the file and restart Claude Desktop.
+
+    <Note>
+      To get your credentials, log into [app.moltsets.com](https://app.moltsets.com) and go to **Connectors** to create a new connector.
+    </Note>
+
+    ### Configuring Tool Permissions
+
+    By default, all MoltSets tools are set to **Needs Approval** — Claude will prompt you the first time each tool is used. To update permissions in bulk:
+
+    1. Go to **Settings → Connectors**
+    2. Click **Configure** beside the MoltSets connector
+    3. Use the bulk change tool to set all tools to **Always Allow**
+
+    To restrict specific tools, set them individually to **Blocked**.
+  </Tab>
+  <Tab title="Claude Code">
+    Run the following command in your terminal, replacing the placeholder values with your credentials:
+
+    ```bash
+    claude mcp add --transport http moltsets https://mcp.moltsets.com/mcp \
+      --client-id YOUR_CLIENT_ID \
+      --client-secret YOUR_CLIENT_SECRET
+    ```
+
+    Claude Code will open a browser window and prompt you to approve access on the MoltSets consent screen. Once approved, your token is stored and managed automatically.
+
+    <Note>
+      To get your credentials, log into [app.moltsets.com](https://app.moltsets.com) and go to **Connectors** to create a new connector.
+    </Note>
+  </Tab>
+</Tabs>
+
+---
+
+## Example Prompts
+
+Once connected, you can talk to MoltSets the same way you'd talk to a colleague. Here are a few prompts to get started:
+
+**Enrich a contact from LinkedIn**
+
+> "Enrich this LinkedIn profile and give me their business email and phone number: linkedin.com/in/example"
+
+**Look up a visitor**
+
+> "I have an IP address from a site visitor — 192.0.2.1 — can you tell me who this is?"
+
+**Resolve a hashed email**
+
+> "Resolve this HEM to a real identity and return the name and company: `abc123...`"
+
+**Bulk enrich a list**
+
+> "Here are 10 LinkedIn URLs. Enrich each one for business email and return the results as a table."
+
+Visit "[**I Have X, I Want Y**](/i-have-x-i-want-y)" for more example prompts.
+
+---
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Connection fails after adding the config">
+    Restart your AI tool after adding the MCP configuration. Most clients need a full restart to detect new MCP servers.
+
+    Verify the URL is exactly:
+
+    ```text
+    https://mcp.moltsets.com/mcp
+    ```
+
+    No trailing slash, no extra path segments.
+  </Accordion>
+
+  <Accordion title="Authentication errors (invalid credentials)">
+    Double-check that your Client ID and Client Secret are copied correctly from [app.moltsets.com](https://app.moltsets.com) — no extra spaces, no truncation.
+
+    If your credentials were recently rotated or revoked, generate a new connector from the **Connectors** page and update your config with the new values. Then restart your AI tool.
+  </Accordion>
+
+  <Accordion title="Network or timeout errors">
+    Check your network connection and try again. If the issue persists, verify the server is reachable by opening `https://mcp.moltsets.com/mcp` in your browser. If you see a response (even an error page), the server is up and the issue is likely local to your config.
+  </Accordion>
+</AccordionGroup>

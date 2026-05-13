@@ -1,0 +1,109 @@
+---
+title: "HEM to Best LinkedIn"
+api: 'POST /hem_to_best_linkedin'
+description: "Resolve a hashed email (MD5) to the highest-confidence LinkedIn profile URL when multiple candidates exist."
+---
+
+Unlike `hem_to_linkedin`, this tool applies additional scoring to return the single best LinkedIn match when multiple candidates are found.
+
+## Connection
+
+| | |
+|---|---|
+| **Method** | `POST` |
+| **URL** | `https://api.moltsets.com/api/v1/tools/hem_to_best_linkedin` |
+| **Auth** | `Authorization: Bearer YOUR_API_KEY` |
+| **Content-Type** | `application/json` |
+
+## Parameters
+
+<Tip>
+  Pass either `md5` or `email` — not both.
+</Tip>
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `md5` | string | Conditional | MD5 hash of the email address |
+| `email` | string | Conditional | Plaintext email address |
+
+## Request
+
+```bash
+curl -X POST https://api.moltsets.com/api/v1/tools/hem_to_best_linkedin \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"md5": "5d41402abc4b2a76b9719d91101XXXXX"}'
+```
+
+## Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `results.linkedin_url` | string | Full LinkedIn profile URL for the best match |
+| `metadata.tokens_charged` | integer | Credits consumed by this request |
+| `metadata.tokens_remaining` | integer | Credits remaining after this request |
+
+<Info>
+  Credits are only charged when a result is found. If no match is found, `tokens_charged` will be `0` and `results` will be empty.
+</Info>
+
+## Responses
+
+<AccordionGroup>
+  <Accordion title="200 — Success">
+    ```json
+    {
+      "results": {
+        "linkedin_url": "https://www.linkedin.com/in/john-smith-123"
+      },
+      "status": "ok",
+      "metadata": {
+        "tokens_charged": 1,
+        "tokens_remaining": 206
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="200 — No data found">
+    ```json
+    {
+      "results": {},
+      "status": "ok",
+      "metadata": {
+        "tokens_charged": 0,
+        "tokens_remaining": 206
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="401 — Unauthorized">
+    ```json
+    {
+      "error": "Unauthorized",
+      "message": "Invalid API key."
+    }
+    ```
+  </Accordion>
+  <Accordion title="422 — Invalid Input">
+    ```json
+    {
+      "error": {
+        "code": "invalid_input",
+        "message": "Message describing the nature of the invalid input"
+      },
+      "metadata": {
+        "tokens_charged": 0,
+        "tokens_remaining": 189
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="429 — Rate Limit Exceeded">
+    ```json
+    {
+      "error": "Too Many Requests",
+      "message": "Rate limit exceeded. Maximum 100 requests per second."
+    }
+    ```
+  </Accordion>
+</AccordionGroup>

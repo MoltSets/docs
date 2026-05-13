@@ -1,0 +1,140 @@
+---
+title: "LinkedIn to Business Profile"
+api: 'POST /linkedin_to_business_profile'
+description: "Look up a full business profile by LinkedIn slug or URL, including company, title, and firmographic data."
+---
+
+## Connection
+
+| | |
+|---|---|
+| **Method** | `POST` |
+| **URL** | `https://api.moltsets.com/api/v1/tools/linkedin_to_business_profile` |
+| **Auth** | `Authorization: Bearer YOUR_API_KEY` |
+| **Content-Type** | `application/json` |
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `linkedin_url` | string | Yes | Full LinkedIn profile URL or slug (e.g. `https://linkedin.com/in/john-smith-123`) |
+| `include_mobile_phone` | boolean | No | When `true`, attempts to include mobile phone in the response |
+
+## Request
+
+```bash
+curl -X POST https://api.moltsets.com/api/v1/tools/linkedin_to_business_profile \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"linkedin_url": "https://linkedin.com/in/john-smith-123", "include_mobile_phone": true}'
+```
+
+## Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `results.first_name` | string | First name |
+| `results.last_name` | string | Last name |
+| `results.full_name` | string | Full name |
+| `results.title` | string | Current job title |
+| `results.seniority` | string | Seniority level (e.g. `Senior`, `Manager`, `VP`) |
+| `results.linkedin_url` | string | LinkedIn profile URL |
+| `results.business_email` | string | Business email address |
+| `results.personal_email` | string | Best personal email address |
+| `results.personal_emails` | array of strings | All known personal email addresses |
+| `results.mobile_phone` | string | Mobile phone number (only present when `include_mobile_phone: true`) |
+| `results.country` | string | Country |
+| `results.current_industry` | string | Industry classification |
+| `results.company.name` | string | Current employer name |
+| `results.company.website_url` | string | Employer website URL |
+| `results.company.linkedin_url` | string | Employer LinkedIn URL |
+| `results.company.industry` | string | Employer industry |
+| `results.company.revenue` | string | Estimated annual revenue in USD |
+| `metadata.tokens_charged` | integer | Credits consumed by this request |
+| `metadata.tokens_remaining` | integer | Credits remaining after this request |
+
+<Info>
+  Credits are only charged when a result is found. If no profile is matched, `tokens_charged` will be `0` and `results` will be empty.
+</Info>
+
+## Responses
+
+<AccordionGroup>
+  <Accordion title="200 — Success">
+    ```json
+    {
+      "results": {
+        "title": "Senior Associate - Technical Director",
+        "company": {
+          "name": "MoltSets",
+          "revenue": "1200000000",
+          "industry": "Information Technology",
+          "website_url": "http://moltsets.com",
+          "linkedin_url": "https://linkedin.com/company/moltsets"
+        },
+        "country": "United States",
+        "full_name": "John Smith",
+        "last_name": "Smith",
+        "seniority": "Senior",
+        "first_name": "John",
+        "linkedin_url": "https://linkedin.com/in/john-smith-123",
+        "business_email": "john.smith@example.com",
+        "personal_email": "john.smith@gmail.com",
+        "personal_emails": [
+          "john.smith@gmail.com",
+          "smith.john@hotmail.com"
+        ],
+        "current_industry": "Information Technology",
+        "mobile_phone": "5555555555"
+      },
+      "status": "ok",
+      "metadata": {
+        "tokens_charged": 1,
+        "tokens_remaining": 197
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="200 — No data found">
+    ```json
+    {
+      "results": {},
+      "status": "ok",
+      "metadata": {
+        "tokens_charged": 0,
+        "tokens_remaining": 197
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="401 — Unauthorized">
+    ```json
+    {
+      "error": "Unauthorized",
+      "message": "Invalid API key."
+    }
+    ```
+  </Accordion>
+  <Accordion title="422 — Invalid Input">
+    ```json
+    {
+      "error": {
+        "code": "invalid_input",
+        "message": "Message describing the nature of the invalid input"
+      },
+      "metadata": {
+        "tokens_charged": 0,
+        "tokens_remaining": 189
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="429 — Rate Limit Exceeded">
+    ```json
+    {
+      "error": "Too Many Requests",
+      "message": "Rate limit exceeded. Maximum 100 requests per second."
+    }
+    ```
+  </Accordion>
+</AccordionGroup>

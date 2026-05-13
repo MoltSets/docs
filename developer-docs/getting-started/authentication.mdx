@@ -1,0 +1,63 @@
+---
+title: "Authentication"
+description: "How to create and use API keys to authenticate requests."
+---
+
+MoltSets uses API key authentication. Every request must include your API key as a Bearer token in the `Authorization` header.
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+API keys follow the format `ms_XXXXXXXXXXX`.
+
+## Creating an API key
+
+API keys are managed at [app.moltsets.com](https://app.moltsets.com) in the **API Keys** card.
+
+1. Enter a name for the key in the input field beside the **+ Create** button.
+2. Click **+ Create**.
+3. Copy your key immediately — it will only be shown once.
+
+<Warning>
+  Store your API key somewhere secure as soon as you create it! MoltSets does not display the full key again after creation.
+</Warning>
+
+## Using your API key
+
+Pass the key as a Bearer token on every request:
+
+```bash
+curl -X POST https://api.moltsets.com/api/v1/tools/get_account \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{}'
+```
+
+## Multiple keys
+
+You can create as many API keys as you need. The recommended pattern is one key per environment or agent — for example, separate keys for local development, staging, and production.
+
+This makes it easy to revoke access for a specific environment without affecting others.
+
+## Revoking a key
+
+To revoke a key, click **Revoke** next to it in the API Keys card. Revocation is immediate and irreversible. Any requests made with that key after revocation will return a `401` error.
+
+## Key permissions
+
+All API keys have the same permissions — there are no read-only or scoped keys. Any key can call any tool on your account.
+
+## Error responses
+
+| Status | Meaning |
+|---|---|
+| `401 Unauthorized` | Missing or invalid API key |
+| `403 Forbidden` | Valid key but insufficient account access |
+
+```json
+{
+  "error": "Unauthorized",
+  "message": "Invalid or missing API key."
+}
+```
