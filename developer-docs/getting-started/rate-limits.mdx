@@ -1,11 +1,18 @@
 ---
 title: "Rate Limits"
-description: "Understand the request limits that apply across all MoltSets plans."
+description: "Understand the request limits that apply to each MoltSets plan."
 ---
 
-All MoltSets plans share the same rate limit: **100 requests per second, per API key.**
+Rate limits vary by plan. All limits are per API key.
 
-There are no separate limits per plan — Free, Starter, Growth, and Unlimited accounts all operate under the same ceiling.
+## Limits by plan
+
+| **Plan** | **Rate Limit** |
+| :-- | :-- |
+| Free | n/a |
+| Sales Rep | 60 requests/min |
+| Agency | 300 requests/min |
+| Blitz | 1,800 requests/min |
 
 ## What counts as a request
 
@@ -13,12 +20,12 @@ Every API call counts toward the rate limit, regardless of whether it returns da
 
 ## Rate limit errors
 
-When you exceed 100 requests per second on a given endpoint, the API returns a `429 Too Many Requests` response:
+When you exceed your plan's rate limit, the API returns a `429 Too Many Requests` response:
 
 ```json
 {
   "error": "Too Many Requests",
-  "message": "Rate limit exceeded. Maximum 100 requests per second."
+  "message": "Rate limit exceeded."
 }
 ```
 
@@ -41,15 +48,6 @@ async function callWithBackoff(fn, retries = 4) {
 }
 ```
 
-**Multiple API keys** can be used to distribute load if a single endpoint is a bottleneck. Each key shares the same per-endpoint limit, but you can spread requests across keys for high-throughput pipelines.
+**Multiple API keys** can be used to distribute load if a single key is a bottleneck. Each key operates under its own limit, so spreading requests across keys increases effective throughput.
 
 **Batch endpoints** where available (e.g. `enrich_phone` supports up to 100 `linkedin_urls` per call) let you reduce total request count significantly.
-
-## Limits summary
-
-| Limit | Value |
-|---|---|
-| Requests per second | 50 |
-| Scope | Per endpoint |
-| Applies to | All plans |
-| Batch size (enrich_phone) | Up to 100 URLs per request |
