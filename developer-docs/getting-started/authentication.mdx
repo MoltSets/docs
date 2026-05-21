@@ -15,9 +15,8 @@ API keys follow the format `ms_XXXXXXXXXXX`.
 
 API keys are managed at [app.moltsets.com](https://app.moltsets.com/dashboard/api_keys).
 
-1. Enter a name for the key in the input field beside the **+ Create** button.
-2. Click **+ Create**.
-3. Copy your key immediately — it will only be shown once.
+1. To create an API Key, choose "create an API key"
+2. Give it a name then click "create now"
 
 <Warning>
   Store your API key somewhere secure as soon as you create it!
@@ -42,7 +41,12 @@ This makes it easy to revoke access for a specific environment without affecting
 
 ## Revoking a key
 
-To revoke a key, click **Revoke** next to it in the API Keys card. Revocation is immediate and irreversible. Any requests made with that key after revocation will return a `401` error.
+You can revoke credentials individually or all at once:
+
+1. To revoke a single API Key or Connector, click **Revoke** to the right of the credential you want to remove.
+2. To revoke all credentials at once, use the **Revoke All** option on the page.
+
+Revocation is immediate and irreversible.
 
 ## Key permissions
 
