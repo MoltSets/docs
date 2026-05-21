@@ -1,6 +1,6 @@
 ---
 title: "Overview"
-description: "What moltsets is, how it works, and where to start."
+description: "What MoltSets is, how it works, and where to start."
 ---
 
 MoltSets is an identity resolution API. You give it a piece of data — an email address, LinkedIn URL, IP address, or hashed email — and it returns enriched contact and company information. Every tool follows the same request and response structure, so once you've made one call, you know how to make all of them.
@@ -52,18 +52,31 @@ All responses return HTTP `200` with a consistent envelope:
 - **`metadata.tokens_charged`** — credits consumed. Always `0` when no data is returned.
 - **`metadata.tokens_remaining`** — your remaining credit balance after this request.
 
-## Credits
+## Plans
 
-MoltSets uses credit-based billing. Credits are only consumed when a tool returns data — you are never charged for an empty result.
+| **Plan** | **Lifetime Tokens** | **Rate Limit** |
+| :-- | :-- | :-- |
+| $0 | 100 | n/a |
+| \$27 / month | Unlimited |  60 requests/min |
+| \$197 / month | Unlimited | 300 requests/min |
+| \$497 / month* | Unlimited | 1,800 requests/min |
 
-| Plan | Credits | Price |
-|---|---|---|
-| Free | 250 / month | $0 |
-| Starter | 3,000 / month | $149 / month |
-| Growth | 10,000 / month | $299 / month |
-| Unlimited | Unlimited | $499 / month |
+> The $497 / month plan has a standard rate of $997 / month. To receive the discounted rate of $497 / month, you need to submit two pieces of UGC each month for review. [Click here for more information](https://support.moltsets.com/en/articles/15207288).
 
-Use `get_billing` to check credit costs per tool, and `get_usage` to see your consumption breakdown.
+## Choosing a plan
+
+The right plan depends on how fast you need results. Higher rate limits mean faster processing — the difference between waiting an hour and wrapping up in minutes.
+
+| **Plan** | **Ideal for** | **5,000 records** |
+| :-- | :-- | :-- |
+| $0 | Exploring the API and testing integrations | n/a |
+| \$27 / month | Low-volume agents or early production use | ~83 min |
+| \$197 / month | Teams running identity resolution at scale | ~17 min |
+| \$497 / month | High-throughput pipelines with sustained or unpredictable volume | ~3 min |
+
+## More information
+
+For more information on our plans, upgrading and downgrading processes, please refer to our support documentation at [support.moltsets.com](http://support.moltsets.com).
 
 ## Available tools
 
