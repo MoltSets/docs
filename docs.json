@@ -33,13 +33,7 @@
               "developer-docs/getting-started/authentication",
               "developer-docs/getting-started/overview",
               "developer-docs/getting-started/rate-limits",
-              {
-                "group": "Account",
-                "pages": [
-                  "using-the-moltsets-app",
-                  "plans"
-                ]
-              }
+              "developer-docs/getting-started/moltsets-app"
             ]
           },
           {
