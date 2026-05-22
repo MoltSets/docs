@@ -102,5 +102,10 @@
     "color": {
       "light": "#e4e8f0"
     }
+  },
+  "integrations": {
+    "ga4": {
+      "measurementId": "G-W24PWQ91SP"
+    }
   }
 }
