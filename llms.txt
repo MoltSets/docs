@@ -1,1 +1,89 @@
-Test
+# MoltSets
+
+## About MoltSets
+
+MoltSets provides a people data API and MCP for identity resolution, contact enrichment, and B2B prospecting.
+
+- App: https://app.moltsets.com - MoltSets: 100% verified business and personal emails, mobile phones, and Sha256's for ads. Get started for free.
+- Support docs: https://support.moltsets.com - MoltSets Help Desk articles with information on how to use the MoltSets app, manage billing, manage accounts, and more.
+- Developer docs: https://developer.moltsets.com - MoltSets Developer Documentation that includes API reference as well as information on connecting AI agents to the MoltSets MCP.
+- Skills library: https://library.moltsets.com - Claude Skills for MoltSets — pre-built, ready to run. Start with identity resolution, enrichment, and more.
+
+## Key pages
+
+- [Overview](https://developer.moltsets.com/getting-started/overview): What MoltSets is, base URL, request/response structure, plans, and available tools.
+- [Authentication](https://developer.moltsets.com/getting-started/authentication): API key format (`ms_XXXXXXXXXXX`), how to create/revoke keys, Bearer token usage, error responses.
+- [Rate Limits](https://developer.moltsets.com/getting-started/rate-limits): Per-plan limits, what counts as a request, 429 handling, exponential backoff, multi-key strategies.
+- [MoltSets App](https://developer.moltsets.com/getting-started/moltsets-app): Logging in, navigating the app.
+- [MoltSets MCP Server](https://developer.moltsets.com/moltsets-mcp): MCP server URL (`https://mcp.moltsets.com/mcp`), setup for Claude.ai, Claude Desktop, and Claude Code, example prompts, troubleshooting.
+- [I Have X, I Want Y](https://developer.moltsets.com/i-have-x-i-want-y): Tool selection guide — pick based on what data you have (email, HEM, LinkedIn, IP) and what you need.
+
+## API reference
+
+Base URL: `https://api.moltsets.com/api/v1/tools/`
+
+Authentication: `Authorization: Bearer YOUR_API_KEY` on every request.
+
+All requests are `POST` with a JSON body. All responses return HTTP 200 with envelope: `{ "results": {...}, "status": "ok", "metadata": { "tokens_charged": N, "tokens_remaining": N } }`.
+
+### Account
+
+- [GET /get_account](https://developer.moltsets.com/api-reference/account/get-account): Retrieve account details and credit balance.
+- [GET /get_billing](https://developer.moltsets.com/api-reference/account/get-billing): Retrieve billing plan, renewal date, and per-tool credit costs.
+- [GET /get_usage](https://developer.moltsets.com/api-reference/account/get-usage): Retrieve credit usage breakdown.
+
+### Get Email
+
+- [POST /enrich_email](https://developer.moltsets.com/api-reference/get-email/enrich-email): LinkedIn URL → business email address.
+- [POST /enrich_personal_email](https://developer.moltsets.com/api-reference/get-email/linkedin-to-personal-email): LinkedIn URL → personal email address.
+- [POST /linkedin_to_best_personal_email](https://developer.moltsets.com/api-reference/get-email/linkedin-to-best-personal-email): LinkedIn URL → best-match personal email.
+- [POST /hem_to_email](https://developer.moltsets.com/api-reference/get-email/hem-to-email): HEM (MD5) → plaintext email + SHA-256.
+- [POST /business_email_to_personal_hem](https://developer.moltsets.com/api-reference/get-email/business-email-to-personal-hem): Business email or HEM → personal HEM.
+
+### Get LinkedIn
+
+- [POST /hem_to_linkedin](https://developer.moltsets.com/api-reference/get-linked-in/hem-to-linkedin): Email or HEM → LinkedIn slug.
+- [POST /hem_to_best_linkedin](https://developer.moltsets.com/api-reference/get-linked-in/hem-to-best-linkedin): Email or HEM → best-match LinkedIn profile URL.
+
+### Get HEM or MAID
+
+- [POST /linkedin_to_hashed_emails](https://developer.moltsets.com/api-reference/get-hem-or-maid/linkedin-to-hashed-emails): LinkedIn URL → all known HEMs.
+- [POST /hem_to_maid](https://developer.moltsets.com/api-reference/get-hem-or-maid/hem-to-maid): Email or HEM → mobile advertising ID (MAID).
+- [POST /ip_to_hem](https://developer.moltsets.com/api-reference/get-hem-or-maid/ip-to-hem): IP address → HEMs ranked by confidence.
+- [POST /ip_to_maid](https://developer.moltsets.com/api-reference/get-hem-or-maid/ip-to-maid): IP address → MAIDs.
+- [POST /business_email_to_personal_hem](https://developer.moltsets.com/api-reference/get-email/business-email-to-personal-hem): Business email or HEM → personal HEM.
+
+### Get Business Profile
+
+- [POST /linkedin_to_business_profile](https://developer.moltsets.com/api-reference/get-business-profile/linkedin-to-business-profile): LinkedIn URL → business profile + company data.
+- [POST /hem_to_business_profile](https://developer.moltsets.com/api-reference/get-business-profile/hem-to-business-profile): Email or HEM → business profile + company data.
+
+### Get Phone
+
+- [POST /enrich_phone](https://developer.moltsets.com/api-reference/get-mobile-phone/enrich-phone): LinkedIn URL → mobile phone number. Supports up to 100 `linkedin_urls` per call.
+
+### Get Company
+
+- [POST /ip_to_company](https://developer.moltsets.com/api-reference/get-company/ip-to-company): IP address → company associated with that IP.
+
+## Plans
+
+| Plan | Tokens | Rate Limit |
+|------|--------|------------|
+| $0 | 100 lifetime | n/a |
+| $27/month | Unlimited | 60 req/min |
+| $197/month | Unlimited | 300 req/min |
+| $997/month | Unlimited | 1,800 req/min |
+
+## MCP Server
+
+MCP Server URL: `https://mcp.moltsets.com/mcp`
+
+Connect via Claude Code:
+```bash
+claude mcp add --transport http moltsets https://mcp.moltsets.com/mcp \
+  --client-id YOUR_CLIENT_ID \
+  --client-secret YOUR_CLIENT_SECRET
+```
+
+Credentials (Client ID + Client Secret) are created at https://app.moltsets.com under Connectors.
