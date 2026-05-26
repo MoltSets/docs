@@ -86,4 +86,4 @@ claude mcp add --transport http moltsets https://mcp.moltsets.com/mcp \
   --client-secret YOUR_CLIENT_SECRET
 ```
 
-Credentials (Client ID + Client Secret) are created at https://app.moltsets.com under Connectors.
+Credentials (Client ID + Client Secret) are created at https://app.moltsets.com/dashboard/api_keys.
