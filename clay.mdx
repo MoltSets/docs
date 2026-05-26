@@ -5,16 +5,12 @@ description: "Use MoltSets tools directly in Clay via the HTTP API enrichment."
 
 ## Overview
 
-Clay's HTTP API enrichment lets you call any REST API and map the response into your table. This guide covers connecting MoltSets to Clay to enrich LinkedIn URLs with business email addresses.
-
-<Note>
-  This guide uses the `enrich_email` tool as an example. The same setup works for any MoltSets tool — just swap the endpoint and body fields.
-</Note>
+Clay's HTTP API enrichment lets you call any REST API and map the response into your table. This guide walks through connecting any MoltSets tool to Clay.
 
 ## Prerequisites
 
 - A MoltSets API key — find it in your [MoltSets account](https://api.moltsets.com)
-- A Clay table with a column containing LinkedIn URLs
+- A Clay table with a column containing the input data your chosen tool requires
 
 ## Setup
 
@@ -32,9 +28,8 @@ POST
 ```
 
 **Endpoint**
-```
-https://api.moltsets.com/api/v1/tools/enrich_email
-```
+
+Enter the endpoint URL for the MoltSets tool you want to use. Find the correct URL on the tool's API reference page.
 
 **Headers**
 
@@ -43,60 +38,36 @@ https://api.moltsets.com/api/v1/tools/enrich_email
 | `Content-Type` | `application/json` |
 | `Authorization` | `Bearer YOUR_API_KEY` |
 
+Replace `YOUR_API_KEY` with your MoltSets API key.
+
 **Body**
 
-```json
-{"linkedin_url": "{{LinkedIn}}"}
-```
-
-Replace `LinkedIn` with the name of your LinkedIn URL column. Use Clay's `/` shortcut to insert the column reference.
+Enter the request body as shown in the tool's API reference page. For any fields that should pull from a Clay column, use Clay's `/` shortcut to insert a column reference in place of the value.
 
 ### 3. Configure the response
-
-MoltSets returns a consistent response envelope:
-
-```json
-{
-  "results": {
-    "email": "john.smith@example.com"
-  },
-  "status": "ok",
-  "metadata": {
-    "tokens_charged": 1,
-    "tokens_remaining": 206
-  }
-}
-```
 
 In the **Response values to return** field, enter:
 
 ```
-results.email
+results
 ```
 
-This captures the entire `results` object into the HTTP API column.
+This captures the entire `results` object from the MoltSets response into the HTTP API column.
 
-### 4. Extract the email into its own column
+### 4. Extract values into their own columns
 
-Add a second column to pull the email value out of the `results` object:
+Add a separate column for each value you want to extract from the response:
 
 1. Click **+ Add column** and select **Formula**
 2. Use `/` to reference the HTTP API column
-3. Select `results.email` from the field picker
+3. Select the field you want from the field picker (e.g. `results.email`)
 
-This gives you a clean email column populated from the MoltSets response.
+Repeat for each field you need.
+
+<Note>
+  Clay's HTTP API path traversal stops at one level deep, so entering `results.email` directly in the **Response values to return** field will not drill into the nested object. The two-column approach above is the expected workflow.
+</Note>
 
 ## Handling no results
 
-When MoltSets finds no data for a given LinkedIn URL, it returns:
-
-```json
-{
-  "results": {},
-  "status": "ok",
-  "metadata": {
-    "tokens_charged": 0,
-    "tokens_remaining": 206
-  }
-}
-```
+When MoltSets finds no data for a given input, it returns a 404 error.
