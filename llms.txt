@@ -15,8 +15,11 @@ MoltSets provides a people data API and MCP for identity resolution, contact enr
 - [Authentication](https://developer.moltsets.com/getting-started/authentication): API key format (`ms_XXXXXXXXXXX`), how to create/revoke keys, Bearer token usage, error responses.
 - [Rate Limits](https://developer.moltsets.com/getting-started/rate-limits): Per-plan limits, what counts as a request, 429 handling, exponential backoff, multi-key strategies.
 - [MoltSets App](https://developer.moltsets.com/getting-started/moltsets-app): Logging in, navigating the app.
-- [MoltSets MCP Server](https://developer.moltsets.com/moltsets-mcp): MCP server URL (`https://mcp.moltsets.com/mcp`), setup for Claude.ai, Claude Desktop, and Claude Code, example prompts, troubleshooting.
 - [I Have X, I Want Y](https://developer.moltsets.com/i-have-x-i-want-y): Tool selection guide — pick based on what data you have (email, HEM, LinkedIn, IP) and what you need.
+
+## Integrations
+- [MoltSets MCP Server](https://developer.moltsets.com/moltsets-mcp): MCP server URL (`https://mcp.moltsets.com/mcp`), setup for Claude.ai, Claude Desktop, and Claude Code, example prompts, troubleshooting.
+- [Clay HTTP API](https://developer.moltsets.com/clay) - Use MoltSets tools directly in Clay via the HTTP API enrichment.
 
 ## API reference
 
