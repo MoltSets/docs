@@ -1,0 +1,102 @@
+---
+title: "Clay HTTP API"
+description: "Use MoltSets tools directly in Clay via the HTTP API enrichment."
+---
+
+## Overview
+
+Clay's HTTP API enrichment lets you call any REST API and map the response into your table. This guide covers connecting MoltSets to Clay to enrich LinkedIn URLs with business email addresses.
+
+<Note>
+  This guide uses the `enrich_email` tool as an example. The same setup works for any MoltSets tool — just swap the endpoint and body fields.
+</Note>
+
+## Prerequisites
+
+- A MoltSets API key — find it in your [MoltSets account](https://api.moltsets.com)
+- A Clay table with a column containing LinkedIn URLs
+
+## Setup
+
+### 1. Add an HTTP API enrichment column
+
+In your Clay table, click **+ Add column** and select **HTTP API**.
+
+### 2. Configure the request
+
+Set the following fields in the HTTP API configuration panel:
+
+**Method**
+```
+POST
+```
+
+**Endpoint**
+```
+https://api.moltsets.com/api/v1/tools/enrich_email
+```
+
+**Headers**
+
+| Key | Value |
+|-----|-------|
+| `Content-Type` | `application/json` |
+| `Authorization` | `Bearer YOUR_API_KEY` |
+
+**Body**
+
+```json
+{"linkedin_url": "{{LinkedIn}}"}
+```
+
+Replace `LinkedIn` with the name of your LinkedIn URL column. Use Clay's `/` shortcut to insert the column reference.
+
+### 3. Configure the response
+
+MoltSets returns a consistent response envelope:
+
+```json
+{
+  "results": {
+    "email": "john.smith@example.com"
+  },
+  "status": "ok",
+  "metadata": {
+    "tokens_charged": 1,
+    "tokens_remaining": 206
+  }
+}
+```
+
+In the **Response values to return** field, enter:
+
+```
+results.email
+```
+
+This captures the entire `results` object into the HTTP API column.
+
+### 4. Extract the email into its own column
+
+Add a second column to pull the email value out of the `results` object:
+
+1. Click **+ Add column** and select **Formula**
+2. Use `/` to reference the HTTP API column
+3. Select `results.email` from the field picker
+
+This gives you a clean email column populated from the MoltSets response.
+
+## Handling no results
+
+When MoltSets finds no data for a given LinkedIn URL, it returns:
+
+```json
+{
+  "results": {},
+  "status": "ok",
+  "metadata": {
+    "tokens_charged": 0,
+    "tokens_remaining": 206
+  }
+}
+```

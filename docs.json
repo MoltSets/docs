@@ -45,7 +45,8 @@
           {
             "group": "Integrations",
             "pages": [
-              "moltsets-mcp"
+              "moltsets-mcp",
+              "clay"
             ]
           }
         ]
