@@ -21,7 +21,8 @@ Pick your starting point and .
 | I have… | I want… | Tell Claude Code… | Tool |
 | --- | --- | --- | --- |
 | Name \+ company domain | LinkedIn slug | "Find the LinkedIn profile for John Smith at acme.com" | `linkedin_slug_search` |
-| LinkedIn slug or URL | Business email | "Find the business email for linkedin.com/in/retentionadam" | `enrich_email` |
+| LinkedIn slug or URL | Best available email (business preferred, falls back to personal) | "Find the best email for linkedin.com/in/retentionadam" | `enrich_email` |
+| LinkedIn slug or URL | Business email only | "Find the business email for linkedin.com/in/retentionadam" | `enrich_business_email` |
 | LinkedIn slug or URL | Personal email address | "Find the personal email for retentionadam on LinkedIn" | `enrich_personal_email` |
 | LinkedIn slug or URL | Best personal email | "Find the best personal email for this LinkedIn profile" | `linkedin_to_best_personal_email` |
 | LinkedIn slug or URL | All known personal emails | "Get all personal emails for linkedin.com/in/retentionadam" | `linkedin_to_personal_email` |
@@ -64,7 +65,7 @@ Use `business_email_to_personal_hem` to get a HEM, then `hem_to_best_linkedin` f
 
 "Find contact details for John Smith at acme.com."
 
-Use `linkedin_slug_search` to get their LinkedIn slug, then pass it to `enrich_email`, `enrich_phone`, or `linkedin_to_business_profile`.
+Use `linkedin_slug_search` to get their LinkedIn slug, then pass it to `enrich_business_email`, `enrich_phone`, or `linkedin_to_business_profile`.
 
 **I have a LinkedIn profile and want a phone number for outreach**
 

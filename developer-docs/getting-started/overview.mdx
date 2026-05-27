@@ -56,10 +56,10 @@ All responses return HTTP `200` with a consistent envelope:
 
 | **Plan** | **Lifetime Tokens** | **Rate Limit** |
 | :-- | :-- | :-- |
-| $0 | 100 | n/a |
-| \$27 / month | Unlimited |  60 requests/min |
-| \$197 / month | Unlimited | 300 requests/min |
-| \$997 / month | Unlimited | 1,800 requests/min |
+| $0 | 1000 | 1,000 requests/min |
+| \$27 / month | Unlimited |  30 requests/min |
+| \$97 / month | Unlimited | 1.000 requests/min |
+| \$497 / month | Unlimited | 3,000 requests/min |
 
 > [Getting the \$997/month plan for \$497/month with the UGC Discount — How It Works](https://support.moltsets.com/en/articles/15207288).
 
@@ -71,8 +71,8 @@ The right plan depends on how fast you need results. Higher rate limits mean fas
 | :-- | :-- | :-- |
 | $0 | Exploring the API and testing integrations | n/a |
 | \$27 / month | Low-volume agents or early production use | ~83 min |
-| \$197 / month | Teams running identity resolution at scale | ~17 min |
-| \$997 / month | High-throughput pipelines with sustained or unpredictable volume | ~3 min |
+| \$97 / month | Teams running identity resolution at scale | ~17 min |
+| \$497 / month | High-throughput pipelines with sustained or unpredictable volume | ~3 min |
 
 ## More information
 
@@ -83,7 +83,7 @@ For more information on our plans, upgrading and downgrading processes, please r
 | Category | Tools |
 |---|---|
 | **Account** | `get_account`, `get_billing`, `get_usage` |
-| **Email** | `enrich_email`, `enrich_personal_email`, `linkedin_to_best_personal_email`, `hem_to_email`, `business_email_to_personal_hem` |
+| **Email** | `enrich_email`, `enrich_business_email`, `enrich_personal_email`, `linkedin_to_best_personal_email`, `hem_to_email`, `business_email_to_personal_hem` |
 | **LinkedIn** | `linkedin_slug_search`, `linkedin_to_hashed_emails`, `linkedin_to_business_profile` |
 | **Phone** | `enrich_phone` |
 | **HEM Resolution** | `hem_to_linkedin`, `hem_to_best_linkedin`, `hem_to_business_profile`, `hem_to_maid` |

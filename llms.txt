@@ -37,7 +37,8 @@ All requests are `POST` with a JSON body. All responses return HTTP 200 with env
 
 ### Get Email
 
-- [POST /enrich_email](https://developer.moltsets.com/api-reference/get-email/enrich-email): LinkedIn URL → business email address.
+- [POST /enrich_email](https://developer.moltsets.com/api-reference/get-email/enrich-email): LinkedIn URL → best available email (business preferred, falls back to personal). Returns `type` field (`"business"` or `"personal"`).
+- [POST /enrich_business_email](https://developer.moltsets.com/api-reference/get-email/enrich-business-email): LinkedIn URL → business email address only.
 - [POST /enrich_personal_email](https://developer.moltsets.com/api-reference/get-email/linkedin-to-personal-email): LinkedIn URL → personal email address.
 - [POST /linkedin_to_best_personal_email](https://developer.moltsets.com/api-reference/get-email/linkedin-to-best-personal-email): LinkedIn URL → best-match personal email.
 - [POST /hem_to_email](https://developer.moltsets.com/api-reference/get-email/hem-to-email): HEM (MD5) → plaintext email + SHA-256.
@@ -73,10 +74,12 @@ All requests are `POST` with a JSON body. All responses return HTTP 200 with env
 
 | Plan | Tokens | Rate Limit |
 |------|--------|------------|
-| $0 | 100 lifetime | n/a |
-| $27/month | Unlimited | 60 req/min |
-| $197/month | Unlimited | 300 req/min |
-| $997/month | Unlimited | 1,800 req/min |
+| $0 | 1000 | 1000 requests/min |
+| \$27 / month | Unlimited |  30 requests/min |
+| \$97 / month | Unlimited | 1000 requests/min |
+| \$497 / month | Unlimited | 3000 requests/min |
+
+> [Getting the \$997/month plan for \$497/month with the UGC Discount — How It Works](https://support.moltsets.com/en/articles/15207288).
 
 ## MCP Server
 

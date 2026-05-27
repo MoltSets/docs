@@ -1,7 +1,7 @@
 ---
-title: "LinkedIn to Email (Hybrid)"
-api: 'POST /enrich_email'
-description: "Hybrid Email Enrichment — returns a business email when available, falls back to personal email. Returns the email type so you always know what you got."
+title: "LinkedIn to Business Email"
+api: 'POST /enrich_business_email'
+description: "Business Email Enrichment — find the verified business email address for a LinkedIn profile."
 ---
 
 ## Connection
@@ -9,7 +9,7 @@ description: "Hybrid Email Enrichment — returns a business email when availabl
 | | |
 |---|---|
 | **Method** | `POST` |
-| **URL** | `https://api.moltsets.com/api/v1/tools/enrich_email` |
+| **URL** | `https://api.moltsets.com/api/v1/tools/enrich_business_email` |
 | **Auth** | `Authorization: Bearer YOUR_API_KEY` |
 | **Content-Type** | `application/json` |
 
@@ -22,7 +22,7 @@ description: "Hybrid Email Enrichment — returns a business email when availabl
 ## Request
 
 ```bash
-curl -X POST https://api.moltsets.com/api/v1/tools/enrich_email \
+curl -X POST https://api.moltsets.com/api/v1/tools/enrich_business_email \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"linkedin_url": "https://linkedin.com/in/john-smith-123"}'
@@ -32,18 +32,16 @@ curl -X POST https://api.moltsets.com/api/v1/tools/enrich_email \
 
 | Field | Type | Description |
 |---|---|---|
-| `results.email` | string \| null | Email address found. `null` when no result. |
-| `results.type` | string \| null | `"business"` or `"personal"`. `null` when no result. |
-| `results.last_validated_at` | string \| null | ISO 8601 timestamp of last validation, or `null`. |
+| `results.email` | string | Verified business email address |
 | `metadata.tokens_charged` | integer | Credits consumed by this request |
 | `metadata.tokens_remaining` | integer | Credits remaining after this request |
 
 <Info>
-  Credits are only charged when a result is found. If no email is found, `tokens_charged` will be `0`.
+  Credits are only charged when a result is found. If no email is found, `tokens_charged` will be `0` and `results` will be empty.
 </Info>
 
 <Note>
-  Use `results.type` to distinguish business from personal results. If you need a business email exclusively, use [enrich_business_email](/api-reference/get-email/enrich-business-email) instead.
+  This tool returns business emails only. For a hybrid tool that falls back to personal email, use [enrich_email](/api-reference/get-email/enrich-email) instead.
 </Note>
 
 ## Responses
@@ -53,30 +51,24 @@ curl -X POST https://api.moltsets.com/api/v1/tools/enrich_email \
     ```json
     {
       "results": {
-        "email": "ashley@freshlypicked.com",
-        "type": "business",
-        "last_validated_at": null
+        "email": "john.smith@example.com"
       },
       "status": "ok",
       "metadata": {
         "tokens_charged": 1,
-        "tokens_remaining": 28
+        "tokens_remaining": 206
       }
     }
     ```
   </Accordion>
-  <Accordion title="404 — No data found">
+  <Accordion title="200 — No data found">
     ```json
     {
-      "results": {
-        "email": null,
-        "type": null,
-        "last_validated_at": null
-      },
-      "status": "not_found",
+      "results": {},
+      "status": "ok",
       "metadata": {
         "tokens_charged": 0,
-        "tokens_remaining": 28
+        "tokens_remaining": 206
       }
     }
     ```
