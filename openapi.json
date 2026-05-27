@@ -306,7 +306,7 @@
                   }
                 },
                 "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "email": "john-smith-123@example.com", "type": "business", "last_validated_at": null }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 28 } } }
+                  "found": { "summary": "Data found", "value": { "results": { "email": "john.smith@example.com", "type": "business", "last_validated_at": null }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 28 } } }
                 }
               }
             }
