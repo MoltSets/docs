@@ -30,8 +30,8 @@
           {
             "group": "Getting Started",
             "pages": [
-              "developer-docs/getting-started/authentication",
               "developer-docs/getting-started/overview",
+              "developer-docs/getting-started/authentication",
               "developer-docs/getting-started/rate-limits",
               "developer-docs/getting-started/moltsets-app"
             ]
