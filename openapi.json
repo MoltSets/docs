@@ -421,49 +421,6 @@
         }
       }
     },
-    "/business_email_to_personal_hem": {
-      "post": {
-        "summary": "Business Email to Personal HEM",
-        "operationId": "businessEmailToPersonalHem",
-        "description": "Convert a business email address or hashed email (HEM) into SHA-256 personal hashed emails for identity resolution and audience matching. Pass either `email` or `md5`, not both.",
-        "tags": ["Get Ad Audience"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": { "type": "string", "description": "Plaintext business email address." },
-                  "md5": { "type": "string", "description": "MD5 hash of the business email address." }
-                }
-              },
-              "examples": {
-                "email": { "summary": "Using email", "value": { "email": "john.smith@example.com" } },
-                "md5": { "summary": "Using MD5", "value": { "md5": "5d41402abc4b2a76b9719d91101XXXXX" } }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "personal_email_sha256": ["e187e84b06e1e6577bcebe42d3905434ddc89d2d5abaab8e85691882310XXXXX"] }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 207 } } }
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
-        }
-      }
-    },
     "/enrich_phone": {
       "post": {
         "summary": "LinkedIn to Mobile Phone",
@@ -593,45 +550,6 @@
         }
       }
     },
-    "/linkedin_to_hashed_emails": {
-      "post": {
-        "summary": "LinkedIn to HEM",
-        "operationId": "linkedinToHashedEmails",
-        "description": "Look up all known hashed email addresses (MD5 and SHA-256) for a LinkedIn profile, across both business and personal emails.",
-        "tags": ["Get Ad Audience"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": ["linkedin_url"],
-                "properties": {
-                  "linkedin_url": { "type": "string", "example": "https://linkedin.com/in/retentionadam" }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "linkedin_slug": "john-smith-123", "business_sha256_array": ["f101da855ed67dc34c9729f04df8aeefXXXXX"], "business_md5_array": ["900b89c0e5ece81f7fb0a72ef3dXXXXX"], "personal_sha256_array": ["266f422db074460bb5bf41984c3aXXXXX"], "personal_md5_array": ["0c86fde3392c84d6514de378dc1XXXXX"] }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 191 } } }
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
-        }
-      }
-    },
     "/linkedin_to_business_profile": {
       "post": {
         "summary": "LinkedIn to Business Profile",
@@ -704,6 +622,88 @@
               "application/json": {
                 "examples": {
                   "found": { "summary": "Data found", "value": { "results": { "first_name": "John", "last_name": "Smith", "title": "Principal Cybersecurity Engineer", "seniority": "Manager", "functional_area": "Information Technology", "linkedinurl": "https://www.linkedin.com/in/john-smith-123", "current_company": "MoltSets", "current_company_url": "https://moltsets.com", "current_company_linkedinurl": "https://linkedin.com/company/moltsets", "country": "United States", "company_employee_count": "3", "company_employee_range": "1-10", "company_revenue": "1200000000", "company_revenue_range": "$1-10M", "work_email_confirmed": "a4cd87c390c98385297fbe9250XXXXX", "work_email_confirmed_status": "2025-10-12", "personal_emails": ["3018fe3a783fad1db0370ee3fXXXXX"], "personal_emails_status": [null] }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 198 } } }
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
+          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
+          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
+          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
+          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+        }
+      }
+    },
+    "/business_email_to_personal_hem": {
+      "post": {
+        "summary": "Business Email to Personal HEM",
+        "operationId": "businessEmailToPersonalHem",
+        "description": "Convert a business email address or hashed email (HEM) into SHA-256 personal hashed emails for identity resolution and audience matching. Pass either `email` or `md5`, not both.",
+        "tags": ["Get Ad Audience"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string", "description": "Plaintext business email address." },
+                  "md5": { "type": "string", "description": "MD5 hash of the business email address." }
+                }
+              },
+              "examples": {
+                "email": { "summary": "Using email", "value": { "email": "john.smith@example.com" } },
+                "md5": { "summary": "Using MD5", "value": { "md5": "5d41402abc4b2a76b9719d91101XXXXX" } }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "found": { "summary": "Data found", "value": { "results": { "personal_email_sha256": ["e187e84b06e1e6577bcebe42d3905434ddc89d2d5abaab8e85691882310XXXXX"] }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 207 } } }
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
+          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
+          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
+          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
+          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+        }
+      }
+    },
+    "/linkedin_to_hashed_emails": {
+      "post": {
+        "summary": "LinkedIn to HEM",
+        "operationId": "linkedinToHashedEmails",
+        "description": "Look up all known hashed email addresses (MD5 and SHA-256) for a LinkedIn profile, across both business and personal emails.",
+        "tags": ["Get Ad Audience"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["linkedin_url"],
+                "properties": {
+                  "linkedin_url": { "type": "string", "example": "https://linkedin.com/in/retentionadam" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "found": { "summary": "Data found", "value": { "results": { "linkedin_slug": "john-smith-123", "business_sha256_array": ["f101da855ed67dc34c9729f04df8aeefXXXXX"], "business_md5_array": ["900b89c0e5ece81f7fb0a72ef3dXXXXX"], "personal_sha256_array": ["266f422db074460bb5bf41984c3aXXXXX"], "personal_md5_array": ["0c86fde3392c84d6514de378dc1XXXXX"] }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 191 } } }
                 }
               }
             }
@@ -1066,12 +1066,33 @@
     }
   },
   "tags": [
-    { "name": "Account", "description": "Account management tools. Free — do not consume credits." },
-    { "name": "Email", "description": "Email enrichment and resolution tools." },
-    { "name": "Phone", "description": "Phone enrichment tools." },
-    { "name": "LinkedIn", "description": "LinkedIn profile enrichment and resolution tools." },
-    { "name": "HEM Resolution", "description": "Resolve hashed emails (HEMs) to contact and identity data." },
-    { "name": "IP Resolution", "description": "Resolve IP addresses to hashed emails, MAIDs, and company data." },
-    { "name": "Search", "description": "Search and filter company and business profiles by name, domain, industry, size, or revenue." }
+    {
+      "name": "Search",
+      "description": "Search and filter company and business profiles by name, domain, industry, size, or revenue."
+    },
+    {
+      "name": "Get 100% Verified Emails",
+      "description": "Resolve and enrich verified business and personal email addresses."
+    },
+    {
+      "name": "Get 100% Carrier-Verified Mobile Phones",
+      "description": "Enrich carrier-verified mobile phone numbers."
+    },
+    {
+      "name": "Get Full Business Profile",
+      "description": "Resolve identifiers to full business profiles and company firmographics."
+    },
+    {
+      "name": "Get Ad Audience",
+      "description": "Resolve identifiers to hashed emails (HEMs) and mobile advertising IDs (MAIDs) for audience matching."
+    },
+    {
+      "name": "Get Company",
+      "description": "Resolve IP addresses to company data."
+    },
+    {
+      "name": "Account",
+      "description": "Account management tools. Free — do not consume credits."
+    }
   ]
 }
