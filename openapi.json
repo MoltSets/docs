@@ -518,7 +518,7 @@
     },
     "/business_email_to_personal_hem": {
       "post": {
-        "summary": "Business Email/HEM to Personal HEM",
+        "summary": "Business Email to Personal HEM",
         "operationId": "businessEmailToPersonalHem",
         "description": "Convert a business email address or hashed email (HEM) into SHA-256 personal hashed emails for identity resolution and audience matching. Pass either `email` or `md5`, not both.",
         "tags": ["Get HEM or MAID"],
@@ -604,7 +604,7 @@
     },
     "/hem_to_linkedin": {
       "post": {
-        "summary": "Email/HEM to LinkedIn Slug",
+        "summary": "Email to LinkedIn Slug",
         "operationId": "hemToLinkedin",
         "description": "Resolve a plaintext email or MD5 hashed email to a LinkedIn profile slug. Pass either `email` or `md5`, not both.",
         "tags": ["Get LinkedIn"],
@@ -647,7 +647,7 @@
     },
     "/hem_to_best_linkedin": {
       "post": {
-        "summary": "Email/HEM to Best LinkedIn URL",
+        "summary": "Email to Best LinkedIn URL",
         "operationId": "hemToBestLinkedin",
         "description": "Resolve a plaintext email or MD5 hashed email to the highest-confidence LinkedIn profile URL when multiple candidates exist. Pass either `email` or `md5`, not both.",
         "tags": ["Get LinkedIn"],
@@ -769,7 +769,7 @@
     },
     "/hem_to_business_profile": {
       "post": {
-        "summary": "Email/HEM to Business Profile",
+        "summary": "Email to Business Profile",
         "operationId": "hemToBusinessProfile",
         "description": "Resolve a plaintext email or MD5 hashed email to a full business profile including name, company, title, and contact info. Pass either `email` or `md5`, not both.",
         "tags": ["Get Business Profile"],
@@ -813,7 +813,7 @@
     },
     "/hem_to_maid": {
       "post": {
-        "summary": "Email/HEM to MAID",
+        "summary": "Email to MAID",
         "operationId": "hemToMaid",
         "description": "Resolve a plaintext email or MD5 hashed email to mobile advertising IDs (MAIDs). Pass either `email` or `md5`, not both.",
         "tags": ["Get HEM or MAID"],
