@@ -25,6 +25,10 @@
   "navigation": {
     "tabs": [
       {
+        "tab": "API Reference",
+        "openapi": "openapi.json"
+      },
+      {
         "tab": "Guide",
         "pages": [
           {
@@ -51,11 +55,8 @@
             ]
           }
         ]
-      },
-      {
-        "tab": "API Reference",
-        "openapi": "openapi.json"
       }
+      
     ]
   },
   "logo": "/logo/moltsets.png",
