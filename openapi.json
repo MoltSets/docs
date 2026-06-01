@@ -171,7 +171,7 @@
         "summary": "LinkedIn to Email (Hybrid)",
         "operationId": "enrichEmail",
         "description": "Find the best available email for a LinkedIn profile. Returns a business email when available, falls back to personal email. The `type` field indicates which was returned. Credits only charged when data is found.",
-        "tags": ["Get 100% Verified Emails"],
+        "tags": ["Get Verified Emails"],
         "requestBody": {
           "required": true,
           "content": {
@@ -253,7 +253,7 @@
         "summary": "LinkedIn to Business Email",
         "operationId": "enrichBusinessEmail",
         "description": "Find the verified business email address for a LinkedIn profile. Returns business emails only — use enrich_email for a hybrid tool that falls back to personal email. Credits only charged when data is found.",
-        "tags": ["Get 100% Verified Emails"],
+        "tags": ["Get Verified Emails"],
         "requestBody": {
           "required": true,
           "content": {
@@ -309,7 +309,7 @@
         "summary": "LinkedIn to Personal Email",
         "operationId": "enrichPersonalEmail",
         "description": "Find the verified personal email address for a LinkedIn profile. Credits only charged when data is found.",
-        "tags": ["Get 100% Verified Emails"],
+        "tags": ["Get Verified Emails"],
         "requestBody": {
           "required": true,
           "content": {
@@ -348,7 +348,7 @@
         "summary": "LinkedIn to Best Personal Email",
         "operationId": "linkedinToBestPersonalEmail",
         "description": "Look up the highest-confidence personal email address for a LinkedIn profile using additional scoring across candidates.",
-        "tags": ["Get 100% Verified Emails"],
+        "tags": ["Get Verified Emails"],
         "requestBody": {
           "required": true,
           "content": {
@@ -387,7 +387,7 @@
         "summary": "HEM to Email",
         "operationId": "hemToEmail",
         "description": "Resolve a hashed email (MD5) to the plaintext email address and SHA-256 hash.",
-        "tags": ["Get 100% Verified Emails"],
+        "tags": ["Get Verified Emails"],
         "requestBody": {
           "required": true,
           "content": {
@@ -426,7 +426,7 @@
         "summary": "LinkedIn to Mobile Phone",
         "operationId": "enrichPhone",
         "description": "Find the verified mobile phone number for a LinkedIn profile. Only mobile numbers returned — no landlines. Credits only charged when data is found. Pass either `linkedin_url` (single) or `linkedin_urls` (batch, up to 100), not both.",
-        "tags": ["Get 100% Carrier-Verified Mobile Phones"],
+        "tags": ["Get Carrier-Verified Mobile Phones"],
         "requestBody": {
           "required": true,
           "content": {
@@ -1071,11 +1071,11 @@
       "description": "Search and filter company and business profiles by name, domain, industry, size, or revenue."
     },
     {
-      "name": "Get 100% Verified Emails",
+      "name": "Get Verified Emails",
       "description": "Resolve and enrich verified business and personal email addresses."
     },
     {
-      "name": "Get 100% Carrier-Verified Mobile Phones",
+      "name": "Get Carrier-Verified Mobile Phones",
       "description": "Enrich carrier-verified mobile phone numbers."
     },
     {
