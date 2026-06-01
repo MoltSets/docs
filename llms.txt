@@ -70,6 +70,11 @@ All requests are `POST` with a JSON body. All responses return HTTP 200 with env
 
 - [POST /ip_to_company](https://developer.moltsets.com/api-reference/get-company/ip-to-company): IP address → company associated with that IP.
 
+### Search
+
+- [POST /search_company_profiles](https://developer.moltsets.com/api-reference/search/search-company-profiles): Search companies by name, domain, industry, size, or revenue → ranked company profiles.
+- [POST /search_business_profiles](https://developer.moltsets.com/api-reference/search/search-business-profiles): Search people by company, industry, size, or revenue → ranked business profiles.
+
 ## Plans
 
 | Plan | Tokens | Rate Limit |
