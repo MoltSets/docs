@@ -1,84 +1,128 @@
 ---
 title: "I Have X, I Want Y"
-description: "Find the right MoltSets MCP tool based on what data you have and what you need."
+description: "Find the right MoltSets tool based on what data you have and what you need. Covers email finding, people finding, identity resolution, company lookup, and IP resolution."
 ---
 
-Pick your starting point and .
+Pick your starting point below. Each table shows what input you need, what you'll get back, an example prompt to use in Claude, and the tool name.
 
-## Email & HEM
+## Email Finding
 
-| I have… | I want… | Tell Claude Code… | Tool |
-| --- | --- | --- | --- |
-| Business email | Personal hashed email (HEM) | "Convert john@acme.com to a personal HEM" | `business_email_to_personal_hem` |
-| HEM (MD5) | Plaintext email \+ SHA-256 | "Resolve this HEM to an email address" | `hem_to_email` |
-| HEM (MD5) or email | LinkedIn slug | "Find the LinkedIn slug for this HEM" | `hem_to_linkedin` |
-| HEM (MD5) or email | Best-match LinkedIn profile URL | "Find the best LinkedIn profile for this HEM" | `hem_to_best_linkedin` |
-| HEM (MD5) or email | Business profile \+ company data | "Get the business profile for this HEM" | `hem_to_business_profile` |
-| HEM (MD5) or email | Mobile advertising ID (MAID) | "Resolve this HEM to a MAID" | `hem_to_maid` |
+| I have… | I want… | Type in Claude… | Tool |
+|---|---|---|---|
+| LinkedIn URL | Best available email (business if found, falls back to personal) | Find the best email for linkedin.com/in/username | `enrich_email` |
+| LinkedIn URL | Business email only | Find the business email for linkedin.com/in/username | `enrich_business_email` |
+| LinkedIn URL | Personal email only | Find the personal email for linkedin.com/in/username | `enrich_personal_email` |
+| LinkedIn URL | Highest-confidence personal email | Find the best personal email for linkedin.com/in/username | `linkedin_to_best_personal_email` |
+| MD5 hashed email | Plaintext email + SHA-256 | Resolve this hashed email to a plaintext address: [md5] | `hem_to_email` |
 
-## LinkedIn
+## People Finding
 
-| I have… | I want… | Tell Claude Code… | Tool |
-| --- | --- | --- | --- |
-| Name \+ company domain | LinkedIn slug | "Find the LinkedIn profile for John Smith at acme.com" | `linkedin_slug_search` |
-| LinkedIn slug or URL | Best available email (business preferred, falls back to personal) | "Find the best email for linkedin.com/in/retentionadam" | `enrich_email` |
-| LinkedIn slug or URL | Business email only | "Find the business email for linkedin.com/in/retentionadam" | `enrich_business_email` |
-| LinkedIn slug or URL | Personal email address | "Find the personal email for retentionadam on LinkedIn" | `enrich_personal_email` |
-| LinkedIn slug or URL | Best personal email | "Find the best personal email for this LinkedIn profile" | `linkedin_to_best_personal_email` |
-| LinkedIn slug or URL | All known personal emails | "Get all personal emails for linkedin.com/in/retentionadam" | `linkedin_to_personal_email` |
-| LinkedIn slug or URL | Phone number | "Find the phone number for retentionadam on LinkedIn" | `enrich_phone` |
-| LinkedIn slug or URL | Mobile phone number | "Get the mobile phone for this LinkedIn profile" | `linkedin_to_mobile_phone` |
-| LinkedIn slug or URL | All known HEMs | "Get all hashed emails for this LinkedIn profile" | `linkedin_to_hashed_emails` |
-| LinkedIn slug or URL | Business profile \+ company data | "Get the full business profile for retentionadam" | `linkedin_to_business_profile` |
+| I have… | I want… | Type in Claude… | Tool |
+|---|---|---|---|
+| LinkedIn URL | Full business profile (name, title, company, firmographics) | Get the full profile for linkedin.com/in/username | `linkedin_to_business_profile` |
+| LinkedIn URL | Full business profile + mobile phone | Get the full profile including phone for linkedin.com/in/username | `linkedin_to_business_profile` |
+| Email or hashed email | Full business profile (name, title, company, firmographics) | Get the business profile for john.smith@example.com | `hem_to_business_profile` |
+| Email or hashed email | Full business profile + mobile phone | Get the full profile including phone for john.smith@example.com | `hem_to_business_profile` |
+| LinkedIn URL | Mobile phone only | Find the mobile phone number for linkedin.com/in/username | `enrich_phone` |
+| Company name or domain | All contacts at that company | Find contacts at acme.com | `search_business_profiles` |
+| Company name + industry filter | Contacts filtered by industry | Find information technology contacts at acme.com | `search_business_profiles` |
+| Company name + employee size | Contacts at companies of a specific size | Find contacts at companies with 51-200 employees named Acme | `search_business_profiles` |
+| Revenue range | Contacts at companies within a revenue band | Find contacts at companies with revenue above $50M | `search_business_profiles` |
+| Industry + employee size | Contacts matching an ICP profile | Find contacts at information technology companies with 201-500 employees | `search_business_profiles` |
 
-## IP Address
+## Identity Resolution
 
-| I have… | I want… | Tell Claude Code… | Tool |
-| --- | --- | --- | --- |
-| IP address | Hashed emails (HEMs) ranked by confidence | "Resolve 8.8.8.8 to a HEM" | `ip_to_hem` |
-| IP address | Mobile advertising IDs (MAIDs) | "Resolve 8.8.8.8 to a MAID" | `ip_to_maid` |
-| IP address | Company associated with the IP | "Which company is behind IP address 8.8.8.8?" | `ip_to_company` |
+Identity resolution lets you move between identifiers — LinkedIn URLs, emails, hashed emails (HEMs), and mobile advertising IDs (MAIDs) — for use cases like ad audience matching, CDP enrichment, and identity graph building.
 
-## Account
+| I have… | I want… | Type in Claude… | Tool |
+|---|---|---|---|
+| LinkedIn URL | All known hashed emails (MD5 + SHA-256, business + personal) | Get all hashed emails for linkedin.com/in/username | `linkedin_to_hashed_emails` |
+| Business email or hashed email | Personal hashed emails (SHA-256) for audience matching | Get personal hashed emails for john.smith@example.com | `business_email_to_personal_hem` |
+| Email or hashed email | LinkedIn profile slug | Find the LinkedIn profile for john.smith@example.com | `hem_to_linkedin` |
+| Email or hashed email | Highest-confidence LinkedIn URL | Find the best LinkedIn match for john.smith@example.com | `hem_to_best_linkedin` |
+| Email or hashed email | Mobile advertising IDs (MAIDs) | Get mobile ad IDs for john.smith@example.com | `hem_to_maid` |
 
-| I have… | I want… | Tell Claude Code… | Tool |
-| --- | --- | --- | --- |
-| MCP Connection | Account details, plan, and credit balance | "Show me my MoltSets account details" | `get_account` |
-| MCP Connection | Billing plan, renewal date, and credit costs per tool | "What is my current billing plan and credit costs?" | `get_billing` |
-| MCP Connection | Credit usage breakdown | "How many credits have I used this month?" | `get_usage` |
+## Company Lookup
 
-## Common starting points
+| I have… | I want… | Type in Claude… | Tool |
+|---|---|---|---|
+| Company name | Matching company profiles (name, domain, industry, size, revenue) | Find company profiles matching Acme | `search_company_profiles` |
+| Domain | Exact company record | Look up the company at acme.com | `search_company_profiles` |
+| Industry + employee size or revenue range | Filtered list of companies | Find information technology companies with 51-200 employees | `search_company_profiles` |
 
-**I have a website visitor IP and want to know who it is**
+## IP Resolution
 
-"Identify the company behind IP 8.8.8.8, then find a contact and get their email."
+IP resolution is best suited for B2B use cases — consumer ISP addresses will typically not resolve to a company. Passing a user agent string alongside the IP address significantly improves match accuracy for HEM lookups.
 
-Start with `ip_to_company` to identify the company, then `ip_to_hem` to get a HEM you can resolve further with `hem_to_email` or `hem_to_best_linkedin`.
+| I have… | I want… | Type in Claude… | Tool |
+|---|---|---|---|
+| IP address | Company associated with that IP | What company is behind IP 203.0.113.42 | `ip_to_company` |
+| IP address | Hashed emails tied to that IP | Get hashed emails for IP 203.0.113.42 | `ip_to_hem` |
+| IP address + user agent | Hashed emails with higher match accuracy | Get hashed emails for IP 203.0.113.42 with user agent [string] | `ip_to_hem` |
+| IP address | Mobile advertising IDs (MAIDs) | Get mobile ad IDs for IP 203.0.113.42 | `ip_to_maid` |
 
-**I have a business email and want to find someone on LinkedIn**
+## Common Workflows
 
-"Find the LinkedIn profile for john@acme.com."
+Some tasks require chaining two tools together. These are the most useful combinations.
 
-Use `business_email_to_personal_hem` to get a HEM, then `hem_to_best_linkedin` for the profile URL.
+### Anonymous website visitor to identified contact
 
-**I have a name and company and want contact details**
+`ip_to_hem` → `hem_to_business_profile`
 
-"Find contact details for John Smith at acme.com."
+You have a website visitor IP address and want to know who it is. Resolve the IP to a hashed email, then resolve the HEM to a full business profile with name, title, and company.
 
-Use `linkedin_slug_search` to get their LinkedIn slug, then pass it to `enrich_business_email`, `enrich_phone`, or `linkedin_to_business_profile`.
+"Resolve IP 203.0.113.42 to a hashed email, then get the business profile for that HEM."
 
-**I have a LinkedIn profile and want a phone number for outreach**
+---
 
-"Get the mobile number and personal email for retentionadam on LinkedIn."
+### Anonymous website visitor to email address
 
-Use `linkedin_to_mobile_phone` and `linkedin_to_best_personal_email` in parallel.
+`ip_to_hem` → `hem_to_email`
 
-**I have a list of HEMs from an ad platform and want to build a contact list**
+Same starting point as above, but you just want the plaintext email rather than the full profile.
 
-"Resolve these HEMs to emails and business profiles."
+"Resolve IP 203.0.113.42 to a hashed email, then get the plaintext email address."
 
-Resolve each HEM with `hem_to_email` and `hem_to_business_profile` to get personal contact info and company context in two calls.
+---
 
-<Note>
-  Not sure where to start? Look at what you already have — email, LinkedIn slug or URL, IP address, or HEM — and find it in the "I have…" column above. Or just tell Claude Code what you have and what you need, and it will pick the right tool.
-</Note>
+### Anonymous website visitor to LinkedIn profile
+
+`ip_to_hem` → `hem_to_best_linkedin`
+
+Resolve an anonymous visitor to their LinkedIn profile. Useful if you want to review someone before reaching out.
+
+"Resolve IP 203.0.113.42 to a hashed email, then find their LinkedIn profile."
+
+---
+
+### Business email to mobile phone
+
+`hem_to_linkedin` → `enrich_phone`
+
+You have a business email but no LinkedIn URL. Resolve it to a LinkedIn slug first, then use that to get a mobile phone number.
+
+"Find the LinkedIn profile for john.smith@example.com, then get their mobile phone number."
+
+---
+
+### LinkedIn list to mobile ad audience
+
+`linkedin_to_hashed_emails` → `hem_to_maid`
+
+You have a list of LinkedIn profiles and want to push them into a mobile ad platform. Get all known HEMs for each profile, then resolve those to MAIDs.
+
+"Get all hashed emails for linkedin.com/in/username, then resolve them to mobile ad IDs."
+
+---
+
+### CRM email list to ad retargeting audience
+
+`business_email_to_personal_hem` → `hem_to_maid`
+
+You have a CRM list of business emails and want to build a retargeting audience. Convert each business email to a personal HEM, then resolve to MAIDs.
+
+"Convert john.smith@example.com to a personal hashed email, then resolve it to mobile ad IDs."
+
+---
+
+Not sure where to start? Tell Claude what you have and what you need, and it will pick the right tool automatically.
