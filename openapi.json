@@ -973,6 +973,96 @@
           "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
         }
       }
+    },
+    "/search_company_profiles": {
+      "post": {
+        "summary": "Search Company Profiles",
+        "operationId": "searchCompanyProfiles",
+        "description": "Search for companies by name, domain, industry, size, or revenue. Use `query` for free-text company name search, `domain` for exact company lookups, and the categorical filters (industry, employee_range, revenue_range) to narrow results. Combine `query` with filters for best precision. Returns ranked results; higher `_score` = stronger match.",
+        "tags": ["Search"],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": { "type": "string", "description": "Full-text search across company name only. Do not put domain, industry, employee size, or revenue here — use the dedicated filter params for those." },
+                  "domain": { "type": "string", "description": "Exact domain filter. Omit the protocol (no https://). Prefer this over `query` when you have a known domain — it's a precise match.", "example": "moltsets.com" },
+                  "industry": { "type": "string", "description": "Exact industry filter. Map the request to one of the supported values.", "enum": ["Professional and Business Services", "Information Technology", "Manufacturing", "Retail", "Health and Pharmaceuticals", "Creative Arts and Entertainment", "Construction", "Marketing & Advertising", "Finance and Banking", "Tourism and Hospitality", "Non-Profit and Social Services", "Food and Beverage", "Real Estate", "Education", "Transportation and Logistics", "Media and Publishing", "Energy", "Automotive", "Government and Public Administration", "Telecommunications", "Agriculture", "Utilities", "Corporate Services", "Insurance", "Banks", "Computer Software", "Pharmaceuticals and Biotechnology", "Aerospace and Defense", "Electronics", "Mining and Metals"] },
+                  "employee_range": { "type": "string", "description": "Exact employee count range filter. Prefer the numeric ranges when a size is given.", "enum": ["1-10", "11-20", "21-50", "51-200", "201-500", "501-1000", "1001-5000", "5001+", "Small", "Mid-Market", "Enterprise", "Unknown"] },
+                  "revenue_range": { "type": "string", "description": "Exact annual revenue range filter.", "enum": ["Below $500k", "$500k - $1M", "$1M - $5M", "$5M - $10M", "$10M - $20M", "$20M - $50M", "Above $50M", "$50M - $100M", "$100M - $250M", "$250M - $500M", "$500M - $1B", "$1B - $2.5B", "$2.5B - $5B", "Over $5B"] },
+                  "limit": { "type": "integer", "description": "Number of results to return.", "default": 10, "minimum": 1, "maximum": 25 },
+                  "offset": { "type": "integer", "description": "Number of results to skip for pagination. Use with limit to page through results.", "default": 0 }
+                }
+              },
+              "example": { "query": "MoltSets", "industry": "Information Technology", "employee_range": "51-200", "limit": 10, "offset": 0 }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "found": { "summary": "Data found", "value": { "results": { "results": [{ "logo": "https://cdn.mixrank.com/md5/0e4e81c8ff584b1ce3e4c3067e8cXXXXX", "name": "MoltSets", "type": "Privately Held", "domain": "moltsets.com", "industry": "Information Technology", "linkedin_url": "https://linkedin.com/company/moltsets", "exact_revenue": 1200000000.0, "revenue_range": "Above $50M", "employee_count": 57, "employee_range": "51-200", "follower_count": 3677, "linkedin_company_id": "13223077", "_id": "moltsets.com", "_score": 15.2394 }, { "name": "Acme", "type": "Privately Held", "domain": "acme.com", "industry": "Information Technology", "linkedin_url": "https://linkedin.com/company/acme", "revenue_range": "$10M - $20M", "employee_count": 90, "employee_range": "51-200", "follower_count": 121, "linkedin_company_id": "82353383", "_id": "acme.com", "_score": 13.1942 }], "total": 210 }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 206 } } }
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
+          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
+          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
+          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
+          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+        }
+      }
+    },
+    "/search_business_profiles": {
+      "post": {
+        "summary": "Search Business Profiles",
+        "operationId": "searchBusinessProfiles",
+        "description": "Search for people / business profiles by company, industry, size, or revenue. Use `query` for free-text company name search, `domain` for exact company lookups, and the categorical filters (industry, employee_range, revenue_range) to narrow results. Returns ranked contact records; higher `_score` = stronger match.",
+        "tags": ["Search"],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": { "type": "string", "description": "Full-text search across company name only. Do not put domain, industry, employee size, or revenue here — use the dedicated filter params for those." },
+                  "domain": { "type": "string", "description": "Exact domain filter. Omit the protocol (no https://). Prefer this over `query` when you have a known domain — it's a precise match.", "example": "moltsets.com" },
+                  "industry": { "type": "string", "description": "Exact industry filter. Map the request to one of the supported values.", "enum": ["Professional and Business Services", "Information Technology", "Manufacturing", "Retail", "Health and Pharmaceuticals", "Creative Arts and Entertainment", "Construction", "Marketing & Advertising", "Finance and Banking", "Tourism and Hospitality", "Non-Profit and Social Services", "Food and Beverage", "Real Estate", "Education", "Transportation and Logistics", "Media and Publishing", "Energy", "Automotive", "Government and Public Administration", "Telecommunications", "Agriculture", "Utilities", "Corporate Services", "Insurance", "Banks", "Computer Software", "Pharmaceuticals and Biotechnology", "Aerospace and Defense", "Electronics", "Mining and Metals"] },
+                  "employee_range": { "type": "string", "description": "Exact employee count range filter. Prefer the numeric ranges when a size is given.", "enum": ["1-10", "11-20", "21-50", "51-200", "201-500", "501-1000", "1001-5000", "5001+", "Small", "Mid-Market", "Enterprise", "Unknown"] },
+                  "revenue_range": { "type": "string", "description": "Exact annual revenue range filter.", "enum": ["Below $500k", "$500k - $1M", "$1M - $5M", "$5M - $10M", "$10M - $20M", "$20M - $50M", "Above $50M", "$50M - $100M", "$100M - $250M", "$250M - $500M", "$500M - $1B", "$1B - $2.5B", "$2.5B - $5B", "Over $5B"] },
+                  "limit": { "type": "integer", "description": "Number of results to return.", "default": 10, "minimum": 1, "maximum": 25 },
+                  "offset": { "type": "integer", "description": "Number of results to skip for pagination. Use with limit to page through results.", "default": 0 }
+                }
+              },
+              "example": { "query": "MoltSets", "industry": "Information Technology", "limit": 10, "offset": 0 }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "found": { "summary": "Data found", "value": { "results": { "results": [{ "title": "Senior Associate - Technical Director", "company": { "name": "MoltSets", "size": "57", "revenue": "1200000000", "industry": "Information Technology", "logo_url": "https://cdn.mixrank.com/md5/0bb6181a215bac707d7af3276be5XXXXX", "website_url": "https://moltsets.com", "linkedin_url": "https://linkedin.com/company/moltsets" }, "country": "United States", "headline": "Senior Associate - Technical Director @ MoltSets", "full_name": "John Smith", "last_name": "Smith", "seniority": "Senior", "first_name": "John", "linkedin_url": "https://linkedin.com/in/john-smith-123", "business_email": "john.smith@example.com", "current_industry": "Information Technology", "linkedin_slug": "john-smith-123", "_id": "john-smith-123", "_score": 9.1714 }], "total": 278 }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 197 } } }
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
+          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
+          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
+          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
+          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+        }
+      }
     }
   },
   "tags": [
@@ -981,6 +1071,7 @@
     { "name": "Phone", "description": "Phone enrichment tools." },
     { "name": "LinkedIn", "description": "LinkedIn profile enrichment and resolution tools." },
     { "name": "HEM Resolution", "description": "Resolve hashed emails (HEMs) to contact and identity data." },
-    { "name": "IP Resolution", "description": "Resolve IP addresses to hashed emails, MAIDs, and company data." }
+    { "name": "IP Resolution", "description": "Resolve IP addresses to hashed emails, MAIDs, and company data." },
+    { "name": "Search", "description": "Search and filter company and business profiles by name, domain, industry, size, or revenue." }
   ]
 }
