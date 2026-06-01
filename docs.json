@@ -33,11 +33,7 @@
               "developer-docs/getting-started/overview",
               "developer-docs/getting-started/authentication",
               "developer-docs/getting-started/rate-limits",
-              "developer-docs/getting-started/moltsets-app",
-              {
-                "anchor": "API Reference",
-                "href": "api-reference"
-              }
+              "developer-docs/getting-started/moltsets-app"
             ]
           },
           {
