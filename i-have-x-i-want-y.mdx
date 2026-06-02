@@ -7,6 +7,8 @@ Pick your starting point below. Each table shows what input you need, what you'l
 
 ## Search
 
+Search MoltSets's company and contact database by name, domain, industry, employee count, or revenue range. Use these endpoints to build B2B prospect lists, identify target accounts, and find contacts that match your ideal customer profile.
+
 | I have… | I want… | Type in Claude… | Tool |
 |---|---|---|---|
 | Company name | Matching company profiles (name, domain, industry, size, revenue) | Find company profiles matching Acme | `search_company_profiles` |
@@ -19,6 +21,8 @@ Pick your starting point below. Each table shows what input you need, what you'l
 | Industry + employee size | Contacts matching an ICP profile | Find contacts at information technology companies with 201-500 employees | `search_business_profiles` |
 
 ## Get Verified Emails
+
+Resolve LinkedIn profile URLs, company domains, email addresses, and IP addresses into verified business and personal email addresses. Supports single lookups, batch enrichment, and multi-step chains for building outbound contact lists with high deliverability.
 
 | I have… | I want… | Type in Claude… | Tool |
 |---|---|---|---|
@@ -35,6 +39,8 @@ Pick your starting point below. Each table shows what input you need, what you'l
 
 ## Get Carrier-Verified Mobile Phones
 
+Look up carrier-verified mobile phone numbers from LinkedIn profiles, email addresses, company domains, and IP addresses. Every number returned is a real mobile device — no landlines or VoIP. Supports single lookups and batches of up to 100 profiles at once, as well as multi-step chains for building call and SMS lists directly from a company name or IP address.
+
 | I have… | I want… | Type in Claude… | Tool |
 |---|---|---|---|
 | LinkedIn URL | Mobile phone number | Find the mobile phone number for linkedin.com/in/username | `enrich_phone` |
@@ -47,6 +53,8 @@ Pick your starting point below. Each table shows what input you need, what you'l
 
 ## Get Full Business Profile
 
+Resolve a LinkedIn URL or email address into a complete contact record — including full name, job title, seniority, company, firmographic data, verified email addresses, and optionally a carrier-verified mobile phone number. Use these endpoints to enrich inbound leads, populate CRM records, or build a complete picture of a prospect before outreach.
+
 | I have… | I want… | Type in Claude… | Tool |
 |---|---|---|---|
 | LinkedIn URL | Full business profile (name, title, company, firmographics) | Get the full profile for linkedin.com/in/username | `linkedin_to_business_profile` |
@@ -58,6 +66,8 @@ Pick your starting point below. Each table shows what input you need, what you'l
 
 ## Get Ad Audience
 
+Convert known contact identifiers — LinkedIn URLs and email addresses — into hashed emails (SHA-256 and MD5) and mobile advertising IDs (MAIDs) for privacy-safe audience matching. Use these endpoints to activate your contact lists across Meta, Google, LinkedIn Ads, TikTok, and any programmatic platform that supports customer match or device-level targeting.
+
 | I have… | I want… | Type in Claude… | Tool |
 |---|---|---|---|
 | Business email | Personal hashed emails (SHA-256) for audience matching | Get personal hashed emails for john.smith@example.com | `business_email_to_personal_hem` |
@@ -66,14 +76,14 @@ Pick your starting point below. Each table shows what input you need, what you'l
 
 ## Get Company
 
+Identify the company behind any IPv4 address and use that signal to trigger downstream enrichment — finding contacts, pulling a full company profile, or surfacing decision-makers at the organisation. Best suited for B2B use cases; consumer ISP addresses will typically not resolve to a named company.
+
 | I have… | I want… | Type in Claude… | Tool |
 |---|---|---|---|
 | IP address | Company associated with that IP | What company is behind IP 203.0.113.42 | `ip_to_company` |
 | IP address | Contacts at the company behind that IP | Find contacts at the company behind IP 203.0.113.42 | `ip_to_company` → `search_business_profiles` |
 | IP address | Full company profile for the organisation behind that IP | Look up the full company profile for the business at IP 203.0.113.42 | `ip_to_company` → `search_company_profiles` |
 | IP address | Decision-makers at the company behind that IP | Find senior contacts at the company behind IP 203.0.113.42 | `ip_to_company` → `search_business_profiles` |
-
-IP resolution is best suited for B2B use cases — consumer ISP addresses will typically not resolve to a named company.
 
 ## Common Workflows
 
