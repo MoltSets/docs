@@ -34,25 +34,25 @@
           {
             "group": "Getting Started",
             "pages": [
-              "developer-docs/getting-started/overview",
-              "developer-docs/getting-started/authentication",
-              "developer-docs/getting-started/rate-limits",
-              "developer-docs/getting-started/moltsets-app",
+              "getting-started/overview",
+              "getting-started/authentication",
+              "getting-started/rate-limits",
+              "getting-started/moltsets-app",
               "api-reference"
             ]
           },
           {
             "group": "Use Cases",
             "pages": [
-              "developer-docs/use-cases/i-have-x-i-want-y",
-              "developer-docs/use-cases/find-companies-and-contacts"
+              "use-cases/i-have-x-i-want-y",
+              "use-cases/find-companies-and-contacts"
             ]
           },
           {
             "group": "Integrations",
             "pages": [
-              "developer-docs/integrations/moltsets-mcp",
-              "developer-docs/integrations/clay"
+              "integrations/moltsets-mcp",
+              "integrations/clay"
             ]
           }
         ]
