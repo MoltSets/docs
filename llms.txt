@@ -15,12 +15,12 @@ MoltSets provides a people data API and MCP for identity resolution, contact enr
 - [Authentication](https://developer.moltsets.com/getting-started/authentication): API key format (`ms_XXXXXXXXXXX`), how to create/revoke keys, Bearer token usage, error responses.
 - [Rate Limits](https://developer.moltsets.com/getting-started/rate-limits): Per-plan limits, what counts as a request, 429 handling, exponential backoff, multi-key strategies.
 - [MoltSets App](https://developer.moltsets.com/getting-started/moltsets-app): Logging in, navigating the app.
-- [I Have X, I Want Y](https://developer.moltsets.com/integrations/use-cases/i-have-x-i-want-y): Tool selection guide — pick based on what data you have (email, HEM, LinkedIn, IP) and what you need. Covers email/people finding, identity resolution, company lookup, IP resolution, search, and chained workflows.
-- [Find Companies and Contacts](https://developer.moltsets.com/use-cases/find-companies-and-contacts): Search guide — build prospect lists, look up companies by domain, and find contacts matching an ICP via the MCP or API. Covers filters, pagination, and code examples.
+- [I Have X, I Want Y](https://developer.moltsets.comdeveloper-docs/integrationsdeveloper-docs/use-cases/i-have-x-i-want-y): Tool selection guide — pick based on what data you have (email, HEM, LinkedIn, IP) and what you need. Covers email/people finding, identity resolution, company lookup, IP resolution, search, and chained workflows.
+- [Find Companies and Contacts](https://developer.moltsets.comdeveloper-docs/use-cases/find-companies-and-contacts): Search guide — build prospect lists, look up companies by domain, and find contacts matching an ICP via the MCP or API. Covers filters, pagination, and code examples.
 
 ## Integrations
-- [MoltSets MCP Server](https://developer.moltsets.com/integrations/moltsets-mcp): MCP server URL (`https://mcp.moltsets.com/mcp`), setup for Claude.ai, Claude Desktop, and Claude Code, example prompts, troubleshooting.
-- [Clay HTTP API](https://developer.moltsets.com/integrations/clay) - Use MoltSets tools directly in Clay via the HTTP API enrichment.
+- [MoltSets MCP Server](https://developer.moltsets.comdeveloper-docs/integrations/moltsets-mcp): MCP server URL (`https://mcp.moltsets.com/mcp`), setup for Claude.ai, Claude Desktop, and Claude Code, example prompts, troubleshooting.
+- [Clay HTTP API](https://developer.moltsets.comdeveloper-docs/integrations/clay) - Use MoltSets tools directly in Clay via the HTTP API enrichment.
 
 ## API reference
 
