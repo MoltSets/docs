@@ -24,8 +24,4 @@ th strong { color: #F4805D !important; }
 
 .callout[data-callout-type="note"] .prose { color: #34D399 !important; }
 
-@media (min-width: 1536px) {
-    .\32xl\:max-w-2xl {
-        max-width: 100%;
-    }
-}
+#content-area { max-width: 100% !important; }
