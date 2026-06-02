@@ -31,3 +31,8 @@ table code { white-space: nowrap !important; }
 code { background: rgba(244,128,93,0.4) !important; }
 
 pre code { background: none !important; }
+
+.text-lg {
+  font-size: 0.875rem !important;
+  line-height: 1.7142857 !important; 
+}
