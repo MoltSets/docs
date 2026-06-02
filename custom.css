@@ -28,4 +28,4 @@ th strong { color: #F4805D !important; }
 
 table code { white-space: nowrap !important; }
 
-code { background: rgba(244,128,93,0.4); }
+code { background: rgba(244,128,93,0.4) !important; }
