@@ -560,7 +560,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": { "type": "string", "description": "Email address." }
+                  "email": { "type": "string", "description": "Email address." },
                   "include_mobile_phone": { "type": "boolean", "default": false, "description": "When true, attempts to include mobile phone. Costs additional credits when data is found." }
                 }
               },
