@@ -44,15 +44,15 @@
           {
             "group": "Use Cases",
             "pages": [
-              "i-have-x-i-want-y",
-              "find-companies-and-contacts"
+              "use-cases/i-have-x-i-want-y",
+              "use-cases/find-companies-and-contacts"
             ]
           },
           {
             "group": "Integrations",
             "pages": [
-              "moltsets-mcp",
-              "clay"
+              "integrations/moltsets-mcp",
+              "integrations/clay"
             ]
           }
         ]
