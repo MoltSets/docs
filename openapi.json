@@ -252,7 +252,7 @@
       "post": {
         "summary": "LinkedIn to Business Email",
         "operationId": "enrichBusinessEmail",
-        "description": "Retrieve the verified business (work) email address for any LinkedIn profile. Only returns corporate email addresses — no personal inboxes. Use this when you need to reach contacts at their workplace domain, such as for B2B outreach, CRM enrichment, or account-based marketing campaigns. If you also want a personal email fallback, use `enrich_email` instead. Credits are only charged when data is found.",
+        "description": "Retrieve the verified business (work) email address for any LinkedIn profile. Only returns corporate email addresses — no personal inboxes. Use this when you need to reach contacts at their workplace domain, such as for B2B outreach, CRM enrichment, or account-based marketing campaigns. If you also want a personal email fallback, use `enrich_email` instead.",
         "tags": ["Get Verified Emails"],
         "requestBody": {
           "required": true,
@@ -386,7 +386,7 @@
       "post": {
         "summary": "LinkedIn to Mobile Phone",
         "operationId": "enrichPhone",
-        "description": "Look up the carrier-verified mobile phone number for a LinkedIn profile. Only mobile numbers are returned — no landlines or VoIP numbers — so every result is a real device. Supports both single lookups (`linkedin_url`) and batch lookups of up to 100 profiles at once (`linkedin_urls`). Credits are only charged when data is found. Use for SMS outreach, cold calling, or enriching sales sequences with direct-dial mobile numbers.",
+        "description": "Look up the carrier-verified mobile phone number for a LinkedIn profile. Only mobile numbers are returned — no landlines or VoIP numbers — so every result is a real device. Supports both single lookups (`linkedin_url`) and batch lookups of up to 100 profiles at once (`linkedin_urls`). Use for SMS outreach, cold calling, or enriching sales sequences with direct-dial mobile numbers.",
         "tags": ["Get Carrier-Verified Mobile Phones"],
         "requestBody": {
           "required": true,
@@ -522,7 +522,7 @@
                 "required": ["linkedin_url"],
                 "properties": {
                   "linkedin_url": { "type": "string", "example": "https://linkedin.com/in/retentionadam" },
-                  "include_mobile_phone": { "type": "boolean", "description": "When true, attempts to include mobile phone in the response. Costs additional credits when data is found.", "default": false }
+                  "include_mobile_phone": { "type": "boolean", "description": "When true, attempts to include mobile phone in the response.", "default": false }
                 }
               }
             }
@@ -551,7 +551,7 @@
       "post": {
         "summary": "Email to Business Profile",
         "operationId": "hemToBusinessProfile",
-        "description": "Resolve an email address into a complete business profile, including full name, job title, seniority, company, LinkedIn URL, firmographic data, and additional email addresses on file. Use this to enrich inbound leads, form fills, or email list records with everything you need to qualify and contact a prospect. Set `include_mobile_phone: true` to also return a carrier-verified mobile number when available; additional credits apply when phone data is found.",
+        "description": "Resolve an email address into a complete business profile, including full name, job title, seniority, company, LinkedIn URL, firmographic data, and additional email addresses on file. Use this to enrich inbound leads, form fills, or email list records with everything you need to qualify and contact a prospect. Set `include_mobile_phone: true` to also return a carrier-verified mobile number when available; external credits apply when phone data is found.",
         "tags": ["Get Full Business Profile"],
         "requestBody": {
           "required": true,
@@ -561,7 +561,7 @@
                 "type": "object",
                 "properties": {
                   "email": { "type": "string", "description": "Email address." },
-                  "include_mobile_phone": { "type": "boolean", "default": false, "description": "When true, attempts to include mobile phone. Costs additional credits when data is found." }
+                  "include_mobile_phone": { "type": "boolean", "default": false, "description": "When true, attempts to include mobile phone. Costs external credits when data is found." }
                 }
               },
               "examples": {
@@ -754,7 +754,7 @@
       "post": {
         "summary": "Get Account",
         "operationId": "getAccount",
-        "description": "Retrieve your MoltSets account details, including account name, current plan, account status, remaining credit balance, number of API keys, and user count. Use this to programmatically check account health, verify active status, or display account information inside your own application or dashboard. This endpoint is free — it does not consume any credits.",
+        "description": "Retrieve your MoltSets account details, including account name, current plan, account status, remaining credit balance, number of API keys, and user count. Use this to programmatically check account health, verify active status, or display account information inside your own application or dashboard.",
         "tags": ["Account"],
         "requestBody": {
           "required": true,
@@ -823,7 +823,7 @@
       "post": {
         "summary": "Get Billing",
         "operationId": "getBilling",
-        "description": "Retrieve your MoltSets billing details, including your current plan, subscription status, remaining credit balance, billing period start and end dates, and the credit cost for each available tool. Use this to monitor spend, confirm renewal dates, or display live billing information inside your own application. This endpoint is free — it does not consume any credits.",
+        "description": "Retrieve your MoltSets billing details, including your current plan, subscription status, remaining credit balance, billing period start and end dates, and the credit cost for each available tool. Use this to monitor spend, confirm renewal dates, or display live billing information inside your own application.",
         "tags": ["Account"],
         "requestBody": {
           "required": true,
@@ -885,7 +885,7 @@
       "post": {
         "summary": "Get Usage",
         "operationId": "getUsage",
-        "description": "Retrieve a detailed breakdown of your MoltSets API credit usage for a chosen time period — today, the past week, the past month, or the current billing cycle. Returns a day-by-day log of API calls made, credits consumed, successful lookups, empty results, and failed requests, along with period totals. Use this to track consumption trends, audit usage by day, or build internal usage dashboards. This endpoint is free — it does not consume any credits.",
+        "description": "Retrieve a detailed breakdown of your MoltSets API credit usage for a chosen time period — today, the past week, the past month, or the current billing cycle. Returns a day-by-day log of API calls made, credits consumed, successful lookups, empty results, and failed requests, along with period totals. Use this to track consumption trends, audit usage by day, or build internal usage dashboards.",
         "tags": ["Account"],
         "requestBody": {
           "required": true,
