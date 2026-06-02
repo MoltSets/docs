@@ -80,7 +80,7 @@
       "post": {
         "summary": "Search Company Profiles",
         "operationId": "searchCompanyProfiles",
-        "description": "Search for companies by name, domain, industry, size, or revenue. Use `query` for free-text company name search, `domain` for exact company lookups, and the categorical filters (industry, employee_range, revenue_range) to narrow results. Combine `query` with filters for best precision. Returns ranked results; higher `_score` = stronger match.",
+        "description": "Search MoltSets's company database by name, domain, industry, employee count, or annual revenue to find and identify target accounts. Use `query` for free-text company name search, `domain` for exact lookups by website domain, and the categorical filters (`industry`, `employee_range`, `revenue_range`) to narrow your results. Combine `query` with filters for best precision. Returns ranked company records — higher `_score` means a stronger match. Ideal for building prospect lists, qualifying accounts, or enriching CRM data with firmographic context.",
         "tags": ["Search"],
         "requestBody": {
           "required": false,
@@ -125,7 +125,7 @@
       "post": {
         "summary": "Search Business Profiles",
         "operationId": "searchBusinessProfiles",
-        "description": "Search for people / business profiles by company, industry, size, or revenue. Use `query` for free-text company name search, `domain` for exact company lookups, and the categorical filters (industry, employee_range, revenue_range) to narrow results. Returns ranked contact records; higher `_score` = stronger match.",
+        "description": "Search MoltSets's contact database to find people by their employer, industry, company size, or revenue range. Use `query` for free-text company name search, `domain` for exact lookups, and the categorical filters (`industry`, `employee_range`, `revenue_range`) to narrow results. Returns ranked contact records — higher `_score` means a stronger match. Use this to build lead lists, identify decision-makers at target accounts, or populate outbound sequences with verified contact data.",
         "tags": ["Search"],
         "requestBody": {
           "required": false,
@@ -170,7 +170,7 @@
       "post": {
         "summary": "LinkedIn to Email (Hybrid)",
         "operationId": "enrichEmail",
-        "description": "Find the best available email for a LinkedIn profile. Returns a business email when available, falls back to personal email. The `type` field indicates which was returned. Credits only charged when data is found.",
+        "description": "Look up the best available email address for any LinkedIn profile. Returns a verified business email when one exists, and automatically falls back to a personal email if not — so you always get a result when data is available. The `type` field in the response tells you which kind was returned. Credits are only charged when data is found, so failed lookups are free. Use this as your default LinkedIn-to-email enrichment endpoint when email type is not a constraint.",
         "tags": ["Get Verified Emails"],
         "requestBody": {
           "required": true,
@@ -252,7 +252,7 @@
       "post": {
         "summary": "LinkedIn to Business Email",
         "operationId": "enrichBusinessEmail",
-        "description": "Find the verified business email address for a LinkedIn profile. Returns business emails only — use enrich_email for a hybrid tool that falls back to personal email. Credits only charged when data is found.",
+        "description": "Retrieve the verified business (work) email address for any LinkedIn profile. Only returns corporate email addresses — no personal inboxes. Use this when you need to reach contacts at their workplace domain, such as for B2B outreach, CRM enrichment, or account-based marketing campaigns. If you also want a personal email fallback, use `enrich_email` instead. Credits are only charged when data is found.",
         "tags": ["Get Verified Emails"],
         "requestBody": {
           "required": true,
@@ -308,7 +308,7 @@
       "post": {
         "summary": "LinkedIn to Personal Email",
         "operationId": "enrichPersonalEmail",
-        "description": "Find the verified personal email address for a LinkedIn profile. Credits only charged when data is found.",
+        "description": "Retrieve the verified personal email address (such as Gmail or iCloud) for any LinkedIn profile. Useful for reaching contacts outside their work inbox — ideal for recruitment outreach, consumer marketing, or re-engagement campaigns where a personal address improves deliverability. Credits are only charged when data is found.",
         "tags": ["Get Verified Emails"],
         "requestBody": {
           "required": true,
@@ -347,7 +347,7 @@
       "post": {
         "summary": "LinkedIn to Best Personal Email",
         "operationId": "linkedinToBestPersonalEmail",
-        "description": "Look up the highest-confidence personal email address for a LinkedIn profile using additional scoring across candidates.",
+        "description": "Look up the highest-confidence personal email address for a LinkedIn profile. When multiple personal email candidates exist for a profile, this endpoint scores them and returns only the one most likely to be current and deliverable. Use this over `enrich_personal_email` when match quality is more important than speed, or when you're seeing higher bounce rates and need more precise personal email resolution.",
         "tags": ["Get Verified Emails"],
         "requestBody": {
           "required": true,
@@ -386,7 +386,7 @@
       "post": {
         "summary": "LinkedIn to Mobile Phone",
         "operationId": "enrichPhone",
-        "description": "Find the verified mobile phone number for a LinkedIn profile. Only mobile numbers returned — no landlines. Credits only charged when data is found. Pass either `linkedin_url` (single) or `linkedin_urls` (batch, up to 100), not both.",
+        "description": "Look up the carrier-verified mobile phone number for a LinkedIn profile. Only mobile numbers are returned — no landlines or VoIP numbers — so every result is a real device. Supports both single lookups (`linkedin_url`) and batch lookups of up to 100 profiles at once (`linkedin_urls`). Credits are only charged when data is found. Use for SMS outreach, cold calling, or enriching sales sequences with direct-dial mobile numbers.",
         "tags": ["Get Carrier-Verified Mobile Phones"],
         "requestBody": {
           "required": true,
@@ -429,7 +429,7 @@
       "post": {
         "summary": "Email to LinkedIn Slug",
         "operationId": "hemToLinkedin",
-        "description": "Resolve an email to a LinkedIn profile slug.",
+        "description": "Resolve any email address to its associated LinkedIn profile slug. Useful for connecting a CRM contact or email list record back to a LinkedIn identity, enabling downstream enrichment, profile lookups, or social selling workflows. Pass a business or personal email and receive the LinkedIn slug for that person when a match exists.",
         "tags": ["Get Full Business Profile"],
         "requestBody": {
           "required": true,
@@ -470,7 +470,7 @@
       "post": {
         "summary": "Email to Best LinkedIn URL",
         "operationId": "hemToBestLinkedin",
-        "description": "Resolve an email to the highest-confidence LinkedIn profile URL when multiple candidates exist.",
+        "description": "Resolve an email address to the highest-confidence LinkedIn profile URL when multiple candidates exist. Unlike `hem_to_linkedin`, which returns a slug, this endpoint scores all matching profiles and returns the single best full LinkedIn URL. Use this when email-to-LinkedIn match quality is critical — for example, before personalising outreach, triggering enrichment workflows, or appending LinkedIn data to a contact record.",
         "tags": ["Get Full Business Profile"],
         "requestBody": {
           "required": true,
@@ -511,7 +511,7 @@
       "post": {
         "summary": "LinkedIn to Business Profile",
         "operationId": "linkedinToBusinessProfile",
-        "description": "Look up a full business profile by LinkedIn URL, including name, title, company, firmographic data, and optionally mobile phone.",
+        "description": "Resolve a LinkedIn profile URL into a complete business profile, including full name, job title, seniority, company name, company website, industry, revenue, verified business email, personal email, and optionally a carrier-verified mobile phone number. This is MoltSets's most complete LinkedIn enrichment endpoint — use it when you need a full picture of a contact and their employer in a single call. Set `include_mobile_phone: true` to append a direct-dial mobile number; additional credits apply when phone data is found.",
         "tags": ["Get Full Business Profile"],
         "requestBody": {
           "required": true,
@@ -551,7 +551,7 @@
       "post": {
         "summary": "Email to Business Profile",
         "operationId": "hemToBusinessProfile",
-        "description": "Resolve an email to a full business profile including name, company, title, and contact info.",
+        "description": "Resolve an email address into a complete business profile, including full name, job title, seniority, company, LinkedIn URL, firmographic data, and additional email addresses on file. Use this to enrich inbound leads, form fills, or email list records with everything you need to qualify and contact a prospect. Set `include_mobile_phone: true` to also return a carrier-verified mobile number when available; additional credits apply when phone data is found.",
         "tags": ["Get Full Business Profile"],
         "requestBody": {
           "required": true,
@@ -593,7 +593,7 @@
       "post": {
         "summary": "Business Email to SHA256",
         "operationId": "businessEmailToSHA256",
-        "description": "Convert a business email address into SHA256 personal hashed emails for identity resolution and audience matching. SHA245 can be used for all know ad platforms.",
+        "description": "Convert a business email address into SHA256-hashed personal email addresses for privacy-safe identity resolution and paid advertising audience matching. The returned hashes can be uploaded directly to Meta, Google, LinkedIn, TikTok, and other ad platforms that support customer match or custom audience workflows. Use this to retarget known contacts across their personal devices without exposing raw personal email data.",
         "tags": ["Get Ad Audience"],
         "requestBody": {
           "required": true,
@@ -634,7 +634,7 @@
       "post": {
         "summary": "LinkedIn to SHA256",
         "operationId": "linkedinToSHA256",
-        "description": "Look up all known SHA256 for a LinkedIn profile, across both business and personal emails.",
+        "description": "Retrieve all known SHA256 and MD5 hashed emails for a LinkedIn profile, covering both business and personal email addresses. Returns separate arrays for business and personal hashes in both formats, giving you maximum coverage for audience matching across ad platforms. Use this when you need to build the broadest possible match key set for a LinkedIn-identified contact — for example, to maximise match rates when uploading customer lists to Meta, Google, or LinkedIn Ads.",
         "tags": ["Get Ad Audience"],
         "requestBody": {
           "required": true,
@@ -673,7 +673,7 @@
       "post": {
         "summary": "Email to MAID",
         "operationId": "hemToMaid",
-        "description": "Resolve an email to mobile advertising IDs (MAIDs).",
+        "description": "Resolve an email address to one or more Mobile Advertising IDs (MAIDs), including AAIDs (Android Advertising IDs) and IDFAs (Apple Identifier for Advertisers). MAIDs are used by ad platforms to target users on their mobile devices with precision. Use this endpoint to connect a known email identity to mobile device signals — enabling cross-device retargeting, programmatic audience activation, and mobile-first ad campaigns against your contact lists.",
         "tags": ["Get Ad Audience"],
         "requestBody": {
           "required": true,
@@ -715,7 +715,7 @@
       "post": {
         "summary": "IP to Company",
         "operationId": "ipToCompany",
-        "description": "Resolve an IP address to the company or companies associated with it. Best suited for B2B use cases — consumer ISP IPs will typically not resolve to a company.",
+        "description": "Identify the company or companies associated with an IPv4 address. Pass an IP from your website visitor logs, server request data, or analytics platform and get back the domain of the organisation behind that traffic. Best suited for B2B use cases — consumer ISP addresses will typically not resolve to a named company. Use this to de-anonymise B2B web traffic, trigger account-based workflows, or feed website visitor identification pipelines.",
         "tags": ["Get Company"],
         "requestBody": {
           "required": true,
@@ -754,7 +754,7 @@
       "post": {
         "summary": "Get Account",
         "operationId": "getAccount",
-        "description": "Get your account details including name, plan, status, credit balance, and API key count. Free — does not consume credits.",
+        "description": "Retrieve your MoltSets account details, including account name, current plan, account status, remaining credit balance, number of API keys, and user count. Use this to programmatically check account health, verify active status, or display account information inside your own application or dashboard. This endpoint is free — it does not consume any credits.",
         "tags": ["Account"],
         "requestBody": {
           "required": true,
@@ -823,7 +823,7 @@
       "post": {
         "summary": "Get Billing",
         "operationId": "getBilling",
-        "description": "Get your account's billing details including current plan, subscription status, credit balance, renewal date, and credit costs per tool. Free — does not consume credits.",
+        "description": "Retrieve your MoltSets billing details, including your current plan, subscription status, remaining credit balance, billing period start and end dates, and the credit cost for each available tool. Use this to monitor spend, confirm renewal dates, or display live billing information inside your own application. This endpoint is free — it does not consume any credits.",
         "tags": ["Account"],
         "requestBody": {
           "required": true,
@@ -885,7 +885,7 @@
       "post": {
         "summary": "Get Usage",
         "operationId": "getUsage",
-        "description": "Get your account's credit usage for a given time period. Free — does not consume credits.",
+        "description": "Retrieve a detailed breakdown of your MoltSets API credit usage for a chosen time period — today, the past week, the past month, or the current billing cycle. Returns a day-by-day log of API calls made, credits consumed, successful lookups, empty results, and failed requests, along with period totals. Use this to track consumption trends, audit usage by day, or build internal usage dashboards. This endpoint is free — it does not consume any credits.",
         "tags": ["Account"],
         "requestBody": {
           "required": true,
