@@ -41,6 +41,14 @@
             ]
           },
           {
+            "group": "API Reference",
+            "root": "api-reference",
+            "directory": "none",
+            "pages": [
+              "api-reference"
+            ]
+          },
+          {
             "group": "Use Cases",
             "pages": [
               "i-have-x-i-want-y",
