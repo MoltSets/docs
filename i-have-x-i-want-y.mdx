@@ -26,6 +26,12 @@ Pick your starting point below. Each table shows what input you need, what you'l
 | LinkedIn URL | Business email only | Find the business email for linkedin.com/in/username | `enrich_business_email` |
 | LinkedIn URL | Personal email only | Find the personal email for linkedin.com/in/username | `enrich_personal_email` |
 | LinkedIn URL | Highest-confidence personal email | Find the best personal email for linkedin.com/in/username | `linkedin_to_best_personal_email` |
+| Company name or domain | Best available email for each employee | Search for employees at acme.com and get their best email address | `search_business_profiles` → `enrich_email` |
+| Company name or domain | Business emails for each employee | Search for employees at acme.com and get their business email addresses | `search_business_profiles` → `enrich_business_email` |
+| Company name or domain | Personal emails for each employee | Search for employees at acme.com and get their personal email addresses | `search_business_profiles` → `enrich_personal_email` |
+| IP address | Emails for employees at the company behind that IP | Find employees at the company behind IP 203.0.113.42 and get their email addresses | `ip_to_company` → `search_business_profiles` → `enrich_email` |
+| Email address | Personal email as a backup or alternative | Find the LinkedIn profile for john.smith@example.com then get their personal email | `hem_to_linkedin` → `enrich_personal_email` |
+| LinkedIn URL | Business email, falling back to personal if not found | Try to find the business email for linkedin.com/in/username, fall back to personal if nothing is found | `enrich_business_email` → `enrich_personal_email` |
 
 ## Get Carrier-Verified Mobile Phones
 
@@ -33,6 +39,11 @@ Pick your starting point below. Each table shows what input you need, what you'l
 |---|---|---|---|
 | LinkedIn URL | Mobile phone number | Find the mobile phone number for linkedin.com/in/username | `enrich_phone` |
 | List of LinkedIn URLs (up to 100) | Mobile phone numbers for each profile | Find mobile phone numbers for these LinkedIn profiles: [list] | `enrich_phone` |
+| Company name or domain | Mobile phone numbers for each employee | Search for employees at acme.com and get their mobile phone numbers | `search_business_profiles` → `enrich_phone` |
+| Company name + seniority or role filter | Mobile phones for decision-makers at a company | Search for senior contacts at acme.com and get their mobile phone numbers | `search_business_profiles` → `enrich_phone` |
+| Email address | Mobile phone number | Find the LinkedIn profile for john.smith@example.com then get their mobile phone number | `hem_to_linkedin` → `enrich_phone` |
+| IP address | Mobile phones for employees at the company behind that IP | Find employees at the company behind IP 203.0.113.42 and get their mobile phone numbers | `ip_to_company` → `search_business_profiles` → `enrich_phone` |
+| LinkedIn URL | Email address and mobile phone | Get the email address and mobile phone number for linkedin.com/in/username | `enrich_email` + `enrich_phone` |
 
 ## Get Full Business Profile
 
