@@ -3,7 +3,7 @@
   "info": {
     "title": "MoltSets API",
     "version": "1.0.0",
-    "description": "Identity resolution API. Resolve emails, LinkedIn profiles, IP addresses, and hashed emails into enriched contact and company data."
+    "description": "Identity resolution API. Resolve emails, LinkedIn profiles, IP addresses, and emails into enriched contact and company data."
   },
   "servers": [
     {
@@ -382,45 +382,6 @@
         }
       }
     },
-    "/hem_to_email": {
-      "post": {
-        "summary": "HEM to Email",
-        "operationId": "hemToEmail",
-        "description": "Resolve a hashed email (MD5) to the plaintext email address and SHA-256 hash.",
-        "tags": ["Get Verified Emails"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": ["md5"],
-                "properties": {
-                  "md5": { "type": "string", "description": "MD5 hashed email address." }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "email": "john.smith@example.com", "md5_email": "3018fe3a783fad1db0370ee3faXXXXX", "sha256_email": "54a0a34d989f1ffe0ee7020ebfa2c250fc6037d45bcb887b18e5790a6bXXXXX" }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 206 } } }
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
-        }
-      }
-    },
     "/enrich_phone": {
       "post": {
         "summary": "LinkedIn to Mobile Phone",
@@ -636,9 +597,9 @@
     },
     "/business_email_to_personal_hem": {
       "post": {
-        "summary": "Business Email to Personal HEM",
-        "operationId": "businessEmailToPersonalHem",
-        "description": "Convert a business email address or hashed email (HEM) into SHA-256 personal hashed emails for identity resolution and audience matching. Pass either `email` or `md5`, not both.",
+        "summary": "Business Email to SHA256",
+        "operationId": "businessEmailToSHA256",
+        "description": "Convert a business email address into SHA256 personal hashed emails for identity resolution and audience matching. Pass either `email` or `md5`, not both.",
         "tags": ["Get Ad Audience"],
         "requestBody": {
           "required": true,
@@ -647,13 +608,11 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": { "type": "string", "description": "Plaintext business email address." },
-                  "md5": { "type": "string", "description": "MD5 hash of the business email address." }
+                  "email": { "type": "string", "description": "Plaintext business email address." }
                 }
               },
               "examples": {
-                "email": { "summary": "Using email", "value": { "email": "john.smith@example.com" } },
-                "md5": { "summary": "Using MD5", "value": { "md5": "5d41402abc4b2a76b9719d91101XXXXX" } }
+                "email": { "summary": "Using email", "value": { "email": "john.smith@example.com" } }
               }
             }
           }
@@ -664,7 +623,7 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "personal_email_sha256": ["e187e84b06e1e6577bcebe42d3905434ddc89d2d5abaab8e85691882310XXXXX"] }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 207 } } }
+                  "found": { "summary": "Data found", "value": { "results": { "personal_email_SHA256": ["e187e84b06e1e6577bcebe42d3905434ddc89d2d5abaab8e85691882310XXXXX"] }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 207 } } }
                 }
               }
             }
@@ -679,9 +638,9 @@
     },
     "/linkedin_to_hashed_emails": {
       "post": {
-        "summary": "LinkedIn to HEM",
-        "operationId": "linkedinToHashedEmails",
-        "description": "Look up all known hashed email addresses (MD5 and SHA-256) for a LinkedIn profile, across both business and personal emails.",
+        "summary": "LinkedIn to SHA256",
+        "operationId": "linkedinToSHA256",
+        "description": "Look up all known SHA256 for a LinkedIn profile, across both business and personal emails.",
         "tags": ["Get Ad Audience"],
         "requestBody": {
           "required": true,
@@ -703,7 +662,7 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "linkedin_slug": "john-smith-123", "business_sha256_array": ["f101da855ed67dc34c9729f04df8aeefXXXXX"], "business_md5_array": ["900b89c0e5ece81f7fb0a72ef3dXXXXX"], "personal_sha256_array": ["266f422db074460bb5bf41984c3aXXXXX"], "personal_md5_array": ["0c86fde3392c84d6514de378dc1XXXXX"] }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 191 } } }
+                  "found": { "summary": "Data found", "value": { "results": { "linkedin_slug": "john-smith-123", "business_SHA256_array": ["f101da855ed67dc34c9729f04df8aeefXXXXX"], "business_md5_array": ["900b89c0e5ece81f7fb0a72ef3dXXXXX"], "personal_SHA256_array": ["266f422db074460bb5bf41984c3aXXXXX"], "personal_md5_array": ["0c86fde3392c84d6514de378dc1XXXXX"] }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 191 } } }
                 }
               }
             }
@@ -720,7 +679,7 @@
       "post": {
         "summary": "Email to MAID",
         "operationId": "hemToMaid",
-        "description": "Resolve a plaintext email or MD5 hashed email to mobile advertising IDs (MAIDs). Pass either `email` or `md5`, not both.",
+        "description": "Resolve a plaintext email to mobile advertising IDs (MAIDs). Pass either `email` or `md5`, not both.",
         "tags": ["Get Ad Audience"],
         "requestBody": {
           "required": true,
@@ -729,13 +688,11 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": { "type": "string", "description": "Plaintext email address." },
-                  "md5": { "type": "string", "description": "MD5 hashed email address." }
+                  "email": { "type": "string", "description": "Plaintext email address." }
                 }
               },
               "examples": {
-                "email": { "summary": "Using email", "value": { "email": "john.smith@example.com" } },
-                "md5": { "summary": "Using MD5", "value": { "md5": "5d41402abc4b2a76b9719d91101XXXXX" } }
+                "email": { "summary": "Using email", "value": { "email": "john.smith@example.com" } }
               }
             }
           }
@@ -759,87 +716,7 @@
         }
       }
     },
-    "/ip_to_hem": {
-      "post": {
-        "summary": "IP to HEM",
-        "operationId": "ipToHem",
-        "description": "Resolve an IP address (with optional user agent) to hashed email addresses (MD5), ranked by confidence score. Passing `user_agent` significantly improves match accuracy.",
-        "tags": ["Get Ad Audience"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": ["ip_address"],
-                "properties": {
-                  "ip_address": { "type": "string", "description": "IPv4 address to resolve.", "example": "8.8.8.8" },
-                  "user_agent": { "type": "string", "description": "Browser user agent string. Significantly improves match accuracy." },
-                  "include_sha256": { "type": "boolean", "default": false, "description": "When true, includes SHA-256 hashes alongside MD5 hashes in results." }
-                }
-              },
-              "example": { "ip_address": "8.8.8.8", "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)", "include_sha256": true }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "found": { "summary": "Data found", "value": { "results": [{ "md5": "43132e2f7752aafbc18d0ff97bbXXXXX", "sha256": "9adcf8496de590e61c733352fdcafaXXXXX", "score": "0.928" }], "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 206 } } }
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
-        }
-      }
-    },
-    "/ip_to_maid": {
-      "post": {
-        "summary": "IP to MAID",
-        "operationId": "ipToMaid",
-        "description": "Resolve an IP address to mobile advertising IDs (MAIDs) associated with it.",
-        "tags": ["Get Ad Audience"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": ["ip_address"],
-                "properties": {
-                  "ip_address": { "type": "string", "description": "IPv4 address to resolve.", "example": "8.8.8.8" }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "found": { "summary": "Data found", "value": { "results": [{ "device_id": "7e89542e-de65-4c94-bc0d-76d02d2XXXXX", "device_type": "AAID" }], "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 206 } } }
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
-        }
-      }
-    },
+
     "/ip_to_company": {
       "post": {
         "summary": "IP to Company",
@@ -1084,7 +961,7 @@
     },
     {
       "name": "Get Ad Audience",
-      "description": "Resolve identifiers to hashed emails (HEMs) and mobile advertising IDs (MAIDs) for audience matching."
+      "description": "Resolve identifiers to hashed email (HEM) and mobile advertising IDs (MAIDs) for audience matching."
     },
     {
       "name": "Get Company",

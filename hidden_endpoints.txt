@@ -1,0 +1,120 @@
+    "/ip_to_hem": {
+  "post": {
+    "summary": "IP to HEM",
+    "operationId": "ipToHem",
+    "description": "Resolve an IP address (with optional user agent) to hashed email addresses (MD5), ranked by confidence score. Passing `user_agent` significantly improves match accuracy.",
+    "tags": ["Get Ad Audience"],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["ip_address"],
+            "properties": {
+              "ip_address": { "type": "string", "description": "IPv4 address to resolve.", "example": "8.8.8.8" },
+              "user_agent": { "type": "string", "description": "Browser user agent string. Significantly improves match accuracy." },
+              "include_SHA256": { "type": "boolean", "default": false, "description": "When true, includes SHA256 hashes alongside MD5 hashes in results." }
+            }
+          },
+          "example": { "ip_address": "8.8.8.8", "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)", "include_SHA256": true }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "examples": {
+              "found": { "summary": "Data found", "value": { "results": [{ "md5": "43132e2f7752aafbc18d0ff97bbXXXXX", "SHA256": "9adcf8496de590e61c733352fdcafaXXXXX", "score": "0.928" }], "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 206 } } }
+            }
+          }
+        }
+      },
+      "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
+      "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
+      "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
+      "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
+      "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+    }
+  }
+},
+"/ip_to_maid": {
+  "post": {
+    "summary": "IP to MAID",
+    "operationId": "ipToMaid",
+    "description": "Resolve an IP address to mobile advertising IDs (MAIDs) associated with it.",
+    "tags": ["Get Ad Audience"],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["ip_address"],
+            "properties": {
+              "ip_address": { "type": "string", "description": "IPv4 address to resolve.", "example": "8.8.8.8" }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "examples": {
+              "found": { "summary": "Data found", "value": { "results": [{ "device_id": "7e89542e-de65-4c94-bc0d-76d02d2XXXXX", "device_type": "AAID" }], "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 206 } } }
+            }
+          }
+        }
+      },
+      "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
+      "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
+      "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
+      "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
+      "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+    }
+  }
+},
+"/hem_to_email": {
+  "post": {
+    "summary": "HEM to Email",
+    "operationId": "hemToEmail",
+    "description": "Resolve a hashed email (MD5) to the plaintext email address and SHA256 hash.",
+    "tags": ["Get Verified Emails"],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["md5"],
+            "properties": {
+              "md5": { "type": "string", "description": "MD5 hashed email address." }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "examples": {
+              "found": { "summary": "Data found", "value": { "results": { "email": "john.smith@example.com", "md5_email": "3018fe3a783fad1db0370ee3faXXXXX", "SHA256_email": "54a0a34d989f1ffe0ee7020ebfa2c250fc6037d45bcb887b18e5790a6bXXXXX" }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 206 } } }
+            }
+          }
+        }
+      },
+      "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
+      "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
+      "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
+      "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
+      "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+    }
+  }
+},
