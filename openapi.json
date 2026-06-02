@@ -429,7 +429,7 @@
       "post": {
         "summary": "Email to LinkedIn Slug",
         "operationId": "hemToLinkedin",
-        "description": "Resolve a plaintext email or MD5 hashed email to a LinkedIn profile slug. Pass either `email` or `md5`, not both.",
+        "description": "Resolve an email to a LinkedIn profile slug.",
         "tags": ["Get Full Business Profile"],
         "requestBody": {
           "required": true,
@@ -438,13 +438,11 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": { "type": "string", "description": "Plaintext email address." },
-                  "md5": { "type": "string", "description": "MD5 hashed email address." }
+                  "email": { "type": "string", "description": "Email address." }
                 }
               },
               "examples": {
-                "email": { "summary": "Using email", "value": { "email": "john.smith@example.com" } },
-                "md5": { "summary": "Using MD5", "value": { "md5": "5d41402abc4b2a76b9719d91101XXXXX" } }
+                "email": { "summary": "Using email", "value": { "email": "john.smith@example.com" } }
               }
             }
           }
@@ -472,7 +470,7 @@
       "post": {
         "summary": "Email to Best LinkedIn URL",
         "operationId": "hemToBestLinkedin",
-        "description": "Resolve a plaintext email or MD5 hashed email to the highest-confidence LinkedIn profile URL when multiple candidates exist. Pass either `email` or `md5`, not both.",
+        "description": "Resolve an email to the highest-confidence LinkedIn profile URL when multiple candidates exist.",
         "tags": ["Get Full Business Profile"],
         "requestBody": {
           "required": true,
@@ -481,13 +479,11 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": { "type": "string", "description": "Plaintext email address." },
-                  "md5": { "type": "string", "description": "MD5 hashed email address." }
+                  "email": { "type": "string", "description": "Email address." }
                 }
               },
               "examples": {
-                "email": { "summary": "Using email", "value": { "email": "john.smith@example.com" } },
-                "md5": { "summary": "Using MD5", "value": { "md5": "5d41402abc4b2a76b9719d91101XXXXX" } }
+                "email": { "summary": "Using email", "value": { "email": "john.smith@example.com" } }
               }
             }
           }
@@ -555,7 +551,7 @@
       "post": {
         "summary": "Email to Business Profile",
         "operationId": "hemToBusinessProfile",
-        "description": "Resolve a plaintext email or MD5 hashed email to a full business profile including name, company, title, and contact info. Pass either `email` or `md5`, not both.",
+        "description": "Resolve an email to a full business profile including name, company, title, and contact info.",
         "tags": ["Get Full Business Profile"],
         "requestBody": {
           "required": true,
@@ -564,14 +560,12 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": { "type": "string", "description": "Plaintext email address." },
-                  "md5": { "type": "string", "description": "MD5 hashed email address." },
+                  "email": { "type": "string", "description": "Email address." }
                   "include_mobile_phone": { "type": "boolean", "default": false, "description": "When true, attempts to include mobile phone. Costs additional credits when data is found." }
                 }
               },
               "examples": {
-                "email": { "summary": "Using email", "value": { "email": "john.smith@example.com" } },
-                "md5": { "summary": "Using MD5", "value": { "md5": "5d41402abc4b2a76b9719d91101XXXXX" } }
+                "email": { "summary": "Using email", "value": { "email": "john.smith@example.com" } }
               }
             }
           }
@@ -599,7 +593,7 @@
       "post": {
         "summary": "Business Email to SHA256",
         "operationId": "businessEmailToSHA256",
-        "description": "Convert a business email address into SHA256 personal hashed emails for identity resolution and audience matching. Pass either `email` or `md5`, not both.",
+        "description": "Convert a business email address into SHA256 personal hashed emails for identity resolution and audience matching. SHA245 can be used for all know ad platforms.",
         "tags": ["Get Ad Audience"],
         "requestBody": {
           "required": true,
@@ -608,7 +602,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": { "type": "string", "description": "Plaintext business email address." }
+                  "email": { "type": "string", "description": "Business email address." }
                 }
               },
               "examples": {
@@ -679,7 +673,7 @@
       "post": {
         "summary": "Email to MAID",
         "operationId": "hemToMaid",
-        "description": "Resolve a plaintext email to mobile advertising IDs (MAIDs). Pass either `email` or `md5`, not both.",
+        "description": "Resolve an email to mobile advertising IDs (MAIDs).",
         "tags": ["Get Ad Audience"],
         "requestBody": {
           "required": true,
@@ -688,7 +682,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": { "type": "string", "description": "Plaintext email address." }
+                  "email": { "type": "string", "description": "Email address." }
                 }
               },
               "examples": {
