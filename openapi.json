@@ -41,36 +41,66 @@
       "ErrorBadRequest": {
         "type": "object",
         "properties": {
-          "error": { "type": "string", "example": "Bad Request" },
-          "message": { "type": "string", "example": "The server cannot process the request due to a client error (400 Bad Request)." }
+          "error": {
+            "type": "string",
+            "example": "Bad Request"
+          },
+          "message": {
+            "type": "string",
+            "example": "The server cannot process the request due to a client error (400 Bad Request)."
+          }
         }
       },
       "ErrorInvalidInput": {
         "type": "object",
         "properties": {
-          "error": { "type": "string", "example": "Invalid Input" },
-          "message": { "type": "string", "example": "Message describing the nature of the invalid input." }
+          "error": {
+            "type": "string",
+            "example": "Invalid Input"
+          },
+          "message": {
+            "type": "string",
+            "example": "Message describing the nature of the invalid input."
+          }
         }
       },
       "ErrorUnauthorized": {
         "type": "object",
         "properties": {
-          "error": { "type": "string", "example": "Unauthorized" },
-          "message": { "type": "string", "example": "Invalid API key." }
+          "error": {
+            "type": "string",
+            "example": "Unauthorized"
+          },
+          "message": {
+            "type": "string",
+            "example": "Invalid API key."
+          }
         }
       },
       "ErrorNotFound": {
         "type": "object",
         "properties": {
-          "error": { "type": "string", "example": "Not Found" },
-          "message": { "type": "string", "example": "No match was found for the data provided." }
+          "error": {
+            "type": "string",
+            "example": "Not Found"
+          },
+          "message": {
+            "type": "string",
+            "example": "No match was found for the data provided."
+          }
         }
       },
       "ErrorRateLimit": {
         "type": "object",
         "properties": {
-          "error": { "type": "string", "example": "Too Many Requests" },
-          "message": { "type": "string", "example": "Rate limit exceeded. Maximum 100 requests per second." }
+          "error": {
+            "type": "string",
+            "example": "Too Many Requests"
+          },
+          "message": {
+            "type": "string",
+            "example": "Rate limit exceeded. Maximum 100 requests per second."
+          }
         }
       }
     }
@@ -81,7 +111,9 @@
         "summary": "Search Company Profiles",
         "operationId": "searchCompanyProfiles",
         "description": "Search MoltSets's company database by name, domain, industry, employee count, or annual revenue to find and identify target accounts. Use `query` for free-text company name search, `domain` for exact lookups by website domain, and the categorical filters (`industry`, `employee_range`, `revenue_range`) to narrow your results. Combine `query` with filters for best precision. Returns ranked company records — higher `_score` means a stronger match. Ideal for building prospect lists, qualifying accounts, or enriching CRM data with firmographic context.",
-        "tags": ["Search"],
+        "tags": [
+          "Search"
+        ],
         "requestBody": {
           "required": false,
           "content": {
@@ -89,16 +121,110 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "query": { "type": "string", "description": "Full-text search across company name only. Do not put domain, industry, employee size, or revenue here — use the dedicated filter params for those." },
-                  "domain": { "type": "string", "description": "Exact domain filter. Omit the protocol (no https://). Prefer this over `query` when you have a known domain — it's a precise match.", "example": "moltsets.com" },
-                  "industry": { "type": "string", "description": "Exact industry filter. Map the request to one of the supported values.", "enum": ["Professional and Business Services", "Information Technology", "Manufacturing", "Retail", "Health and Pharmaceuticals", "Creative Arts and Entertainment", "Construction", "Marketing & Advertising", "Finance and Banking", "Tourism and Hospitality", "Non-Profit and Social Services", "Food and Beverage", "Real Estate", "Education", "Transportation and Logistics", "Media and Publishing", "Energy", "Automotive", "Government and Public Administration", "Telecommunications", "Agriculture", "Utilities", "Corporate Services", "Insurance", "Banks", "Computer Software", "Pharmaceuticals and Biotechnology", "Aerospace and Defense", "Electronics", "Mining and Metals"] },
-                  "employee_range": { "type": "string", "description": "Exact employee count range filter. Prefer the numeric ranges when a size is given.", "enum": ["1-10", "11-20", "21-50", "51-200", "201-500", "501-1000", "1001-5000", "5001+", "Small", "Mid-Market", "Enterprise", "Unknown"] },
-                  "revenue_range": { "type": "string", "description": "Exact annual revenue range filter.", "enum": ["Below $500k", "$500k - $1M", "$1M - $5M", "$5M - $10M", "$10M - $20M", "$20M - $50M", "Above $50M", "$50M - $100M", "$100M - $250M", "$250M - $500M", "$500M - $1B", "$1B - $2.5B", "$2.5B - $5B", "Over $5B"] },
-                  "limit": { "type": "integer", "description": "Number of results to return.", "default": 10, "minimum": 1, "maximum": 25 },
-                  "offset": { "type": "integer", "description": "Number of results to skip for pagination. Use with limit to page through results.", "default": 0 }
+                  "query": {
+                    "type": "string",
+                    "description": "Full-text search across company name only. Do not put domain, industry, employee size, or revenue here — use the dedicated filter params for those."
+                  },
+                  "domain": {
+                    "type": "string",
+                    "description": "Exact domain filter. Omit the protocol (no https://). Prefer this over `query` when you have a known domain — it's a precise match.",
+                    "example": "moltsets.com"
+                  },
+                  "industry": {
+                    "type": "string",
+                    "description": "Exact industry filter. Map the request to one of the supported values.",
+                    "enum": [
+                      "Professional and Business Services",
+                      "Information Technology",
+                      "Manufacturing",
+                      "Retail",
+                      "Health and Pharmaceuticals",
+                      "Creative Arts and Entertainment",
+                      "Construction",
+                      "Marketing & Advertising",
+                      "Finance and Banking",
+                      "Tourism and Hospitality",
+                      "Non-Profit and Social Services",
+                      "Food and Beverage",
+                      "Real Estate",
+                      "Education",
+                      "Transportation and Logistics",
+                      "Media and Publishing",
+                      "Energy",
+                      "Automotive",
+                      "Government and Public Administration",
+                      "Telecommunications",
+                      "Agriculture",
+                      "Utilities",
+                      "Corporate Services",
+                      "Insurance",
+                      "Banks",
+                      "Computer Software",
+                      "Pharmaceuticals and Biotechnology",
+                      "Aerospace and Defense",
+                      "Electronics",
+                      "Mining and Metals"
+                    ]
+                  },
+                  "employee_range": {
+                    "type": "string",
+                    "description": "Exact employee count range filter. Prefer the numeric ranges when a size is given.",
+                    "enum": [
+                      "1-10",
+                      "11-20",
+                      "21-50",
+                      "51-200",
+                      "201-500",
+                      "501-1000",
+                      "1001-5000",
+                      "5001+",
+                      "Small",
+                      "Mid-Market",
+                      "Enterprise",
+                      "Unknown"
+                    ]
+                  },
+                  "revenue_range": {
+                    "type": "string",
+                    "description": "Exact annual revenue range filter.",
+                    "enum": [
+                      "Below $500k",
+                      "$500k - $1M",
+                      "$1M - $5M",
+                      "$5M - $10M",
+                      "$10M - $20M",
+                      "$20M - $50M",
+                      "Above $50M",
+                      "$50M - $100M",
+                      "$100M - $250M",
+                      "$250M - $500M",
+                      "$500M - $1B",
+                      "$1B - $2.5B",
+                      "$2.5B - $5B",
+                      "Over $5B"
+                    ]
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "description": "Number of results to return.",
+                    "default": 10,
+                    "minimum": 1,
+                    "maximum": 25
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "description": "Number of results to skip for pagination. Use with limit to page through results.",
+                    "default": 0
+                  }
                 }
               },
-              "example": { "query": "MoltSets", "industry": "Information Technology", "employee_range": "51-200", "limit": 10, "offset": 0 }
+              "example": {
+                "query": "MoltSets",
+                "industry": "Information Technology",
+                "employee_range": "51-200",
+                "limit": 10,
+                "offset": 0
+              }
             }
           }
         },
@@ -108,16 +234,105 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "results": [{ "logo": "https://cdn.mixrank.com/md5/0e4e81c8ff584b1ce3e4c3067e8cXXXXX", "name": "MoltSets", "type": "Privately Held", "domain": "moltsets.com", "industry": "Information Technology", "linkedin_url": "https://linkedin.com/company/moltsets", "exact_revenue": 1200000000.0, "revenue_range": "Above $50M", "employee_count": 57, "employee_range": "51-200", "follower_count": 3677, "linkedin_company_id": "13223077", "_id": "moltsets.com", "_score": 15.2394 }, { "name": "Acme", "type": "Privately Held", "domain": "acme.com", "industry": "Information Technology", "linkedin_url": "https://linkedin.com/company/acme", "revenue_range": "$10M - $20M", "employee_count": 90, "employee_range": "51-200", "follower_count": 121, "linkedin_company_id": "82353383", "_id": "acme.com", "_score": 13.1942 }], "total": 210 }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 206 } } }
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "results": [
+                          {
+                            "logo": "https://cdn.mixrank.com/md5/0e4e81c8ff584b1ce3e4c3067e8cXXXXX",
+                            "name": "MoltSets",
+                            "type": "Privately Held",
+                            "domain": "moltsets.com",
+                            "industry": "Information Technology",
+                            "linkedin_url": "https://linkedin.com/company/moltsets",
+                            "exact_revenue": 1200000000.0,
+                            "revenue_range": "Above $50M",
+                            "employee_count": 57,
+                            "employee_range": "51-200",
+                            "follower_count": 3677,
+                            "linkedin_company_id": "13223077",
+                            "_id": "moltsets.com",
+                            "_score": 15.2394
+                          },
+                          {
+                            "name": "Acme",
+                            "type": "Privately Held",
+                            "domain": "acme.com",
+                            "industry": "Information Technology",
+                            "linkedin_url": "https://linkedin.com/company/acme",
+                            "revenue_range": "$10M - $20M",
+                            "employee_count": 90,
+                            "employee_range": "51-200",
+                            "follower_count": 121,
+                            "linkedin_company_id": "82353383",
+                            "_id": "acme.com",
+                            "_score": 13.1942
+                          }
+                        ],
+                        "total": 210
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 206
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -126,7 +341,9 @@
         "summary": "Search Business Profiles",
         "operationId": "searchBusinessProfiles",
         "description": "Search MoltSets's contact database to find people by their employer, industry, company size, or revenue range. Use `query` for free-text company name search, `domain` for exact lookups, and the categorical filters (`industry`, `employee_range`, `revenue_range`) to narrow results. Returns ranked contact records — higher `_score` means a stronger match. Use this to build lead lists, identify decision-makers at target accounts, or populate outbound sequences with verified contact data.",
-        "tags": ["Search"],
+        "tags": [
+          "Search"
+        ],
         "requestBody": {
           "required": false,
           "content": {
@@ -134,16 +351,109 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "query": { "type": "string", "description": "Full-text search across company name only. Do not put domain, industry, employee size, or revenue here — use the dedicated filter params for those." },
-                  "domain": { "type": "string", "description": "Exact domain filter. Omit the protocol (no https://). Prefer this over `query` when you have a known domain — it's a precise match.", "example": "moltsets.com" },
-                  "industry": { "type": "string", "description": "Exact industry filter. Map the request to one of the supported values.", "enum": ["Professional and Business Services", "Information Technology", "Manufacturing", "Retail", "Health and Pharmaceuticals", "Creative Arts and Entertainment", "Construction", "Marketing & Advertising", "Finance and Banking", "Tourism and Hospitality", "Non-Profit and Social Services", "Food and Beverage", "Real Estate", "Education", "Transportation and Logistics", "Media and Publishing", "Energy", "Automotive", "Government and Public Administration", "Telecommunications", "Agriculture", "Utilities", "Corporate Services", "Insurance", "Banks", "Computer Software", "Pharmaceuticals and Biotechnology", "Aerospace and Defense", "Electronics", "Mining and Metals"] },
-                  "employee_range": { "type": "string", "description": "Exact employee count range filter. Prefer the numeric ranges when a size is given.", "enum": ["1-10", "11-20", "21-50", "51-200", "201-500", "501-1000", "1001-5000", "5001+", "Small", "Mid-Market", "Enterprise", "Unknown"] },
-                  "revenue_range": { "type": "string", "description": "Exact annual revenue range filter.", "enum": ["Below $500k", "$500k - $1M", "$1M - $5M", "$5M - $10M", "$10M - $20M", "$20M - $50M", "Above $50M", "$50M - $100M", "$100M - $250M", "$250M - $500M", "$500M - $1B", "$1B - $2.5B", "$2.5B - $5B", "Over $5B"] },
-                  "limit": { "type": "integer", "description": "Number of results to return.", "default": 10, "minimum": 1, "maximum": 25 },
-                  "offset": { "type": "integer", "description": "Number of results to skip for pagination. Use with limit to page through results.", "default": 0 }
+                  "query": {
+                    "type": "string",
+                    "description": "Full-text search across company name only. Do not put domain, industry, employee size, or revenue here — use the dedicated filter params for those."
+                  },
+                  "domain": {
+                    "type": "string",
+                    "description": "Exact domain filter. Omit the protocol (no https://). Prefer this over `query` when you have a known domain — it's a precise match.",
+                    "example": "moltsets.com"
+                  },
+                  "industry": {
+                    "type": "string",
+                    "description": "Exact industry filter. Map the request to one of the supported values.",
+                    "enum": [
+                      "Professional and Business Services",
+                      "Information Technology",
+                      "Manufacturing",
+                      "Retail",
+                      "Health and Pharmaceuticals",
+                      "Creative Arts and Entertainment",
+                      "Construction",
+                      "Marketing & Advertising",
+                      "Finance and Banking",
+                      "Tourism and Hospitality",
+                      "Non-Profit and Social Services",
+                      "Food and Beverage",
+                      "Real Estate",
+                      "Education",
+                      "Transportation and Logistics",
+                      "Media and Publishing",
+                      "Energy",
+                      "Automotive",
+                      "Government and Public Administration",
+                      "Telecommunications",
+                      "Agriculture",
+                      "Utilities",
+                      "Corporate Services",
+                      "Insurance",
+                      "Banks",
+                      "Computer Software",
+                      "Pharmaceuticals and Biotechnology",
+                      "Aerospace and Defense",
+                      "Electronics",
+                      "Mining and Metals"
+                    ]
+                  },
+                  "employee_range": {
+                    "type": "string",
+                    "description": "Exact employee count range filter. Prefer the numeric ranges when a size is given.",
+                    "enum": [
+                      "1-10",
+                      "11-20",
+                      "21-50",
+                      "51-200",
+                      "201-500",
+                      "501-1000",
+                      "1001-5000",
+                      "5001+",
+                      "Small",
+                      "Mid-Market",
+                      "Enterprise",
+                      "Unknown"
+                    ]
+                  },
+                  "revenue_range": {
+                    "type": "string",
+                    "description": "Exact annual revenue range filter.",
+                    "enum": [
+                      "Below $500k",
+                      "$500k - $1M",
+                      "$1M - $5M",
+                      "$5M - $10M",
+                      "$10M - $20M",
+                      "$20M - $50M",
+                      "Above $50M",
+                      "$50M - $100M",
+                      "$100M - $250M",
+                      "$250M - $500M",
+                      "$500M - $1B",
+                      "$1B - $2.5B",
+                      "$2.5B - $5B",
+                      "Over $5B"
+                    ]
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "description": "Number of results to return.",
+                    "default": 10,
+                    "minimum": 1,
+                    "maximum": 25
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "description": "Number of results to skip for pagination. Use with limit to page through results.",
+                    "default": 0
+                  }
                 }
               },
-              "example": { "query": "MoltSets", "industry": "Information Technology", "limit": 10, "offset": 0 }
+              "example": {
+                "query": "MoltSets",
+                "industry": "Information Technology",
+                "limit": 10,
+                "offset": 0
+              }
             }
           }
         },
@@ -153,32 +463,119 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "results": [{ "title": "Senior Associate - Technical Director", "company": { "name": "MoltSets", "size": "57", "revenue": "1200000000", "industry": "Information Technology", "logo_url": "https://cdn.mixrank.com/md5/0bb6181a215bac707d7af3276be5XXXXX", "website_url": "https://moltsets.com", "linkedin_url": "https://linkedin.com/company/moltsets" }, "country": "United States", "headline": "Senior Associate - Technical Director @ MoltSets", "full_name": "John Smith", "last_name": "Smith", "seniority": "Senior", "first_name": "John", "linkedin_url": "https://linkedin.com/in/john-smith-123", "business_email": "john.smith@example.com", "current_industry": "Information Technology", "linkedin_slug": "john-smith-123", "_id": "john-smith-123", "_score": 9.1714 }], "total": 278 }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 197 } } }
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "results": [
+                          {
+                            "title": "Senior Associate - Technical Director",
+                            "company": {
+                              "name": "MoltSets",
+                              "size": "57",
+                              "revenue": "1200000000",
+                              "industry": "Information Technology",
+                              "logo_url": "https://cdn.mixrank.com/md5/0bb6181a215bac707d7af3276be5XXXXX",
+                              "website_url": "https://moltsets.com",
+                              "linkedin_url": "https://linkedin.com/company/moltsets"
+                            },
+                            "country": "United States",
+                            "headline": "Senior Associate - Technical Director @ MoltSets",
+                            "full_name": "John Smith",
+                            "last_name": "Smith",
+                            "seniority": "Senior",
+                            "first_name": "John",
+                            "linkedin_url": "https://linkedin.com/in/john-smith-123",
+                            "business_email": "john.smith@example.com",
+                            "current_industry": "Information Technology",
+                            "linkedin_slug": "john-smith-123",
+                            "_id": "john-smith-123",
+                            "_score": 9.1714
+                          }
+                        ],
+                        "total": 278
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 197
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     },
     "/enrich_email": {
       "post": {
-        "summary": "LinkedIn to Email (Hybrid)",
+        "summary": "LinkedIn to Best Email",
         "operationId": "enrichEmail",
         "description": "Look up the best available email address for any LinkedIn profile. Returns a verified business email when one exists, and automatically falls back to a personal email if not — so you always get a result when data is available. The `type` field in the response tells you which kind was returned. Credits are only charged when data is found, so failed lookups are free. Use this as your default LinkedIn-to-email enrichment endpoint when email type is not a constraint.",
-        "tags": ["Get Verified Emails"],
+        "tags": [
+          "Get Verified Emails"
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["linkedin_url"],
+                "required": [
+                  "linkedin_url"
+                ],
                 "properties": {
                   "linkedin_url": {
                     "type": "string",
@@ -201,23 +598,77 @@
                     "results": {
                       "type": "object",
                       "properties": {
-                        "email": { "type": "string", "nullable": true, "description": "Email address found, or null if not found." },
-                        "type": { "type": "string", "nullable": true, "enum": ["business", "personal", null], "description": "Whether the returned email is a business or personal address." },
-                        "last_validated_at": { "type": "string", "nullable": true, "description": "ISO 8601 timestamp of last validation, or null." }
+                        "email": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Email address found, or null if not found."
+                        },
+                        "type": {
+                          "type": "string",
+                          "nullable": true,
+                          "enum": [
+                            "business",
+                            "personal",
+                            null
+                          ],
+                          "description": "Whether the returned email is a business or personal address."
+                        },
+                        "last_validated_at": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "ISO 8601 timestamp of last validation, or null."
+                        }
                       }
                     },
-                    "status": { "type": "string", "example": "ok" },
-                    "metadata": { "$ref": "#/components/schemas/Metadata" }
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "metadata": {
+                      "$ref": "#/components/schemas/Metadata"
+                    }
                   }
                 },
                 "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "email": "john.smith@example.com", "type": "business", "last_validated_at": null }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 28 } } }
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "email": "john.smith@example.com",
+                        "type": "business",
+                        "last_validated_at": null
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 28
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
           "404": {
             "description": "No data found",
             "content": {
@@ -228,23 +679,69 @@
                     "results": {
                       "type": "object",
                       "properties": {
-                        "email": { "type": "string", "nullable": true },
-                        "type": { "type": "string", "nullable": true },
-                        "last_validated_at": { "type": "string", "nullable": true }
+                        "email": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "type": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "last_validated_at": {
+                          "type": "string",
+                          "nullable": true
+                        }
                       }
                     },
-                    "status": { "type": "string", "example": "not_found" },
-                    "metadata": { "$ref": "#/components/schemas/Metadata" }
+                    "status": {
+                      "type": "string",
+                      "example": "not_found"
+                    },
+                    "metadata": {
+                      "$ref": "#/components/schemas/Metadata"
+                    }
                   }
                 },
                 "examples": {
-                  "not_found": { "summary": "No data found", "value": { "results": { "email": null, "type": null, "last_validated_at": null }, "status": "not_found", "metadata": { "tokens_charged": 0, "tokens_remaining": 28 } } }
+                  "not_found": {
+                    "summary": "No data found",
+                    "value": {
+                      "results": {
+                        "email": null,
+                        "type": null,
+                        "last_validated_at": null
+                      },
+                      "status": "not_found",
+                      "metadata": {
+                        "tokens_charged": 0,
+                        "tokens_remaining": 28
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -253,14 +750,18 @@
         "summary": "LinkedIn to Business Email",
         "operationId": "enrichBusinessEmail",
         "description": "Retrieve the verified business (work) email address for any LinkedIn profile. Only returns corporate email addresses — no personal inboxes. Use this when you need to reach contacts at their workplace domain, such as for B2B outreach, CRM enrichment, or account-based marketing campaigns. If you also want a personal email fallback, use `enrich_email` instead.",
-        "tags": ["Get Verified Emails"],
+        "tags": [
+          "Get Verified Emails"
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["linkedin_url"],
+                "required": [
+                  "linkedin_url"
+                ],
                 "properties": {
                   "linkedin_url": {
                     "type": "string",
@@ -283,24 +784,89 @@
                     "results": {
                       "type": "object",
                       "properties": {
-                        "email": { "type": "string", "description": "Verified business email address" }
+                        "email": {
+                          "type": "string",
+                          "description": "Verified business email address"
+                        }
                       }
                     },
-                    "status": { "type": "string", "example": "ok" },
-                    "metadata": { "$ref": "#/components/schemas/Metadata" }
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "metadata": {
+                      "$ref": "#/components/schemas/Metadata"
+                    }
                   }
                 },
                 "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "email": "john.smith@example.com" }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 206 } } }
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "email": "john.smith@example.com"
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 206
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -309,16 +875,24 @@
         "summary": "LinkedIn to Personal Email",
         "operationId": "enrichPersonalEmail",
         "description": "Retrieve the verified personal email address (such as Gmail or iCloud) for any LinkedIn profile. Useful for reaching contacts outside their work inbox — ideal for recruitment outreach, consumer marketing, or re-engagement campaigns where a personal address improves deliverability. Credits are only charged when data is found.",
-        "tags": ["Get Verified Emails"],
+        "tags": [
+          "Get Verified Emails"
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["linkedin_url"],
+                "required": [
+                  "linkedin_url"
+                ],
                 "properties": {
-                  "linkedin_url": { "type": "string", "description": "Full LinkedIn profile URL or slug.", "example": "https://linkedin.com/in/retentionadam" }
+                  "linkedin_url": {
+                    "type": "string",
+                    "description": "Full LinkedIn profile URL or slug.",
+                    "example": "https://linkedin.com/in/retentionadam"
+                  }
                 }
               }
             }
@@ -330,55 +904,74 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "email": "john.smith@gmail.com", "last_validated_at": "2026-03-04" }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 206 } } }
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "email": "john.smith@gmail.com",
+                        "last_validated_at": "2026-03-04"
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 206
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
-        }
-      }
-    },
-    "/linkedin_to_best_personal_email": {
-      "post": {
-        "summary": "LinkedIn to Best Personal Email",
-        "operationId": "linkedinToBestPersonalEmail",
-        "description": "Look up the highest-confidence personal email address for a LinkedIn profile. When multiple personal email candidates exist for a profile, this endpoint scores them and returns only the one most likely to be current and deliverable. Use this over `enrich_personal_email` when match quality is more important than speed, or when you're seeing higher bounce rates and need more precise personal email resolution.",
-        "tags": ["Get Verified Emails"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": ["linkedin_url"],
-                "properties": {
-                  "linkedin_url": { "type": "string", "example": "https://linkedin.com/in/retentionadam" }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
                 }
               }
             }
           }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "email": "john.smith@gmail.com", "last_validated_at": "2026-03-04" }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 206 } } }
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
         }
       }
     },
@@ -387,7 +980,9 @@
         "summary": "LinkedIn to Mobile Phone",
         "operationId": "enrichPhone",
         "description": "Look up the carrier-verified mobile phone number for a LinkedIn profile. Only mobile numbers are returned — no landlines or VoIP numbers — so every result is a real device. Supports both single lookups (`linkedin_url`) and batch lookups of up to 100 profiles at once (`linkedin_urls`). Use for SMS outreach, cold calling, or enriching sales sequences with direct-dial mobile numbers.",
-        "tags": ["Get Carrier-Verified Mobile Phones"],
+        "tags": [
+          "Get Carrier-Verified Mobile Phones"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -395,13 +990,36 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "linkedin_url": { "type": "string", "description": "Single LinkedIn profile URL." },
-                  "linkedin_urls": { "type": "array", "items": { "type": "string" }, "maxItems": 100, "description": "Batch of LinkedIn profile URLs, up to 100." }
+                  "linkedin_url": {
+                    "type": "string",
+                    "description": "Single LinkedIn profile URL."
+                  },
+                  "linkedin_urls": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 100,
+                    "description": "Batch of LinkedIn profile URLs, up to 100."
+                  }
                 }
               },
               "examples": {
-                "single": { "summary": "Single lookup", "value": { "linkedin_url": "https://linkedin.com/in/retentionadam" } },
-                "batch": { "summary": "Batch lookup", "value": { "linkedin_urls": ["https://linkedin.com/in/retentionadam", "https://linkedin.com/in/jane-doe"] } }
+                "single": {
+                  "summary": "Single lookup",
+                  "value": {
+                    "linkedin_url": "https://linkedin.com/in/retentionadam"
+                  }
+                },
+                "batch": {
+                  "summary": "Batch lookup",
+                  "value": {
+                    "linkedin_urls": [
+                      "https://linkedin.com/in/retentionadam",
+                      "https://linkedin.com/in/jane-doe"
+                    ]
+                  }
+                }
               }
             }
           }
@@ -412,16 +1030,73 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "mobile_phone": "5555555555" }, "status": "ok", "metadata": { "tokens_charged": 10, "tokens_remaining": 208 } } }
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "mobile_phone": "5555555555"
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 10,
+                        "tokens_remaining": 208
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -430,7 +1105,9 @@
         "summary": "Email to LinkedIn Slug",
         "operationId": "hemToLinkedin",
         "description": "Resolve any email address to its associated LinkedIn profile slug. Useful for connecting a CRM contact or email list record back to a LinkedIn identity, enabling downstream enrichment, profile lookups, or social selling workflows. Pass a business or personal email and receive the LinkedIn slug for that person when a match exists.",
-        "tags": ["Get Full Business Profile"],
+        "tags": [
+          "Get Full Business Profile"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -438,11 +1115,19 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": { "type": "string", "description": "Email address." }
+                  "email": {
+                    "type": "string",
+                    "description": "Email address."
+                  }
                 }
               },
               "examples": {
-                "email": { "summary": "Using email", "value": { "email": "john.smith@example.com" } }
+                "email": {
+                  "summary": "Using email",
+                  "value": {
+                    "email": "john.smith@example.com"
+                  }
+                }
               }
             }
           }
@@ -453,16 +1138,73 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "linkedin_slug": "john-smith-123" }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 206 } } }
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "linkedin_slug": "john-smith-123"
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 206
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -471,7 +1213,9 @@
         "summary": "Email to Best LinkedIn URL",
         "operationId": "hemToBestLinkedin",
         "description": "Resolve an email address to the highest-confidence LinkedIn profile URL when multiple candidates exist. Unlike `hem_to_linkedin`, which returns a slug, this endpoint scores all matching profiles and returns the single best full LinkedIn URL. Use this when email-to-LinkedIn match quality is critical — for example, before personalising outreach, triggering enrichment workflows, or appending LinkedIn data to a contact record.",
-        "tags": ["Get Full Business Profile"],
+        "tags": [
+          "Get Full Business Profile"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -479,11 +1223,19 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": { "type": "string", "description": "Email address." }
+                  "email": {
+                    "type": "string",
+                    "description": "Email address."
+                  }
                 }
               },
               "examples": {
-                "email": { "summary": "Using email", "value": { "email": "john.smith@example.com" } }
+                "email": {
+                  "summary": "Using email",
+                  "value": {
+                    "email": "john.smith@example.com"
+                  }
+                }
               }
             }
           }
@@ -494,16 +1246,73 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "linkedin_url": "https://www.linkedin.com/in/john-smith-123" }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 206 } } }
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "linkedin_url": "https://www.linkedin.com/in/john-smith-123"
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 206
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -512,17 +1321,28 @@
         "summary": "LinkedIn to Business Profile",
         "operationId": "linkedinToBusinessProfile",
         "description": "Resolve a LinkedIn profile URL into a complete business profile, including full name, job title, seniority, company name, company website, industry, revenue, verified business email, personal email, and optionally a carrier-verified mobile phone number. This is MoltSets's most complete LinkedIn enrichment endpoint — use it when you need a full picture of a contact and their employer in a single call. Set `include_mobile_phone: true` to append a direct-dial mobile number; additional credits apply when phone data is found.",
-        "tags": ["Get Full Business Profile"],
+        "tags": [
+          "Get Full Business Profile"
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["linkedin_url"],
+                "required": [
+                  "linkedin_url"
+                ],
                 "properties": {
-                  "linkedin_url": { "type": "string", "example": "https://linkedin.com/in/retentionadam" },
-                  "include_mobile_phone": { "type": "boolean", "description": "When true, attempts to include mobile phone in the response.", "default": false }
+                  "linkedin_url": {
+                    "type": "string",
+                    "example": "https://linkedin.com/in/retentionadam"
+                  },
+                  "include_mobile_phone": {
+                    "type": "boolean",
+                    "description": "When true, attempts to include mobile phone in the response.",
+                    "default": false
+                  }
                 }
               }
             }
@@ -534,16 +1354,93 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "first_name": "John", "last_name": "Smith", "full_name": "John Smith", "title": "Senior Associate - Technical Director", "seniority": "Senior", "linkedin_url": "https://linkedin.com/in/john-smith-123", "business_email": "john.smith@example.com", "personal_email": "john.smith@gmail.com", "personal_emails": ["john.smith@gmail.com"], "mobile_phone": "5555555555", "country": "United States", "current_industry": "Information Technology", "company": { "name": "MoltSets", "website_url": "https://moltsets.com", "linkedin_url": "https://linkedin.com/company/moltsets", "industry": "Information Technology", "revenue": "1200000000" } }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 197 } } }
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "first_name": "John",
+                        "last_name": "Smith",
+                        "full_name": "John Smith",
+                        "title": "Senior Associate - Technical Director",
+                        "seniority": "Senior",
+                        "linkedin_url": "https://linkedin.com/in/john-smith-123",
+                        "business_email": "john.smith@example.com",
+                        "personal_email": "john.smith@gmail.com",
+                        "personal_emails": [
+                          "john.smith@gmail.com"
+                        ],
+                        "mobile_phone": "5555555555",
+                        "country": "United States",
+                        "current_industry": "Information Technology",
+                        "company": {
+                          "name": "MoltSets",
+                          "website_url": "https://moltsets.com",
+                          "linkedin_url": "https://linkedin.com/company/moltsets",
+                          "industry": "Information Technology",
+                          "revenue": "1200000000"
+                        }
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 197
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -552,7 +1449,9 @@
         "summary": "Email to Business Profile",
         "operationId": "hemToBusinessProfile",
         "description": "Resolve an email address into a complete business profile, including full name, job title, seniority, company, LinkedIn URL, firmographic data, and additional email addresses on file. Use this to enrich inbound leads, form fills, or email list records with everything you need to qualify and contact a prospect. Set `include_mobile_phone: true` to also return a carrier-verified mobile number when available; external credits apply when phone data is found.",
-        "tags": ["Get Full Business Profile"],
+        "tags": [
+          "Get Full Business Profile"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -560,12 +1459,24 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": { "type": "string", "description": "Email address." },
-                  "include_mobile_phone": { "type": "boolean", "default": false, "description": "When true, attempts to include mobile phone. Costs external credits when data is found." }
+                  "email": {
+                    "type": "string",
+                    "description": "Email address."
+                  },
+                  "include_mobile_phone": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "When true, attempts to include mobile phone. Costs external credits when data is found."
+                  }
                 }
               },
               "examples": {
-                "email": { "summary": "Using email", "value": { "email": "john.smith@example.com" } }
+                "email": {
+                  "summary": "Using email",
+                  "value": {
+                    "email": "john.smith@example.com"
+                  }
+                }
               }
             }
           }
@@ -576,16 +1487,94 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "first_name": "John", "last_name": "Smith", "title": "Principal Cybersecurity Engineer", "seniority": "Manager", "functional_area": "Information Technology", "linkedinurl": "https://www.linkedin.com/in/john-smith-123", "current_company": "MoltSets", "current_company_url": "https://moltsets.com", "current_company_linkedinurl": "https://linkedin.com/company/moltsets", "country": "United States", "company_employee_count": "3", "company_employee_range": "1-10", "company_revenue": "1200000000", "company_revenue_range": "$1-10M", "work_email_confirmed": "a4cd87c390c98385297fbe9250XXXXX", "work_email_confirmed_status": "2025-10-12", "personal_emails": ["3018fe3a783fad1db0370ee3fXXXXX"], "personal_emails_status": [null] }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 198 } } }
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "first_name": "John",
+                        "last_name": "Smith",
+                        "title": "Principal Cybersecurity Engineer",
+                        "seniority": "Manager",
+                        "functional_area": "Information Technology",
+                        "linkedinurl": "https://www.linkedin.com/in/john-smith-123",
+                        "current_company": "MoltSets",
+                        "current_company_url": "https://moltsets.com",
+                        "current_company_linkedinurl": "https://linkedin.com/company/moltsets",
+                        "country": "United States",
+                        "company_employee_count": "3",
+                        "company_employee_range": "1-10",
+                        "company_revenue": "1200000000",
+                        "company_revenue_range": "$1-10M",
+                        "work_email_confirmed": "a4cd87c390c98385297fbe9250XXXXX",
+                        "work_email_confirmed_status": "2025-10-12",
+                        "personal_emails": [
+                          "3018fe3a783fad1db0370ee3fXXXXX"
+                        ],
+                        "personal_emails_status": [
+                          null
+                        ]
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 198
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -594,7 +1583,9 @@
         "summary": "Business Email to SHA256",
         "operationId": "businessEmailToSHA256",
         "description": "Convert a business email address into SHA256-hashed personal email addresses for privacy-safe identity resolution and paid advertising audience matching. The returned hashes can be uploaded directly to Meta, Google, LinkedIn, TikTok, and other ad platforms that support customer match or custom audience workflows. Use this to retarget known contacts across their personal devices without exposing raw personal email data.",
-        "tags": ["Get Ad Audience"],
+        "tags": [
+          "Get Ad Audience"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -602,11 +1593,19 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": { "type": "string", "description": "Business email address." }
+                  "email": {
+                    "type": "string",
+                    "description": "Business email address."
+                  }
                 }
               },
               "examples": {
-                "email": { "summary": "Using email", "value": { "email": "john.smith@example.com" } }
+                "email": {
+                  "summary": "Using email",
+                  "value": {
+                    "email": "john.smith@example.com"
+                  }
+                }
               }
             }
           }
@@ -617,16 +1616,75 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "personal_email_SHA256": ["e187e84b06e1e6577bcebe42d3905434ddc89d2d5abaab8e85691882310XXXXX"] }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 207 } } }
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "personal_email_SHA256": [
+                          "e187e84b06e1e6577bcebe42d3905434ddc89d2d5abaab8e85691882310XXXXX"
+                        ]
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 207
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -635,16 +1693,23 @@
         "summary": "LinkedIn to SHA256",
         "operationId": "linkedinToSHA256",
         "description": "Retrieve all known SHA256 and MD5 hashed emails for a LinkedIn profile, covering both business and personal email addresses. Returns separate arrays for business and personal hashes in both formats, giving you maximum coverage for audience matching across ad platforms. Use this when you need to build the broadest possible match key set for a LinkedIn-identified contact — for example, to maximise match rates when uploading customer lists to Meta, Google, or LinkedIn Ads.",
-        "tags": ["Get Ad Audience"],
+        "tags": [
+          "Get Ad Audience"
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["linkedin_url"],
+                "required": [
+                  "linkedin_url"
+                ],
                 "properties": {
-                  "linkedin_url": { "type": "string", "example": "https://linkedin.com/in/retentionadam" }
+                  "linkedin_url": {
+                    "type": "string",
+                    "example": "https://linkedin.com/in/retentionadam"
+                  }
                 }
               }
             }
@@ -656,16 +1721,85 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "linkedin_slug": "john-smith-123", "business_SHA256_array": ["f101da855ed67dc34c9729f04df8aeefXXXXX"], "business_md5_array": ["900b89c0e5ece81f7fb0a72ef3dXXXXX"], "personal_SHA256_array": ["266f422db074460bb5bf41984c3aXXXXX"], "personal_md5_array": ["0c86fde3392c84d6514de378dc1XXXXX"] }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 191 } } }
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "linkedin_slug": "john-smith-123",
+                        "business_SHA256_array": [
+                          "f101da855ed67dc34c9729f04df8aeefXXXXX"
+                        ],
+                        "business_md5_array": [
+                          "900b89c0e5ece81f7fb0a72ef3dXXXXX"
+                        ],
+                        "personal_SHA256_array": [
+                          "266f422db074460bb5bf41984c3aXXXXX"
+                        ],
+                        "personal_md5_array": [
+                          "0c86fde3392c84d6514de378dc1XXXXX"
+                        ]
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 191
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -674,7 +1808,9 @@
         "summary": "Email to MAID",
         "operationId": "hemToMaid",
         "description": "Resolve an email address to one or more Mobile Advertising IDs (MAIDs), including AAIDs (Android Advertising IDs) and IDFAs (Apple Identifier for Advertisers). MAIDs are used by ad platforms to target users on their mobile devices with precision. Use this endpoint to connect a known email identity to mobile device signals — enabling cross-device retargeting, programmatic audience activation, and mobile-first ad campaigns against your contact lists.",
-        "tags": ["Get Ad Audience"],
+        "tags": [
+          "Get Ad Audience"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -682,11 +1818,19 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": { "type": "string", "description": "Email address." }
+                  "email": {
+                    "type": "string",
+                    "description": "Email address."
+                  }
                 }
               },
               "examples": {
-                "email": { "summary": "Using email", "value": { "email": "john.smith@example.com" } }
+                "email": {
+                  "summary": "Using email",
+                  "value": {
+                    "email": "john.smith@example.com"
+                  }
+                }
               }
             }
           }
@@ -697,35 +1841,102 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "found": { "summary": "Data found", "value": { "results": [{ "device_id": "b8c747bb-96c5-453f-b770-9d64889XXXXX", "device_type": "AAID" }], "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 206 } } }
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": [
+                        {
+                          "device_id": "b8c747bb-96c5-453f-b770-9d64889XXXXX",
+                          "device_type": "AAID"
+                        }
+                      ],
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 206
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     },
-
     "/ip_to_company": {
       "post": {
         "summary": "IP to Company",
         "operationId": "ipToCompany",
         "description": "Identify the company or companies associated with an IPv4 address. Pass an IP from your website visitor logs, server request data, or analytics platform and get back the domain of the organisation behind that traffic. Best suited for B2B use cases — consumer ISP addresses will typically not resolve to a named company. Use this to de-anonymise B2B web traffic, trigger account-based workflows, or feed website visitor identification pipelines.",
-        "tags": ["Get Company"],
+        "tags": [
+          "Get Company"
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["ip_address"],
+                "required": [
+                  "ip_address"
+                ],
                 "properties": {
-                  "ip_address": { "type": "string", "description": "IPv4 address to resolve.", "example": "8.8.8.8" }
+                  "ip_address": {
+                    "type": "string",
+                    "description": "IPv4 address to resolve.",
+                    "example": "8.8.8.8"
+                  }
                 }
               }
             }
@@ -737,16 +1948,78 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "found": { "summary": "Data found", "value": { "results": { "companies": [{ "domain": "acme.com", "percentage": "1.0" }] }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 206 } } }
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "companies": [
+                          {
+                            "domain": "acme.com",
+                            "percentage": "1.0"
+                          }
+                        ]
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 206
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -755,7 +2028,9 @@
         "summary": "Get Account",
         "operationId": "getAccount",
         "description": "Retrieve your MoltSets account details, including account name, current plan, account status, remaining credit balance, number of API keys, and user count. Use this to programmatically check account health, verify active status, or display account information inside your own application or dashboard.",
-        "tags": ["Account"],
+        "tags": [
+          "Account"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -779,19 +2054,62 @@
                     "results": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "Account ID" },
-                        "name": { "type": "string", "description": "Account name" },
-                        "status": { "type": "string", "description": "Account status", "enum": ["active", "suspended"] },
-                        "plan": { "type": "string", "description": "Current plan", "enum": ["free", "starter", "growth", "unlimited"] },
-                        "credit_balance": { "type": "integer", "description": "Remaining credits" },
-                        "unlimited": { "type": "boolean", "description": "true if the account has unlimited credits" },
-                        "api_key_count": { "type": "integer", "description": "Number of API keys on the account" },
-                        "user_count": { "type": "integer", "description": "Number of users on the account" },
-                        "created_at": { "type": "string", "format": "date-time", "description": "ISO 8601 account creation timestamp" }
+                        "id": {
+                          "type": "string",
+                          "description": "Account ID"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Account name"
+                        },
+                        "status": {
+                          "type": "string",
+                          "description": "Account status",
+                          "enum": [
+                            "active",
+                            "suspended"
+                          ]
+                        },
+                        "plan": {
+                          "type": "string",
+                          "description": "Current plan",
+                          "enum": [
+                            "free",
+                            "starter",
+                            "growth",
+                            "unlimited"
+                          ]
+                        },
+                        "credit_balance": {
+                          "type": "integer",
+                          "description": "Remaining credits"
+                        },
+                        "unlimited": {
+                          "type": "boolean",
+                          "description": "true if the account has unlimited credits"
+                        },
+                        "api_key_count": {
+                          "type": "integer",
+                          "description": "Number of API keys on the account"
+                        },
+                        "user_count": {
+                          "type": "integer",
+                          "description": "Number of users on the account"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "ISO 8601 account creation timestamp"
+                        }
                       }
                     },
-                    "status": { "type": "string", "example": "ok" },
-                    "metadata": { "$ref": "#/components/schemas/Metadata" }
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "metadata": {
+                      "$ref": "#/components/schemas/Metadata"
+                    }
                   }
                 },
                 "example": {
@@ -807,15 +2125,54 @@
                     "created_at": "2026-04-15T13:55:29Z"
                   },
                   "status": "ok",
-                  "metadata": { "tokens_charged": 0, "tokens_remaining": 217 }
+                  "metadata": {
+                    "tokens_charged": 0,
+                    "tokens_remaining": 217
+                  }
                 }
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -824,12 +2181,17 @@
         "summary": "Get Billing",
         "operationId": "getBilling",
         "description": "Retrieve your MoltSets billing details, including your current plan, subscription status, remaining credit balance, billing period start and end dates, and the credit cost for each available tool. Use this to monitor spend, confirm renewal dates, or display live billing information inside your own application.",
-        "tags": ["Account"],
+        "tags": [
+          "Account"
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "type": "object", "description": "No arguments required. Send an empty object." },
+              "schema": {
+                "type": "object",
+                "description": "No arguments required. Send an empty object."
+              },
               "example": {}
             }
           }
@@ -845,17 +2207,60 @@
                     "results": {
                       "type": "object",
                       "properties": {
-                        "plan": { "type": "string", "enum": ["free", "starter", "growth", "unlimited"] },
-                        "subscription_status": { "type": "string", "enum": ["active", "none", "cancelled", "past_due"] },
-                        "credit_balance": { "type": "integer" },
-                        "unlimited": { "type": "boolean" },
-                        "current_period_start": { "type": ["string", "null"], "format": "date-time" },
-                        "current_period_end": { "type": ["string", "null"], "format": "date-time" },
-                        "token_costs": { "type": "object", "description": "Credit cost per tool call. Keys are tool names, values are integer credit costs.", "additionalProperties": { "type": "integer" } }
+                        "plan": {
+                          "type": "string",
+                          "enum": [
+                            "free",
+                            "starter",
+                            "growth",
+                            "unlimited"
+                          ]
+                        },
+                        "subscription_status": {
+                          "type": "string",
+                          "enum": [
+                            "active",
+                            "none",
+                            "cancelled",
+                            "past_due"
+                          ]
+                        },
+                        "credit_balance": {
+                          "type": "integer"
+                        },
+                        "unlimited": {
+                          "type": "boolean"
+                        },
+                        "current_period_start": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "date-time"
+                        },
+                        "current_period_end": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "date-time"
+                        },
+                        "token_costs": {
+                          "type": "object",
+                          "description": "Credit cost per tool call. Keys are tool names, values are integer credit costs.",
+                          "additionalProperties": {
+                            "type": "integer"
+                          }
+                        }
                       }
                     },
-                    "status": { "type": "string", "example": "ok" },
-                    "metadata": { "$ref": "#/components/schemas/Metadata" }
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "metadata": {
+                      "$ref": "#/components/schemas/Metadata"
+                    }
                   }
                 },
                 "example": {
@@ -866,18 +2271,65 @@
                     "unlimited": false,
                     "current_period_start": null,
                     "current_period_end": null,
-                    "token_costs": { "enrich_email": 1, "enrich_business_email": 1, "enrich_personal_email": 1, "enrich_phone": 10, "get_account": 0, "get_billing": 0, "get_usage": 0 }
+                    "token_costs": {
+                      "enrich_email": 1,
+                      "enrich_business_email": 1,
+                      "enrich_personal_email": 1,
+                      "enrich_phone": 10,
+                      "get_account": 0,
+                      "get_billing": 0,
+                      "get_usage": 0
+                    }
                   },
                   "status": "ok",
-                  "metadata": { "tokens_charged": 0, "tokens_remaining": 250 }
+                  "metadata": {
+                    "tokens_charged": 0,
+                    "tokens_remaining": 250
+                  }
                 }
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -886,7 +2338,9 @@
         "summary": "Get Usage",
         "operationId": "getUsage",
         "description": "Retrieve a detailed breakdown of your MoltSets API credit usage for a chosen time period — today, the past week, the past month, or the current billing cycle. Returns a day-by-day log of API calls made, credits consumed, successful lookups, empty results, and failed requests, along with period totals. Use this to track consumption trends, audit usage by day, or build internal usage dashboards.",
-        "tags": ["Account"],
+        "tags": [
+          "Account"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -896,13 +2350,20 @@
                 "properties": {
                   "period": {
                     "type": "string",
-                    "enum": ["today", "week", "month", "billing_cycle"],
+                    "enum": [
+                      "today",
+                      "week",
+                      "month",
+                      "billing_cycle"
+                    ],
                     "default": "today",
                     "description": "Time window to report on. Defaults to `today`."
                   }
                 }
               },
-              "example": { "period": "month" }
+              "example": {
+                "period": "month"
+              }
             }
           }
         },
@@ -918,20 +2379,72 @@
                     "end_date": "2026-04-29",
                     "credit_balance": 250,
                     "days": [
-                      { "date": "2026-04-16", "calls": 2, "credits": 0, "with_data": 2, "without_data": 0, "failed": 0 }
+                      {
+                        "date": "2026-04-16",
+                        "calls": 2,
+                        "credits": 0,
+                        "with_data": 2,
+                        "without_data": 0,
+                        "failed": 0
+                      }
                     ],
-                    "totals": { "calls": 2, "credits": 0, "with_data": 2, "without_data": 0, "failed": 0 }
+                    "totals": {
+                      "calls": 2,
+                      "credits": 0,
+                      "with_data": 2,
+                      "without_data": 0,
+                      "failed": 0
+                    }
                   },
                   "status": "ok",
-                  "metadata": { "tokens_charged": 0, "tokens_remaining": 250 }
+                  "metadata": {
+                    "tokens_charged": 0,
+                    "tokens_remaining": 250
+                  }
                 }
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     }

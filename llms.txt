@@ -40,7 +40,6 @@ All requests are `POST` with a JSON body. All responses return HTTP 200 with env
 - [POST /enrich_email](https://developer.moltsets.com/api-reference/get-verified-emails/linkedin-to-email-hybrid): LinkedIn URL → best available email (business preferred, falls back to personal). Returns `type` field (`"business"` or `"personal"`).
 - [POST /enrich_business_email](https://developer.moltsets.com/api-reference/get-verified-emails/linkedin-to-business-email): LinkedIn URL → verified business email only.
 - [POST /enrich_personal_email](https://developer.moltsets.com/api-reference/get-verified-emails/linkedin-to-personal-email): LinkedIn URL → verified personal email.
-- [POST /linkedin_to_best_personal_email](https://developer.moltsets.com/api-reference/get-verified-emails/linkedin-to-best-personal-email): LinkedIn URL → highest-confidence personal email.
 
 ### Get Carrier-Verified Mobile Phones
 
