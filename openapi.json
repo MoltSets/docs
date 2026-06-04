@@ -563,7 +563,7 @@
       "post": {
         "summary": "LinkedIn to Best Email",
         "operationId": "enrichEmail",
-        "description": "Look up the best available email address for any LinkedIn profile. Returns a verified business email when one exists, and automatically falls back to a personal email if not — so you always get a result when data is available. The `type` field in the response tells you which kind was returned. Credits are only charged when data is found, so failed lookups are free. Use this as your default LinkedIn-to-email enrichment endpoint when email type is not a constraint.",
+        "description": "Look up the best available email address for any LinkedIn profile. Returns a verified business email when one exists, and automatically falls back to a personal email if not — so you always get a result when data is available. The `type` field in the response tells you which kind was returned. Use this as your default LinkedIn-to-email enrichment endpoint when email type is not a constraint.",
         "tags": [
           "Get Verified Emails"
         ],
@@ -874,7 +874,7 @@
       "post": {
         "summary": "LinkedIn to Personal Email",
         "operationId": "enrichPersonalEmail",
-        "description": "Retrieve the verified personal email address (such as Gmail or iCloud) for any LinkedIn profile. Useful for reaching contacts outside their work inbox — ideal for recruitment outreach, consumer marketing, or re-engagement campaigns where a personal address improves deliverability. Credits are only charged when data is found.",
+        "description": "Retrieve the verified personal email address (such as Gmail or iCloud) for any LinkedIn profile. Useful for reaching contacts outside their work inbox — ideal for recruitment outreach, consumer marketing, or re-engagement campaigns where a personal address improves deliverability.",
         "tags": [
           "Get Verified Emails"
         ],
