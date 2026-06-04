@@ -108,7 +108,7 @@
   "paths": {
     "/search_company_profiles": {
       "post": {
-        "summary": "Search Company Profiles",
+        "summary": "Search for Companies",
         "operationId": "searchCompanyProfiles",
         "description": "Search MoltSets's company database by name, domain, industry, employee count, or annual revenue to find and identify target accounts. Use `query` for free-text company name search, `domain` for exact lookups by website domain, and the categorical filters (`industry`, `employee_range`, `revenue_range`) to narrow your results. Combine `query` with filters for best precision. Returns ranked company records — higher `_score` means a stronger match. Ideal for building prospect lists, qualifying accounts, or enriching CRM data with firmographic context.",
         "tags": [
@@ -338,7 +338,7 @@
     },
     "/search_business_profiles": {
       "post": {
-        "summary": "Search Business Profiles",
+        "summary": "Search for People",
         "operationId": "searchBusinessProfiles",
         "description": "Search MoltSets's contact database to find people by their employer, industry, company size, or revenue range. Use `query` for free-text company name search, `domain` for exact lookups, and the categorical filters (`industry`, `employee_range`, `revenue_range`) to narrow results. Returns ranked contact records — higher `_score` means a stronger match. Use this to build lead lists, identify decision-makers at target accounts, or populate outbound sequences with verified contact data.",
         "tags": [

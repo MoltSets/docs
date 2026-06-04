@@ -32,12 +32,12 @@ All requests are `POST` with a JSON body. All responses return HTTP 200 with env
 
 ### Search
 
-- [POST /search_company_profiles](https://developer.moltsets.com/api-reference/search/search-company-profiles): Search companies by name, domain, industry, size, or revenue → ranked company profiles.
-- [POST /search_business_profiles](https://developer.moltsets.com/api-reference/search/search-business-profiles): Search people by company, industry, size, or revenue → ranked business profiles.
+- [POST /search_company_profiles](https://developer.moltsets.com/api-reference/search/search-for-companies): Search companies by name, domain, industry, size, or revenue → ranked company profiles.
+- [POST /search_business_profiles](https://developer.moltsets.com/api-reference/search/search-for-people): Search people by company, industry, size, or revenue → ranked business profiles.
 
 ### Get Verified Emails
 
-- [POST /enrich_email](https://developer.moltsets.com/api-reference/get-verified-emails/linkedin-to-email-hybrid): LinkedIn URL → best available email (business preferred, falls back to personal). Returns `type` field (`"business"` or `"personal"`).
+- [POST /enrich_email](https://developer.moltsets.com/api-reference/get-verified-emails/linkedin-to-best-email): LinkedIn URL → best available email (business preferred, falls back to personal). Returns `type` field (`"business"` or `"personal"`).
 - [POST /enrich_business_email](https://developer.moltsets.com/api-reference/get-verified-emails/linkedin-to-business-email): LinkedIn URL → verified business email only.
 - [POST /enrich_personal_email](https://developer.moltsets.com/api-reference/get-verified-emails/linkedin-to-personal-email): LinkedIn URL → verified personal email.
 
