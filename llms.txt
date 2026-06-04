@@ -78,7 +78,7 @@ All requests are `POST` with a JSON body. All responses return HTTP 200 with env
 | \$97 / month | Unlimited | 1000 requests/min |
 | \$497 / month | Unlimited | 5000 requests/min |
 
-> [Getting the \$997/month plan for \$497/month with the UGC Discount — How It Works](https://support.moltsets.com/en/articles/15207288).
+> [Getting the \$999/month plan for \$497/month with the UGC Discount — How It Works](https://support.moltsets.com/en/articles/15207288).
 
 ## MCP Server
 
