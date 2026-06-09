@@ -106,606 +106,8 @@
     }
   },
   "paths": {
-"/search_business_profiles": {
-    "post": {
-      "summary": "Search for People",
-      "operationId": "searchBusinessProfiles",
-      "description": "Search MoltSets's contact database to find people by their employer, industry, company size, or revenue range. Use `query` for free-text company name search, `domain` for exact lookups, and the categorical filters (`industry`, `employee_range`, `revenue_range`) to narrow results. Returns ranked contact records — higher `_score` means a stronger match. Use this to build lead lists, identify decision-makers at target accounts, or populate outbound sequences with verified contact data.",
-      "tags": [
-        "Search"
-      ],
-      "requestBody": {
-        "required": false,
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "query": {
-                  "type": "string",
-                  "description": "Full-text search across company name only. Do not put domain, industry, employee size, or revenue here — use the dedicated filter params for those."
-                },
-                "domain": {
-                  "type": "string",
-                  "description": "Exact domain filter. Omit the protocol (no https://). Prefer this over `query` when you have a known domain — it's a precise match.",
-                  "example": "moltsets.com"
-                },
-                "industry": {
-                  "type": "string",
-                  "description": "Exact industry filter. Map the request to one of the supported values.",
-                  "enum": [
-                    "Professional and Business Services",
-                    "Information Technology",
-                    "Manufacturing",
-                    "Retail",
-                    "Health and Pharmaceuticals",
-                    "Creative Arts and Entertainment",
-                    "Construction",
-                    "Marketing & Advertising",
-                    "Finance and Banking",
-                    "Tourism and Hospitality",
-                    "Non-Profit and Social Services",
-                    "Food and Beverage",
-                    "Real Estate",
-                    "Education",
-                    "Transportation and Logistics",
-                    "Media and Publishing",
-                    "Energy",
-                    "Automotive",
-                    "Government and Public Administration",
-                    "Telecommunications",
-                    "Agriculture",
-                    "Utilities",
-                    "Corporate Services",
-                    "Insurance",
-                    "Banks",
-                    "Computer Software",
-                    "Pharmaceuticals and Biotechnology",
-                    "Aerospace and Defense",
-                    "Electronics",
-                    "Mining and Metals"
-                  ]
-                },
-                "employee_range": {
-                  "type": "string",
-                  "description": "Exact employee count range filter. Prefer the numeric ranges when a size is given.",
-                  "enum": [
-                    "1-10",
-                    "11-20",
-                    "21-50",
-                    "51-200",
-                    "201-500",
-                    "501-1000",
-                    "1001-5000",
-                    "5001+",
-                    "Small",
-                    "Mid-Market",
-                    "Enterprise",
-                    "Unknown"
-                  ]
-                },
-                "revenue_range": {
-                  "type": "string",
-                  "description": "Exact annual revenue range filter.",
-                  "enum": [
-                    "Below $500k",
-                    "$500k - $1M",
-                    "$1M - $5M",
-                    "$5M - $10M",
-                    "$10M - $20M",
-                    "$20M - $50M",
-                    "Above $50M",
-                    "$50M - $100M",
-                    "$100M - $250M",
-                    "$250M - $500M",
-                    "$500M - $1B",
-                    "$1B - $2.5B",
-                    "$2.5B - $5B",
-                    "Over $5B"
-                  ]
-                },
-                "limit": {
-                  "type": "integer",
-                  "description": "Number of results to return.",
-                  "default": 10,
-                  "minimum": 1,
-                  "maximum": 25
-                },
-                "offset": {
-                  "type": "integer",
-                  "description": "Number of results to skip for pagination. Use with limit to page through results.",
-                  "default": 0
-                }
-              }
-            },
-            "example": {
-              "query": "MoltSets",
-              "industry": "Information Technology",
-              "limit": 10,
-              "offset": 0
-            }
-          }
-        }
-      },
-      "responses": {
-        "200": {
-          "description": "Success",
-          "content": {
-            "application/json": {
-              "examples": {
-                "found": {
-                  "summary": "Data found",
-                  "value": {
-                    "results": {
-                      "results": [
-                        {
-                          "title": "Senior Associate - Technical Director",
-                          "company": {
-                            "name": "MoltSets",
-                            "size": "57",
-                            "revenue": "1200000000",
-                            "industry": "Information Technology",
-                            "logo_url": "https://cdn.mixrank.com/md5/0bb6181a215bac707d7af3276be5XXXXX",
-                            "website_url": "https://moltsets.com",
-                            "linkedin_url": "https://linkedin.com/company/moltsets"
-                          },
-                          "country": "United States",
-                          "headline": "Senior Associate - Technical Director @ MoltSets",
-                          "full_name": "John Smith",
-                          "last_name": "Smith",
-                          "seniority": "Senior",
-                          "first_name": "John",
-                          "linkedin_url": "https://linkedin.com/in/john-smith-123",
-                          "business_email": "john.smith@example.com",
-                          "current_industry": "Information Technology",
-                          "linkedin_slug": "john-smith-123",
-                          "_id": "john-smith-123",
-                          "_score": 9.1714
-                        }
-                      ],
-                      "total": 278
-                    },
-                    "status": "ok",
-                    "metadata": {
-                      "tokens_charged": 1,
-                      "tokens_remaining": 197
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "400": {
-          "description": "Bad Request",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorBadRequest"
-              }
-            }
-          }
-        },
-        "401": {
-          "description": "Unauthorized",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorUnauthorized"
-              }
-            }
-          }
-        },
-        "404": {
-          "description": "Not Found",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorNotFound"
-              }
-            }
-          }
-        },
-        "422": {
-          "description": "Invalid Input",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorInvalidInput"
-              }
-            }
-          }
-        },
-        "429": {
-          "description": "Rate limit exceeded",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorRateLimit"
-              }
-            }
-          }
-        }
-      }
-    }
-  }, 
-"/search_company_profiles": {
-    "post": {
-      "summary": "Search for Companies",
-      "operationId": "searchCompanyProfiles",
-      "description": "Search MoltSets's company database by name, domain, industry, employee count, or annual revenue to find and identify target accounts. Use `query` for free-text company name search, `domain` for exact lookups by website domain, and the categorical filters (`industry`, `employee_range`, `revenue_range`) to narrow your results. Combine `query` with filters for best precision. Returns ranked company records — higher `_score` means a stronger match. Ideal for building prospect lists, qualifying accounts, or enriching CRM data with firmographic context.",
-      "tags": [
-        "Search"
-      ],
-      "requestBody": {
-        "required": false,
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "query": {
-                  "type": "string",
-                  "description": "Full-text search across company name only. Do not put domain, industry, employee size, or revenue here — use the dedicated filter params for those."
-                },
-                "domain": {
-                  "type": "string",
-                  "description": "Exact domain filter. Omit the protocol (no https://). Prefer this over `query` when you have a known domain — it's a precise match.",
-                  "example": "moltsets.com"
-                },
-                "industry": {
-                  "type": "string",
-                  "description": "Exact industry filter. Map the request to one of the supported values.",
-                  "enum": [
-                    "Professional and Business Services",
-                    "Information Technology",
-                    "Manufacturing",
-                    "Retail",
-                    "Health and Pharmaceuticals",
-                    "Creative Arts and Entertainment",
-                    "Construction",
-                    "Marketing & Advertising",
-                    "Finance and Banking",
-                    "Tourism and Hospitality",
-                    "Non-Profit and Social Services",
-                    "Food and Beverage",
-                    "Real Estate",
-                    "Education",
-                    "Transportation and Logistics",
-                    "Media and Publishing",
-                    "Energy",
-                    "Automotive",
-                    "Government and Public Administration",
-                    "Telecommunications",
-                    "Agriculture",
-                    "Utilities",
-                    "Corporate Services",
-                    "Insurance",
-                    "Banks",
-                    "Computer Software",
-                    "Pharmaceuticals and Biotechnology",
-                    "Aerospace and Defense",
-                    "Electronics",
-                    "Mining and Metals"
-                  ]
-                },
-                "employee_range": {
-                  "type": "string",
-                  "description": "Exact employee count range filter. Prefer the numeric ranges when a size is given.",
-                  "enum": [
-                    "1-10",
-                    "11-20",
-                    "21-50",
-                    "51-200",
-                    "201-500",
-                    "501-1000",
-                    "1001-5000",
-                    "5001+",
-                    "Small",
-                    "Mid-Market",
-                    "Enterprise",
-                    "Unknown"
-                  ]
-                },
-                "revenue_range": {
-                  "type": "string",
-                  "description": "Exact annual revenue range filter.",
-                  "enum": [
-                    "Below $500k",
-                    "$500k - $1M",
-                    "$1M - $5M",
-                    "$5M - $10M",
-                    "$10M - $20M",
-                    "$20M - $50M",
-                    "Above $50M",
-                    "$50M - $100M",
-                    "$100M - $250M",
-                    "$250M - $500M",
-                    "$500M - $1B",
-                    "$1B - $2.5B",
-                    "$2.5B - $5B",
-                    "Over $5B"
-                  ]
-                },
-                "limit": {
-                  "type": "integer",
-                  "description": "Number of results to return.",
-                  "default": 10,
-                  "minimum": 1,
-                  "maximum": 25
-                },
-                "offset": {
-                  "type": "integer",
-                  "description": "Number of results to skip for pagination. Use with limit to page through results.",
-                  "default": 0
-                }
-              }
-            },
-            "example": {
-              "query": "MoltSets",
-              "industry": "Information Technology",
-              "employee_range": "51-200",
-              "limit": 10,
-              "offset": 0
-            }
-          }
-        }
-      },
-      "responses": {
-        "200": {
-          "description": "Success",
-          "content": {
-            "application/json": {
-              "examples": {
-                "found": {
-                  "summary": "Data found",
-                  "value": {
-                    "results": {
-                      "results": [
-                        {
-                          "logo": "https://cdn.mixrank.com/md5/0e4e81c8ff584b1ce3e4c3067e8cXXXXX",
-                          "name": "MoltSets",
-                          "type": "Privately Held",
-                          "domain": "moltsets.com",
-                          "industry": "Information Technology",
-                          "linkedin_url": "https://linkedin.com/company/moltsets",
-                          "exact_revenue": 1200000000.0,
-                          "revenue_range": "Above $50M",
-                          "employee_count": 57,
-                          "employee_range": "51-200",
-                          "follower_count": 3677,
-                          "linkedin_company_id": "13223077",
-                          "_id": "moltsets.com",
-                          "_score": 15.2394
-                        },
-                        {
-                          "name": "Acme",
-                          "type": "Privately Held",
-                          "domain": "acme.com",
-                          "industry": "Information Technology",
-                          "linkedin_url": "https://linkedin.com/company/acme",
-                          "revenue_range": "$10M - $20M",
-                          "employee_count": 90,
-                          "employee_range": "51-200",
-                          "follower_count": 121,
-                          "linkedin_company_id": "82353383",
-                          "_id": "acme.com",
-                          "_score": 13.1942
-                        }
-                      ],
-                      "total": 210
-                    },
-                    "status": "ok",
-                    "metadata": {
-                      "tokens_charged": 1,
-                      "tokens_remaining": 206
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "400": {
-          "description": "Bad Request",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorBadRequest"
-              }
-            }
-          }
-        },
-        "401": {
-          "description": "Unauthorized",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorUnauthorized"
-              }
-            }
-          }
-        },
-        "404": {
-          "description": "Not Found",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorNotFound"
-              }
-            }
-          }
-        },
-        "422": {
-          "description": "Invalid Input",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorInvalidInput"
-              }
-            }
-          }
-        },
-        "429": {
-          "description": "Rate limit exceeded",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorRateLimit"
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-    "/linkedin_slug_search": {
-      "post": {
-        "summary": "Search for a Person or Company",
-        "operationId": "linkedinSlugSearch",
-        "description": "Search for a Person or Company by name and company domain. Use `count_only: true` (free, no tokens) to check how many results exist before committing tokens — tighten or loosen your search based on the count. Full results cost tokens and are only charged when data is found. Accepts a full name (parsed into first/last) or separate `first_name` and `last_name`. The company field should be a domain (e.g. 'acme.com'). URLs are normalized automatically. After returning search results, always ask the user if they would like to enrich the results with a business email, personal email, or mobile phone number — and offer to do so using the `enrich_email` (best available email), `enrich_business_email`, `enrich_personal_email`, or `enrich_phone` tools.",
-        "tags": [
-          "Search"
-        ],
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "description": "Full name (e.g. 'Tate Blahnik') — parsed into first and last name automatically."
-                  },
-                  "first_name": {
-                    "type": "string",
-                    "description": "First name (used if `name` is not provided)."
-                  },
-                  "last_name": {
-                    "type": "string",
-                    "description": "Last name (used if `name` is not provided)."
-                  },
-                  "company": {
-                    "type": "string",
-                    "description": "Company domain (e.g. 'acme.com') or URL (e.g. 'https://acme.com') — normalized to domain.",
-                    "example": "acme.com"
-                  },
-                  "company_domain": {
-                    "type": "string",
-                    "description": "Alias for `company` — company domain or URL."
-                  },
-                  "count_only": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Free — returns the count of matching results without fetching data or charging tokens. Use this first to gauge result volume before committing to a full search."
-                  }
-                }
-              },
-              "example": {
-                "name": "Tate Blahnik",
-                "company": "acme.com",
-                "count_only": true
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "count_only": {
-                    "summary": "Count only",
-                    "value": {
-                      "results": {
-                        "count": 3
-                      },
-                      "status": "ok",
-                      "metadata": {
-                        "tokens_charged": 0,
-                        "tokens_remaining": 206
-                      }
-                    }
-                  },
-                  "found": {
-                    "summary": "Data found",
-                    "value": {
-                      "results": [
-                        {
-                          "full_name": "Tate Blahnik",
-                          "first_name": "Tate",
-                          "last_name": "Blahnik",
-                          "linkedin_slug": "tate-blahnik-123",
-                          "linkedin_url": "https://linkedin.com/in/tate-blahnik-123",
-                          "company": "acme.com"
-                        }
-                      ],
-                      "status": "ok",
-                      "metadata": {
-                        "tokens_charged": 1,
-                        "tokens_remaining": 205
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorUnauthorized"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorNotFound"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Invalid Input",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorInvalidInput"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRateLimit"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
+ 
+
     "/enrich_email": {
       "post": {
         "summary": "LinkedIn to Best Email",
@@ -1122,111 +524,6 @@
         }
       }
     },
-    "/linkedin_to_best_personal_email": {
-      "post": {
-        "summary": "LinkedIn to Best Personal Email",
-        "operationId": "linkedinToBestPersonalEmail",
-        "description": "[Advanced] Look up the best personal email address for a LinkedIn profile.",
-        "tags": [
-          "Get Verified Emails"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "linkedin_url"
-                ],
-                "properties": {
-                  "linkedin_url": {
-                    "type": "string",
-                    "description": "LinkedIn profile URL — accepts a full URL (https://linkedin.com/in/janedoe), a partial URL (linkedin.com/in/janedoe), or a bare slug (janedoe).",
-                    "example": "https://linkedin.com/in/johndoe"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "found": {
-                    "summary": "Data found",
-                    "value": {
-                      "results": {
-                        "email": "john.smith@gmail.com",
-                        "last_validated_at": "2026-03-04"
-                      },
-                      "status": "ok",
-                      "metadata": {
-                        "tokens_charged": 1,
-                        "tokens_remaining": 206
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorUnauthorized"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorNotFound"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Invalid Input",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorInvalidInput"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorRateLimit"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/enrich_phone": {
       "post": {
         "summary": "LinkedIn to Mobile Phone",
@@ -1292,6 +589,596 @@
                       "metadata": {
                         "tokens_charged": 10,
                         "tokens_remaining": 208
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hem_to_linkedin": {
+      "post": {
+        "summary": "Email to LinkedIn Slug",
+        "operationId": "hemToLinkedin",
+        "description": "Resolve any email address to its associated LinkedIn profile slug. Useful for connecting a CRM contact or email list record back to a LinkedIn identity, enabling downstream enrichment, profile lookups, or social selling workflows. Pass a business or personal email and receive the LinkedIn slug for that person when a match exists.",
+        "tags": [
+          "Get Full Business Profile"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "Email address."
+                  }
+                }
+              },
+              "examples": {
+                "email": {
+                  "summary": "Using email",
+                  "value": {
+                    "email": "john.smith@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "linkedin_slug": "john-smith-123"
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 206
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hem_to_best_linkedin": {
+      "post": {
+        "summary": "Email to Best LinkedIn URL",
+        "operationId": "hemToBestLinkedin",
+        "description": "Resolve an email address to the highest-confidence LinkedIn profile URL when multiple candidates exist. Unlike `hem_to_linkedin`, which returns a slug, this endpoint scores all matching profiles and returns the single best full LinkedIn URL. Use this when email-to-LinkedIn match quality is critical — for example, before personalising outreach, triggering enrichment workflows, or appending LinkedIn data to a contact record.",
+        "tags": [
+          "Get Full Business Profile"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "Email address."
+                  }
+                }
+              },
+              "examples": {
+                "email": {
+                  "summary": "Using email",
+                  "value": {
+                    "email": "john.smith@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "linkedin_url": "https://www.linkedin.com/in/john-smith-123"
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 206
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/linkedin_to_business_profile": {
+      "post": {
+        "summary": "LinkedIn to Business Profile",
+        "operationId": "linkedinToBusinessProfile",
+        "description": "Resolve a LinkedIn profile URL into a complete business profile, including full name, job title, seniority, company name, company website, industry, revenue, verified business email, personal email, and optionally a carrier-verified mobile phone number. This is MoltSets's most complete LinkedIn enrichment endpoint — use it when you need a full picture of a contact and their employer in a single call. Set `include_mobile_phone: true` to append a direct-dial mobile number; additional credits apply when phone data is found.",
+        "tags": [
+          "Get Full Business Profile"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "linkedin_url"
+                ],
+                "properties": {
+                  "linkedin_url": {
+                    "type": "string",
+                    "example": "https://linkedin.com/in/retentionadam"
+                  },
+                  "include_mobile_phone": {
+                    "type": "boolean",
+                    "description": "When true, attempts to include mobile phone in the response.",
+                    "default": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "first_name": "John",
+                        "last_name": "Smith",
+                        "full_name": "John Smith",
+                        "title": "Senior Associate - Technical Director",
+                        "seniority": "Senior",
+                        "linkedin_url": "https://linkedin.com/in/john-smith-123",
+                        "business_email": "john.smith@example.com",
+                        "personal_email": "john.smith@gmail.com",
+                        "personal_emails": [
+                          "john.smith@gmail.com"
+                        ],
+                        "mobile_phone": "5555555555",
+                        "country": "United States",
+                        "current_industry": "Information Technology",
+                        "company": {
+                          "name": "MoltSets",
+                          "website_url": "https://moltsets.com",
+                          "linkedin_url": "https://linkedin.com/company/moltsets",
+                          "industry": "Information Technology",
+                          "revenue": "1200000000"
+                        }
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 197
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hem_to_business_profile": {
+      "post": {
+        "summary": "Email to Business Profile",
+        "operationId": "hemToBusinessProfile",
+        "description": "Resolve an email address into a complete business profile, including full name, job title, seniority, company, LinkedIn URL, firmographic data, and additional email addresses on file. Use this to enrich inbound leads, form fills, or email list records with everything you need to qualify and contact a prospect. Set `include_mobile_phone: true` to also return a carrier-verified mobile number when available; external credits apply when phone data is found.",
+        "tags": [
+          "Get Full Business Profile"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "Email address."
+                  },
+                  "include_mobile_phone": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "When true, attempts to include mobile phone. Costs external credits when data is found."
+                  }
+                }
+              },
+              "examples": {
+                "email": {
+                  "summary": "Using email",
+                  "value": {
+                    "email": "john.smith@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "first_name": "John",
+                        "last_name": "Smith",
+                        "title": "Principal Cybersecurity Engineer",
+                        "seniority": "Manager",
+                        "functional_area": "Information Technology",
+                        "linkedinurl": "https://www.linkedin.com/in/john-smith-123",
+                        "current_company": "MoltSets",
+                        "current_company_url": "https://moltsets.com",
+                        "current_company_linkedinurl": "https://linkedin.com/company/moltsets",
+                        "country": "United States",
+                        "company_employee_count": "3",
+                        "company_employee_range": "1-10",
+                        "company_revenue": "1200000000",
+                        "company_revenue_range": "$1-10M",
+                        "work_email_confirmed": "a4cd87c390c98385297fbe9250XXXXX",
+                        "work_email_confirmed_status": "2025-10-12",
+                        "personal_emails": [
+                          "3018fe3a783fad1db0370ee3fXXXXX"
+                        ],
+                        "personal_emails_status": [
+                          null
+                        ]
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 198
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+
+
+    "/ip_to_company": {
+      "post": {
+        "summary": "IP to Company",
+        "operationId": "ipToCompany",
+        "description": "Identify the company or companies associated with an IPv4 address. Pass an IP from your website visitor logs, server request data, or analytics platform and get back the domain of the organisation behind that traffic. Best suited for B2B use cases — consumer ISP addresses will typically not resolve to a named company. Use this to de-anonymise B2B web traffic, trigger account-based workflows, or feed website visitor identification pipelines.",
+        "tags": [
+          "Get Company"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "ip_address"
+                ],
+                "properties": {
+                  "ip_address": {
+                    "type": "string",
+                    "description": "IPv4 address to resolve.",
+                    "example": "8.8.8.8"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "companies": [
+                          {
+                            "domain": "acme.com",
+                            "percentage": "1.0"
+                          }
+                        ]
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 206
                       }
                     }
                   }
