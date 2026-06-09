@@ -27,8 +27,8 @@ Search MoltSets's company and contact database by name, domain, industry, employ
 | Company name + employee size | Contacts at companies of a specific size | Find contacts at companies with 51-200 employees named Acme | `search_business_profiles` |
 | Revenue range | Contacts at companies within a revenue band | Find contacts at companies with revenue above $50M | `search_business_profiles` |
 | Industry + employee size | Contacts matching an ICP profile | Find contacts at information technology companies with 201-500 employees | `search_business_profiles` |
-| Person name + company domain | LinkedIn slug for that person | Find the LinkedIn profile for Tate Blahnik at acme.com | `linkedin_slug_search` |
-| Person name + company domain | Result count before spending tokens | How many people named Tate Blahnik are at acme.com | `linkedin_slug_search` (`count_only: true`) |
+| Person name + company domain | LinkedIn slug for that person | Find the LinkedIn profile for John Smith at acme.com | `linkedin_slug_search` |
+| Person name + company domain | Result count before spending tokens | How many people named John Smith are at acme.com | `linkedin_slug_search` (`count_only: true`) |
 
 ## Get Verified Emails
 
@@ -43,7 +43,7 @@ Resolve LinkedIn profile URLs and company domains into verified business and per
 | Company name or domain | Best available email for each employee | Search for employees at acme.com and get their best email address | `search_business_profiles` → `enrich_email` |
 | Company name or domain | Business emails for each employee | Search for employees at acme.com and get their business email addresses | `search_business_profiles` → `enrich_business_email` |
 | Company name or domain | Personal emails for each employee | Search for employees at acme.com and get their personal email addresses | `search_business_profiles` → `enrich_personal_email` |
-| Person name + company domain | Best email for that person | Find Tate Blahnik at acme.com and get their best email | `linkedin_slug_search` → `enrich_email` |
+| Person name + company domain | Best email for that person | Find John Smith at acme.com and get their best email | `linkedin_slug_search` → `enrich_email` |
 | LinkedIn URL | Business email, falling back to personal if not found | Try to find the business email for linkedin.com/in/username, fall back to personal if nothing is found | `enrich_business_email` → `enrich_personal_email` |
 
 ## Get Carrier-Verified Mobile Phones
@@ -56,7 +56,7 @@ Look up carrier-verified mobile phone numbers from LinkedIn profiles and company
 | List of LinkedIn URLs (up to 100) | Mobile phone numbers for each profile | Find mobile phone numbers for these LinkedIn profiles: [list] | `enrich_phone` |
 | Company name or domain | Mobile phone numbers for each employee | Search for employees at acme.com and get their mobile phone numbers | `search_business_profiles` → `enrich_phone` |
 | Company name + seniority or role filter | Mobile phones for decision-makers at a company | Search for senior contacts at acme.com and get their mobile phone numbers | `search_business_profiles` → `enrich_phone` |
-| Person name + company domain | Mobile phone for that person | Find Tate Blahnik at acme.com and get their mobile phone number | `linkedin_slug_search` → `enrich_phone` |
+| Person name + company domain | Mobile phone for that person | Find John Smith at acme.com and get their mobile phone number | `linkedin_slug_search` → `enrich_phone` |
 | LinkedIn URL | Email address and mobile phone | Get the email address and mobile phone number for linkedin.com/in/username | `enrich_email` + `enrich_phone` |
 
 ## Common Workflows
@@ -69,7 +69,7 @@ Some tasks require chaining two tools together. These are the most useful combin
 
 You have a person's name and their company domain but no LinkedIn URL. Resolve them to a LinkedIn slug first, then use that to get a mobile phone number.
 
-"Find Tate Blahnik at acme.com, then get their mobile phone number."
+"Find John Smith at acme.com, then get their mobile phone number."
 
 ---
 

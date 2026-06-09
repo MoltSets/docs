@@ -576,7 +576,7 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "Full name (e.g. 'Tate Blahnik') — parsed into first and last name automatically."
+                    "description": "Full name (e.g. 'John Smith') — parsed into first and last name automatically."
                   },
                   "first_name": {
                     "type": "string",
@@ -603,7 +603,7 @@
                 }
               },
               "example": {
-                "name": "Tate Blahnik",
+                "name": "John Smith",
                 "company": "acme.com",
                 "count_only": true
               }
@@ -634,7 +634,7 @@
                     "value": {
                       "results": [
                         {
-                          "full_name": "Tate Blahnik",
+                          "full_name": "John Smith",
                           "first_name": "Tate",
                           "last_name": "Blahnik",
                           "linkedin_slug": "tate-blahnik-123",
