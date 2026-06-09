@@ -60,9 +60,9 @@ All requests are `POST` with a JSON body. All responses return HTTP 200 with env
 | $0 | 1000 | 1k requests per minute & 1k results per day | 100 |
 | \$27 / month | Unlimited | 30 requests per minute & 1k results per day | 100 / month |
 | \$97 / month | Unlimited | 1k requests per minute & 15k results per day | 500 / month |
-| \$497 / month (reg. $999) | Unlimited | 5k requests per minute & 100k results per day | 2500 / month |
+| \$497 / month (reg. $997) | Unlimited | 5k requests per minute & 100k results per day | 2500 / month |
 
-> [Getting the \$999/month plan for \$497/month with the UGC Discount — How It Works](https://support.moltsets.com/en/articles/15207288).
+> [Getting the \$997/month plan for \$497/month with the UGC Discount — How It Works](https://support.moltsets.com/en/articles/15207288).
 
 ## MCP Server
 
