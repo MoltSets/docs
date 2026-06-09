@@ -563,7 +563,7 @@
       "post": {
         "summary": "Search for a Person or Company",
         "operationId": "linkedinSlugSearch",
-        "description": "Search for a Person or Company by name and company domain. Use `count_only: true` (free, no tokens) to check how many results exist before committing tokens — tighten or loosen your search based on the count. Full results cost tokens and are only charged when data is found. Accepts a full name (parsed into first/last) or separate `first_name` and `last_name`. The company field should be a domain (e.g. 'acme.com'). URLs are normalized automatically. After returning search results, always ask the user if they would like to enrich the results with a business email, personal email, or mobile phone number — and offer to do so using the `enrich_email` (best available email), `enrich_business_email`, `enrich_personal_email`, or `enrich_phone` tools.",
+        "description": "Find the LinkedIn profile for a person or company from a name and company domain. Pass a full name (we parse it into first and last for you) or send `first_name` and `last_name` separately, then add the company as a domain like `acme.com`. URLs are normalised automatically, so you do not need to clean your inputs first. Run a free count first with `count_only: true` to see how many matches exist, then tighten or loosen your search before committing tokens. Full results are only charged when we actually find data, so an empty search costs you nothing.",
         "tags": [
           "Search"
         ],
@@ -1126,7 +1126,7 @@
       "post": {
         "summary": "LinkedIn to Best Personal Email",
         "operationId": "linkedinToBestPersonalEmail",
-        "description": "[Advanced] Look up the best personal email address for a LinkedIn profile.",
+        "description": "Turn a LinkedIn profile into a verified personal email in a single call. The LinkedIn to Best Personal Email endpoint takes a LinkedIn URL or slug and returns the highest-confidence personal email address we hold for that person, along with the date it was last validated. Every email is re-checked within the last 30 days, so each result comes back with a recent validation date you can act on with confidence.",
         "tags": [
           "Get Verified Emails"
         ],
