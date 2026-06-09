@@ -1,6 +1,6 @@
 ---
 title: "I Have X, I Want Y"
-description: "Find the right MoltSets tool based on what data you have and what you need. Covers email finding, phone lookup, people finding, identity resolution, company search, and IP resolution."
+description: "Find the right MoltSets tool based on what data you have and what you need. Covers email finding, phone lookup, people finding, and company search."
 ---
 
 ## Before You Begin
@@ -27,26 +27,28 @@ Search MoltSets's company and contact database by name, domain, industry, employ
 | Company name + employee size | Contacts at companies of a specific size | Find contacts at companies with 51-200 employees named Acme | `search_business_profiles` |
 | Revenue range | Contacts at companies within a revenue band | Find contacts at companies with revenue above $50M | `search_business_profiles` |
 | Industry + employee size | Contacts matching an ICP profile | Find contacts at information technology companies with 201-500 employees | `search_business_profiles` |
+| Person name + company domain | LinkedIn slug for that person | Find the LinkedIn profile for Tate Blahnik at acme.com | `linkedin_slug_search` |
+| Person name + company domain | Result count before spending tokens | How many people named Tate Blahnik are at acme.com | `linkedin_slug_search` (`count_only: true`) |
 
 ## Get Verified Emails
 
-Resolve LinkedIn profile URLs, company domains, email addresses, and IP addresses into verified business and personal email addresses. Supports single lookups, batch enrichment, and multi-step chains for building outbound contact lists with high deliverability.
+Resolve LinkedIn profile URLs and company domains into verified business and personal email addresses. Supports single lookups and multi-step chains for building outbound contact lists with high deliverability.
 
 | I have… | I want… | Type in Claude… | Tool |
 |---|---|---|---|
 | LinkedIn URL | Best available email (business if found, falls back to personal) | Find the best email for linkedin.com/in/username | `enrich_email` |
 | LinkedIn URL | Business email only | Find the business email for linkedin.com/in/username | `enrich_business_email` |
 | LinkedIn URL | Personal email only | Find the personal email for linkedin.com/in/username | `enrich_personal_email` |
+| LinkedIn URL | Best personal email | Find the best personal email for linkedin.com/in/username | `linkedin_to_best_personal_email` |
 | Company name or domain | Best available email for each employee | Search for employees at acme.com and get their best email address | `search_business_profiles` → `enrich_email` |
 | Company name or domain | Business emails for each employee | Search for employees at acme.com and get their business email addresses | `search_business_profiles` → `enrich_business_email` |
 | Company name or domain | Personal emails for each employee | Search for employees at acme.com and get their personal email addresses | `search_business_profiles` → `enrich_personal_email` |
-| IP address | Emails for employees at the company behind that IP | Find employees at the company behind IP 203.0.113.42 and get their email addresses | `ip_to_company` → `search_business_profiles` → `enrich_email` |
-| Email address | Personal email as a backup or alternative | Find the LinkedIn profile for john.smith@example.com then get their personal email | `hem_to_linkedin` → `enrich_personal_email` |
+| Person name + company domain | Best email for that person | Find Tate Blahnik at acme.com and get their best email | `linkedin_slug_search` → `enrich_email` |
 | LinkedIn URL | Business email, falling back to personal if not found | Try to find the business email for linkedin.com/in/username, fall back to personal if nothing is found | `enrich_business_email` → `enrich_personal_email` |
 
 ## Get Carrier-Verified Mobile Phones
 
-Look up carrier-verified mobile phone numbers from LinkedIn profiles, email addresses, company domains, and IP addresses. Every number returned is a real mobile device — no landlines or VoIP. Supports single lookups and batches of up to 100 profiles at once, as well as multi-step chains for building call and SMS lists directly from a company name or IP address.
+Look up carrier-verified mobile phone numbers from LinkedIn profiles and company domains. Every number returned is a real mobile device — no landlines or VoIP. Supports single lookups and batches of up to 100 profiles at once, as well as multi-step chains for building call and SMS lists directly from a company name.
 
 | I have… | I want… | Type in Claude… | Tool |
 |---|---|---|---|
@@ -54,75 +56,30 @@ Look up carrier-verified mobile phone numbers from LinkedIn profiles, email addr
 | List of LinkedIn URLs (up to 100) | Mobile phone numbers for each profile | Find mobile phone numbers for these LinkedIn profiles: [list] | `enrich_phone` |
 | Company name or domain | Mobile phone numbers for each employee | Search for employees at acme.com and get their mobile phone numbers | `search_business_profiles` → `enrich_phone` |
 | Company name + seniority or role filter | Mobile phones for decision-makers at a company | Search for senior contacts at acme.com and get their mobile phone numbers | `search_business_profiles` → `enrich_phone` |
-| Email address | Mobile phone number | Find the LinkedIn profile for john.smith@example.com then get their mobile phone number | `hem_to_linkedin` → `enrich_phone` |
-| IP address | Mobile phones for employees at the company behind that IP | Find employees at the company behind IP 203.0.113.42 and get their mobile phone numbers | `ip_to_company` → `search_business_profiles` → `enrich_phone` |
+| Person name + company domain | Mobile phone for that person | Find Tate Blahnik at acme.com and get their mobile phone number | `linkedin_slug_search` → `enrich_phone` |
 | LinkedIn URL | Email address and mobile phone | Get the email address and mobile phone number for linkedin.com/in/username | `enrich_email` + `enrich_phone` |
-
-## Get Full Business Profile
-
-Resolve a LinkedIn URL or email address into a complete contact record — including full name, job title, seniority, company, firmographic data, verified email addresses, and optionally a carrier-verified mobile phone number. Use these endpoints to enrich inbound leads, populate CRM records, or build a complete picture of a prospect before outreach.
-
-| I have… | I want… | Type in Claude… | Tool |
-|---|---|---|---|
-| LinkedIn URL | Full business profile (name, title, company, firmographics) | Get the full profile for linkedin.com/in/username | `linkedin_to_business_profile` |
-| LinkedIn URL | Full business profile + mobile phone | Get the full profile including phone for linkedin.com/in/username | `linkedin_to_business_profile` |
-| Email | Full business profile (name, title, company, firmographics) | Get the business profile for john.smith@example.com | `hem_to_business_profile` |
-| Email | Full business profile + mobile phone | Get the full profile including phone for john.smith@example.com | `hem_to_business_profile` |
-| Email | LinkedIn profile slug | Find the LinkedIn profile for john.smith@example.com | `hem_to_linkedin` |
-| Email | Highest-confidence LinkedIn URL | Find the best LinkedIn match for john.smith@example.com | `hem_to_best_linkedin` |
-
-## Get Ad Audience
-
-Convert known contact identifiers — LinkedIn URLs and email addresses — into hashed emails (SHA-256 and MD5) and mobile advertising IDs (MAIDs) for privacy-safe audience matching. Use these endpoints to activate your contact lists across Meta, Google, LinkedIn Ads, TikTok, and any programmatic platform that supports customer match or device-level targeting.
-
-| I have… | I want… | Type in Claude… | Tool |
-|---|---|---|---|
-| Business email | Personal hashed emails (SHA-256) for audience matching | Get personal hashed emails for john.smith@example.com | `business_email_to_personal_hem` |
-| LinkedIn URL | All known hashed emails (MD5 + SHA-256, business + personal) | Get all hashed emails for linkedin.com/in/username | `linkedin_to_hashed_emails` |
-| Email | Mobile advertising IDs (MAIDs) | Get mobile ad IDs for john.smith@example.com | `hem_to_maid` |
-
-## Get Company
-
-Identify the company behind any IPv4 address and use that signal to trigger downstream enrichment — finding contacts, pulling a full company profile, or surfacing decision-makers at the organisation. Best suited for B2B use cases; consumer ISP addresses will typically not resolve to a named company.
-
-| I have… | I want… | Type in Claude… | Tool |
-|---|---|---|---|
-| IP address | Company associated with that IP | What company is behind IP 203.0.113.42 | `ip_to_company` |
-| IP address | Contacts at the company behind that IP | Find contacts at the company behind IP 203.0.113.42 | `ip_to_company` → `search_business_profiles` |
-| IP address | Full company profile for the organisation behind that IP | Look up the full company profile for the business at IP 203.0.113.42 | `ip_to_company` → `search_company_profiles` |
-| IP address | Decision-makers at the company behind that IP | Find senior contacts at the company behind IP 203.0.113.42 | `ip_to_company` → `search_business_profiles` |
 
 ## Common Workflows
 
 Some tasks require chaining two tools together. These are the most useful combinations.
 
-### Business email to mobile phone
+### Person name to mobile phone
 
-`hem_to_linkedin` → `enrich_phone`
+`linkedin_slug_search` → `enrich_phone`
 
-You have a business email but no LinkedIn URL. Resolve it to a LinkedIn slug first, then use that to get a mobile phone number.
+You have a person's name and their company domain but no LinkedIn URL. Resolve them to a LinkedIn slug first, then use that to get a mobile phone number.
 
-"Find the LinkedIn profile for john.smith@example.com, then get their mobile phone number."
-
----
-
-### LinkedIn list to mobile ad audience
-
-`linkedin_to_hashed_emails` → `hem_to_maid`
-
-You have a list of LinkedIn profiles and want to push them into a mobile ad platform. Get all known HEMs for each profile, then resolve those to MAIDs.
-
-"Get all hashed emails for linkedin.com/in/username, then resolve them to mobile ad IDs."
+"Find Tate Blahnik at acme.com, then get their mobile phone number."
 
 ---
 
-### CRM email list to ad retargeting audience
+### Company domain to outbound email list
 
-`business_email_to_personal_hem` → `hem_to_maid`
+`search_business_profiles` → `enrich_email`
 
-You have a CRM list of business emails and want to build a retargeting audience. Convert each business email to a personal HEM, then resolve to MAIDs.
+You have a target company and want a list of contacts with their best email addresses. Search for employees at the company, then enrich each with their best available email.
 
-"Convert john.smith@example.com to a personal hashed email, then resolve it to mobile ad IDs."
+"Search for employees at acme.com and get their best email address."
 
 ---
 
