@@ -47,6 +47,12 @@ All requests are `POST` with a JSON body. All responses return HTTP 200 with env
 
 - [POST /enrich_phone](https://developer.moltsets.com/api-reference/get-carrier-verified-mobile-phones/linkedin-to-mobile-phone): LinkedIn URL → verified mobile phone (mobiles only, no landlines). Pass `linkedin_url` (single) or `linkedin_urls` (batch, up to 100).
 
+### Get Ad Audience
+
+- [POST /business_email_to_sha256](https://developer.moltsets.com/api-reference/get-ad-audience/business-email-to-sha256): Business email → SHA256 personal hashed emails for audience matching.
+- [POST /linkedin_to_sha256](https://developer.moltsets.com/api-reference/get-ad-audience/linkedin-to-sha256): LinkedIn URL → all known SHA256 hashes (business + personal).
+- [POST /email_to_maid](https://developer.moltsets.com/api-reference/get-ad-audience/email-to-maid): Email → mobile advertising IDs (MAIDs).
+
 ### Account
 
 - [POST /get_account](https://developer.moltsets.com/api-reference/account/get-account): Retrieve account details and credit balance. Free.
