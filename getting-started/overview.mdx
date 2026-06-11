@@ -16,7 +16,7 @@ https://api.moltsets.com/api/v1/tools/
 Each tool has its own endpoint path. For example:
 
 ```
-POST https://api.moltsets.com/api/v1/tools/enrich_email
+POST https://api.moltsets.com/api/v1/tools/linkedin_to_best_email
 POST https://api.moltsets.com/api/v1/tools/ip_to_company
 POST https://api.moltsets.com/api/v1/tools/get_account
 ```
@@ -26,7 +26,7 @@ POST https://api.moltsets.com/api/v1/tools/get_account
 Every request is a `POST` with a JSON body, an `Authorization` header, and a `Content-Type` header:
 
 ```bash
-curl -X POST https://api.moltsets.com/api/v1/tools/enrich_email \
+curl -X POST https://api.moltsets.com/api/v1/tools/linkedin_to_best_email \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"linkedin_url": "https://linkedin.com/in/retentionadam"}'
@@ -83,10 +83,10 @@ For more information on our plans, upgrading and downgrading processes, please r
 | Category | Tools |
 |---|---|
 | **Account** | `get_account`, `get_billing`, `get_usage` |
-| **Email** | `enrich_email`, `enrich_business_email`, `enrich_personal_email`, `hem_to_email`, `business_email_to_personal_hem` |
-| **LinkedIn** | `linkedin_slug_search`, `linkedin_to_hashed_emails`, `linkedin_to_business_profile` |
-| **Phone** | `enrich_phone` |
-| **HEM Resolution** | `hem_to_linkedin`, `hem_to_best_linkedin`, `hem_to_business_profile`, `hem_to_maid` |
+| **Email** | `linkedin_to_best_email`, `linkedin_to_business_email`, `linkedin_to_personal_email`, `hem_to_email`, `business_email_to_sha256` |
+| **LinkedIn** | `search_linkedin_profile`, `linkedin_to_sha256`, `linkedin_to_business_profile` |
+| **Phone** | `linkedin_to_mobile_phone` |
+| **HEM Resolution** | `hem_to_linkedin`, `hem_to_best_linkedin`, `hem_to_business_profile`, `email_to_maid` |
 | **IP Resolution** | `ip_to_hem`, `ip_to_maid`, `ip_to_company` |
 
 ## What to do next

@@ -32,18 +32,18 @@ All requests are `POST` with a JSON body. All responses return HTTP 200 with env
 
 ### Search
 
-- [POST /search_company_profiles](https://developer.moltsets.com/api-reference/search/search-for-companies): Search companies by name, domain, industry, size, or revenue → ranked company profiles.
-- [POST /search_business_profiles](https://developer.moltsets.com/api-reference/search/search-for-people): Search people by company, industry, size, or revenue → ranked business profiles.
+- [POST /search_companies](https://developer.moltsets.com/api-reference/search/search-for-companies): Search companies by name, domain, industry, size, or revenue → ranked company profiles.
+- [POST /search_people](https://developer.moltsets.com/api-reference/search/search-for-people): Search people by company, industry, size, or revenue → ranked business profiles.
 
 ### Get Verified Emails
 
-- [POST /enrich_email](https://developer.moltsets.com/api-reference/get-verified-emails/linkedin-to-best-email): LinkedIn URL → best available email (business preferred, falls back to personal). Returns `type` field (`"business"` or `"personal"`).
-- [POST /enrich_business_email](https://developer.moltsets.com/api-reference/get-verified-emails/linkedin-to-business-email): LinkedIn URL → verified business email only.
-- [POST /enrich_personal_email](https://developer.moltsets.com/api-reference/get-verified-emails/linkedin-to-personal-email): LinkedIn URL → verified personal email.
+- [POST /linkedin_to_best_email](https://developer.moltsets.com/api-reference/get-verified-emails/linkedin-to-best-email): LinkedIn URL → best available email (business preferred, falls back to personal). Returns `type` field (`"business"` or `"personal"`).
+- [POST /linkedin_to_business_email](https://developer.moltsets.com/api-reference/get-verified-emails/linkedin-to-business-email): LinkedIn URL → verified business email only.
+- [POST /linkedin_to_personal_email](https://developer.moltsets.com/api-reference/get-verified-emails/linkedin-to-personal-email): LinkedIn URL → verified personal email.
 
 ### Get Carrier-Verified Mobile Phones
 
-- [POST /enrich_phone](https://developer.moltsets.com/api-reference/get-carrier-verified-mobile-phones/linkedin-to-mobile-phone): LinkedIn URL → verified mobile phone (mobiles only, no landlines). Pass `linkedin_url` (single) or `linkedin_urls` (batch, up to 100).
+- [POST /linkedin_to_mobile_phone](https://developer.moltsets.com/api-reference/get-carrier-verified-mobile-phones/linkedin-to-mobile-phone): LinkedIn URL → verified mobile phone (mobiles only, no landlines). Pass `linkedin_url` (single) or `linkedin_urls` (batch, up to 100).
 
 ### Get Full Business Profile
 
@@ -54,9 +54,9 @@ All requests are `POST` with a JSON body. All responses return HTTP 200 with env
 
 ### Get Ad Audience
 
-- [POST /business_email_to_personal_hem](https://developer.moltsets.com/api-reference/get-ad-audience/business-email-to-sha256): Business email → SHA256 personal hashed emails for audience matching.
-- [POST /linkedin_to_hashed_emails](https://developer.moltsets.com/api-reference/get-ad-audience/linkedin-to-sha256): LinkedIn URL → all known SHA256 hashes (business + personal).
-- [POST /hem_to_maid](https://developer.moltsets.com/api-reference/get-ad-audience/email-to-maid): Email → mobile advertising IDs (MAIDs).
+- [POST /business_email_to_sha256](https://developer.moltsets.com/api-reference/get-ad-audience/business-email-to-sha256): Business email → SHA256 personal hashed emails for audience matching.
+- [POST /linkedin_to_sha256](https://developer.moltsets.com/api-reference/get-ad-audience/linkedin-to-sha256): LinkedIn URL → all known SHA256 hashes (business + personal).
+- [POST /email_to_maid](https://developer.moltsets.com/api-reference/get-ad-audience/email-to-maid): Email → mobile advertising IDs (MAIDs).
 
 ### Get Company
 

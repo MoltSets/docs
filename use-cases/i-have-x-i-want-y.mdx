@@ -19,16 +19,16 @@ Search MoltSets's company and contact database by name, domain, industry, employ
 
 | I have… | I want… | Type in Claude… | Tool |
 |---|---|---|---|
-| Company name | Matching company profiles (name, domain, industry, size, revenue) | Find company profiles matching Acme | `search_company_profiles` |
-| Domain | Exact company record | Look up the company at acme.com | `search_company_profiles` |
-| Industry + employee size or revenue range | Filtered list of companies | Find information technology companies with 51-200 employees | `search_company_profiles` |
-| Company name or domain | All contacts at that company | Find contacts at acme.com | `search_business_profiles` |
-| Company name + industry filter | Contacts filtered by industry | Find information technology contacts at acme.com | `search_business_profiles` |
-| Company name + employee size | Contacts at companies of a specific size | Find contacts at companies with 51-200 employees named Acme | `search_business_profiles` |
-| Revenue range | Contacts at companies within a revenue band | Find contacts at companies with revenue above $50M | `search_business_profiles` |
-| Industry + employee size | Contacts matching an ICP profile | Find contacts at information technology companies with 201-500 employees | `search_business_profiles` |
-| Person name + company domain | LinkedIn slug for that person | Find the LinkedIn profile for John Smith at acme.com | `linkedin_slug_search` |
-| Person name + company domain | Result count before spending tokens | How many people named John Smith are at acme.com | `linkedin_slug_search` (`count_only: true`) |
+| Company name | Matching company profiles (name, domain, industry, size, revenue) | Find company profiles matching Acme | `search_companies` |
+| Domain | Exact company record | Look up the company at acme.com | `search_companies` |
+| Industry + employee size or revenue range | Filtered list of companies | Find information technology companies with 51-200 employees | `search_companies` |
+| Company name or domain | All contacts at that company | Find contacts at acme.com | `search_people` |
+| Company name + industry filter | Contacts filtered by industry | Find information technology contacts at acme.com | `search_people` |
+| Company name + employee size | Contacts at companies of a specific size | Find contacts at companies with 51-200 employees named Acme | `search_people` |
+| Revenue range | Contacts at companies within a revenue band | Find contacts at companies with revenue above $50M | `search_people` |
+| Industry + employee size | Contacts matching an ICP profile | Find contacts at information technology companies with 201-500 employees | `search_people` |
+| Person name + company domain | LinkedIn slug for that person | Find the LinkedIn profile for John Smith at acme.com | `search_linkedin_profile` |
+| Person name + company domain | Result count before spending tokens | How many people named John Smith are at acme.com | `search_linkedin_profile` (`count_only: true`) |
 
 ## Get Verified Emails
 
@@ -36,15 +36,15 @@ Resolve LinkedIn profile URLs and company domains into verified business and per
 
 | I have… | I want… | Type in Claude… | Tool |
 |---|---|---|---|
-| LinkedIn URL | Best available email (business if found, falls back to personal) | Find the best email for linkedin.com/in/username | `enrich_email` |
-| LinkedIn URL | Business email only | Find the business email for linkedin.com/in/username | `enrich_business_email` |
-| LinkedIn URL | Personal email only | Find the personal email for linkedin.com/in/username | `enrich_personal_email` |
+| LinkedIn URL | Best available email (business if found, falls back to personal) | Find the best email for linkedin.com/in/username | `linkedin_to_best_email` |
+| LinkedIn URL | Business email only | Find the business email for linkedin.com/in/username | `linkedin_to_business_email` |
+| LinkedIn URL | Personal email only | Find the personal email for linkedin.com/in/username | `linkedin_to_personal_email` |
 | LinkedIn URL | Best personal email | Find the best personal email for linkedin.com/in/username | `linkedin_to_best_personal_email` |
-| Company name or domain | Best available email for each employee | Search for employees at acme.com and get their best email address | `search_business_profiles` → `enrich_email` |
-| Company name or domain | Business emails for each employee | Search for employees at acme.com and get their business email addresses | `search_business_profiles` → `enrich_business_email` |
-| Company name or domain | Personal emails for each employee | Search for employees at acme.com and get their personal email addresses | `search_business_profiles` → `enrich_personal_email` |
-| Person name + company domain | Best email for that person | Find John Smith at acme.com and get their best email | `linkedin_slug_search` → `enrich_email` |
-| LinkedIn URL | Business email, falling back to personal if not found | Try to find the business email for linkedin.com/in/username, fall back to personal if nothing is found | `enrich_business_email` → `enrich_personal_email` |
+| Company name or domain | Best available email for each employee | Search for employees at acme.com and get their best email address | `search_people` → `linkedin_to_best_email` |
+| Company name or domain | Business emails for each employee | Search for employees at acme.com and get their business email addresses | `search_people` → `linkedin_to_business_email` |
+| Company name or domain | Personal emails for each employee | Search for employees at acme.com and get their personal email addresses | `search_people` → `linkedin_to_personal_email` |
+| Person name + company domain | Best email for that person | Find John Smith at acme.com and get their best email | `search_linkedin_profile` → `linkedin_to_best_email` |
+| LinkedIn URL | Business email, falling back to personal if not found | Try to find the business email for linkedin.com/in/username, fall back to personal if nothing is found | `linkedin_to_business_email` → `linkedin_to_personal_email` |
 
 ## Get Carrier-Verified Mobile Phones
 
@@ -52,12 +52,12 @@ Look up carrier-verified mobile phone numbers from LinkedIn profiles and company
 
 | I have… | I want… | Type in Claude… | Tool |
 |---|---|---|---|
-| LinkedIn URL | Mobile phone number | Find the mobile phone number for linkedin.com/in/username | `enrich_phone` |
-| List of LinkedIn URLs (up to 100) | Mobile phone numbers for each profile | Find mobile phone numbers for these LinkedIn profiles: [list] | `enrich_phone` |
-| Company name or domain | Mobile phone numbers for each employee | Search for employees at acme.com and get their mobile phone numbers | `search_business_profiles` → `enrich_phone` |
-| Company name + seniority or role filter | Mobile phones for decision-makers at a company | Search for senior contacts at acme.com and get their mobile phone numbers | `search_business_profiles` → `enrich_phone` |
-| Person name + company domain | Mobile phone for that person | Find John Smith at acme.com and get their mobile phone number | `linkedin_slug_search` → `enrich_phone` |
-| LinkedIn URL | Email address and mobile phone | Get the email address and mobile phone number for linkedin.com/in/username | `enrich_email` + `enrich_phone` |
+| LinkedIn URL | Mobile phone number | Find the mobile phone number for linkedin.com/in/username | `linkedin_to_mobile_phone` |
+| List of LinkedIn URLs (up to 100) | Mobile phone numbers for each profile | Find mobile phone numbers for these LinkedIn profiles: [list] | `linkedin_to_mobile_phone` |
+| Company name or domain | Mobile phone numbers for each employee | Search for employees at acme.com and get their mobile phone numbers | `search_people` → `linkedin_to_mobile_phone` |
+| Company name + seniority or role filter | Mobile phones for decision-makers at a company | Search for senior contacts at acme.com and get their mobile phone numbers | `search_people` → `linkedin_to_mobile_phone` |
+| Person name + company domain | Mobile phone for that person | Find John Smith at acme.com and get their mobile phone number | `search_linkedin_profile` → `linkedin_to_mobile_phone` |
+| LinkedIn URL | Email address and mobile phone | Get the email address and mobile phone number for linkedin.com/in/username | `linkedin_to_best_email` + `linkedin_to_mobile_phone` |
 
 ## Common Workflows
 
@@ -65,7 +65,7 @@ Some tasks require chaining two tools together. These are the most useful combin
 
 ### Person name to mobile phone
 
-`linkedin_slug_search` → `enrich_phone`
+`search_linkedin_profile` → `linkedin_to_mobile_phone`
 
 You have a person's name and their company domain but no LinkedIn URL. Resolve them to a LinkedIn slug first, then use that to get a mobile phone number.
 
@@ -75,7 +75,7 @@ You have a person's name and their company domain but no LinkedIn URL. Resolve t
 
 ### Company domain to outbound email list
 
-`search_business_profiles` → `enrich_email`
+`search_people` → `linkedin_to_best_email`
 
 You have a target company and want a list of contacts with their best email addresses. Search for employees at the company, then enrich each with their best available email.
 

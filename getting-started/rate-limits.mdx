@@ -69,4 +69,4 @@ async function callWithBackoff(fn, retries = 4) {
 
 **Multiple API keys** can be used to distribute load if a single key is a bottleneck. Each key operates under its own limit, so spreading requests across keys increases effective throughput.
 
-**Batch endpoints** where available (e.g. `enrich_phone` supports up to 100 `linkedin_urls` per call) let you reduce total request count significantly.
+**Batch endpoints** where available (e.g. `linkedin_to_mobile_phone` supports up to 100 `linkedin_urls` per call) let you reduce total request count significantly.

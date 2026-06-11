@@ -15,7 +15,7 @@ If you already have a LinkedIn URL, email, or IP address and want to enrich it, 
 
 ## Available Filters
 
-Both `search_company_profiles` and `search_business_profiles` accept the same filters.
+Both `search_companies` and `search_people` accept the same filters.
 
 | Filter | What it does | Notes |
 |---|---|---|
@@ -31,7 +31,7 @@ Combine `query` with filters for best precision. Results are ranked by relevance
 
 ## Finding Companies
 
-Use `search_company_profiles` when your output is a list of companies. Returns name, domain, industry, employee count, revenue range, LinkedIn URL, and follower count.
+Use `search_companies` when your output is a list of companies. Returns name, domain, industry, employee count, revenue range, LinkedIn URL, and follower count.
 
 | I want… | Type in Claude… | Filters used |
 |---|---|---|
@@ -44,7 +44,7 @@ Use `search_company_profiles` when your output is a list of companies. Returns n
 
 ## Finding Contacts
 
-Use `search_business_profiles` when your output is a list of people. Returns name, title, seniority, LinkedIn URL, business email, company name, and firmographic data.
+Use `search_people` when your output is a list of people. Returns name, title, seniority, LinkedIn URL, business email, company name, and firmographic data.
 
 | I want… | Type in Claude… | Filters used |
 |---|---|---|
@@ -98,7 +98,7 @@ All search requests follow the same shape. Pass your filters in the request body
 **Find companies matching an ICP**
 
 ```javascript
-const response = await fetch("https://api.moltsets.com/api/v1/tools/search_company_profiles", {
+const response = await fetch("https://api.moltsets.com/api/v1/tools/search_companies", {
   method: "POST",
   headers: {
     "Authorization": "Bearer YOUR_API_KEY",
@@ -121,7 +121,7 @@ const data = await response.json();
 **Find contacts at a specific company**
 
 ```javascript
-const response = await fetch("https://api.moltsets.com/api/v1/tools/search_business_profiles", {
+const response = await fetch("https://api.moltsets.com/api/v1/tools/search_people", {
   method: "POST",
   headers: {
     "Authorization": "Bearer YOUR_API_KEY",
@@ -171,5 +171,5 @@ async function fetchAllResults(filters, endpoint) {
 }
 
 // Example: fetch all contacts at acme.com
-const contacts = await fetchAllResults({ domain: "acme.com" }, "search_business_profiles");
+const contacts = await fetchAllResults({ domain: "acme.com" }, "search_people");
 ```

@@ -106,7 +106,7 @@
     }
   },
   "paths": {
-"/search_business_profiles": {
+"/search_people": {
     "post": {
       "summary": "Search for People",
       "operationId": "searchBusinessProfiles",
@@ -329,7 +329,7 @@
       }
     }
   }, 
-"/search_company_profiles": {
+"/search_companies": {
     "post": {
       "summary": "Search for Companies",
       "operationId": "searchCompanyProfiles",
@@ -559,7 +559,7 @@
       }
     }
   },
-    "/linkedin_slug_search": {
+    "/search_linkedin_profile": {
       "post": {
         "summary": "Search for a Person or Company",
         "operationId": "linkedinSlugSearch",
@@ -706,7 +706,7 @@
         }
       }
     },
-    "/enrich_email": {
+    "/linkedin_to_best_email": {
       "post": {
         "summary": "LinkedIn to Best Email",
         "operationId": "enrichEmail",
@@ -892,11 +892,11 @@
         }
       }
     },
-    "/enrich_business_email": {
+    "/linkedin_to_business_email": {
       "post": {
         "summary": "LinkedIn to Business Email",
         "operationId": "enrichBusinessEmail",
-        "description": "Retrieve the verified business (work) email address for any LinkedIn profile. Only returns corporate email addresses — no personal inboxes. Use this when you need to reach contacts at their workplace domain, such as for B2B outreach, CRM enrichment, or account-based marketing campaigns. If you also want a personal email fallback, use `enrich_email` instead.",
+        "description": "Retrieve the verified business (work) email address for any LinkedIn profile. Only returns corporate email addresses — no personal inboxes. Use this when you need to reach contacts at their workplace domain, such as for B2B outreach, CRM enrichment, or account-based marketing campaigns. If you also want a personal email fallback, use `linkedin_to_best_email` instead.",
         "tags": [
           "Get Verified Emails"
         ],
@@ -1017,7 +1017,7 @@
         }
       }
     },
-    "/enrich_personal_email": {
+    "/linkedin_to_personal_email": {
       "post": {
         "summary": "LinkedIn to Personal Email",
         "operationId": "enrichPersonalEmail",
@@ -1227,7 +1227,7 @@
         }
       }
     },
-    "/enrich_phone": {
+    "/linkedin_to_mobile_phone": {
       "post": {
         "summary": "LinkedIn to Mobile Phone",
         "operationId": "enrichPhone",
@@ -1940,10 +1940,10 @@
                     "current_period_start": null,
                     "current_period_end": null,
                     "token_costs": {
-                      "enrich_email": 1,
-                      "enrich_business_email": 1,
-                      "enrich_personal_email": 1,
-                      "enrich_phone": 10,
+                      "linkedin_to_best_email": 1,
+                      "linkedin_to_business_email": 1,
+                      "linkedin_to_personal_email": 1,
+                      "linkedin_to_mobile_phone": 10,
                       "get_account": 0,
                       "get_billing": 0,
                       "get_usage": 0
