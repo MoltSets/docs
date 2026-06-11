@@ -706,6 +706,267 @@
         }
       }
     },
+    "/search_business_email_by_name": {
+      "post": {
+        "summary": "Search Business Email by Name",
+        "operationId": "searchBusinessEmailByName",
+        "description": "Find a person's verified business email address by their name and company domain — a one-call shortcut for `search_linkedin_profile` followed by `linkedin_to_business_email`. Accepts a full name (parsed into first/last) or separate `first_name` and `last_name`. The `company` field should be a domain (e.g. 'acme.com'); URLs are normalized automatically. Returns the email plus the matched LinkedIn profile URL. Tokens are only charged when an email is found.",
+        "tags": [
+          "Search"
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Full name (e.g. 'John Smith') — parsed into first and last name automatically."
+                  },
+                  "first_name": {
+                    "type": "string",
+                    "description": "First name (used if `name` is not provided)."
+                  },
+                  "last_name": {
+                    "type": "string",
+                    "description": "Last name (used if `name` is not provided)."
+                  },
+                  "company": {
+                    "type": "string",
+                    "description": "Company domain (e.g. 'acme.com') or URL (e.g. 'https://acme.com') — normalized to domain.",
+                    "example": "acme.com"
+                  },
+                  "company_domain": {
+                    "type": "string",
+                    "description": "Alias for `company` — company domain or URL."
+                  }
+                }
+              },
+              "example": {
+                "name": "John Smith",
+                "company": "acme.com"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "email": "john.smith@acme.com",
+                        "linkedin_url": "https://linkedin.com/in/john-smith-123"
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 205
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search_business_profile_by_name": {
+      "post": {
+        "summary": "Search Business Profile by Name",
+        "operationId": "searchBusinessProfileByName",
+        "description": "[Advanced] Find a person's full business profile (company, title, firmographic data) by their name and company domain — a one-call shortcut for `search_linkedin_profile` followed by a profile lookup. Accepts a full name (parsed into first/last) or separate `first_name` and `last_name`. The `company` field should be a domain (e.g. 'acme.com'); URLs are normalized automatically. Tokens are only charged when data is found.",
+        "tags": [
+          "Search"
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Full name (e.g. 'John Smith') — parsed into first and last name automatically."
+                  },
+                  "first_name": {
+                    "type": "string",
+                    "description": "First name (used if `name` is not provided)."
+                  },
+                  "last_name": {
+                    "type": "string",
+                    "description": "Last name (used if `name` is not provided)."
+                  },
+                  "company": {
+                    "type": "string",
+                    "description": "Company domain (e.g. 'acme.com') or URL (e.g. 'https://acme.com') — normalized to domain.",
+                    "example": "acme.com"
+                  },
+                  "company_domain": {
+                    "type": "string",
+                    "description": "Alias for `company` — company domain or URL."
+                  },
+                  "include_mobile_phone": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Include mobile phone lookup (additional DynamoDB query)."
+                  }
+                }
+              },
+              "example": {
+                "name": "John Smith",
+                "company": "acme.com",
+                "include_mobile_phone": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "full_name": "John Smith",
+                        "first_name": "John",
+                        "last_name": "Smith",
+                        "title": "VP of Engineering",
+                        "company": "Acme Inc",
+                        "company_domain": "acme.com",
+                        "linkedin_url": "https://linkedin.com/in/john-smith-123",
+                        "mobile_phone": "+15551234567",
+                        "firmographics": {
+                          "industry": "Software",
+                          "employee_count": "201-500",
+                          "revenue": "$50M-$100M"
+                        }
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 205
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/linkedin_to_best_email": {
       "post": {
         "summary": "LinkedIn to Best Email",
