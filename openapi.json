@@ -710,7 +710,7 @@
       "post": {
         "summary": "Search Business Email by Name",
         "operationId": "searchBusinessEmailByName",
-        "description": "Find a person's verified business email address by their name and company domain — a one-call shortcut for `search_linkedin_profile` followed by `linkedin_to_business_email`. Accepts a full name (parsed into first/last) or separate `first_name` and `last_name`. The `company` field should be a domain (e.g. 'acme.com'); URLs are normalized automatically. Returns the email plus the matched LinkedIn profile URL. Tokens are only charged when an email is found.",
+        "description": "Find a person's verified business email address from just their name and company domain. This endpoint runs a LinkedIn profile search and an email lookup in a single call, returning the verified email along with the matched LinkedIn profile URL. Pass either a full name or separate `first_name` and `last_name` fields, and provide the company as a domain like `acme.com`. URLs are normalised automatically, and tokens are only charged when an email is found.",
         "tags": [
           "Search"
         ],
@@ -832,7 +832,7 @@
       "post": {
         "summary": "Search Business Profile by Name",
         "operationId": "searchBusinessProfileByName",
-        "description": "[Advanced] Find a person's full business profile (company, title, firmographic data) by their name and company domain — a one-call shortcut for `search_linkedin_profile` followed by a profile lookup. Accepts a full name (parsed into first/last) or separate `first_name` and `last_name`. The `company` field should be a domain (e.g. 'acme.com'); URLs are normalized automatically. Tokens are only charged when data is found.",
+        "description": "Find anyone's full business profile from just their name and company domain. This endpoint runs a LinkedIn profile search and a firmographic lookup in a single call, returning the person's job title, company, and company data such as industry, size, and location. Pass either a full name or separate `first_name` and `last_name` fields, and provide the company as a domain like `acme.com`. URLs are normalised automatically, and tokens are only charged when a match is found.",
         "tags": [
           "Search"
         ],
