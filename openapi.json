@@ -561,7 +561,7 @@
   },
     "/search_linkedin_profile": {
       "post": {
-        "summary": "Search for a Person or Company",
+        "summary": "Search for LinkedIn Profile",
         "operationId": "linkedinSlugSearch",
         "description": "Find the LinkedIn profile for a person or company from a name and company domain. Pass a full name (we parse it into first and last for you) or send `first_name` and `last_name` separately, then add the company as a domain like `acme.com`. URLs are normalised automatically, so you do not need to clean your inputs first. Run a free count first with `count_only: true` to see how many matches exist, then tighten or loosen your search before committing tokens. Full results are only charged when we actually find data, so an empty search costs you nothing.",
         "tags": [
