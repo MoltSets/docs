@@ -1951,6 +1951,305 @@
         }
       }
     },
+    "/reverse_linkedin_lookup": {
+      "post": {
+        "summary": "Reverse LinkedIn Lookup",
+        "operationId": "linkedinToBusinessProfile",
+        "description": "Resolve a LinkedIn profile URL into a complete business profile, including full name, job title, seniority, company name, company website, industry, revenue, verified business email, personal email, and optionally a carrier-verified mobile phone number. This is MoltSets's most complete LinkedIn enrichment endpoint — use it when you need a full picture of a contact and their employer in a single call. Set `include_mobile_phone: true` to append a direct-dial mobile number; additional credits apply when phone data is found.",
+        "tags": [
+          "Reverse Lookups"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "linkedin_url"
+                ],
+                "properties": {
+                  "linkedin_url": {
+                    "type": "string",
+                    "example": "https://linkedin.com/in/retentionadam"
+                  },
+                  "include_mobile_phone": {
+                    "type": "boolean",
+                    "description": "When true, attempts to include mobile phone in the response.",
+                    "default": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "first_name": "John",
+                        "last_name": "Smith",
+                        "full_name": "John Smith",
+                        "title": "Senior Associate - Technical Director",
+                        "seniority": "Senior",
+                        "linkedin_url": "https://linkedin.com/in/john-smith-123",
+                        "business_email": "john.smith@example.com",
+                        "personal_email": "john.smith@gmail.com",
+                        "personal_emails": [
+                          "john.smith@gmail.com"
+                        ],
+                        "mobile_phone": "5555555555",
+                        "country": "United States",
+                        "current_industry": "Information Technology",
+                        "company": {
+                          "name": "MoltSets",
+                          "website_url": "https://moltsets.com",
+                          "linkedin_url": "https://linkedin.com/company/moltsets",
+                          "industry": "Information Technology",
+                          "revenue": "1200000000"
+                        }
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 197
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
+          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
+          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
+          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
+          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+        }
+      }
+    },
+    "/reverse_email_lookup": {
+      "post": {
+        "summary": "Reverse Email Lookup",
+        "operationId": "hemToBusinessProfile",
+        "description": "Resolve an email address into a complete business profile, including full name, job title, seniority, company, LinkedIn URL, firmographic data, and additional email addresses on file. Use this to enrich inbound leads, form fills, or email list records with everything you need to qualify and contact a prospect. Set `include_mobile_phone: true` to also return a carrier-verified mobile number when available; external credits apply when phone data is found.",
+        "tags": [
+          "Reverse Lookups"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "Email address."
+                  },
+                  "include_mobile_phone": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "When true, attempts to include mobile phone. Costs external credits when data is found."
+                  }
+                }
+              },
+              "examples": {
+                "email": {
+                  "summary": "Using email",
+                  "value": {
+                    "email": "john.smith@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "first_name": "John",
+                        "last_name": "Smith",
+                        "title": "Principal Cybersecurity Engineer",
+                        "seniority": "Manager",
+                        "functional_area": "Information Technology",
+                        "linkedinurl": "https://www.linkedin.com/in/john-smith-123",
+                        "current_company": "MoltSets",
+                        "current_company_url": "https://moltsets.com",
+                        "current_company_linkedinurl": "https://linkedin.com/company/moltsets",
+                        "country": "United States",
+                        "company_employee_count": "3",
+                        "company_employee_range": "1-10",
+                        "company_revenue": "1200000000",
+                        "company_revenue_range": "$1-10M",
+                        "work_email_confirmed": "a4cd87c390c98385297fbe9250XXXXX",
+                        "work_email_confirmed_status": "2025-10-12",
+                        "personal_emails": [
+                          "3018fe3a783fad1db0370ee3fXXXXX"
+                        ],
+                        "personal_emails_status": [
+                          null
+                        ]
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 198
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
+          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
+          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
+          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
+          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+        }
+      }
+    },
+    "/email_to_linkedin": {
+      "post": {
+        "summary": "Email to LinkedIn",
+        "operationId": "hemToBestLinkedin",
+        "description": "Resolve an email address to the highest-confidence LinkedIn profile URL when multiple candidates exist. Unlike `hem_to_linkedin`, which returns a slug, this endpoint scores all matching profiles and returns the single best full LinkedIn URL. Use this when email-to-LinkedIn match quality is critical — for example, before personalising outreach, triggering enrichment workflows, or appending LinkedIn data to a contact record.",
+        "tags": [
+          "Get LinkedIn"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "Email address."
+                  }
+                }
+              },
+              "examples": {
+                "email": {
+                  "summary": "Using email",
+                  "value": {
+                    "email": "john.smith@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "linkedin_url": "https://www.linkedin.com/in/john-smith-123"
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 206
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
+          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
+          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
+          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
+          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+        }
+      }
+    },
+    "/ip_to_company": {
+      "post": {
+        "summary": "IP to Company",
+        "operationId": "ipToCompany",
+        "description": "Identify the company or companies associated with an IPv4 address. Pass an IP from your website visitor logs, server request data, or analytics platform and get back the domain of the organisation behind that traffic. Best suited for B2B use cases — consumer ISP addresses will typically not resolve to a named company. Use this to de-anonymise B2B web traffic, trigger account-based workflows, or feed website visitor identification pipelines.",
+        "tags": [
+          "Get Company"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "ip_address"
+                ],
+                "properties": {
+                  "ip_address": {
+                    "type": "string",
+                    "description": "IPv4 address to resolve.",
+                    "example": "8.8.8.8"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "companies": [
+                          {
+                            "domain": "acme.com",
+                            "percentage": "1.0"
+                          }
+                        ]
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_charged": 1,
+                        "tokens_remaining": 206
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
+          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
+          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
+          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
+          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+        }
+      }
+    },
     
     "/get_account": {
       "post": {
@@ -2374,305 +2673,6 @@
               }
             }
           }
-        }
-      }
-    },
-    "/email_to_linkedin": {
-      "post": {
-        "summary": "Email to LinkedIn",
-        "operationId": "hemToBestLinkedin",
-        "description": "Resolve an email address to the highest-confidence LinkedIn profile URL when multiple candidates exist. Unlike `hem_to_linkedin`, which returns a slug, this endpoint scores all matching profiles and returns the single best full LinkedIn URL. Use this when email-to-LinkedIn match quality is critical — for example, before personalising outreach, triggering enrichment workflows, or appending LinkedIn data to a contact record.",
-        "tags": [
-          "Get LinkedIn"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "description": "Email address."
-                  }
-                }
-              },
-              "examples": {
-                "email": {
-                  "summary": "Using email",
-                  "value": {
-                    "email": "john.smith@example.com"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "found": {
-                    "summary": "Data found",
-                    "value": {
-                      "results": {
-                        "linkedin_url": "https://www.linkedin.com/in/john-smith-123"
-                      },
-                      "status": "ok",
-                      "metadata": {
-                        "tokens_charged": 1,
-                        "tokens_remaining": 206
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
-        }
-      }
-    },
-    "/reverse_linkedin_lookup": {
-      "post": {
-        "summary": "Reverse LinkedIn Lookup",
-        "operationId": "linkedinToBusinessProfile",
-        "description": "Resolve a LinkedIn profile URL into a complete business profile, including full name, job title, seniority, company name, company website, industry, revenue, verified business email, personal email, and optionally a carrier-verified mobile phone number. This is MoltSets's most complete LinkedIn enrichment endpoint — use it when you need a full picture of a contact and their employer in a single call. Set `include_mobile_phone: true` to append a direct-dial mobile number; additional credits apply when phone data is found.",
-        "tags": [
-          "Reverse Lookups"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "linkedin_url"
-                ],
-                "properties": {
-                  "linkedin_url": {
-                    "type": "string",
-                    "example": "https://linkedin.com/in/retentionadam"
-                  },
-                  "include_mobile_phone": {
-                    "type": "boolean",
-                    "description": "When true, attempts to include mobile phone in the response.",
-                    "default": false
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "found": {
-                    "summary": "Data found",
-                    "value": {
-                      "results": {
-                        "first_name": "John",
-                        "last_name": "Smith",
-                        "full_name": "John Smith",
-                        "title": "Senior Associate - Technical Director",
-                        "seniority": "Senior",
-                        "linkedin_url": "https://linkedin.com/in/john-smith-123",
-                        "business_email": "john.smith@example.com",
-                        "personal_email": "john.smith@gmail.com",
-                        "personal_emails": [
-                          "john.smith@gmail.com"
-                        ],
-                        "mobile_phone": "5555555555",
-                        "country": "United States",
-                        "current_industry": "Information Technology",
-                        "company": {
-                          "name": "MoltSets",
-                          "website_url": "https://moltsets.com",
-                          "linkedin_url": "https://linkedin.com/company/moltsets",
-                          "industry": "Information Technology",
-                          "revenue": "1200000000"
-                        }
-                      },
-                      "status": "ok",
-                      "metadata": {
-                        "tokens_charged": 1,
-                        "tokens_remaining": 197
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
-        }
-      }
-    },
-    "/reverse_email_lookup": {
-      "post": {
-        "summary": "Reverse Email Lookup",
-        "operationId": "hemToBusinessProfile",
-        "description": "Resolve an email address into a complete business profile, including full name, job title, seniority, company, LinkedIn URL, firmographic data, and additional email addresses on file. Use this to enrich inbound leads, form fills, or email list records with everything you need to qualify and contact a prospect. Set `include_mobile_phone: true` to also return a carrier-verified mobile number when available; external credits apply when phone data is found.",
-        "tags": [
-          "Reverse Lookups"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "description": "Email address."
-                  },
-                  "include_mobile_phone": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "When true, attempts to include mobile phone. Costs external credits when data is found."
-                  }
-                }
-              },
-              "examples": {
-                "email": {
-                  "summary": "Using email",
-                  "value": {
-                    "email": "john.smith@example.com"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "found": {
-                    "summary": "Data found",
-                    "value": {
-                      "results": {
-                        "first_name": "John",
-                        "last_name": "Smith",
-                        "title": "Principal Cybersecurity Engineer",
-                        "seniority": "Manager",
-                        "functional_area": "Information Technology",
-                        "linkedinurl": "https://www.linkedin.com/in/john-smith-123",
-                        "current_company": "MoltSets",
-                        "current_company_url": "https://moltsets.com",
-                        "current_company_linkedinurl": "https://linkedin.com/company/moltsets",
-                        "country": "United States",
-                        "company_employee_count": "3",
-                        "company_employee_range": "1-10",
-                        "company_revenue": "1200000000",
-                        "company_revenue_range": "$1-10M",
-                        "work_email_confirmed": "a4cd87c390c98385297fbe9250XXXXX",
-                        "work_email_confirmed_status": "2025-10-12",
-                        "personal_emails": [
-                          "3018fe3a783fad1db0370ee3fXXXXX"
-                        ],
-                        "personal_emails_status": [
-                          null
-                        ]
-                      },
-                      "status": "ok",
-                      "metadata": {
-                        "tokens_charged": 1,
-                        "tokens_remaining": 198
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
-        }
-      }
-    },
-    "/ip_to_company": {
-      "post": {
-        "summary": "IP to Company",
-        "operationId": "ipToCompany",
-        "description": "Identify the company or companies associated with an IPv4 address. Pass an IP from your website visitor logs, server request data, or analytics platform and get back the domain of the organisation behind that traffic. Best suited for B2B use cases — consumer ISP addresses will typically not resolve to a named company. Use this to de-anonymise B2B web traffic, trigger account-based workflows, or feed website visitor identification pipelines.",
-        "tags": [
-          "Get Company"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "ip_address"
-                ],
-                "properties": {
-                  "ip_address": {
-                    "type": "string",
-                    "description": "IPv4 address to resolve.",
-                    "example": "8.8.8.8"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "found": {
-                    "summary": "Data found",
-                    "value": {
-                      "results": {
-                        "companies": [
-                          {
-                            "domain": "acme.com",
-                            "percentage": "1.0"
-                          }
-                        ]
-                      },
-                      "status": "ok",
-                      "metadata": {
-                        "tokens_charged": 1,
-                        "tokens_remaining": 206
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
         }
       }
     }
