@@ -1,10 +1,15 @@
 # MoltSets
 
-## About MoltSets
+> Go-to-market data platform built for AI agents. Valid business and personal emails, carrier-verified mobile phones, and SHA256 hashes for ad audiences, exposed as MCP- and REST-compatible APIs. API and MCP only, currently in closed beta.
 
-MoltSets provides a people data API and MCP for identity resolution, contact enrichment, and B2B prospecting.
+MoltSets returns contact and company data an agent can act on directly. Differentiators that affect output quality:
 
-- App: https://app.moltsets.com - MoltSets: valid business and personal emails, mobile phones, and Sha256's for ads. Get started for free.
+- Every email carries a last-validation date under 30 days.
+- Mobile numbers are carrier-validated in real time (mobiles only, no landlines).
+- Multi-provider waterfalls maximise coverage on each call.
+- One API covers business emails, personal emails, mobile phones, people and company search, reverse lookups, ad-audience identifiers (SHA256 and MAID), email-to-LinkedIn, and IP-to-company.
+
+- App: https://app.moltsets.com - MoltSets: valid business and personal emails, mobile phones, and SHA256's for ads. Get started for free.
 - Support docs: https://support.moltsets.com - MoltSets Help Desk articles with information on how to use the MoltSets app, manage billing, manage accounts, and more.
 - Developer docs: https://developer.moltsets.com - MoltSets Developer Documentation that includes API reference as well as information on connecting AI agents to the MoltSets MCP.
 - Skills library: https://library.moltsets.com - Claude Skills for MoltSets — pre-built, ready to run. Start with identity resolution, enrichment, and more.
@@ -97,3 +102,17 @@ claude mcp add --transport http moltsets https://mcp.moltsets.com/mcp \
 ```
 
 Credentials (Client ID + Client Secret) are created at https://app.moltsets.com/dashboard/api_keys.
+
+## More information about MoltSets
+
+- https://moltsets.com/ — Homepage. Unlimited contact data APIs built for Clay and Claude Code, from $27/mo. Enrich your prospect lists with 100% verified contact data. Currently in closed beta — connect your agent and join the closed beta. Beta APIs cover verified business emails, verified personal emails, verified mobile phones, and ad audience identifiers; company search and people search are in alpha.
+- https://moltsets.com/pricing — Pricing. Every plan includes unlimited API calls (rate limits vary by plan) and 100% verified emails with a date of last validation under 30 days; real-time carrier-validated mobile numbers. Tiers: Free (1,000 calls), $27/mo (unlimited), $97/mo (unlimited), and the $497/mo UGC plan (50% off the $997 list price, by promo).
+- https://moltsets.com/how-it-works — How it works. MoltSets enriches lists in Clay and Claude Code. Sign up and get an API key, try it free or pick an unlimited plan, then connect to Clay or Claude Code. Emails are verified across three sources, mobile numbers are carrier-verified in real time, and only contacts validated in the last 30 days are returned so you never burn tokens on bad data.
+- https://moltsets.com/our-data — Our data. The data categories MoltSets covers: 100% verified business emails, personal emails, mobile phones, people search, company search, reverse email lookup, email validation, and Sha256 hashes for ad audiences. Multi-provider waterfalls maximize coverage on every call, and every email carries a validation date under 30 days.
+- https://moltsets.com/for-agents — For agents. AI agents can buy MoltSets data with Stripe's MPP or Coinbase's x402 — no API key and no subscription. Create an MPP or x402 wallet, choose the API that fits the task in the docs, then call the MoltSets MCP with the required input; if the wallet has sufficient funds, MoltSets enriches and charges per record. MCP- and REST-compatible, with agent-first docs and transparent pricing.
+- https://moltsets.com/partnerships — Partnerships. Partner with MoltSets to lower your data bill, boost your personal brand, and make more money. Three programs: the UGC Plan (50% off, post 2x/mo tagging MoltSets, Adam comments on every post), the Affiliate Program (20% recurring on every dollar from signups you drive), and the Live Show Partner program (demo Claude/Clay skills to 500+ live viewers and get featured in the MoltSets skill library).
+- https://moltsets.com/terms-of-service — Terms of Service for MoltSets.
+- https://moltsets.com/privacy-policy — Privacy Policy for MoltSets.
+- https://moltsets.com/data-protection-addendum - Data Protection Addendum for MoltSets.
+- https://moltsets.com/compliance - Compliance information for MoltSets.
+- https://moltsets.com/sub-processors-list - Sub-processor information for MoltSets.
