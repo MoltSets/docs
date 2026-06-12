@@ -61,6 +61,17 @@ Look up carrier-verified mobile phone numbers from LinkedIn profiles and company
 | Person name + company domain | Mobile phone for that person | Find John Smith at acme.com and get their mobile phone number | `search_linkedin_profile` → `linkedin_to_mobile_phone` |
 | LinkedIn URL | Email address and mobile phone | Get the email address and mobile phone number for linkedin.com/in/username | `linkedin_to_best_email` + `linkedin_to_mobile_phone` |
 
+## Reverse Lookups
+
+Resolve a single identifier — an email address or a LinkedIn URL — into a complete business profile in one call. Returns name, job title, seniority, company, firmographic data, and emails on file, with an optional carrier-verified mobile phone number. Use these to enrich inbound leads, form fills, or existing CRM records.
+
+| I have… | I want… | Type in Claude… | Tool |
+|---|---|---|---|
+| Email | Full business profile (name, title, company, firmographics) | Look up the business profile for john@acme.com | `reverse_email_lookup` |
+| Email | Business profile plus mobile phone | Look up john@acme.com and include their mobile phone | `reverse_email_lookup` (`include_mobile_phone: true`) |
+| LinkedIn URL | Complete profile (title, company, industry, revenue, business + personal email) | Get the full profile for linkedin.com/in/username | `reverse_linkedin_lookup` |
+| LinkedIn URL | Complete profile plus mobile phone in one call | Get everything on linkedin.com/in/username including mobile | `reverse_linkedin_lookup` (`include_mobile_phone: true`) |
+
 ## Common Workflows
 
 Some tasks require chaining two tools together. These are the most useful combinations.
