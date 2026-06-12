@@ -4,7 +4,7 @@
 
 MoltSets provides a people data API and MCP for identity resolution, contact enrichment, and B2B prospecting.
 
-- App: https://app.moltsets.com - MoltSets: 100% verified business and personal emails, mobile phones, and Sha256's for ads. Get started for free.
+- App: https://app.moltsets.com - MoltSets: valid business and personal emails, mobile phones, and Sha256's for ads. Get started for free.
 - Support docs: https://support.moltsets.com - MoltSets Help Desk articles with information on how to use the MoltSets app, manage billing, manage accounts, and more.
 - Developer docs: https://developer.moltsets.com - MoltSets Developer Documentation that includes API reference as well as information on connecting AI agents to the MoltSets MCP.
 - Skills library: https://library.moltsets.com - Claude Skills for MoltSets — pre-built, ready to run. Start with identity resolution, enrichment, and more.
@@ -35,15 +35,15 @@ All requests are `POST` with a JSON body. All responses return HTTP 200 with env
 - [POST /search_people](https://developer.moltsets.com/api-reference/search/search-for-people): Search people by company, industry, size, or revenue → ranked business profiles.
 - [POST /search_companies](https://developer.moltsets.com/api-reference/search/search-for-companies): Search companies by name, domain, industry, size, or revenue → ranked company profiles.
 - [POST /search_linkedin_profile](https://developer.moltsets.com/api-reference/search/search-for-a-person-or-company): Search a person or company by name + company domain → LinkedIn slug. Use `count_only: true` (free) to check result volume before spending tokens.
-- [POST /search_business_email_by_name](https://developer.moltsets.com/api-reference/search/search-business-email-by-name): Name + company domain → verified business email + matched LinkedIn URL. One-call shortcut for `search_linkedin_profile` + `linkedin_to_business_email`. Charged only when found.
+- [POST /search_business_email_by_name](https://developer.moltsets.com/api-reference/search/search-business-email-by-name): Name + company domain → valid business email + matched LinkedIn URL. One-call shortcut for `search_linkedin_profile` + `linkedin_to_business_email`. Charged only when found.
 - [POST /search_business_profile_by_name](https://developer.moltsets.com/api-reference/search/search-business-profile-by-name): [Advanced] Name + company domain → full business profile (company, title, firmographics). Optional `include_mobile_phone`. Charged only when found.
 
-### Get Verified Emails
+### Get Valid Emails
 
-- [POST /linkedin_to_best_email](https://developer.moltsets.com/api-reference/get-verified-emails/linkedin-to-best-email): LinkedIn URL → best available email (business preferred, falls back to personal). Returns `type` field (`"business"` or `"personal"`).
-- [POST /linkedin_to_business_email](https://developer.moltsets.com/api-reference/get-verified-emails/linkedin-to-business-email): LinkedIn URL → verified business email only.
-- [POST /linkedin_to_personal_email](https://developer.moltsets.com/api-reference/get-verified-emails/linkedin-to-personal-email): LinkedIn URL → verified personal email.
-- [POST /linkedin_to_best_personal_email](https://developer.moltsets.com/api-reference/get-verified-emails/linkedin-to-best-personal-email): LinkedIn URL → best personal email.
+- [POST /linkedin_to_best_email](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-best-email): LinkedIn URL → best available email (business preferred, falls back to personal). Returns `type` field (`"business"` or `"personal"`).
+- [POST /linkedin_to_business_email](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-business-email): LinkedIn URL → valid business email only.
+- [POST /linkedin_to_personal_email](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-personal-email): LinkedIn URL → valid personal email.
+- [POST /linkedin_to_best_personal_email](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-best-personal-email): LinkedIn URL → best personal email.
 
 ### Get Carrier-Verified Mobile Phones
 
