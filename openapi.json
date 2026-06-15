@@ -110,7 +110,7 @@
     "post": {
       "summary": "Search for People",
       "operationId": "searchBusinessProfiles",
-      "description": "Search MoltSets's contact database to find people by their employer, industry, company size, or revenue range. Use `query` for free-text company name search, `domain` for exact lookups, and the categorical filters (`industry`, `employee_range`, `revenue_range`) to narrow results. Returns ranked contact records — higher `_score` means a stronger match. Use this to build lead lists, identify decision-makers at target accounts, or populate outbound sequences with verified contact data.",
+      "description": "Search MoltSets's contact database to find people by name, role, company, industry, country, seniority, or department. Use `query` for free-text cross-field search across name, company, title, and headline (put names and role keywords here), and the categorical filters (`country`, `seniority`, `industry`, `department`/`functional_area`) to narrow results. Combine query with filters for best precision. Returns ranked contact records — higher `_score` means a stronger match. Use this to build lead lists, identify decision-makers at target accounts, or populate outbound sequences with verified contact data.",
       "tags": [
         "Search"
       ],
@@ -123,104 +123,110 @@
               "properties": {
                 "query": {
                   "type": "string",
-                  "description": "Full-text search across company name only. Do not put domain, industry, employee size, or revenue here — use the dedicated filter params for those."
+                  "description": "Full-text search across full_name, first_name, last_name, company name, title (~85% filled), and headline (~65% filled) using cross-field matching. Multi-word queries distribute terms across fields — \"John Smith\" matches first_name: John AND last_name: Smith rather than either alone. Job title and role keywords belong here — both the title field (e.g. \"Account Executive\", \"Head of Sales\", \"Data Scientist\", \"Software Engineer\", \"Marketing Lead\") and the headline field (e.g. \"Helping SaaS companies grow\", \"B2B sales leader\") are searched. For seniority level (VP, Director, C-suite) use the seniority filter instead; use this field for specific role or function keywords. Combine with filters for precision — e.g. query: \"Account Executive\", country: \"United States\", seniority: \"Senior\". Extract names, company names, and role keywords from the human's request. Examples: \"Jane Doe\", \"Account Executive Salesforce\", \"Head of Sales fintech\", \"Data Scientist\", \"software engineer Netflix\", \"recruiter London\". Do NOT put categorical values like country or seniority here — use the dedicated filter params for those."
                 },
-                "domain": {
+                "country": {
                   "type": "string",
-                  "description": "Exact domain filter. Omit the protocol (no https://). Prefer this over `query` when you have a known domain — it's a precise match.",
-                  "example": "moltsets.com"
+                  "description": "Exact country name filter (~99% filled — most reliable filter). Must match the stored value exactly. Top values by volume: \"United States\", \"India\", \"United Kingdom\", \"Brazil\", \"Canada\", \"France\", \"Mexico\", \"Australia\", \"China\", \"Spain\", \"Netherlands\", \"Italy\", \"Indonesia\", \"Germany\", \"Philippines\", \"Turkey\", \"South Africa\", \"Saudi Arabia\", \"Argentina\", \"Singapore\", \"United Arab Emirates\", \"Colombia\", \"South Korea\", \"Malaysia\", \"Poland\", \"Belgium\", \"Switzerland\", \"Ireland\", \"Sweden\", \"Denmark\", \"Norway\", \"Austria\", \"Portugal\", \"Israel\", \"New Zealand\", \"Finland\", \"Greece\", \"Hungary\", \"Romania\", \"Ukraine\". Use the full English country name. \"UK\" and \"HK\" exist as dirty values — prefer \"United Kingdom\" and \"Hong Kong\" when the human says those.",
+                  "example": "United States"
+                },
+                "seniority": {
+                  "type": "string",
+                  "description": "Exact seniority level filter (~60% filled). Map the human's language to one of these exact values: \"Intern\" (intern, trainee, student ambassador), \"Entry\" (entry-level, junior, associate, coordinator, analyst, assistant — most common), \"Senior\" (senior, experienced individual contributor), \"Manager\" (manager, supervisor, team lead, head of small team), \"Director\" (director, senior director), \"VP\" (vice president, VP, SVP, EVP), \"Head\" (head of department, chief of staff), \"C Suite\" (CEO, CTO, CFO, COO, CMO, CRO, president, chief), \"Owner\" (owner, founder, co-founder, principal), \"Partner\" (partner, managing partner). Use the exact string shown — note \"C Suite\" has a space, not a hyphen.",
+                  "enum": [
+                    "Intern",
+                    "Entry",
+                    "Senior",
+                    "Manager",
+                    "Director",
+                    "VP",
+                    "Head",
+                    "C Suite",
+                    "Owner",
+                    "Partner"
+                  ]
                 },
                 "industry": {
                   "type": "string",
-                  "description": "Exact industry filter. Map the request to one of the supported values.",
+                  "description": "Exact current industry filter (~60% filled). Map the human's language to one of these exact values: \"Information Technology\" (tech, software, IT, SaaS, startup), \"Professional and Business Services\" (consulting, business services, staffing), \"Finance and Banking\" (finance, banking, fintech, investment, insurance), \"Education\" (school, university, edtech, e-learning), \"Health and Pharmaceuticals\" (healthcare, pharma, biotech, medical, hospital), \"Manufacturing\" (manufacturing, industrial, production), \"Government and Public Administration\" (government, public sector, military), \"Retail\" (retail, e-commerce, consumer goods), \"Food and Beverage\" (food, beverage, restaurant, CPG), \"Creative Arts and Entertainment\" (media, entertainment, arts, gaming), \"Non-Profit and Social Services\" (nonprofit, NGO, charity, social), \"Transportation and Logistics\" (logistics, supply chain, shipping, trucking), \"Construction\" (construction, real estate development, architecture), \"Tourism and Hospitality\" (travel, hotel, tourism, hospitality), \"Energy\" (energy, oil, gas, renewables, utilities), \"Marketing & Advertising\" (marketing, advertising, PR, digital marketing), \"Telecommunications\" (telecom, wireless, broadband), \"Real Estate\" (real estate, property), \"Automotive\" (automotive, car, vehicle), \"Media and Publishing\" (media, publishing, journalism, news), \"Agriculture\" (agriculture, farming, agtech). Use the exact string shown.",
                   "enum": [
-                    "Professional and Business Services",
                     "Information Technology",
-                    "Manufacturing",
-                    "Retail",
-                    "Health and Pharmaceuticals",
-                    "Creative Arts and Entertainment",
-                    "Construction",
-                    "Marketing & Advertising",
+                    "Professional and Business Services",
                     "Finance and Banking",
-                    "Tourism and Hospitality",
-                    "Non-Profit and Social Services",
-                    "Food and Beverage",
-                    "Real Estate",
                     "Education",
-                    "Transportation and Logistics",
-                    "Media and Publishing",
-                    "Energy",
-                    "Automotive",
+                    "Health and Pharmaceuticals",
+                    "Manufacturing",
                     "Government and Public Administration",
+                    "Retail",
+                    "Food and Beverage",
+                    "Creative Arts and Entertainment",
+                    "Non-Profit and Social Services",
+                    "Transportation and Logistics",
+                    "Construction",
+                    "Tourism and Hospitality",
+                    "Energy",
+                    "Marketing & Advertising",
                     "Telecommunications",
-                    "Agriculture",
-                    "Utilities",
-                    "Corporate Services",
-                    "Insurance",
-                    "Banks",
-                    "Computer Software",
-                    "Pharmaceuticals and Biotechnology",
-                    "Aerospace and Defense",
-                    "Electronics",
-                    "Mining and Metals"
+                    "Real Estate",
+                    "Automotive",
+                    "Media and Publishing",
+                    "Agriculture"
                   ]
                 },
-                "employee_range": {
+                "department": {
                   "type": "string",
-                  "description": "Exact employee count range filter. Prefer the numeric ranges when a size is given.",
+                  "description": "Exact normalized department filter (~60% filled, co-populated with functional_area — prefer one or the other, not both). Map the human's language to one of these exact values: \"Operations\" (ops, general, administration, management — most common), \"Sales\" (sales, business development, account management), \"Information Technology\" (IT, tech, software, engineering — use for IT/tech roles), \"Education\" (teaching, academic, training), \"Engineering\" (engineering, R&D, product engineering), \"Finance\" (finance, accounting, treasury), \"Medical & Health\" (healthcare, medical, nursing, clinical), \"Marketing\" (marketing, growth, demand gen, content), \"Human Resources\" (HR, people, talent, recruiting), \"Design\" (design, UX, creative), \"Consulting\" (consulting, advisory, strategy), \"Legal\" (legal, compliance, counsel). Use the exact string shown.",
                   "enum": [
-                    "1-10",
-                    "11-20",
-                    "21-50",
-                    "51-200",
-                    "201-500",
-                    "501-1000",
-                    "1001-5000",
-                    "5001+",
-                    "Small",
-                    "Mid-Market",
-                    "Enterprise",
-                    "Unknown"
+                    "Operations",
+                    "Sales",
+                    "Information Technology",
+                    "Education",
+                    "Engineering",
+                    "Finance",
+                    "Medical & Health",
+                    "Marketing",
+                    "Human Resources",
+                    "Design",
+                    "Consulting",
+                    "Legal"
                   ]
                 },
-                "revenue_range": {
+                "functional_area": {
                   "type": "string",
-                  "description": "Exact annual revenue range filter.",
+                  "description": "Exact functional area filter (~60% filled, co-populated with department — same doc counts, same enumerated values, sourced together). Use department or functional_area, not both. Use the exact string shown.",
                   "enum": [
-                    "Below $500k",
-                    "$500k - $1M",
-                    "$1M - $5M",
-                    "$5M - $10M",
-                    "$10M - $20M",
-                    "$20M - $50M",
-                    "Above $50M",
-                    "$50M - $100M",
-                    "$100M - $250M",
-                    "$250M - $500M",
-                    "$500M - $1B",
-                    "$1B - $2.5B",
-                    "$2.5B - $5B",
-                    "Over $5B"
+                    "Operations",
+                    "Sales",
+                    "Information Technology",
+                    "Education",
+                    "Engineering",
+                    "Finance",
+                    "Medical & Health",
+                    "Marketing",
+                    "Human Resources",
+                    "Design",
+                    "Consulting",
+                    "Legal"
                   ]
                 },
                 "limit": {
                   "type": "integer",
-                  "description": "Number of results to return.",
+                  "description": "Number of results to return (default: 10, max: 25). Increase when the human wants more options.",
                   "default": 10,
                   "minimum": 1,
                   "maximum": 25
                 },
                 "offset": {
                   "type": "integer",
-                  "description": "Number of results to skip for pagination. Use with limit to page through results.",
+                  "description": "Number of results to skip for pagination (default: 0). Use with limit to page through results — e.g. offset: 10 to get the second page of 10 results.",
                   "default": 0
                 }
               }
             },
             "example": {
-              "query": "MoltSets",
-              "industry": "Information Technology",
+              "query": "Account Executive",
+              "country": "United States",
+              "seniority": "Senior",
               "limit": 10,
               "offset": 0
             }
