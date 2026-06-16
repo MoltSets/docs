@@ -125,6 +125,16 @@
                   "type": "string",
                   "description": "Full-text search across full_name, first_name, last_name, company name, title (~85% filled), and headline (~65% filled) using cross-field matching. Multi-word queries distribute terms across fields — \"John Smith\" matches first_name: John AND last_name: Smith rather than either alone. Job title and role keywords belong here — both the title field (e.g. \"Account Executive\", \"Head of Sales\", \"Data Scientist\", \"Software Engineer\", \"Marketing Lead\") and the headline field (e.g. \"Helping SaaS companies grow\", \"B2B sales leader\") are searched. For seniority level (VP, Director, C-suite) use the seniority filter instead; use this field for specific role or function keywords. Combine with filters for precision — e.g. query: \"Account Executive\", country: \"United States\", seniority: \"Senior\". Extract names, company names, and role keywords from the human's request. Examples: \"Jane Doe\", \"Account Executive Salesforce\", \"Head of Sales fintech\", \"Data Scientist\", \"software engineer Netflix\", \"recruiter London\". Do NOT put categorical values like country or seniority here — use the dedicated filter params for those."
                 },
+                "company": {
+                  "type": "string",
+                  "description": "Full-text search across company name only. Do not put domain, industry, employee size, or revenue here — use the dedicated filter params for those.",
+                  "example": "moltsets.com"
+                },
+                "company_domain": {
+                  "type": "string",
+                  "description": "Exact domain filter. Omit the protocol (no https://). Prefer this over `query` when you have a known domain — it's a precise match.",
+                  "example": "moltsets.com"
+                },
                 "country": {
                   "type": "string",
                   "description": "Exact country name filter (~99% filled — most reliable filter). Must match the stored value exactly. Top values by volume: \"United States\", \"India\", \"United Kingdom\", \"Brazil\", \"Canada\", \"France\", \"Mexico\", \"Australia\", \"China\", \"Spain\", \"Netherlands\", \"Italy\", \"Indonesia\", \"Germany\", \"Philippines\", \"Turkey\", \"South Africa\", \"Saudi Arabia\", \"Argentina\", \"Singapore\", \"United Arab Emirates\", \"Colombia\", \"South Korea\", \"Malaysia\", \"Poland\", \"Belgium\", \"Switzerland\", \"Ireland\", \"Sweden\", \"Denmark\", \"Norway\", \"Austria\", \"Portugal\", \"Israel\", \"New Zealand\", \"Finland\", \"Greece\", \"Hungary\", \"Romania\", \"Ukraine\". Use the full English country name.",
