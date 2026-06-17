@@ -30,11 +30,15 @@
         "properties": {
           "tokens_charged": {
             "type": "integer",
-            "description": "Credits consumed by this request. Always `0` when no data is returned."
+            "description": "Tokens consumed by this request. Always `0` when no data is returned."
           },
           "tokens_remaining": {
+            "type": "string",
+            "description": "Tokens remaining after this request. Number if on the free plan, 'unlimited' if paid."
+          },
+          "daily_results_remaining": {
             "type": "integer",
-            "description": "Credits remaining after this request."
+            "description": "The number of 'results' remaining on your daily rate limit. Daily rate limit is unique per plan."
           }
         }
       },
