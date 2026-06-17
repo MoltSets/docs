@@ -92,6 +92,11 @@
       "vscode"
     ]
   },
+  "seo": {
+    "metatags": {
+      "google-site-verification": "Y5cVcMGgm_IzHVgHNg2TFlKHtbr9N-QdSFIvjxIWqX8"
+    }
+  },
   "footer": {
     "socials": {
       "linkedin": "https://linkedin.com/company/moltsets"
