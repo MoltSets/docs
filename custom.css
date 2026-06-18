@@ -36,3 +36,7 @@ pre code { background: none !important; }
   font-size: 1rem !important;
   line-height: 1.75 !important; 
 }
+
+[data-testid="api-playground-modal"] .lg:grid-cols-2 {
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+}
