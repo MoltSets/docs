@@ -2385,13 +2385,13 @@
                 },
                 "example": {
                   "results": {
-                    "id": "GmNdp1NV",
-                    "name": "Retention",
+                    "id": "#######",
+                    "name": "Account_Name",
                     "status": "active",
                     "plan": "subscription_97",
                     "token_balance": -1,
                     "unlimited": true,
-                    "daily_result_limit": 1000000,
+                    "daily_result_limit": 15000,
                     "daily_results_used": 0,
                     "external_token_balance": 100,
                     "external_token_allowance": 500,
