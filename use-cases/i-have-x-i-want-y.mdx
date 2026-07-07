@@ -30,7 +30,7 @@ Search MoltSets's company and contact database by name, domain, industry, employ
 | Person name + company domain | LinkedIn slug for that person | Find the LinkedIn profile for John Smith at acme.com | `search_linkedin_profile` |
 | Person name + company domain | Result count before spending tokens | How many people named John Smith are at acme.com | `search_linkedin_profile` (`count_only: true`) |
 | Person name + company domain | Verified business email in one call (plus matched LinkedIn URL) | Find the business email for John Smith at acme.com | `search_business_email_by_name` |
-| Person name + company domain | Full business profile in one call (company, title, firmographics; optional mobile phone) | Find the business profile for John Smith at acme.com | `search_business_profile_by_name` |
+| Person name + company domain | Full business profile in one call (company, title, firmographics) | Find the business profile for John Smith at acme.com | `search_business_profile_by_name` |
 
 ## Get Verified Emails
 
@@ -63,14 +63,12 @@ Look up carrier-verified mobile phone numbers from LinkedIn profiles and company
 
 ## Reverse Lookups
 
-Resolve a single identifier — an email address or a LinkedIn URL — into a complete business profile in one call. Returns name, job title, seniority, company, firmographic data, and emails on file, with an optional carrier-verified mobile phone number. Use these to enrich inbound leads, form fills, or existing CRM records.
+Resolve a single identifier — an email address or a LinkedIn URL — into a complete business profile in one call. Returns name, job title, seniority, company, firmographic data, and emails on file. Use these to enrich inbound leads, form fills, or existing CRM records.
 
 | I have… | I want… | Type in Claude… | Tool |
 |---|---|---|---|
 | Email | Full business profile (name, title, company, firmographics) | Look up the business profile for john@acme.com | `reverse_email_lookup` |
-| Email | Business profile plus mobile phone | Look up john@acme.com and include their mobile phone | `reverse_email_lookup` (`include_mobile_phone: true`) |
 | LinkedIn URL | Complete profile (title, company, industry, revenue, business + personal email) | Get the full profile for linkedin.com/in/username | `reverse_linkedin_lookup` |
-| LinkedIn URL | Complete profile plus mobile phone in one call | Get everything on linkedin.com/in/username including mobile | `reverse_linkedin_lookup` (`include_mobile_phone: true`) |
 
 ## Common Workflows
 

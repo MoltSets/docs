@@ -888,18 +888,12 @@
                   "company_domain": {
                     "type": "string",
                     "description": "Alias for `company` — company domain or URL."
-                  },
-                  "include_mobile_phone": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Include mobile phone lookup (additional DynamoDB query). External tokens are required for mobile phone lookups at a cost of 10 tokens per returned result."
                   }
                 }
               },
               "example": {
                 "name": "John Smith",
-                "company": "acme.com",
-                "include_mobile_phone": true
+                "company": "acme.com"
               }
             }
           }
@@ -921,7 +915,6 @@
                         "company": "Acme Inc",
                         "company_domain": "acme.com",
                         "linkedin_url": "https://linkedin.com/in/john-smith-123",
-                        "mobile_phone": "+15551234567",
                         "firmographics": {
                           "industry": "Software",
                           "employee_count": "201-500",
@@ -1651,7 +1644,7 @@
       "post": {
         "summary": "Reverse Email Lookup",
         "operationId": "hemToBusinessProfile",
-        "description": "Resolve an email address into a complete business profile, including full name, job title, seniority, company, LinkedIn URL, firmographic data, and additional email addresses on file. Use this to enrich inbound leads, form fills, or email list records with everything you need to qualify and contact a prospect. Set `include_mobile_phone: true` to also return a carrier-verified mobile number when available; External tokens are required for mobile phone lookups at a cost of 10 tokens per returned result.",
+        "description": "Resolve an email address into a complete business profile, including full name, job title, seniority, company, LinkedIn URL, firmographic data, and additional email addresses on file. Use this to enrich inbound leads, form fills, or email list records with everything you need to qualify and contact a prospect.",
         "tags": [
           "Reverse Lookups"
         ],
@@ -1665,11 +1658,6 @@
                   "email": {
                     "type": "string",
                     "description": "Email address."
-                  },
-                  "include_mobile_phone": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "When true, attempts to include mobile phone. External tokens are required for mobile phone lookups at a cost of 10 tokens per returned result."
                   }
                 }
               },
@@ -1741,7 +1729,7 @@
       "post": {
         "summary": "Reverse LinkedIn Lookup",
         "operationId": "linkedinToBusinessProfile",
-        "description": "Resolve a LinkedIn profile URL into a complete business profile, including full name, job title, seniority, company name, company website, industry, revenue, valid business email, personal email, and optionally a carrier-verified mobile phone number. This is MoltSets's most complete LinkedIn enrichment endpoint — use it when you need a full picture of a contact and their employer in a single call. Set `include_mobile_phone: true` to append a direct-dial mobile number; External tokens are required for mobile phone lookups at a cost of 10 tokens per returned result.",
+        "description": "Resolve a LinkedIn profile URL into a complete business profile, including full name, job title, seniority, company name, company website, industry, revenue, valid business email, and personal email. This is MoltSets's most complete LinkedIn enrichment endpoint — use it when you need a full picture of a contact and their employer in a single call.",
         "tags": [
           "Reverse Lookups"
         ],
@@ -1758,11 +1746,6 @@
                   "linkedin_url": {
                     "type": "string",
                     "example": "https://linkedin.com/in/retentionadam"
-                  },
-                  "include_mobile_phone": {
-                    "type": "boolean",
-                    "description": "When true, attempts to include mobile phone in the response. External tokens are required for mobile phone lookups at a cost of 10 tokens per returned result.",
-                    "default": false
                   }
                 }
               }
@@ -1790,7 +1773,6 @@
                         "personal_emails": [
                           "john.smith@gmail.com"
                         ],
-                        "mobile_phone": "5555555555",
                         "country": "United States",
                         "current_industry": "Information Technology",
                         "company": {
