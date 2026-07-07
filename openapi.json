@@ -1070,7 +1070,7 @@
                       "results": {
                         "email": "john.smith@example.com",
                         "type": "business",
-                        "last_validated_at": null
+                        "last_validated_at": "2026-03-04"
                       },
                       "status": "ok",
                       "metadata": {
@@ -1578,7 +1578,8 @@
                     "summary": "Data found",
                     "value": {
                       "results": {
-                        "mobile_phone": "5555555555"
+                        "mobile_phone": "5555555555",
+                        "last_validated_at": "2026-03-04"
                       },
                       "status": "ok",
                       "metadata": {
