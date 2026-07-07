@@ -892,7 +892,7 @@
                   "include_mobile_phone": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Include mobile phone lookup (additional DynamoDB query)."
+                    "description": "Include mobile phone lookup (additional DynamoDB query). External tokens are required for mobile phone lookups at a cost of 10 tokens per returned result."
                   }
                 }
               },
@@ -1523,7 +1523,7 @@
       "post": {
         "summary": "LinkedIn to Mobile Phone",
         "operationId": "enrichPhone",
-        "description": "Look up the carrier-verified mobile phone number for a LinkedIn profile. Only mobile numbers are returned — no landlines or VoIP numbers — so every result is a real device. Supports both single lookups (`linkedin_url`) and batch lookups of up to 100 profiles at once (`linkedin_urls`). Use for SMS outreach, cold calling, or enriching sales sequences with direct-dial mobile numbers.",
+        "description": "Look up the carrier-verified mobile phone number for a LinkedIn profile along with a date that it was last verified. Only mobile numbers are returned — no landlines or VoIP numbers — so every result is a real device. Supports both single lookups (`linkedin_url`) and batch lookups of up to 100 profiles at once (`linkedin_urls`). Use for SMS outreach, cold calling, or enriching sales sequences with direct-dial mobile numbers. External tokens are required for mobile phone lookups at a cost of 10 tokens per returned result.",
         "tags": [
           "Get Carrier-Verified Mobile Phones"
         ],
@@ -1651,7 +1651,7 @@
       "post": {
         "summary": "Reverse Email Lookup",
         "operationId": "hemToBusinessProfile",
-        "description": "Resolve an email address into a complete business profile, including full name, job title, seniority, company, LinkedIn URL, firmographic data, and additional email addresses on file. Use this to enrich inbound leads, form fills, or email list records with everything you need to qualify and contact a prospect. Set `include_mobile_phone: true` to also return a carrier-verified mobile number when available; external credits apply when phone data is found.",
+        "description": "Resolve an email address into a complete business profile, including full name, job title, seniority, company, LinkedIn URL, firmographic data, and additional email addresses on file. Use this to enrich inbound leads, form fills, or email list records with everything you need to qualify and contact a prospect. Set `include_mobile_phone: true` to also return a carrier-verified mobile number when available; External tokens are required for mobile phone lookups at a cost of 10 tokens per returned result.",
         "tags": [
           "Reverse Lookups"
         ],
@@ -1669,7 +1669,7 @@
                   "include_mobile_phone": {
                     "type": "boolean",
                     "default": false,
-                    "description": "When true, attempts to include mobile phone. Costs external credits when data is found."
+                    "description": "When true, attempts to include mobile phone. External tokens are required for mobile phone lookups at a cost of 10 tokens per returned result."
                   }
                 }
               },
@@ -1741,7 +1741,7 @@
       "post": {
         "summary": "Reverse LinkedIn Lookup",
         "operationId": "linkedinToBusinessProfile",
-        "description": "Resolve a LinkedIn profile URL into a complete business profile, including full name, job title, seniority, company name, company website, industry, revenue, valid business email, personal email, and optionally a carrier-verified mobile phone number. This is MoltSets's most complete LinkedIn enrichment endpoint — use it when you need a full picture of a contact and their employer in a single call. Set `include_mobile_phone: true` to append a direct-dial mobile number; additional credits apply when phone data is found.",
+        "description": "Resolve a LinkedIn profile URL into a complete business profile, including full name, job title, seniority, company name, company website, industry, revenue, valid business email, personal email, and optionally a carrier-verified mobile phone number. This is MoltSets's most complete LinkedIn enrichment endpoint — use it when you need a full picture of a contact and their employer in a single call. Set `include_mobile_phone: true` to append a direct-dial mobile number; External tokens are required for mobile phone lookups at a cost of 10 tokens per returned result.",
         "tags": [
           "Reverse Lookups"
         ],
@@ -1761,7 +1761,7 @@
                   },
                   "include_mobile_phone": {
                     "type": "boolean",
-                    "description": "When true, attempts to include mobile phone in the response.",
+                    "description": "When true, attempts to include mobile phone in the response. External tokens are required for mobile phone lookups at a cost of 10 tokens per returned result.",
                     "default": false
                   }
                 }
