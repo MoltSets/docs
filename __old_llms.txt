@@ -7,7 +7,7 @@ MoltSets provides a people data API and MCP for identity resolution, contact enr
 - App: https://app.moltsets.com - MoltSets: 100% verified business and personal emails, mobile phones, and Sha256's for ads. Get started for free.
 - Support docs: https://support.moltsets.com - MoltSets Help Desk articles with information on how to use the MoltSets app, manage billing, manage accounts, and more.
 - Developer docs: https://developer.moltsets.com - MoltSets Developer Documentation that includes API reference as well as information on connecting AI agents to the MoltSets MCP.
-- Skills library: https://library.moltsets.com - Claude Skills for MoltSets — pre-built, ready to run. Start with identity resolution, enrichment, and more.
+- Skills library: https://moltsets.com/library - Claude Skills for MoltSets — pre-built, ready to run. Start with identity resolution, enrichment, and more.
 
 ## Key pages
 
