@@ -110,482 +110,482 @@
     }
   },
   "paths": {
-"/search_people": {
-    "post": {
-      "summary": "Search for People",
-      "operationId": "searchBusinessProfiles",
-      "description": "Search MoltSets's contact database to find people by name, role, company, industry, country, seniority, or department. Use `query` for free-text cross-field search across name, company, title, and headline (put names and role keywords here), and the categorical filters (`country`, `seniority`, `industry`, `department`/`functional_area`) to narrow results. Combine query with filters for best precision. Returns ranked contact records — higher `_score` means a stronger match. Use this to build lead lists, identify decision-makers at target accounts, or populate outbound sequences with verified contact data.",
-      "tags": [
-        "Search"
-      ],
-      "requestBody": {
-        "required": false,
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "query": {
-                  "type": "string",
-                  "description": "Full-text search across full_name, first_name, last_name, company name, title (~85% filled), and headline (~65% filled) using cross-field matching. Multi-word queries distribute terms across fields — \"John Smith\" matches first_name: John AND last_name: Smith rather than either alone. Job title and role keywords belong here — both the title field (e.g. \"Account Executive\", \"Head of Sales\", \"Data Scientist\", \"Software Engineer\", \"Marketing Lead\") and the headline field (e.g. \"Helping SaaS companies grow\", \"B2B sales leader\") are searched. For seniority level (VP, Director, C-suite) use the seniority filter instead; use this field for specific role or function keywords. Combine with filters for precision — e.g. query: \"Account Executive\", country: \"United States\", seniority: \"Senior\". Extract names, company names, and role keywords from the human's request. Examples: \"Jane Doe\", \"Account Executive Salesforce\", \"Head of Sales fintech\", \"Data Scientist\", \"software engineer Netflix\", \"recruiter London\". Do NOT put categorical values like country or seniority here — use the dedicated filter params for those."
-                },
-                "company": {
-                  "type": "string",
-                  "description": "Full-text search across company name only. Do not put domain, industry, employee size, or revenue here — use the dedicated filter params for those.",
-                  "example": "moltsets.com"
-                },
-                "company_domain": {
-                  "type": "string",
-                  "description": "Exact domain filter. Omit the protocol (no https://). Prefer this over `query` when you have a known domain — it's a precise match.",
-                  "example": "moltsets.com"
-                },
-                "country": {
-                  "type": "string",
-                  "description": "Exact country name filter (~99% filled — most reliable filter). Must match the stored value exactly. Top values by volume: \"United States\", \"India\", \"United Kingdom\", \"Brazil\", \"Canada\", \"France\", \"Mexico\", \"Australia\", \"China\", \"Spain\", \"Netherlands\", \"Italy\", \"Indonesia\", \"Germany\", \"Philippines\", \"Turkey\", \"South Africa\", \"Saudi Arabia\", \"Argentina\", \"Singapore\", \"United Arab Emirates\", \"Colombia\", \"South Korea\", \"Malaysia\", \"Poland\", \"Belgium\", \"Switzerland\", \"Ireland\", \"Sweden\", \"Denmark\", \"Norway\", \"Austria\", \"Portugal\", \"Israel\", \"New Zealand\", \"Finland\", \"Greece\", \"Hungary\", \"Romania\", \"Ukraine\". Use the full English country name.",
-                  "example": "United States"
-                },
-                "seniority": {
-                  "type": "string",
-                  "description": "Exact seniority level filter (~60% filled). Map the human's language to one of these exact values: \"Intern\" (intern, trainee, student ambassador), \"Entry\" (entry-level, junior, associate, coordinator, analyst, assistant — most common), \"Senior\" (senior, experienced individual contributor), \"Manager\" (manager, supervisor, team lead, head of small team), \"Director\" (director, senior director), \"VP\" (vice president, VP, SVP, EVP), \"Head\" (head of department, chief of staff), \"C Suite\" (CEO, CTO, CFO, COO, CMO, CRO, president, chief), \"Owner\" (owner, founder, co-founder, principal), \"Partner\" (partner, managing partner). Use the exact string shown — note \"C Suite\" has a space, not a hyphen.",
-                  "enum": [
-                    "Intern",
-                    "Entry",
-                    "Senior",
-                    "Manager",
-                    "Director",
-                    "VP",
-                    "Head",
-                    "C Suite",
-                    "Owner",
-                    "Partner"
-                  ]
-                },
-                "industry": {
-                  "type": "string",
-                  "description": "This field takes one exact value from the fixed list below, and it's currently about 60% filled in. When someone describes their industry in their own words, find the closest match from the list and type it in exactly as shown, including the capitalisation, spelling, and any punctuation (for example the ampersand in \"Marketing & Advertising\").\nUse the cues in brackets to decide which value fits:\n\nInformation Technology (tech, software, IT, SaaS, startup)\nProfessional and Business Services (consulting, business services, staffing)\nFinance and Banking (finance, banking, fintech, investment, insurance)\nEducation (school, university, edtech, e-learning)\nHealth and Pharmaceuticals (healthcare, pharma, biotech, medical, hospital)\nManufacturing (manufacturing, industrial, production)\nGovernment and Public Administration (government, public sector, military)\nRetail (retail, e-commerce, consumer goods)\nFood and Beverage (food, beverage, restaurant, CPG)\nCreative Arts and Entertainment (media, entertainment, arts, gaming)\nNon-Profit and Social Services (nonprofit, NGO, charity, social)\nTransportation and Logistics (logistics, supply chain, shipping, trucking)\nConstruction (construction, real estate development, architecture)\nTourism and Hospitality (travel, hotel, tourism, hospitality)\nEnergy (energy, oil, gas, renewables, utilities)\nMarketing & Advertising (marketing, advertising, PR, digital marketing)\nTelecommunications (telecom, wireless, broadband)\nReal Estate (real estate, property)\nAutomotive (automotive, car, vehicle)\nMedia and Publishing (media, publishing, journalism, news)\nAgriculture (agriculture, farming, agtech)",
-                  "enum": [
-                    "Information Technology",
-                    "Professional and Business Services",
-                    "Finance and Banking",
-                    "Education",
-                    "Health and Pharmaceuticals",
-                    "Manufacturing",
-                    "Government and Public Administration",
-                    "Retail",
-                    "Food and Beverage",
-                    "Creative Arts and Entertainment",
-                    "Non-Profit and Social Services",
-                    "Transportation and Logistics",
-                    "Construction",
-                    "Tourism and Hospitality",
-                    "Energy",
-                    "Marketing & Advertising",
-                    "Telecommunications",
-                    "Real Estate",
-                    "Automotive",
-                    "Media and Publishing",
-                    "Agriculture"
-                  ]
-                },
-                "department": {
-                  "type": "string",
-                  "description": "This field takes one exact value from the fixed list below, and it's currently about 60% filled in. Note that it shares its data with the functional_area field, so populate one or the other, not both. When someone describes their department in their own words, find the closest match and type it in exactly as shown, including capitalisation and punctuation (for example the ampersand in \"Medical & Health\").\nUse the cues in brackets to decide which value fits:\n\nOperations (ops, general, administration, management — this is the most common one)\nSales (sales, business development, account management)\nInformation Technology (IT, tech, software, engineering — use this for IT and tech roles)\nEducation (teaching, academic, training)\nEngineering (engineering, R&D, product engineering)\nFinance (finance, accounting, treasury)\nMedical & Health (healthcare, medical, nursing, clinical)\nMarketing (marketing, growth, demand gen, content)\nHuman Resources (HR, people, talent, recruiting)\nDesign (design, UX, creative)\nConsulting (consulting, advisory, strategy)\nLegal (legal, compliance, counsel)",
-                  "enum": [
-                    "Operations",
-                    "Sales",
-                    "Information Technology",
-                    "Education",
-                    "Engineering",
-                    "Finance",
-                    "Medical & Health",
-                    "Marketing",
-                    "Human Resources",
-                    "Design",
-                    "Consulting",
-                    "Legal"
-                  ]
-                },
-                "functional_area": {
-                  "type": "string",
-                  "description": "Exact functional area filter (~60% filled, co-populated with department — same doc counts, same enumerated values, sourced together). Use department or functional_area, not both. Use the exact string shown.",
-                  "enum": [
-                    "Operations",
-                    "Sales",
-                    "Information Technology",
-                    "Education",
-                    "Engineering",
-                    "Finance",
-                    "Medical & Health",
-                    "Marketing",
-                    "Human Resources",
-                    "Design",
-                    "Consulting",
-                    "Legal"
-                  ]
-                },
-                "limit": {
-                  "type": "integer",
-                  "description": "Number of results to return (default: 10, max: 25). Increase when the human wants more options.",
-                  "default": 10,
-                  "minimum": 1,
-                  "maximum": 25
-                },
-                "offset": {
-                  "type": "integer",
-                  "description": "Number of results to skip for pagination (default: 0). Use with limit to page through results — e.g. offset: 10 to get the second page of 10 results.",
-                  "default": 0
+    "/search_people": {
+      "post": {
+        "summary": "Search for People",
+        "operationId": "searchBusinessProfiles",
+        "description": "Search MoltSets's contact database to find people by name, role, company, industry, country, seniority, or department. Use `query` for free-text cross-field search across name, company, title, and headline (put names and role keywords here), and the categorical filters (`country`, `seniority`, `industry`, `department`/`functional_area`) to narrow results. Combine query with filters for best precision. Returns ranked contact records — higher `_score` means a stronger match. Use this to build lead lists, identify decision-makers at target accounts, or populate outbound sequences with verified contact data.\n\nThis API is subject to our [Fair Use Policy for Search](https://moltsets.com/fair-use-policy-search/).",
+        "tags": [
+          "Search"
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "description": "Full-text search across full_name, first_name, last_name, company name, title (~85% filled), and headline (~65% filled) using cross-field matching. Multi-word queries distribute terms across fields — \"John Smith\" matches first_name: John AND last_name: Smith rather than either alone. Job title and role keywords belong here — both the title field (e.g. \"Account Executive\", \"Head of Sales\", \"Data Scientist\", \"Software Engineer\", \"Marketing Lead\") and the headline field (e.g. \"Helping SaaS companies grow\", \"B2B sales leader\") are searched. For seniority level (VP, Director, C-suite) use the seniority filter instead; use this field for specific role or function keywords. Combine with filters for precision — e.g. query: \"Account Executive\", country: \"United States\", seniority: \"Senior\". Extract names, company names, and role keywords from the human's request. Examples: \"Jane Doe\", \"Account Executive Salesforce\", \"Head of Sales fintech\", \"Data Scientist\", \"software engineer Netflix\", \"recruiter London\". Do NOT put categorical values like country or seniority here — use the dedicated filter params for those."
+                  },
+                  "company": {
+                    "type": "string",
+                    "description": "Full-text search across company name only. Do not put domain, industry, employee size, or revenue here — use the dedicated filter params for those.",
+                    "example": "moltsets.com"
+                  },
+                  "company_domain": {
+                    "type": "string",
+                    "description": "Exact domain filter. Omit the protocol (no https://). Prefer this over `query` when you have a known domain — it's a precise match.",
+                    "example": "moltsets.com"
+                  },
+                  "country": {
+                    "type": "string",
+                    "description": "Exact country name filter (~99% filled — most reliable filter). Must match the stored value exactly. Top values by volume: \"United States\", \"India\", \"United Kingdom\", \"Brazil\", \"Canada\", \"France\", \"Mexico\", \"Australia\", \"China\", \"Spain\", \"Netherlands\", \"Italy\", \"Indonesia\", \"Germany\", \"Philippines\", \"Turkey\", \"South Africa\", \"Saudi Arabia\", \"Argentina\", \"Singapore\", \"United Arab Emirates\", \"Colombia\", \"South Korea\", \"Malaysia\", \"Poland\", \"Belgium\", \"Switzerland\", \"Ireland\", \"Sweden\", \"Denmark\", \"Norway\", \"Austria\", \"Portugal\", \"Israel\", \"New Zealand\", \"Finland\", \"Greece\", \"Hungary\", \"Romania\", \"Ukraine\". Use the full English country name.",
+                    "example": "United States"
+                  },
+                  "seniority": {
+                    "type": "string",
+                    "description": "Exact seniority level filter (~60% filled). Map the human's language to one of these exact values: \"Intern\" (intern, trainee, student ambassador), \"Entry\" (entry-level, junior, associate, coordinator, analyst, assistant — most common), \"Senior\" (senior, experienced individual contributor), \"Manager\" (manager, supervisor, team lead, head of small team), \"Director\" (director, senior director), \"VP\" (vice president, VP, SVP, EVP), \"Head\" (head of department, chief of staff), \"C Suite\" (CEO, CTO, CFO, COO, CMO, CRO, president, chief), \"Owner\" (owner, founder, co-founder, principal), \"Partner\" (partner, managing partner). Use the exact string shown — note \"C Suite\" has a space, not a hyphen.",
+                    "enum": [
+                      "Intern",
+                      "Entry",
+                      "Senior",
+                      "Manager",
+                      "Director",
+                      "VP",
+                      "Head",
+                      "C Suite",
+                      "Owner",
+                      "Partner"
+                    ]
+                  },
+                  "industry": {
+                    "type": "string",
+                    "description": "This field takes one exact value from the fixed list below, and it's currently about 60% filled in. When someone describes their industry in their own words, find the closest match from the list and type it in exactly as shown, including the capitalisation, spelling, and any punctuation (for example the ampersand in \"Marketing & Advertising\").\nUse the cues in brackets to decide which value fits:\n\nInformation Technology (tech, software, IT, SaaS, startup)\nProfessional and Business Services (consulting, business services, staffing)\nFinance and Banking (finance, banking, fintech, investment, insurance)\nEducation (school, university, edtech, e-learning)\nHealth and Pharmaceuticals (healthcare, pharma, biotech, medical, hospital)\nManufacturing (manufacturing, industrial, production)\nGovernment and Public Administration (government, public sector, military)\nRetail (retail, e-commerce, consumer goods)\nFood and Beverage (food, beverage, restaurant, CPG)\nCreative Arts and Entertainment (media, entertainment, arts, gaming)\nNon-Profit and Social Services (nonprofit, NGO, charity, social)\nTransportation and Logistics (logistics, supply chain, shipping, trucking)\nConstruction (construction, real estate development, architecture)\nTourism and Hospitality (travel, hotel, tourism, hospitality)\nEnergy (energy, oil, gas, renewables, utilities)\nMarketing & Advertising (marketing, advertising, PR, digital marketing)\nTelecommunications (telecom, wireless, broadband)\nReal Estate (real estate, property)\nAutomotive (automotive, car, vehicle)\nMedia and Publishing (media, publishing, journalism, news)\nAgriculture (agriculture, farming, agtech)",
+                    "enum": [
+                      "Information Technology",
+                      "Professional and Business Services",
+                      "Finance and Banking",
+                      "Education",
+                      "Health and Pharmaceuticals",
+                      "Manufacturing",
+                      "Government and Public Administration",
+                      "Retail",
+                      "Food and Beverage",
+                      "Creative Arts and Entertainment",
+                      "Non-Profit and Social Services",
+                      "Transportation and Logistics",
+                      "Construction",
+                      "Tourism and Hospitality",
+                      "Energy",
+                      "Marketing & Advertising",
+                      "Telecommunications",
+                      "Real Estate",
+                      "Automotive",
+                      "Media and Publishing",
+                      "Agriculture"
+                    ]
+                  },
+                  "department": {
+                    "type": "string",
+                    "description": "This field takes one exact value from the fixed list below, and it's currently about 60% filled in. Note that it shares its data with the functional_area field, so populate one or the other, not both. When someone describes their department in their own words, find the closest match and type it in exactly as shown, including capitalisation and punctuation (for example the ampersand in \"Medical & Health\").\nUse the cues in brackets to decide which value fits:\n\nOperations (ops, general, administration, management — this is the most common one)\nSales (sales, business development, account management)\nInformation Technology (IT, tech, software, engineering — use this for IT and tech roles)\nEducation (teaching, academic, training)\nEngineering (engineering, R&D, product engineering)\nFinance (finance, accounting, treasury)\nMedical & Health (healthcare, medical, nursing, clinical)\nMarketing (marketing, growth, demand gen, content)\nHuman Resources (HR, people, talent, recruiting)\nDesign (design, UX, creative)\nConsulting (consulting, advisory, strategy)\nLegal (legal, compliance, counsel)",
+                    "enum": [
+                      "Operations",
+                      "Sales",
+                      "Information Technology",
+                      "Education",
+                      "Engineering",
+                      "Finance",
+                      "Medical & Health",
+                      "Marketing",
+                      "Human Resources",
+                      "Design",
+                      "Consulting",
+                      "Legal"
+                    ]
+                  },
+                  "functional_area": {
+                    "type": "string",
+                    "description": "Exact functional area filter (~60% filled, co-populated with department — same doc counts, same enumerated values, sourced together). Use department or functional_area, not both. Use the exact string shown.",
+                    "enum": [
+                      "Operations",
+                      "Sales",
+                      "Information Technology",
+                      "Education",
+                      "Engineering",
+                      "Finance",
+                      "Medical & Health",
+                      "Marketing",
+                      "Human Resources",
+                      "Design",
+                      "Consulting",
+                      "Legal"
+                    ]
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "description": "Number of results to return (default: 10, max: 25). Increase when the human wants more options.",
+                    "default": 10,
+                    "minimum": 1,
+                    "maximum": 25
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "description": "Number of results to skip for pagination (default: 0). Use with limit to page through results — e.g. offset: 10 to get the second page of 10 results.",
+                    "default": 0
+                  }
+                }
+              },
+              "example": {
+                "query": "Account Executive",
+                "country": "United States",
+                "seniority": "Senior",
+                "limit": 10,
+                "offset": 0
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "results": [
+                          {
+                            "title": "Senior Associate - Technical Director",
+                            "company": {
+                              "name": "MoltSets",
+                              "size": "57",
+                              "revenue": "1200000000",
+                              "industry": "Information Technology",
+                              "logo_url": "https://cdn.mixrank.com/md5/0bb6181a215bac707d7af3276be5XXXXX",
+                              "website_url": "https://moltsets.com",
+                              "linkedin_url": "https://linkedin.com/company/moltsets"
+                            },
+                            "country": "United States",
+                            "headline": "Senior Associate - Technical Director @ MoltSets",
+                            "full_name": "John Smith",
+                            "last_name": "Smith",
+                            "seniority": "Senior",
+                            "first_name": "John",
+                            "linkedin_url": "https://linkedin.com/in/john-smith-123",
+                            "business_email": "john.smith@example.com",
+                            "current_industry": "Information Technology",
+                            "linkedin_slug": "john-smith-123",
+                            "_id": "john-smith-123",
+                            "_score": 9.1714
+                          }
+                        ],
+                        "total": 278
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_used": 1,
+                        "tokens_remaining": "unlimited",
+                        "daily_results_remaining": 9876
+                      }
+                    }
+                  }
                 }
               }
-            },
-            "example": {
-              "query": "Account Executive",
-              "country": "United States",
-              "seniority": "Senior",
-              "limit": 10,
-              "offset": 0
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
             }
           }
         }
-      },
-      "responses": {
-        "200": {
-          "description": "Success",
+      }
+    },
+    "/search_companies": {
+      "post": {
+        "summary": "Search for Companies",
+        "operationId": "searchCompanyProfiles",
+        "description": "Search MoltSets's company database by name, domain, industry, employee count, or annual revenue to find and identify target accounts. Use `query` for free-text company name search, `domain` for exact lookups by website domain, and the categorical filters (`industry`, `employee_range`, `revenue_range`) to narrow your results. Combine `query` with filters for best precision. Returns ranked company records — higher `_score` means a stronger match. Ideal for building prospect lists, qualifying accounts, or enriching CRM data with firmographic context.\n\nThis API is subject to our [Fair Use Policy for Search](https://moltsets.com/fair-use-policy-search/).",
+        "tags": [
+          "Search"
+        ],
+        "requestBody": {
+          "required": false,
           "content": {
             "application/json": {
-              "examples": {
-                "found": {
-                  "summary": "Data found",
-                  "value": {
-                    "results": {
-                      "results": [
-                        {
-                          "title": "Senior Associate - Technical Director",
-                          "company": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "description": "Full-text search across company name only. Do not put domain, industry, employee size, or revenue here — use the dedicated filter params for those."
+                  },
+                  "domain": {
+                    "type": "string",
+                    "description": "Exact domain filter. Omit the protocol (no https://). Prefer this over `query` when you have a known domain — it's a precise match.",
+                    "example": "moltsets.com"
+                  },
+                  "industry": {
+                    "type": "string",
+                    "description": "Exact industry filter. Map the request to one of the supported values.",
+                    "enum": [
+                      "Professional and Business Services",
+                      "Information Technology",
+                      "Manufacturing",
+                      "Retail",
+                      "Health and Pharmaceuticals",
+                      "Creative Arts and Entertainment",
+                      "Construction",
+                      "Marketing & Advertising",
+                      "Finance and Banking",
+                      "Tourism and Hospitality",
+                      "Non-Profit and Social Services",
+                      "Food and Beverage",
+                      "Real Estate",
+                      "Education",
+                      "Transportation and Logistics",
+                      "Media and Publishing",
+                      "Energy",
+                      "Automotive",
+                      "Government and Public Administration",
+                      "Telecommunications",
+                      "Agriculture",
+                      "Utilities",
+                      "Corporate Services",
+                      "Insurance",
+                      "Banks",
+                      "Computer Software",
+                      "Pharmaceuticals and Biotechnology",
+                      "Aerospace and Defense",
+                      "Electronics",
+                      "Mining and Metals"
+                    ]
+                  },
+                  "employee_range": {
+                    "type": "string",
+                    "description": "Exact employee count range filter. Prefer the numeric ranges when a size is given.",
+                    "enum": [
+                      "1-10",
+                      "11-20",
+                      "21-50",
+                      "51-200",
+                      "201-500",
+                      "501-1000",
+                      "1001-5000",
+                      "5001+",
+                      "Small",
+                      "Mid-Market",
+                      "Enterprise",
+                      "Unknown"
+                    ]
+                  },
+                  "revenue_range": {
+                    "type": "string",
+                    "description": "Exact annual revenue range filter.",
+                    "enum": [
+                      "Below $500k",
+                      "$500k - $1M",
+                      "$1M - $5M",
+                      "$5M - $10M",
+                      "$10M - $20M",
+                      "$20M - $50M",
+                      "Above $50M",
+                      "$50M - $100M",
+                      "$100M - $250M",
+                      "$250M - $500M",
+                      "$500M - $1B",
+                      "$1B - $2.5B",
+                      "$2.5B - $5B",
+                      "Over $5B"
+                    ]
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "description": "Number of results to return.",
+                    "default": 10,
+                    "minimum": 1,
+                    "maximum": 25
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "description": "Number of results to skip for pagination. Use with limit to page through results.",
+                    "default": 0
+                  }
+                }
+              },
+              "example": {
+                "query": "MoltSets",
+                "industry": "Information Technology",
+                "employee_range": "51-200",
+                "limit": 10,
+                "offset": 0
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "found": {
+                    "summary": "Data found",
+                    "value": {
+                      "results": {
+                        "results": [
+                          {
+                            "logo": "https://cdn.mixrank.com/md5/0e4e81c8ff584b1ce3e4c3067e8cXXXXX",
                             "name": "MoltSets",
-                            "size": "57",
-                            "revenue": "1200000000",
+                            "type": "Privately Held",
+                            "domain": "moltsets.com",
                             "industry": "Information Technology",
-                            "logo_url": "https://cdn.mixrank.com/md5/0bb6181a215bac707d7af3276be5XXXXX",
-                            "website_url": "https://moltsets.com",
-                            "linkedin_url": "https://linkedin.com/company/moltsets"
+                            "linkedin_url": "https://linkedin.com/company/moltsets",
+                            "exact_revenue": 1200000000.0,
+                            "revenue_range": "Above $50M",
+                            "employee_count": 57,
+                            "employee_range": "51-200",
+                            "follower_count": 3677,
+                            "linkedin_company_id": "13223077",
+                            "_id": "moltsets.com",
+                            "_score": 15.2394
                           },
-                          "country": "United States",
-                          "headline": "Senior Associate - Technical Director @ MoltSets",
-                          "full_name": "John Smith",
-                          "last_name": "Smith",
-                          "seniority": "Senior",
-                          "first_name": "John",
-                          "linkedin_url": "https://linkedin.com/in/john-smith-123",
-                          "business_email": "john.smith@example.com",
-                          "current_industry": "Information Technology",
-                          "linkedin_slug": "john-smith-123",
-                          "_id": "john-smith-123",
-                          "_score": 9.1714
-                        }
-                      ],
-                      "total": 278
-                    },
-                    "status": "ok",
-                    "metadata": {
-                      "tokens_used": 1,
-                      "tokens_remaining": "unlimited",
-                      "daily_results_remaining": 9876
+                          {
+                            "name": "Acme",
+                            "type": "Privately Held",
+                            "domain": "acme.com",
+                            "industry": "Information Technology",
+                            "linkedin_url": "https://linkedin.com/company/acme",
+                            "revenue_range": "$10M - $20M",
+                            "employee_count": 90,
+                            "employee_range": "51-200",
+                            "follower_count": 121,
+                            "linkedin_company_id": "82353383",
+                            "_id": "acme.com",
+                            "_score": 13.1942
+                          }
+                        ],
+                        "total": 210
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "tokens_used": 1,
+                        "tokens_remaining": "unlimited",
+                        "daily_results_remaining": 9876
+                      }
                     }
                   }
                 }
               }
             }
-          }
-        },
-        "400": {
-          "description": "Bad Request",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorBadRequest"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
               }
             }
-          }
-        },
-        "401": {
-          "description": "Unauthorized",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorUnauthorized"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
               }
             }
-          }
-        },
-        "404": {
-          "description": "Not Found",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorNotFound"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
               }
             }
-          }
-        },
-        "422": {
-          "description": "Invalid Input",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorInvalidInput"
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
               }
             }
-          }
-        },
-        "429": {
-          "description": "Rate limit exceeded",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorRateLimit"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
               }
             }
           }
         }
       }
-    }
-  }, 
-"/search_companies": {
-    "post": {
-      "summary": "Search for Companies",
-      "operationId": "searchCompanyProfiles",
-      "description": "Search MoltSets's company database by name, domain, industry, employee count, or annual revenue to find and identify target accounts. Use `query` for free-text company name search, `domain` for exact lookups by website domain, and the categorical filters (`industry`, `employee_range`, `revenue_range`) to narrow your results. Combine `query` with filters for best precision. Returns ranked company records — higher `_score` means a stronger match. Ideal for building prospect lists, qualifying accounts, or enriching CRM data with firmographic context.",
-      "tags": [
-        "Search"
-      ],
-      "requestBody": {
-        "required": false,
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "query": {
-                  "type": "string",
-                  "description": "Full-text search across company name only. Do not put domain, industry, employee size, or revenue here — use the dedicated filter params for those."
-                },
-                "domain": {
-                  "type": "string",
-                  "description": "Exact domain filter. Omit the protocol (no https://). Prefer this over `query` when you have a known domain — it's a precise match.",
-                  "example": "moltsets.com"
-                },
-                "industry": {
-                  "type": "string",
-                  "description": "Exact industry filter. Map the request to one of the supported values.",
-                  "enum": [
-                    "Professional and Business Services",
-                    "Information Technology",
-                    "Manufacturing",
-                    "Retail",
-                    "Health and Pharmaceuticals",
-                    "Creative Arts and Entertainment",
-                    "Construction",
-                    "Marketing & Advertising",
-                    "Finance and Banking",
-                    "Tourism and Hospitality",
-                    "Non-Profit and Social Services",
-                    "Food and Beverage",
-                    "Real Estate",
-                    "Education",
-                    "Transportation and Logistics",
-                    "Media and Publishing",
-                    "Energy",
-                    "Automotive",
-                    "Government and Public Administration",
-                    "Telecommunications",
-                    "Agriculture",
-                    "Utilities",
-                    "Corporate Services",
-                    "Insurance",
-                    "Banks",
-                    "Computer Software",
-                    "Pharmaceuticals and Biotechnology",
-                    "Aerospace and Defense",
-                    "Electronics",
-                    "Mining and Metals"
-                  ]
-                },
-                "employee_range": {
-                  "type": "string",
-                  "description": "Exact employee count range filter. Prefer the numeric ranges when a size is given.",
-                  "enum": [
-                    "1-10",
-                    "11-20",
-                    "21-50",
-                    "51-200",
-                    "201-500",
-                    "501-1000",
-                    "1001-5000",
-                    "5001+",
-                    "Small",
-                    "Mid-Market",
-                    "Enterprise",
-                    "Unknown"
-                  ]
-                },
-                "revenue_range": {
-                  "type": "string",
-                  "description": "Exact annual revenue range filter.",
-                  "enum": [
-                    "Below $500k",
-                    "$500k - $1M",
-                    "$1M - $5M",
-                    "$5M - $10M",
-                    "$10M - $20M",
-                    "$20M - $50M",
-                    "Above $50M",
-                    "$50M - $100M",
-                    "$100M - $250M",
-                    "$250M - $500M",
-                    "$500M - $1B",
-                    "$1B - $2.5B",
-                    "$2.5B - $5B",
-                    "Over $5B"
-                  ]
-                },
-                "limit": {
-                  "type": "integer",
-                  "description": "Number of results to return.",
-                  "default": 10,
-                  "minimum": 1,
-                  "maximum": 25
-                },
-                "offset": {
-                  "type": "integer",
-                  "description": "Number of results to skip for pagination. Use with limit to page through results.",
-                  "default": 0
-                }
-              }
-            },
-            "example": {
-              "query": "MoltSets",
-              "industry": "Information Technology",
-              "employee_range": "51-200",
-              "limit": 10,
-              "offset": 0
-            }
-          }
-        }
-      },
-      "responses": {
-        "200": {
-          "description": "Success",
-          "content": {
-            "application/json": {
-              "examples": {
-                "found": {
-                  "summary": "Data found",
-                  "value": {
-                    "results": {
-                      "results": [
-                        {
-                          "logo": "https://cdn.mixrank.com/md5/0e4e81c8ff584b1ce3e4c3067e8cXXXXX",
-                          "name": "MoltSets",
-                          "type": "Privately Held",
-                          "domain": "moltsets.com",
-                          "industry": "Information Technology",
-                          "linkedin_url": "https://linkedin.com/company/moltsets",
-                          "exact_revenue": 1200000000.0,
-                          "revenue_range": "Above $50M",
-                          "employee_count": 57,
-                          "employee_range": "51-200",
-                          "follower_count": 3677,
-                          "linkedin_company_id": "13223077",
-                          "_id": "moltsets.com",
-                          "_score": 15.2394
-                        },
-                        {
-                          "name": "Acme",
-                          "type": "Privately Held",
-                          "domain": "acme.com",
-                          "industry": "Information Technology",
-                          "linkedin_url": "https://linkedin.com/company/acme",
-                          "revenue_range": "$10M - $20M",
-                          "employee_count": 90,
-                          "employee_range": "51-200",
-                          "follower_count": 121,
-                          "linkedin_company_id": "82353383",
-                          "_id": "acme.com",
-                          "_score": 13.1942
-                        }
-                      ],
-                      "total": 210
-                    },
-                    "status": "ok",
-                    "metadata": {
-                      "tokens_used": 1,
-                      "tokens_remaining": "unlimited",
-                      "daily_results_remaining": 9876
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "400": {
-          "description": "Bad Request",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorBadRequest"
-              }
-            }
-          }
-        },
-        "401": {
-          "description": "Unauthorized",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorUnauthorized"
-              }
-            }
-          }
-        },
-        "404": {
-          "description": "Not Found",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorNotFound"
-              }
-            }
-          }
-        },
-        "422": {
-          "description": "Invalid Input",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorInvalidInput"
-              }
-            }
-          }
-        },
-        "429": {
-          "description": "Rate limit exceeded",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ErrorRateLimit"
-              }
-            }
-          }
-        }
-      }
-    }
-  },
+    },
     "/search_linkedin_profile": {
       "post": {
         "summary": "Search for LinkedIn Profile",
         "operationId": "linkedinSlugSearch",
-        "description": "Find the LinkedIn profile for a person or company from a name and company domain. Pass a full name (we parse it into first and last for you) or send `first_name` and `last_name` separately, then add the company as a domain like `acme.com`. URLs are normalised automatically, so you do not need to clean your inputs first. Run a free count first with `count_only: true` to see how many matches exist, then tighten or loosen your search before committing tokens. Full results are only charged when we actually find data, so an empty search costs you nothing.",
+        "description": "Find the LinkedIn profile for a person or company from a name and company domain. Pass a full name (we parse it into first and last for you) or send `first_name` and `last_name` separately, then add the company as a domain like `acme.com`. URLs are normalised automatically, so you do not need to clean your inputs first. Run a free count first with `count_only: true` to see how many matches exist, then tighten or loosen your search before committing tokens. Full results are only charged when we actually find data, so an empty search costs you nothing.\n\nThis API is subject to our [Fair Use Policy for Search](https://moltsets.com/fair-use-policy-search/).",
         "tags": [
           "Search"
         ],
@@ -734,7 +734,7 @@
       "post": {
         "summary": "Search Business Email by Name",
         "operationId": "searchBusinessEmailByName",
-        "description": "Find a person's valid business email address from just their name and company domain. This endpoint runs a LinkedIn profile search and an email lookup in a single call, returning the email along with the matched LinkedIn profile URL. Pass either a full name or separate `first_name` and `last_name` fields, and provide the company as a domain like `acme.com`. URLs are normalised automatically, and tokens are only charged when an email is found.",
+        "description": "Find a person's valid business email address from just their name and company domain. This endpoint runs a LinkedIn profile search and an email lookup in a single call, returning the email along with the matched LinkedIn profile URL. Pass either a full name or separate `first_name` and `last_name` fields, and provide the company as a domain like `acme.com`. URLs are normalised automatically, and tokens are only charged when an email is found.\n\nThis API is subject to our [Fair Use Policy for Search](https://moltsets.com/fair-use-policy-search/).",
         "tags": [
           "Search"
         ],
@@ -857,7 +857,7 @@
       "post": {
         "summary": "Search Business Profile by Name",
         "operationId": "searchBusinessProfileByName",
-        "description": "Find anyone's full business profile from just their name and company domain. This endpoint runs a LinkedIn profile search and a firmographic lookup in a single call, returning the person's job title, company, and company data such as industry, size, and location. Pass either a full name or separate `first_name` and `last_name` fields, and provide the company as a domain like `acme.com`. URLs are normalised automatically, and tokens are only charged when a match is found.",
+        "description": "Find anyone's full business profile from just their name and company domain. This endpoint runs a LinkedIn profile search and a firmographic lookup in a single call, returning the person's job title, company, and company data such as industry, size, and location. Pass either a full name or separate `first_name` and `last_name` fields, and provide the company as a domain like `acme.com`. URLs are normalised automatically, and tokens are only charged when a match is found.\n\nThis API is subject to our [Fair Use Policy for Search](https://moltsets.com/fair-use-policy-search/).",
         "tags": [
           "Search"
         ],
@@ -990,7 +990,7 @@
       "post": {
         "summary": "LinkedIn to Best Email",
         "operationId": "enrichEmail",
-        "description": "Look up the best available email address for any LinkedIn profile. Returns a valid business email when one exists, and automatically falls back to a personal email if not — so you always get a result when data is available. The `type` field in the response tells you which kind was returned. Use this as your default LinkedIn-to-email enrichment endpoint when email type is not a constraint.",
+        "description": "Look up the best available email address for any LinkedIn profile. Returns a valid business email when one exists, and automatically falls back to a personal email if not — so you always get a result when data is available. The `type` field in the response tells you which kind was returned. Use this as your default LinkedIn-to-email enrichment endpoint when email type is not a constraint.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
         "tags": [
           "Get Valid Emails"
         ],
@@ -1178,7 +1178,7 @@
       "post": {
         "summary": "LinkedIn to Business Email",
         "operationId": "enrichBusinessEmail",
-        "description": "Retrieve the valid business (work) email address for any LinkedIn profile. Only returns corporate email addresses — no personal inboxes. Use this when you need to reach contacts at their workplace domain, such as for B2B outreach, CRM enrichment, or account-based marketing campaigns. If you also want a personal email fallback, use `linkedin_to_best_email` instead.",
+        "description": "Retrieve the valid business (work) email address for any LinkedIn profile. Only returns corporate email addresses — no personal inboxes. Use this when you need to reach contacts at their workplace domain, such as for B2B outreach, CRM enrichment, or account-based marketing campaigns. If you also want a personal email fallback, use `linkedin_to_best_email` instead.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
         "tags": [
           "Get Valid Emails"
         ],
@@ -1304,7 +1304,7 @@
       "post": {
         "summary": "LinkedIn to Personal Email",
         "operationId": "enrichPersonalEmail",
-        "description": "Retrieve the valid personal email address (such as Gmail or iCloud) for any LinkedIn profile. Useful for reaching contacts outside their work inbox — ideal for recruitment outreach, consumer marketing, or re-engagement campaigns where a personal address improves deliverability.",
+        "description": "Retrieve the valid personal email address (such as Gmail or iCloud) for any LinkedIn profile. Useful for reaching contacts outside their work inbox — ideal for recruitment outreach, consumer marketing, or re-engagement campaigns where a personal address improves deliverability.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
         "tags": [
           "Get Valid Emails"
         ],
@@ -1410,7 +1410,7 @@
       "post": {
         "summary": "LinkedIn to Best Personal Email",
         "operationId": "linkedinToBestPersonalEmail",
-        "description": "Turn a LinkedIn profile into a valid personal email in a single call. The LinkedIn to Best Personal Email endpoint takes a LinkedIn URL or slug and returns the highest-confidence personal email address we hold for that person, along with the date it was last validated. Every email is re-checked within the last 30 days, so each result comes back with a recent validation date you can act on with confidence.",
+        "description": "Turn a LinkedIn profile into a valid personal email in a single call. The LinkedIn to Best Personal Email endpoint takes a LinkedIn URL or slug and returns the highest-confidence personal email address we hold for that person, along with the date it was last validated. Every email is re-checked within the last 30 days, so each result comes back with a recent validation date you can act on with confidence.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
         "tags": [
           "Get Valid Emails"
         ],
@@ -1516,7 +1516,7 @@
       "post": {
         "summary": "LinkedIn to Mobile Phone",
         "operationId": "enrichPhone",
-        "description": "Look up the carrier-verified mobile phone number for a LinkedIn profile along with a date that it was last verified. Only mobile numbers are returned — no landlines or VoIP numbers — so every result is a real device. Supports both single lookups (`linkedin_url`) and batch lookups of up to 100 profiles at once (`linkedin_urls`). Use for SMS outreach, cold calling, or enriching sales sequences with direct-dial mobile numbers. External tokens are required for mobile phone lookups at a cost of 10 tokens per returned result.",
+        "description": "Look up the carrier-verified mobile phone number for a LinkedIn profile along with a date that it was last verified. Only mobile numbers are returned — no landlines or VoIP numbers — so every result is a real device. Supports both single lookups (`linkedin_url`) and batch lookups of up to 100 profiles at once (`linkedin_urls`). Use for SMS outreach, cold calling, or enriching sales sequences with direct-dial mobile numbers. External tokens are required for mobile phone lookups at a cost of 10 tokens per returned result.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
         "tags": [
           "Get Carrier-Verified Mobile Phones"
         ],
@@ -1639,12 +1639,11 @@
         }
       }
     },
-    
     "/reverse_email_lookup": {
       "post": {
         "summary": "Reverse Email Lookup",
         "operationId": "hemToBusinessProfile",
-        "description": "Resolve an email address into a complete business profile, including full name, job title, seniority, company, LinkedIn URL, firmographic data, and additional email addresses on file. Use this to enrich inbound leads, form fills, or email list records with everything you need to qualify and contact a prospect.",
+        "description": "Resolve an email address into a complete business profile, including full name, job title, seniority, company, LinkedIn URL, firmographic data, and additional email addresses on file. Use this to enrich inbound leads, form fills, or email list records with everything you need to qualify and contact a prospect.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
         "tags": [
           "Reverse Lookups"
         ],
@@ -1717,11 +1716,56 @@
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1729,7 +1773,7 @@
       "post": {
         "summary": "Reverse LinkedIn Lookup",
         "operationId": "linkedinToBusinessProfile",
-        "description": "Resolve a LinkedIn profile URL into a complete business profile, including full name, job title, seniority, company name, company website, industry, revenue, valid business email, and personal email. This is MoltSets's most complete LinkedIn enrichment endpoint — use it when you need a full picture of a contact and their employer in a single call.",
+        "description": "Resolve a LinkedIn profile URL into a complete business profile, including full name, job title, seniority, company name, company website, industry, revenue, valid business email, and personal email. This is MoltSets's most complete LinkedIn enrichment endpoint — use it when you need a full picture of a contact and their employer in a single call.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
         "tags": [
           "Reverse Lookups"
         ],
@@ -1795,21 +1839,64 @@
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     },
-    
-    
     "/email_to_maid": {
       "post": {
         "summary": "Email to MAID",
         "operationId": "hemToMaid",
-        "description": "Resolve an email address to one or more Mobile Advertising IDs (MAIDs), including AAIDs (Android Advertising IDs) and IDFAs (Apple Identifier for Advertisers). MAIDs are used by ad platforms to target users on their mobile devices with precision. Use this endpoint to connect a known email identity to mobile device signals — enabling cross-device retargeting, programmatic audience activation, and mobile-first ad campaigns against your contact lists.",
+        "description": "Resolve an email address to one or more Mobile Advertising IDs (MAIDs), including AAIDs (Android Advertising IDs) and IDFAs (Apple Identifier for Advertisers). MAIDs are used by ad platforms to target users on their mobile devices with precision. Use this endpoint to connect a known email identity to mobile device signals — enabling cross-device retargeting, programmatic audience activation, and mobile-first ad campaigns against your contact lists.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
         "tags": [
           "Get Ad Audience"
         ],
@@ -1917,12 +2004,11 @@
         }
       }
     },
-    
     "/business_email_to_sha256": {
       "post": {
         "summary": "Business Email to SHA256",
         "operationId": "businessEmailToSHA256",
-        "description": "Convert a business email address into SHA256-hashed personal email addresses for privacy-safe identity resolution and paid advertising audience matching. The returned hashes can be uploaded directly to Meta, Google, LinkedIn, TikTok, and other ad platforms that support customer match or custom audience workflows. Use this to retarget known contacts across their personal devices without exposing raw personal email data.",
+        "description": "Convert a business email address into SHA256-hashed personal email addresses for privacy-safe identity resolution and paid advertising audience matching. The returned hashes can be uploaded directly to Meta, Google, LinkedIn, TikTok, and other ad platforms that support customer match or custom audience workflows. Use this to retarget known contacts across their personal devices without exposing raw personal email data.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
         "tags": [
           "Get Ad Audience"
         ],
@@ -2029,12 +2115,11 @@
         }
       }
     },
-    
     "/linkedin_to_sha256": {
       "post": {
         "summary": "LinkedIn to SHA256",
         "operationId": "linkedinToSHA256",
-        "description": "Retrieve all known SHA256 and MD5 hashed emails for a LinkedIn profile, covering both business and personal email addresses. Returns separate arrays for business and personal hashes in both formats, giving you maximum coverage for audience matching across ad platforms. Use this when you need to build the broadest possible match key set for a LinkedIn-identified contact — for example, to maximise match rates when uploading customer lists to Meta, Google, or LinkedIn Ads.",
+        "description": "Retrieve all known SHA256 and MD5 hashed emails for a LinkedIn profile, covering both business and personal email addresses. Returns separate arrays for business and personal hashes in both formats, giving you maximum coverage for audience matching across ad platforms. Use this when you need to build the broadest possible match key set for a LinkedIn-identified contact — for example, to maximise match rates when uploading customer lists to Meta, Google, or LinkedIn Ads.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
         "tags": [
           "Get Ad Audience"
         ],
@@ -2146,12 +2231,11 @@
         }
       }
     },
-    
     "/email_to_linkedin": {
       "post": {
         "summary": "Email to LinkedIn",
         "operationId": "hemToBestLinkedin",
-        "description": "Resolve an email address to the highest-confidence LinkedIn profile URL when multiple candidates exist. Unlike `hem_to_linkedin`, which returns a slug, this endpoint scores all matching profiles and returns the single best full LinkedIn URL. Use this when email-to-LinkedIn match quality is critical — for example, before personalising outreach, triggering enrichment workflows, or appending LinkedIn data to a contact record.",
+        "description": "Resolve an email address to the highest-confidence LinkedIn profile URL when multiple candidates exist. Unlike `hem_to_linkedin`, which returns a slug, this endpoint scores all matching profiles and returns the single best full LinkedIn URL. Use this when email-to-LinkedIn match quality is critical — for example, before personalising outreach, triggering enrichment workflows, or appending LinkedIn data to a contact record.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
         "tags": [
           "Get LinkedIn"
         ],
@@ -2203,11 +2287,56 @@
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2215,7 +2344,7 @@
       "post": {
         "summary": "IP to Company",
         "operationId": "ipToCompany",
-        "description": "Identify the company or companies associated with an IPv4 address. Pass an IP from your website visitor logs, server request data, or analytics platform and get back the domain of the organisation behind that traffic. Best suited for B2B use cases — consumer ISP addresses will typically not resolve to a named company. Use this to de-anonymise B2B web traffic, trigger account-based workflows, or feed website visitor identification pipelines.",
+        "description": "Identify the company or companies associated with an IPv4 address. Pass an IP from your website visitor logs, server request data, or analytics platform and get back the domain of the organisation behind that traffic. Best suited for B2B use cases — consumer ISP addresses will typically not resolve to a named company. Use this to de-anonymise B2B web traffic, trigger account-based workflows, or feed website visitor identification pipelines.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
         "tags": [
           "Get Company"
         ],
@@ -2268,15 +2397,59 @@
               }
             }
           },
-          "400": { "description": "Bad Request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorBadRequest" } } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorUnauthorized" } } } },
-          "404": { "description": "Not Found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorNotFound" } } } },
-          "422": { "description": "Invalid Input", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorInvalidInput" } } } },
-          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorRateLimit" } } } }
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInvalidInput"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          }
         }
       }
     },
-    
     "/get_account": {
       "post": {
         "summary": "Get Account",
