@@ -28,7 +28,7 @@
         "content": {
           "application/json": {
             "examples": {
-              "found": { "summary": "Data found", "value": { "results": [{ "md5": "43132e2f7752aafbc18d0ff97bbXXXXX", "SHA256": "9adcf8496de590e61c733352fdcafaXXXXX", "score": "0.928" }], "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 206 } } }
+              "found": { "summary": "Data found", "value": { "results": [{ "md5": "43132e2f7752aafbc18d0ff97bbXXXXX", "SHA256": "9adcf8496de590e61c733352fdcafaXXXXX", "score": "0.928" }], "status": "ok", "metadata": { "tokens_used": 1, "tokens_remaining": 206 } } }
             }
           }
         }
@@ -69,7 +69,7 @@
         "content": {
           "application/json": {
             "examples": {
-              "found": { "summary": "Data found", "value": { "results": [{ "device_id": "7e89542e-de65-4c94-bc0d-76d02d2XXXXX", "device_type": "AAID" }], "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 206 } } }
+              "found": { "summary": "Data found", "value": { "results": [{ "device_id": "7e89542e-de65-4c94-bc0d-76d02d2XXXXX", "device_type": "AAID" }], "status": "ok", "metadata": { "tokens_used": 1, "tokens_remaining": 206 } } }
             }
           }
         }
@@ -110,7 +110,7 @@
         "content": {
           "application/json": {
             "examples": {
-              "found": { "summary": "Data found", "value": { "results": { "email": "john.smith@example.com", "md5_email": "3018fe3a783fad1db0370ee3faXXXXX", "SHA256_email": "54a0a34d989f1ffe0ee7020ebfa2c250fc6037d45bcb887b18e5790a6bXXXXX" }, "status": "ok", "metadata": { "tokens_charged": 1, "tokens_remaining": 206 } } }
+              "found": { "summary": "Data found", "value": { "results": { "email": "john.smith@example.com", "md5_email": "3018fe3a783fad1db0370ee3faXXXXX", "SHA256_email": "54a0a34d989f1ffe0ee7020ebfa2c250fc6037d45bcb887b18e5790a6bXXXXX" }, "status": "ok", "metadata": { "tokens_used": 1, "tokens_remaining": 206 } } }
             }
           }
         }
@@ -185,7 +185,7 @@
                   },
                   "status": "ok",
                   "metadata": {
-                    "tokens_charged": 1,
+                    "tokens_used": 1,
                     "tokens_remaining": 206
                   }
                 }
@@ -250,7 +250,7 @@
                   },
                   "status": "ok",
                   "metadata": {
-                    "tokens_charged": 1,
+                    "tokens_used": 1,
                     "tokens_remaining": 206
                   }
                 }
@@ -335,7 +335,7 @@
                   },
                   "status": "ok",
                   "metadata": {
-                    "tokens_charged": 1,
+                    "tokens_used": 1,
                     "tokens_remaining": 197
                   }
                 }
@@ -426,7 +426,7 @@
                   },
                   "status": "ok",
                   "metadata": {
-                    "tokens_charged": 1,
+                    "tokens_used": 1,
                     "tokens_remaining": 198
                   }
                 }
@@ -492,7 +492,7 @@
                   },
                   "status": "ok",
                   "metadata": {
-                    "tokens_charged": 1,
+                    "tokens_used": 1,
                     "tokens_remaining": 206
                   }
                 }

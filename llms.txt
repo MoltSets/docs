@@ -33,7 +33,7 @@ Base URL: `https://api.moltsets.com/api/v1/tools/`
 
 Authentication: `Authorization: Bearer YOUR_API_KEY` on every request.
 
-All requests are `POST` with a JSON body. All responses return HTTP 200 with envelope: `{ "results": {...}, "status": "ok", "metadata": { "tokens_charged": N, "tokens_remaining": N } }`.
+All requests are `POST` with a JSON body. All responses return HTTP 200 with envelope: `{ "results": {...}, "status": "ok", "metadata": { "tokens_used": N, "tokens_remaining": N } }`.
 
 ### Search
 

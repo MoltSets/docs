@@ -28,7 +28,7 @@
       "Metadata": {
         "type": "object",
         "properties": {
-          "tokens_charged": {
+          "tokens_used": {
             "type": "integer",
             "description": "Tokens consumed by this request. Always `0` when no data is returned."
           },
@@ -287,7 +287,7 @@
                     },
                     "status": "ok",
                     "metadata": {
-                      "tokens_charged": 1,
+                      "tokens_used": 1,
                       "tokens_remaining": "unlimited",
                       "daily_results_remaining": 9876
                     }
@@ -518,7 +518,7 @@
                     },
                     "status": "ok",
                     "metadata": {
-                      "tokens_charged": 1,
+                      "tokens_used": 1,
                       "tokens_remaining": "unlimited",
                       "daily_results_remaining": 9876
                     }
@@ -646,7 +646,7 @@
                       },
                       "status": "ok",
                       "metadata": {
-                        "tokens_charged": 0,
+                        "tokens_used": 0,
                         "tokens_remaining": "unlimited",
                         "daily_results_remaining": 9876
                       }
@@ -667,7 +667,7 @@
                       ],
                       "status": "ok",
                       "metadata": {
-                        "tokens_charged": 1,
+                        "tokens_used": 1,
                         "tokens_remaining": "unlimited",
                         "daily_results_remaining": 9876
                       }
@@ -790,7 +790,7 @@
                       },
                       "status": "ok",
                       "metadata": {
-                        "tokens_charged": 1,
+                        "tokens_used": 1,
                         "tokens_remaining": "unlimited",
                         "daily_results_remaining": 9876
                       }
@@ -923,7 +923,7 @@
                       },
                       "status": "ok",
                       "metadata": {
-                        "tokens_charged": 1,
+                        "tokens_used": 1,
                         "tokens_remaining": "unlimited",
                         "daily_results_remaining": 9876
                       }
@@ -1067,7 +1067,7 @@
                       },
                       "status": "ok",
                       "metadata": {
-                        "tokens_charged": 1,
+                        "tokens_used": 1,
                         "tokens_remaining": "unlimited",
                         "daily_results_remaining": 9876
                       }
@@ -1141,7 +1141,7 @@
                       },
                       "status": "not_found",
                       "metadata": {
-                        "tokens_charged": 0,
+                        "tokens_used": 0,
                         "tokens_remaining": "unlimited",
                         "daily_results_remaining": 9876
                       }
@@ -1237,7 +1237,7 @@
                       },
                       "status": "ok",
                       "metadata": {
-                        "tokens_charged": 1,
+                        "tokens_used": 1,
                         "tokens_remaining": "unlimited",
                         "daily_results_remaining": 9876
                       }
@@ -1343,7 +1343,7 @@
                       },
                       "status": "ok",
                       "metadata": {
-                        "tokens_charged": 1,
+                        "tokens_used": 1,
                         "tokens_remaining": "unlimited",
                         "daily_results_remaining": 9876
                       }
@@ -1449,7 +1449,7 @@
                       },
                       "status": "ok",
                       "metadata": {
-                        "tokens_charged": 1,
+                        "tokens_used": 1,
                         "tokens_remaining": "unlimited",
                         "daily_results_remaining": 9876
                       }
@@ -1576,7 +1576,7 @@
                       },
                       "status": "ok",
                       "metadata": {
-                        "tokens_charged": 10,
+                        "tokens_used": 10,
                         "tokens_remaining": "unlimited",
                         "daily_results_remaining": 9876
                       }
@@ -1707,7 +1707,7 @@
                       },
                       "status": "ok",
                       "metadata": {
-                        "tokens_charged": 1,
+                        "tokens_used": 1,
                         "tokens_remaining": "unlimited",
                         "daily_results_remaining": 9876
                       }
@@ -1785,7 +1785,7 @@
                       },
                       "status": "ok",
                       "metadata": {
-                        "tokens_charged": 1,
+                        "tokens_used": 1,
                         "tokens_remaining": "unlimited",
                         "daily_results_remaining": 9876
                       }
@@ -1854,7 +1854,7 @@
                       ],
                       "status": "ok",
                       "metadata": {
-                        "tokens_charged": 1,
+                        "tokens_used": 1,
                         "tokens_remaining": "unlimited",
                         "daily_results_remaining": 9876
                       }
@@ -1966,7 +1966,7 @@
                       },
                       "status": "ok",
                       "metadata": {
-                        "tokens_charged": 1,
+                        "tokens_used": 1,
                         "tokens_remaining": "unlimited",
                         "daily_results_remaining": 9876
                       }
@@ -2083,7 +2083,7 @@
                       },
                       "status": "ok",
                       "metadata": {
-                        "tokens_charged": 1,
+                        "tokens_used": 1,
                         "tokens_remaining": "unlimited",
                         "daily_results_remaining": 9876
                       }
@@ -2193,7 +2193,7 @@
                       },
                       "status": "ok",
                       "metadata": {
-                        "tokens_charged": 1,
+                        "tokens_used": 1,
                         "tokens_remaining": "unlimited",
                         "daily_results_remaining": 9876
                       }
@@ -2258,7 +2258,7 @@
                       },
                       "status": "ok",
                       "metadata": {
-                        "tokens_charged": 1,
+                        "tokens_used": 1,
                         "tokens_remaining": "unlimited",
                         "daily_results_remaining": 9876
                       }
@@ -2541,7 +2541,7 @@
                   },
                   "status": "ok",
                   "metadata": {
-                    "tokens_charged": 0,
+                    "tokens_used": 0,
                     "tokens_remaining": "unlimited",
                     "daily_results_remaining": 9876
                   }
@@ -2657,7 +2657,7 @@
                   },
                   "status": "ok",
                   "metadata": {
-                    "tokens_charged": 0,
+                    "tokens_used": 0,
                     "tokens_remaining": "unlimited",
                     "daily_results_remaining": 9876
                   }
