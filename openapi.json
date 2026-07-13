@@ -658,10 +658,10 @@
                       "results": [
                         {
                           "full_name": "John Smith",
-                          "first_name": "Tate",
-                          "last_name": "Blahnik",
-                          "linkedin_slug": "tate-blahnik-123",
-                          "linkedin_url": "https://linkedin.com/in/tate-blahnik-123",
+                          "first_name": "John",
+                          "last_name": "Smith",
+                          "linkedin_slug": "john-smith-123",
+                          "linkedin_url": "https://linkedin.com/in/john-smith-123",
                           "company": "acme.com"
                         }
                       ],
