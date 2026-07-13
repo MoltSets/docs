@@ -114,7 +114,7 @@
       "post": {
         "summary": "Search for People",
         "operationId": "searchBusinessProfiles",
-        "description": "Search MoltSets's contact database to find people by name, role, company, industry, country, seniority, or department. Use `query` for free-text cross-field search across name, company, title, and headline (put names and role keywords here), and the categorical filters (`country`, `seniority`, `industry`, `department`/`functional_area`) to narrow results. Combine query with filters for best precision. Returns ranked contact records — higher `_score` means a stronger match. Use this to build lead lists, identify decision-makers at target accounts, or populate outbound sequences with verified contact data.\n\nThis API is subject to our [Fair Use Policy for Search](https://moltsets.com/fair-use-policy-search/).",
+        "description": "Search MoltSets's contact database to find people by name, role, company, industry, country, seniority, or department. Use `query` for free-text cross-field search across name, company, title, and headline (put names and role keywords here), and the categorical filters (`country`, `seniority`, `industry`, `department`/`functional_area`) to narrow results. Combine query with filters for best precision. Returns ranked contact records — higher `_score` means a stronger match. Use this to build lead lists, identify decision-makers at target accounts, or populate outbound sequences with verified contact data.\n\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-search/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Search</a>.",
         "tags": [
           "Search"
         ],
@@ -354,7 +354,7 @@
       "post": {
         "summary": "Search for Companies",
         "operationId": "searchCompanyProfiles",
-        "description": "Search MoltSets's company database by name, domain, industry, employee count, or annual revenue to find and identify target accounts. Use `query` for free-text company name search, `domain` for exact lookups by website domain, and the categorical filters (`industry`, `employee_range`, `revenue_range`) to narrow your results. Combine `query` with filters for best precision. Returns ranked company records — higher `_score` means a stronger match. Ideal for building prospect lists, qualifying accounts, or enriching CRM data with firmographic context.\n\nThis API is subject to our [Fair Use Policy for Search](https://moltsets.com/fair-use-policy-search/).",
+        "description": "Search MoltSets's company database by name, domain, industry, employee count, or annual revenue to find and identify target accounts. Use `query` for free-text company name search, `domain` for exact lookups by website domain, and the categorical filters (`industry`, `employee_range`, `revenue_range`) to narrow your results. Combine `query` with filters for best precision. Returns ranked company records — higher `_score` means a stronger match. Ideal for building prospect lists, qualifying accounts, or enriching CRM data with firmographic context.\n\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-search/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Search</a>.",
         "tags": [
           "Search"
         ],
@@ -585,7 +585,7 @@
       "post": {
         "summary": "Search for LinkedIn Profile",
         "operationId": "linkedinSlugSearch",
-        "description": "Find the LinkedIn profile for a person or company from a name and company domain. Pass a full name (we parse it into first and last for you) or send `first_name` and `last_name` separately, then add the company as a domain like `acme.com`. URLs are normalised automatically, so you do not need to clean your inputs first. Run a free count first with `count_only: true` to see how many matches exist, then tighten or loosen your search before committing tokens. Full results are only charged when we actually find data, so an empty search costs you nothing.\n\nThis API is subject to our [Fair Use Policy for Search](https://moltsets.com/fair-use-policy-search/).",
+        "description": "Find the LinkedIn profile for a person or company from a name and company domain. Pass a full name (we parse it into first and last for you) or send `first_name` and `last_name` separately, then add the company as a domain like `acme.com`. URLs are normalised automatically, so you do not need to clean your inputs first. Run a free count first with `count_only: true` to see how many matches exist, then tighten or loosen your search before committing tokens. Full results are only charged when we actually find data, so an empty search costs you nothing.\n\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-search/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Search</a>.",
         "tags": [
           "Search"
         ],
@@ -734,7 +734,7 @@
       "post": {
         "summary": "Search Business Email by Name",
         "operationId": "searchBusinessEmailByName",
-        "description": "Find a person's valid business email address from just their name and company domain. This endpoint runs a LinkedIn profile search and an email lookup in a single call, returning the email along with the matched LinkedIn profile URL. Pass either a full name or separate `first_name` and `last_name` fields, and provide the company as a domain like `acme.com`. URLs are normalised automatically, and tokens are only charged when an email is found.\n\nThis API is subject to our [Fair Use Policy for Search](https://moltsets.com/fair-use-policy-search/).",
+        "description": "Find a person's valid business email address from just their name and company domain. This endpoint runs a LinkedIn profile search and an email lookup in a single call, returning the email along with the matched LinkedIn profile URL. Pass either a full name or separate `first_name` and `last_name` fields, and provide the company as a domain like `acme.com`. URLs are normalised automatically, and tokens are only charged when an email is found.\n\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-search/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Search</a>.",
         "tags": [
           "Search"
         ],
@@ -857,7 +857,7 @@
       "post": {
         "summary": "Search Business Profile by Name",
         "operationId": "searchBusinessProfileByName",
-        "description": "Find anyone's full business profile from just their name and company domain. This endpoint runs a LinkedIn profile search and a firmographic lookup in a single call, returning the person's job title, company, and company data such as industry, size, and location. Pass either a full name or separate `first_name` and `last_name` fields, and provide the company as a domain like `acme.com`. URLs are normalised automatically, and tokens are only charged when a match is found.\n\nThis API is subject to our [Fair Use Policy for Search](https://moltsets.com/fair-use-policy-search/).",
+        "description": "Find anyone's full business profile from just their name and company domain. This endpoint runs a LinkedIn profile search and a firmographic lookup in a single call, returning the person's job title, company, and company data such as industry, size, and location. Pass either a full name or separate `first_name` and `last_name` fields, and provide the company as a domain like `acme.com`. URLs are normalised automatically, and tokens are only charged when a match is found.\n\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-search/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Search</a>.",
         "tags": [
           "Search"
         ],
@@ -990,7 +990,7 @@
       "post": {
         "summary": "LinkedIn to Best Email",
         "operationId": "enrichEmail",
-        "description": "Look up the best available email address for any LinkedIn profile. Returns a valid business email when one exists, and automatically falls back to a personal email if not — so you always get a result when data is available. The `type` field in the response tells you which kind was returned. Use this as your default LinkedIn-to-email enrichment endpoint when email type is not a constraint.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
+        "description": "Look up the best available email address for any LinkedIn profile. Returns a valid business email when one exists, and automatically falls back to a personal email if not — so you always get a result when data is available. The `type` field in the response tells you which kind was returned. Use this as your default LinkedIn-to-email enrichment endpoint when email type is not a constraint.\n\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.",
         "tags": [
           "Get Valid Emails"
         ],
@@ -1178,7 +1178,7 @@
       "post": {
         "summary": "LinkedIn to Business Email",
         "operationId": "enrichBusinessEmail",
-        "description": "Retrieve the valid business (work) email address for any LinkedIn profile. Only returns corporate email addresses — no personal inboxes. Use this when you need to reach contacts at their workplace domain, such as for B2B outreach, CRM enrichment, or account-based marketing campaigns. If you also want a personal email fallback, use `linkedin_to_best_email` instead.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
+        "description": "Retrieve the valid business (work) email address for any LinkedIn profile. Only returns corporate email addresses — no personal inboxes. Use this when you need to reach contacts at their workplace domain, such as for B2B outreach, CRM enrichment, or account-based marketing campaigns. If you also want a personal email fallback, use `linkedin_to_best_email` instead.\n\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.",
         "tags": [
           "Get Valid Emails"
         ],
@@ -1304,7 +1304,7 @@
       "post": {
         "summary": "LinkedIn to Personal Email",
         "operationId": "enrichPersonalEmail",
-        "description": "Retrieve the valid personal email address (such as Gmail or iCloud) for any LinkedIn profile. Useful for reaching contacts outside their work inbox — ideal for recruitment outreach, consumer marketing, or re-engagement campaigns where a personal address improves deliverability.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
+        "description": "Retrieve the valid personal email address (such as Gmail or iCloud) for any LinkedIn profile. Useful for reaching contacts outside their work inbox — ideal for recruitment outreach, consumer marketing, or re-engagement campaigns where a personal address improves deliverability.\n\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.",
         "tags": [
           "Get Valid Emails"
         ],
@@ -1410,7 +1410,7 @@
       "post": {
         "summary": "LinkedIn to Best Personal Email",
         "operationId": "linkedinToBestPersonalEmail",
-        "description": "Turn a LinkedIn profile into a valid personal email in a single call. The LinkedIn to Best Personal Email endpoint takes a LinkedIn URL or slug and returns the highest-confidence personal email address we hold for that person, along with the date it was last validated. Every email is re-checked within the last 30 days, so each result comes back with a recent validation date you can act on with confidence.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
+        "description": "Turn a LinkedIn profile into a valid personal email in a single call. The LinkedIn to Best Personal Email endpoint takes a LinkedIn URL or slug and returns the highest-confidence personal email address we hold for that person, along with the date it was last validated. Every email is re-checked within the last 30 days, so each result comes back with a recent validation date you can act on with confidence.\n\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.",
         "tags": [
           "Get Valid Emails"
         ],
@@ -1516,7 +1516,7 @@
       "post": {
         "summary": "LinkedIn to Mobile Phone",
         "operationId": "enrichPhone",
-        "description": "Look up the carrier-verified mobile phone number for a LinkedIn profile along with a date that it was last verified. Only mobile numbers are returned — no landlines or VoIP numbers — so every result is a real device. Supports both single lookups (`linkedin_url`) and batch lookups of up to 100 profiles at once (`linkedin_urls`). Use for SMS outreach, cold calling, or enriching sales sequences with direct-dial mobile numbers. External tokens are required for mobile phone lookups at a cost of 10 tokens per returned result.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
+        "description": "Look up the carrier-verified mobile phone number for a LinkedIn profile along with a date that it was last verified. Only mobile numbers are returned — no landlines or VoIP numbers — so every result is a real device. Supports both single lookups (`linkedin_url`) and batch lookups of up to 100 profiles at once (`linkedin_urls`). Use for SMS outreach, cold calling, or enriching sales sequences with direct-dial mobile numbers. External tokens are required for mobile phone lookups at a cost of 10 tokens per returned result.\n\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.",
         "tags": [
           "Get Carrier-Verified Mobile Phones"
         ],
@@ -1643,7 +1643,7 @@
       "post": {
         "summary": "Reverse Email Lookup",
         "operationId": "hemToBusinessProfile",
-        "description": "Resolve an email address into a complete business profile, including full name, job title, seniority, company, LinkedIn URL, firmographic data, and additional email addresses on file. Use this to enrich inbound leads, form fills, or email list records with everything you need to qualify and contact a prospect.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
+        "description": "Resolve an email address into a complete business profile, including full name, job title, seniority, company, LinkedIn URL, firmographic data, and additional email addresses on file. Use this to enrich inbound leads, form fills, or email list records with everything you need to qualify and contact a prospect.\n\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.",
         "tags": [
           "Reverse Lookups"
         ],
@@ -1773,7 +1773,7 @@
       "post": {
         "summary": "Reverse LinkedIn Lookup",
         "operationId": "linkedinToBusinessProfile",
-        "description": "Resolve a LinkedIn profile URL into a complete business profile, including full name, job title, seniority, company name, company website, industry, revenue, valid business email, and personal email. This is MoltSets's most complete LinkedIn enrichment endpoint — use it when you need a full picture of a contact and their employer in a single call.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
+        "description": "Resolve a LinkedIn profile URL into a complete business profile, including full name, job title, seniority, company name, company website, industry, revenue, valid business email, and personal email. This is MoltSets's most complete LinkedIn enrichment endpoint — use it when you need a full picture of a contact and their employer in a single call.\n\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.",
         "tags": [
           "Reverse Lookups"
         ],
@@ -1896,7 +1896,7 @@
       "post": {
         "summary": "Email to MAID",
         "operationId": "hemToMaid",
-        "description": "Resolve an email address to one or more Mobile Advertising IDs (MAIDs), including AAIDs (Android Advertising IDs) and IDFAs (Apple Identifier for Advertisers). MAIDs are used by ad platforms to target users on their mobile devices with precision. Use this endpoint to connect a known email identity to mobile device signals — enabling cross-device retargeting, programmatic audience activation, and mobile-first ad campaigns against your contact lists.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
+        "description": "Resolve an email address to one or more Mobile Advertising IDs (MAIDs), including AAIDs (Android Advertising IDs) and IDFAs (Apple Identifier for Advertisers). MAIDs are used by ad platforms to target users on their mobile devices with precision. Use this endpoint to connect a known email identity to mobile device signals — enabling cross-device retargeting, programmatic audience activation, and mobile-first ad campaigns against your contact lists.\n\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.",
         "tags": [
           "Get Ad Audience"
         ],
@@ -2008,7 +2008,7 @@
       "post": {
         "summary": "Business Email to SHA256",
         "operationId": "businessEmailToSHA256",
-        "description": "Convert a business email address into SHA256-hashed personal email addresses for privacy-safe identity resolution and paid advertising audience matching. The returned hashes can be uploaded directly to Meta, Google, LinkedIn, TikTok, and other ad platforms that support customer match or custom audience workflows. Use this to retarget known contacts across their personal devices without exposing raw personal email data.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
+        "description": "Convert a business email address into SHA256-hashed personal email addresses for privacy-safe identity resolution and paid advertising audience matching. The returned hashes can be uploaded directly to Meta, Google, LinkedIn, TikTok, and other ad platforms that support customer match or custom audience workflows. Use this to retarget known contacts across their personal devices without exposing raw personal email data.\n\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.",
         "tags": [
           "Get Ad Audience"
         ],
@@ -2119,7 +2119,7 @@
       "post": {
         "summary": "LinkedIn to SHA256",
         "operationId": "linkedinToSHA256",
-        "description": "Retrieve all known SHA256 and MD5 hashed emails for a LinkedIn profile, covering both business and personal email addresses. Returns separate arrays for business and personal hashes in both formats, giving you maximum coverage for audience matching across ad platforms. Use this when you need to build the broadest possible match key set for a LinkedIn-identified contact — for example, to maximise match rates when uploading customer lists to Meta, Google, or LinkedIn Ads.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
+        "description": "Retrieve all known SHA256 and MD5 hashed emails for a LinkedIn profile, covering both business and personal email addresses. Returns separate arrays for business and personal hashes in both formats, giving you maximum coverage for audience matching across ad platforms. Use this when you need to build the broadest possible match key set for a LinkedIn-identified contact — for example, to maximise match rates when uploading customer lists to Meta, Google, or LinkedIn Ads.\n\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.",
         "tags": [
           "Get Ad Audience"
         ],
@@ -2235,7 +2235,7 @@
       "post": {
         "summary": "Email to LinkedIn",
         "operationId": "hemToBestLinkedin",
-        "description": "Resolve an email address to the highest-confidence LinkedIn profile URL when multiple candidates exist. Unlike `hem_to_linkedin`, which returns a slug, this endpoint scores all matching profiles and returns the single best full LinkedIn URL. Use this when email-to-LinkedIn match quality is critical — for example, before personalising outreach, triggering enrichment workflows, or appending LinkedIn data to a contact record.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
+        "description": "Resolve an email address to the highest-confidence LinkedIn profile URL when multiple candidates exist. Unlike `hem_to_linkedin`, which returns a slug, this endpoint scores all matching profiles and returns the single best full LinkedIn URL. Use this when email-to-LinkedIn match quality is critical — for example, before personalising outreach, triggering enrichment workflows, or appending LinkedIn data to a contact record.\n\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.",
         "tags": [
           "Get LinkedIn"
         ],
@@ -2344,7 +2344,7 @@
       "post": {
         "summary": "IP to Company",
         "operationId": "ipToCompany",
-        "description": "Identify the company or companies associated with an IPv4 address. Pass an IP from your website visitor logs, server request data, or analytics platform and get back the domain of the organisation behind that traffic. Best suited for B2B use cases — consumer ISP addresses will typically not resolve to a named company. Use this to de-anonymise B2B web traffic, trigger account-based workflows, or feed website visitor identification pipelines.\n\nThis API is subject to our [Fair Use Policy for Enrichment](https://moltsets.com/fair-use-policy-enrichment/).",
+        "description": "Identify the company or companies associated with an IPv4 address. Pass an IP from your website visitor logs, server request data, or analytics platform and get back the domain of the organisation behind that traffic. Best suited for B2B use cases — consumer ISP addresses will typically not resolve to a named company. Use this to de-anonymise B2B web traffic, trigger account-based workflows, or feed website visitor identification pipelines.\n\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.",
         "tags": [
           "Get Company"
         ],
