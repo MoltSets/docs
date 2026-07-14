@@ -24,9 +24,13 @@ Search MoltSets's company and contact database by name, domain, industry, employ
 | Industry + employee size or revenue range | Filtered list of companies | Find information technology companies with 51-200 employees | `search_companies` |
 | Company name or domain | All contacts at that company | Find contacts at acme.com | `search_people` |
 | Company name + industry filter | Contacts filtered by industry | Find information technology contacts at acme.com | `search_people` |
-| Company name + employee size | Contacts at companies of a specific size | Find contacts at companies with 51-200 employees named Acme | `search_people` |
-| Revenue range | Contacts at companies within a revenue band | Find contacts at companies with revenue above $50M | `search_people` |
-| Industry + employee size | Contacts matching an ICP profile | Find contacts at information technology companies with 201-500 employees | `search_people` |
+| Company + seniority | Decision-makers at a company | Find senior contacts at acme.com | `search_people` |
+| Industry + country | Contacts in an industry and country | Find marketing contacts at software companies in the United States | `search_people` |
+| Company + department or function | Contacts in a specific team | Find engineering contacts at acme.com | `search_people` |
+
+<Note>
+  `search_people` filters on `query`, `company`, `company_domain`, `country`, `seniority`, `industry`, `department`, and `functional_area`. It does **not** take `employee_range` or `revenue_range` — those are company filters. To target contacts by company size or revenue, first run `search_companies` with those filters, then `search_people` on each returned domain (see [Common Workflows](#common-workflows)).
+</Note>
 | Person name + company domain | LinkedIn slug for that person | Find the LinkedIn profile for John Smith at acme.com | `search_linkedin_profile` |
 | Person name + company domain | Result count before spending tokens | How many people named John Smith are at acme.com | `search_linkedin_profile` (`count_only: true`) |
 | Person name + company domain | Verified business email in one call (plus matched LinkedIn URL) | Find the business email for John Smith at acme.com | `search_business_email_by_name` |
@@ -91,6 +95,16 @@ You have a person's name and their company domain but no LinkedIn URL. Resolve t
 You have a target company and want a list of contacts with their best email addresses. Search for employees at the company, then enrich each with their best available email.
 
 "Search for employees at acme.com and get their best email address."
+
+---
+
+### Company size or revenue to contact list
+
+`search_companies` → `search_people`
+
+`search_people` can't filter by company size or revenue directly. Find the companies that match those firmographics first, then pull contacts from each matching domain.
+
+"Find computer software companies with 201–500 employees, then get contacts at each one."
 
 ---
 
