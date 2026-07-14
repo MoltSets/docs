@@ -1,8 +1,8 @@
 ---
-title: "MoltSets MCP"
+title: "MoltSets MCP Server"
+sidebarTitle: "MoltSets MCP"
+description: "Connect Claude, Claude Code, and any MCP client to MoltSets. Give your AI agent live access to contact enrichment, HEM and IP resolution, and the full identity graph in one tool call."
 ---
-
-# MCP Server
 
 > Legacy enrichment tools are form-based and manual. MoltSets is prompt-and-go. It's an MCP built specifically for AI agents — so your agent can de-anonymize website visitors, resolve hashed emails (HEMs) to real identities, enrich contacts from LinkedIn, and connect the dots between IP addresses, MAIDs, and people. The full identity graph, accessible in a single tool call.
 
@@ -57,28 +57,20 @@ With the MoltSets MCP Server connected:
     </Note>
   </Tab>
   <Tab title="Claude Desktop">
-    Claude Desktop is configured via a JSON file rather than the Claude.ai UI.
+    Claude Desktop uses the same Connectors UI as Claude.ai — no config file editing required.
 
-    1. Open your Claude Desktop config file. On Mac: `~/Library/Application Support/Claude/claude_desktop_config.json`. On Windows: `%APPDATA%\Claude\claude_desktop_config.json`.
-    2. Add the following entry under `mcpServers`, replacing the placeholder values with your credentials:
-
-    ```json
-    {
-      "mcpServers": {
-        "moltsets": {
-          "type": "http",
-          "url": "https://mcp.moltsets.com/mcp",
-          "clientId": "your-client-id",
-          "clientSecret": "your-client-secret"
-        }
-      }
-    }
-    ```
-
-    3. Save the file and restart Claude Desktop.
+    1. Open **Settings → Connectors → Add Custom Connector**.
+    2. Paste the following URL into **Remote MCP server URL**:
+       ```text
+       https://mcp.moltsets.com/mcp
+       ```
+    3. Under **Advanced Settings**, enter your MoltSets Connector credentials:
+       - **OAuth Client ID:** your Client ID
+       - **OAuth Client Secret:** your Client Secret
+    4. Save, then restart Claude Desktop so it picks up the new connector.
 
     <Note>
-      To get your credentials, log into [app.moltsets.com](https://app.moltsets.com/dashboard/api_keys) to create a new connector.
+      To get your credentials, log into [app.moltsets.com](https://app.moltsets.com) and go to **Connectors** to create a new connector.
     </Note>
 
     ### Configuring Tool Permissions
@@ -97,8 +89,10 @@ With the MoltSets MCP Server connected:
     ```bash
     claude mcp add --transport http moltsets https://mcp.moltsets.com/mcp \
       --client-id YOUR_CLIENT_ID \
-      --client-secret YOUR_CLIENT_SECRET
+      --client-secret
     ```
+
+    The `--client-secret` flag takes no value — Claude Code prompts you for the secret (or reads it from the `MCP_CLIENT_SECRET` environment variable).
 
     Claude Code will open a browser window and prompt you to approve access on the MoltSets consent screen. Once approved, your token is stored and managed automatically.
 
@@ -131,6 +125,26 @@ Once connected, you can talk to MoltSets the same way you'd talk to a colleague.
 > "Here are 10 LinkedIn URLs. Enrich each one for business email and return the results as a table."
 
 Visit "[**I Have X, I Want Y**](/use-cases/i-have-x-i-want-y)" for more example prompts.
+
+---
+
+## Tokens & Costs
+
+You only spend tokens on **verified data that is actually returned**. A few rules the agent follows automatically:
+
+- **No data, no charge.** Calls that return `not_found` cost nothing.
+- **Counting is free.** `search_linkedin_profile` with `count_only: true` returns match counts without spending tokens — use it to size a search before committing.
+- **Free tools.** `get_account`, `get_billing`, and `get_usage` never cost tokens. Call `get_billing` for the per-tool `token_costs` map and your current balance.
+
+### External tokens
+
+MoltSets resolves most contact data from its own database. When the data you need isn't there, MoltSets can reach out to a **third-party source** to try to find it — those calls spend **external tokens**, a balance separate from your regular tokens. Every response includes `external_tokens_used` and `external_tokens_remaining` in its `metadata` so your agent can track spend in real time.
+
+For a full breakdown, see [External Tokens](https://support.moltsets.com/en/articles/15280420-external-tokens) and the [Rate Limits](/getting-started/rate-limits) guide.
+
+<Note>
+  New to the API? Start with [Authentication](/getting-started/authentication) to create your keys, then browse the [API Reference Overview](/getting-started/overview) for every endpoint, parameter, and response schema the MCP exposes.
+</Note>
 
 ---
 
