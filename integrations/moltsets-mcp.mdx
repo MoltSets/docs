@@ -94,6 +94,15 @@ With the MoltSets MCP Server connected:
 
     The `--client-secret` flag takes no value — Claude Code prompts you for the secret (or reads it from the `MCP_CLIENT_SECRET` environment variable).
 
+    By default the server is added at the `local` scope (current project only). Add `--scope user` to make MoltSets available across all your projects:
+
+    ```bash
+    claude mcp add --transport http moltsets https://mcp.moltsets.com/mcp \
+      --scope user \
+      --client-id YOUR_CLIENT_ID \
+      --client-secret
+    ```
+
     Claude Code will open a browser window and prompt you to approve access on the MoltSets consent screen. Once approved, your token is stored and managed automatically.
 
     <Note>
