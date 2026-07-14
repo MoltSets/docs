@@ -29,6 +29,32 @@ To prevent abuse, Unlimited Plans are subject to our [Fair Use Policy](https://m
 
 Every API call counts toward the rate limit, regardless of whether it returns data. Empty results and account management calls (`get_account`, `get_billing`, `get_usage`) all count as requests.
 
+## Check where you stand
+
+Before assuming you've hit a wall, check your current position. `get_account`, `get_billing`, and `get_usage` are **free** — they never cost tokens.
+
+### `get_account` — live rate-limit standing
+
+`get_account` returns a `fair_use` object that mirrors the tables above: `enrich` and `search`, each split into `records` and `requests`, over the `5h` and `1w` windows. Each window reports `limit`, `used`, `remaining`, and `resets_at` — so you can see exactly how much headroom is left and when the window rolls over.
+
+```json
+"fair_use": {
+  "enrich": {
+    "records":  { "5h": { "limit": 15000, "used": 0, "remaining": 15000, "resets_at": null } },
+    "requests": { "5h": { "limit": 75000, "used": 0, "remaining": 75000, "resets_at": null } }
+  },
+  "search": { "records": { "5h": { "limit": 7500, "used": 0, "remaining": 7500, "resets_at": null } } }
+}
+```
+
+A `resets_at` of `null` means the window hasn't started counting yet (nothing used); once you make calls it carries the ISO 8601 timestamp when that window resets.
+
+### `get_usage` — consumption history
+
+`get_usage` shows how many calls you've actually made over a period, broken out by day plus a `totals` block — `calls`, `with_data`, `without_data`, and `failed`. Use it to spot bursts that are pushing you toward the 5-hour caps and to confirm which runs are driving your volume.
+
+Ask your connected agent "check my MoltSets rate-limit headroom" and it will read these for you.
+
 ## Staying within the limit
 
 A few approaches to keep your usage within bounds:
