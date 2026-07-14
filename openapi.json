@@ -2499,21 +2499,211 @@
                         },
                         "plan": {
                           "type": "string",
-                          "description": "Current plan",
-                          "enum": [
-                            "free",
-                            "starter",
-                            "growth",
-                            "unlimited"
-                          ]
+                          "description": "Current plan identifier"
                         },
-                        "credit_balance": {
+                        "token_balance": {
                           "type": "integer",
-                          "description": "Remaining credits"
+                          "description": "Remaining token balance. `-1` when the account is unlimited."
                         },
                         "unlimited": {
                           "type": "boolean",
-                          "description": "true if the account has unlimited credits"
+                          "description": "true if the account has unlimited tokens"
+                        },
+                        "fair_use": {
+                          "type": "object",
+                          "description": "Fair Use Policy limits, split by enrichment and search. Each has record and request limits over rolling windows.",
+                          "properties": {
+                            "enrich": {
+                              "type": "object",
+                              "properties": {
+                                "records": {
+                                  "type": "object",
+                                  "description": "Record (result) limits.",
+                                  "properties": {
+                                    "5h": {
+                                      "type": "object",
+                                      "description": "Rolling 5-hour record limit.",
+                                      "properties": {
+                                        "limit": {
+                                          "type": "integer",
+                                          "description": "Cap for this window."
+                                        },
+                                        "used": {
+                                          "type": "integer",
+                                          "description": "Amount used in this window."
+                                        },
+                                        "remaining": {
+                                          "type": "integer",
+                                          "description": "Amount remaining in this window."
+                                        },
+                                        "resets_at": {
+                                          "type": "string",
+                                          "format": "date-time",
+                                          "nullable": true,
+                                          "description": "ISO 8601 timestamp when this window resets, or null if not yet started."
+                                        }
+                                      }
+                                    },
+                                    "1w": {
+                                      "type": "object",
+                                      "description": "Rolling 1-week record limit.",
+                                      "properties": {
+                                        "limit": {
+                                          "type": "integer",
+                                          "description": "Cap for this window."
+                                        },
+                                        "used": {
+                                          "type": "integer",
+                                          "description": "Amount used in this window."
+                                        },
+                                        "remaining": {
+                                          "type": "integer",
+                                          "description": "Amount remaining in this window."
+                                        },
+                                        "resets_at": {
+                                          "type": "string",
+                                          "format": "date-time",
+                                          "nullable": true,
+                                          "description": "ISO 8601 timestamp when this window resets, or null if not yet started."
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "requests": {
+                                  "type": "object",
+                                  "description": "Request limits.",
+                                  "properties": {
+                                    "5h": {
+                                      "type": "object",
+                                      "description": "Rolling 5-hour request limit.",
+                                      "properties": {
+                                        "limit": {
+                                          "type": "integer",
+                                          "description": "Cap for this window."
+                                        },
+                                        "used": {
+                                          "type": "integer",
+                                          "description": "Amount used in this window."
+                                        },
+                                        "remaining": {
+                                          "type": "integer",
+                                          "description": "Amount remaining in this window."
+                                        },
+                                        "resets_at": {
+                                          "type": "string",
+                                          "format": "date-time",
+                                          "nullable": true,
+                                          "description": "ISO 8601 timestamp when this window resets, or null if not yet started."
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "search": {
+                              "type": "object",
+                              "properties": {
+                                "records": {
+                                  "type": "object",
+                                  "description": "Record (result) limits.",
+                                  "properties": {
+                                    "5h": {
+                                      "type": "object",
+                                      "description": "Rolling 5-hour record limit.",
+                                      "properties": {
+                                        "limit": {
+                                          "type": "integer",
+                                          "description": "Cap for this window."
+                                        },
+                                        "used": {
+                                          "type": "integer",
+                                          "description": "Amount used in this window."
+                                        },
+                                        "remaining": {
+                                          "type": "integer",
+                                          "description": "Amount remaining in this window."
+                                        },
+                                        "resets_at": {
+                                          "type": "string",
+                                          "format": "date-time",
+                                          "nullable": true,
+                                          "description": "ISO 8601 timestamp when this window resets, or null if not yet started."
+                                        }
+                                      }
+                                    },
+                                    "1w": {
+                                      "type": "object",
+                                      "description": "Rolling 1-week record limit.",
+                                      "properties": {
+                                        "limit": {
+                                          "type": "integer",
+                                          "description": "Cap for this window."
+                                        },
+                                        "used": {
+                                          "type": "integer",
+                                          "description": "Amount used in this window."
+                                        },
+                                        "remaining": {
+                                          "type": "integer",
+                                          "description": "Amount remaining in this window."
+                                        },
+                                        "resets_at": {
+                                          "type": "string",
+                                          "format": "date-time",
+                                          "nullable": true,
+                                          "description": "ISO 8601 timestamp when this window resets, or null if not yet started."
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "requests": {
+                                  "type": "object",
+                                  "description": "Request limits.",
+                                  "properties": {
+                                    "5h": {
+                                      "type": "object",
+                                      "description": "Rolling 5-hour request limit.",
+                                      "properties": {
+                                        "limit": {
+                                          "type": "integer",
+                                          "description": "Cap for this window."
+                                        },
+                                        "used": {
+                                          "type": "integer",
+                                          "description": "Amount used in this window."
+                                        },
+                                        "remaining": {
+                                          "type": "integer",
+                                          "description": "Amount remaining in this window."
+                                        },
+                                        "resets_at": {
+                                          "type": "string",
+                                          "format": "date-time",
+                                          "nullable": true,
+                                          "description": "ISO 8601 timestamp when this window resets, or null if not yet started."
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "external_token_balance": {
+                          "type": "integer",
+                          "description": "Current external token balance (allowance plus purchased, minus used)."
+                        },
+                        "external_token_allowance": {
+                          "type": "integer",
+                          "description": "External tokens included with the plan."
+                        },
+                        "external_tokens_purchased": {
+                          "type": "integer",
+                          "description": "External tokens purchased on top of the allowance."
                         },
                         "api_key_count": {
                           "type": "integer",
@@ -2541,23 +2731,74 @@
                 },
                 "example": {
                   "results": {
-                    "id": "#######",
-                    "name": "Account_Name",
+                    "id": "kZ9pQ2rt",
+                    "name": "BrightHollow",
                     "status": "active",
                     "plan": "subscription_97",
                     "token_balance": -1,
                     "unlimited": true,
-                    "daily_result_limit": 15000,
-                    "daily_results_used": 0,
-                    "external_token_balance": 100,
+                    "fair_use": {
+                      "enrich": {
+                        "records": {
+                          "5h": {
+                            "limit": 15000,
+                            "used": 0,
+                            "remaining": 15000,
+                            "resets_at": null
+                          },
+                          "1w": {
+                            "limit": 75000,
+                            "used": 0,
+                            "remaining": 75000,
+                            "resets_at": null
+                          }
+                        },
+                        "requests": {
+                          "5h": {
+                            "limit": 75000,
+                            "used": 0,
+                            "remaining": 75000,
+                            "resets_at": null
+                          }
+                        }
+                      },
+                      "search": {
+                        "records": {
+                          "5h": {
+                            "limit": 7500,
+                            "used": 0,
+                            "remaining": 7500,
+                            "resets_at": null
+                          },
+                          "1w": {
+                            "limit": 37500,
+                            "used": 0,
+                            "remaining": 37500,
+                            "resets_at": null
+                          }
+                        },
+                        "requests": {
+                          "5h": {
+                            "limit": 37500,
+                            "used": 0,
+                            "remaining": 37500,
+                            "resets_at": null
+                          }
+                        }
+                      }
+                    },
+                    "external_token_balance": 600,
                     "external_token_allowance": 500,
                     "external_tokens_purchased": 0,
-                    "api_key_count": 2,
+                    "api_key_count": 1,
                     "user_count": 1,
-                    "created_at": "2026-05-26T12:28:10Z"
+                    "created_at": "2026-06-12T16:11:41Z"
                   },
                   "status": "ok",
-                  "metadata": {}
+                  "metadata": {
+                    "external_tokens_used": 0,
+                    "external_tokens_remaining": 600
+                  }
                 }
               }
             }
@@ -2638,12 +2879,7 @@
                       "properties": {
                         "plan": {
                           "type": "string",
-                          "enum": [
-                            "free",
-                            "starter",
-                            "growth",
-                            "unlimited"
-                          ]
+                          "description": "Current plan identifier"
                         },
                         "subscription_status": {
                           "type": "string",
@@ -2652,31 +2888,48 @@
                             "none",
                             "cancelled",
                             "past_due"
-                          ]
+                          ],
+                          "description": "Subscription status"
                         },
-                        "credit_balance": {
-                          "type": "integer"
+                        "token_balance": {
+                          "type": "integer",
+                          "description": "Remaining token balance. `-1` when the account is unlimited."
                         },
                         "unlimited": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "true if the account has unlimited tokens"
+                        },
+                        "external_token_balance": {
+                          "type": "integer",
+                          "description": "Current external token balance (allowance plus purchased, minus used)."
+                        },
+                        "external_token_allowance": {
+                          "type": "integer",
+                          "description": "External tokens included with the plan."
+                        },
+                        "external_tokens_purchased": {
+                          "type": "integer",
+                          "description": "External tokens purchased on top of the allowance."
                         },
                         "current_period_start": {
                           "type": [
                             "string",
                             "null"
                           ],
-                          "format": "date-time"
+                          "format": "date",
+                          "description": "ISO 8601 start of the current billing period, or null."
                         },
                         "current_period_end": {
                           "type": [
                             "string",
                             "null"
                           ],
-                          "format": "date-time"
+                          "format": "date",
+                          "description": "ISO 8601 end of the current billing period, or null."
                         },
                         "token_costs": {
                           "type": "object",
-                          "description": "Credit cost per tool call. Keys are tool names, values are integer credit costs.",
+                          "description": "Token cost per tool call. Keys are tool names, values are integer token costs.",
                           "additionalProperties": {
                             "type": "integer"
                           }
@@ -2694,27 +2947,47 @@
                 },
                 "example": {
                   "results": {
-                    "plan": "free",
-                    "subscription_status": "none",
-                    "credit_balance": 250,
-                    "unlimited": false,
-                    "current_period_start": null,
-                    "current_period_end": null,
+                    "plan": "subscription_997",
+                    "subscription_status": "active",
+                    "token_balance": -1,
+                    "unlimited": true,
+                    "external_token_balance": 2470,
+                    "external_token_allowance": 2500,
+                    "external_tokens_purchased": 60,
+                    "current_period_start": "2026-07-09",
+                    "current_period_end": "2026-08-09",
                     "token_costs": {
+                      "get_account": 1,
+                      "get_billing": 1,
+                      "get_usage": 1,
+                      "business_email_to_sha256": 1,
+                      "email_to_linkedin": 1,
+                      "email_to_maid": 1,
+                      "hem_to_email": 1,
+                      "hem_to_linkedin": 1,
+                      "reverse_email_lookup": 1,
+                      "ip_to_company": 1,
+                      "ip_to_hem": 1,
+                      "ip_to_maid": 1,
+                      "linkedin_to_all_personal_emails": 1,
                       "linkedin_to_best_email": 1,
+                      "linkedin_to_best_personal_email": 1,
                       "linkedin_to_business_email": 1,
+                      "linkedin_to_mobile_phone": 1,
                       "linkedin_to_personal_email": 1,
-                      "linkedin_to_mobile_phone": 10,
-                      "get_account": 0,
-                      "get_billing": 0,
-                      "get_usage": 0
+                      "linkedin_to_sha256": 1,
+                      "reverse_linkedin_lookup": 1,
+                      "search_business_email_by_name": 1,
+                      "search_business_profile_by_name": 1,
+                      "search_companies": 1,
+                      "search_linkedin_profile": 1,
+                      "search_people": 1
                     }
                   },
                   "status": "ok",
                   "metadata": {
                     "external_tokens_used": 0,
-                    "external_tokens_remaining": 5000,
-                    "daily_results_remaining": 9876
+                    "external_tokens_remaining": 2470
                   }
                 }
               }
@@ -2804,33 +3077,32 @@
               "application/json": {
                 "example": {
                   "results": {
-                    "period": "month",
-                    "start_date": "2026-04-01",
-                    "end_date": "2026-04-29",
-                    "credit_balance": 250,
+                    "period": "today",
+                    "start_date": "2026-07-14",
+                    "end_date": "2026-07-14",
+                    "token_balance": -1,
                     "days": [
                       {
-                        "date": "2026-04-16",
-                        "calls": 2,
-                        "credits": 0,
-                        "with_data": 2,
-                        "without_data": 0,
-                        "failed": 0
+                        "date": "2026-07-14",
+                        "calls": 2634,
+                        "tokens": 1405,
+                        "with_data": 1422,
+                        "without_data": 1195,
+                        "failed": 17
                       }
                     ],
                     "totals": {
-                      "calls": 2,
-                      "credits": 0,
-                      "with_data": 2,
-                      "without_data": 0,
-                      "failed": 0
+                      "calls": 2634,
+                      "tokens": 1405,
+                      "with_data": 1422,
+                      "without_data": 1195,
+                      "failed": 17
                     }
                   },
                   "status": "ok",
                   "metadata": {
                     "external_tokens_used": 0,
-                    "external_tokens_remaining": 5000,
-                    "daily_results_remaining": 9876
+                    "external_tokens_remaining": 2470
                   }
                 }
               }
