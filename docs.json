@@ -41,6 +41,13 @@
             ]
           },
           {
+            "group": "MoltSets' Data",
+            "pages": [
+              "moltsets-data/email-risk-scores",
+              "moltsets-data/phone-number-validation"
+            ]
+          },
+          {
             "group": "Use Cases",
             "pages": [
               "use-cases/i-have-x-i-want-y",

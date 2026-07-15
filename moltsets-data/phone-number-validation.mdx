@@ -1,0 +1,16 @@
+---
+title: "Understanding Phone Number Validation"
+description: "How MoltSets validates phone numbers and what the last validated date tells you."
+---
+
+## What we return
+
+For phone numbers, MoltSets provides a **last validated date**. This tells you when the number was last confirmed to be active and in service.
+
+## What this means for you
+
+Unlike email, we don't currently assign a risk score or confidence rating to phone numbers. The last validated date is the signal we give you, and it's up to you to decide how much weight to put on it — for example, a number validated last week carries more confidence than one validated a year ago.
+
+## How it works
+
+The last validated date is appended to each phone number in the API payload.

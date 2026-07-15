@@ -1,0 +1,24 @@
+---
+title: "Understanding Email Risk Scores"
+description: "Why some emails are flagged \"invalid\" by other tools, and how MoltSets' Email Risk Score gives you a more accurate way to decide who to send to."
+---
+
+## Why you might see more "invalid" results from other tools
+
+In spring 2026, Microsoft began blocking SMTP-based email validation checks. Because of this, third-party validation vendors (NeverBounce, ZeroBounce, and others) have started marking fully configured, deliverable inboxes as "invalid" — even though these addresses can receive mail and should be sent to.
+
+## How MoltSets addresses this
+
+To keep things transparent, MoltSets assigns every email an **Email Risk Score**. This score reflects what we actually know about deliverability, rather than relying solely on SMTP checks that are increasingly unreliable.
+
+| Score | What it means | Recommendation |
+| :-- | :-- | :-- |
+| **A** | Valid — known reply, open, or click | Send |
+| **B** | Known send with no bounce | Probably send |
+| **C** | Catch-all | Your call |
+| **D** | Hard invalid — bounce, complaint, or spam trap | Don't send |
+| **F** | No data available | Your call |
+
+## How it works
+
+The Email Risk Score is appended to each record in the API payload. You retain full control over which emails to send to based on this score and your own risk tolerance.
