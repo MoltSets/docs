@@ -28,6 +28,30 @@
       "Metadata": {
         "type": "object",
         "properties": {
+          "fair_use": {
+            "type": "object",
+            "description": "Fair Use Policy headroom for the record limits that apply to this call.",
+            "properties": {
+              "records_remaining_5h": {
+                "type": "integer",
+                "description": "Records you can still request in the current rolling 5-hour window."
+              },
+              "records_reset_5h": {
+                "type": "string",
+                "format": "date-time",
+                "description": "ISO 8601 timestamp when the 5-hour records window resets."
+              },
+              "records_remaining_1w": {
+                "type": "integer",
+                "description": "Records you can still request in the current rolling 1-week window."
+              },
+              "records_reset_1w": {
+                "type": "string",
+                "format": "date-time",
+                "description": "ISO 8601 timestamp when the 1-week records window resets."
+              }
+            }
+          },
           "external_tokens_used": {
             "type": "integer",
             "description": "External tokens consumed by this request when data was resolved from a third-party source. `0` when the request was served from MoltSets's own database."
@@ -35,10 +59,6 @@
           "external_tokens_remaining": {
             "type": "integer",
             "description": "External tokens remaining after this request."
-          },
-          "daily_results_remaining": {
-            "type": "integer",
-            "description": "The number of 'results' remaining on your daily rate limit. Daily rate limit is unique per plan."
           }
         }
       },
@@ -287,9 +307,14 @@
                       },
                       "status": "ok",
                       "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
                         "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000,
-                        "daily_results_remaining": 9876
+                        "external_tokens_remaining": 5000
                       }
                     }
                   }
@@ -518,9 +543,14 @@
                       },
                       "status": "ok",
                       "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
                         "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000,
-                        "daily_results_remaining": 9876
+                        "external_tokens_remaining": 5000
                       }
                     }
                   }
@@ -646,9 +676,14 @@
                       },
                       "status": "ok",
                       "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
                         "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000,
-                        "daily_results_remaining": 9876
+                        "external_tokens_remaining": 5000
                       }
                     }
                   },
@@ -667,9 +702,14 @@
                       ],
                       "status": "ok",
                       "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
                         "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000,
-                        "daily_results_remaining": 9876
+                        "external_tokens_remaining": 5000
                       }
                     }
                   }
@@ -790,9 +830,14 @@
                       },
                       "status": "ok",
                       "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
                         "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000,
-                        "daily_results_remaining": 9876
+                        "external_tokens_remaining": 5000
                       }
                     }
                   }
@@ -923,9 +968,14 @@
                       },
                       "status": "ok",
                       "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
                         "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000,
-                        "daily_results_remaining": 9876
+                        "external_tokens_remaining": 5000
                       }
                     }
                   }
@@ -1067,9 +1117,14 @@
                       },
                       "status": "ok",
                       "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
                         "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000,
-                        "daily_results_remaining": 9876
+                        "external_tokens_remaining": 5000
                       }
                     }
                   }
@@ -1141,9 +1196,14 @@
                       },
                       "status": "not_found",
                       "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
                         "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000,
-                        "daily_results_remaining": 9876
+                        "external_tokens_remaining": 5000
                       }
                     }
                   }
@@ -1237,9 +1297,14 @@
                       },
                       "status": "ok",
                       "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
                         "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000,
-                        "daily_results_remaining": 9876
+                        "external_tokens_remaining": 5000
                       }
                     }
                   }
@@ -1343,9 +1408,14 @@
                       },
                       "status": "ok",
                       "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
                         "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000,
-                        "daily_results_remaining": 9876
+                        "external_tokens_remaining": 5000
                       }
                     }
                   }
@@ -1449,9 +1519,14 @@
                       },
                       "status": "ok",
                       "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
                         "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000,
-                        "daily_results_remaining": 9876
+                        "external_tokens_remaining": 5000
                       }
                     }
                   }
@@ -1576,9 +1651,14 @@
                       },
                       "status": "ok",
                       "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
                         "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000,
-                        "daily_results_remaining": 9876
+                        "external_tokens_remaining": 5000
                       }
                     }
                   }
@@ -1706,9 +1786,14 @@
                       },
                       "status": "ok",
                       "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
                         "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000,
-                        "daily_results_remaining": 9876
+                        "external_tokens_remaining": 5000
                       }
                     }
                   }
@@ -1829,9 +1914,14 @@
                       },
                       "status": "ok",
                       "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
                         "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000,
-                        "daily_results_remaining": 9876
+                        "external_tokens_remaining": 5000
                       }
                     }
                   }
@@ -1941,9 +2031,14 @@
                       ],
                       "status": "ok",
                       "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
                         "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000,
-                        "daily_results_remaining": 9876
+                        "external_tokens_remaining": 5000
                       }
                     }
                   }
@@ -2052,9 +2147,14 @@
                       },
                       "status": "ok",
                       "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
                         "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000,
-                        "daily_results_remaining": 9876
+                        "external_tokens_remaining": 5000
                       }
                     }
                   }
@@ -2168,9 +2268,14 @@
                       },
                       "status": "ok",
                       "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
                         "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000,
-                        "daily_results_remaining": 9876
+                        "external_tokens_remaining": 5000
                       }
                     }
                   }
@@ -2277,9 +2382,14 @@
                       },
                       "status": "ok",
                       "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
                         "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000,
-                        "daily_results_remaining": 9876
+                        "external_tokens_remaining": 5000
                       }
                     }
                   }
@@ -2387,9 +2497,14 @@
                       },
                       "status": "ok",
                       "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
                         "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000,
-                        "daily_results_remaining": 9876
+                        "external_tokens_remaining": 5000
                       }
                     }
                   }
@@ -2796,6 +2911,12 @@
                   },
                   "status": "ok",
                   "metadata": {
+                    "fair_use": {
+                      "records_remaining_5h": 179999,
+                      "records_reset_5h": "2026-07-15T18:53:16Z",
+                      "records_remaining_1w": 899999,
+                      "records_reset_1w": "2026-07-22T13:53:16Z"
+                    },
                     "external_tokens_used": 0,
                     "external_tokens_remaining": 600
                   }
@@ -2986,6 +3107,12 @@
                   },
                   "status": "ok",
                   "metadata": {
+                    "fair_use": {
+                      "records_remaining_5h": 179999,
+                      "records_reset_5h": "2026-07-15T18:53:16Z",
+                      "records_remaining_1w": 899999,
+                      "records_reset_1w": "2026-07-22T13:53:16Z"
+                    },
                     "external_tokens_used": 0,
                     "external_tokens_remaining": 2470
                   }
@@ -3101,6 +3228,12 @@
                   },
                   "status": "ok",
                   "metadata": {
+                    "fair_use": {
+                      "records_remaining_5h": 179999,
+                      "records_reset_5h": "2026-07-15T18:53:16Z",
+                      "records_remaining_1w": 899999,
+                      "records_reset_1w": "2026-07-22T13:53:16Z"
+                    },
                     "external_tokens_used": 0,
                     "external_tokens_remaining": 2470
                   }
