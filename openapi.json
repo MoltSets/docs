@@ -152,7 +152,7 @@
                   "company": {
                     "type": "string",
                     "description": "Full-text search across company name only. Do not put domain, industry, employee size, or revenue here — use the dedicated filter params for those.",
-                    "example": "moltsets.com"
+                    "example": "MoltSets"
                   },
                   "company_domain": {
                     "type": "string",
