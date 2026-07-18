@@ -243,6 +243,45 @@
                       "Legal"
                     ]
                   },
+                  "employee_range": {
+                    "type": "string",
+                    "description": "Exact employee count range filter on the person's CURRENT employer — finds people at companies of a certain size without needing a specific company. Map the human's language to one of these exact values (same vocabulary as search_companies): \"1-10\" (solo, micro, very small), \"11-20\" (tiny team), \"21-50\" (small startup), \"51-200\" (small-mid), \"201-500\" (mid-size), \"501-1000\", \"1001-5000\" (large), \"5001+\" (enterprise, very large). Dirty values that also exist: \"Small\", \"Mid-Market\", \"Enterprise\", \"Unknown\" — prefer the numeric ranges when the human gives a size. Use the exact string shown. Combine with other filters — e.g. seniority: \"VP\", employee_range: \"51-200\".",
+                    "enum": [
+                      "1-10",
+                      "11-20",
+                      "21-50",
+                      "51-200",
+                      "201-500",
+                      "501-1000",
+                      "1001-5000",
+                      "5001+",
+                      "Small",
+                      "Mid-Market",
+                      "Enterprise",
+                      "Unknown"
+                    ]
+                  },
+                  "revenue_range": {
+                    "type": "string",
+                    "description": "Exact annual revenue range filter on the person's CURRENT employer — finds people at companies of a certain revenue without needing a specific company. Map the human's language to one of these exact values (same vocabulary as search_companies): \"Below $500k\", \"$500k - $1M\", \"$1M - $5M\", \"$5M - $10M\", \"$10M - $20M\", \"$20M - $50M\", \"Above $50M\", \"$50M - $100M\", \"$100M - $250M\", \"$250M - $500M\", \"$500M - $1B\", \"$1B - $2.5B\", \"$2.5B - $5B\", \"Over $5B\" (largest enterprises). Note: \"$1 - $1M\" is a legacy format that maps to the same range as \"$500k - $1M\" but has far fewer records — prefer \"$500k - $1M\" for that range. Use the exact string shown.",
+                    "enum": [
+                      "Below $500k",
+                      "$500k - $1M",
+                      "$1M - $5M",
+                      "$5M - $10M",
+                      "$10M - $20M",
+                      "$20M - $50M",
+                      "Above $50M",
+                      "$50M - $100M",
+                      "$100M - $250M",
+                      "$250M - $500M",
+                      "$500M - $1B",
+                      "$1B - $2.5B",
+                      "$2.5B - $5B",
+                      "Over $5B",
+                      "$1 - $1M"
+                    ]
+                  },
                   "limit": {
                     "type": "integer",
                     "description": "Number of results to return (default: 10, max: 25). Increase when the human wants more options.",
