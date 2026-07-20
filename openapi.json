@@ -336,6 +336,7 @@
                             "first_name": "John",
                             "linkedin_url": "https://linkedin.com/in/john-smith-123",
                             "business_email": "john.smith@example.com",
+                            "business_email_risk_score": "A",
                             "current_industry": "Information Technology",
                             "linkedin_slug": "john-smith-123",
                             "_id": "john-smith-123",
@@ -865,6 +866,7 @@
                     "value": {
                       "results": {
                         "email": "john.smith@acme.com",
+                        "risk_score": "A",
                         "linkedin_url": "https://linkedin.com/in/john-smith-123"
                       },
                       "status": "ok",
@@ -1119,6 +1121,19 @@
                           "nullable": true,
                           "description": "Email address found, or null if not found."
                         },
+                        "risk_score": {
+                          "type": "string",
+                          "nullable": true,
+                          "enum": [
+                            "A",
+                            "B",
+                            "C",
+                            "D",
+                            "F",
+                            null
+                          ],
+                          "description": "Send-safety risk grade after email validation: A=validated deliverable, B=known engagement no bounce, C=catch-all/unknowable, D=hard invalid/bounce/complaint/trap, F=no signal."
+                        },
                         "type": {
                           "type": "string",
                           "nullable": true,
@@ -1151,6 +1166,7 @@
                     "value": {
                       "results": {
                         "email": "john.smith@example.com",
+                        "risk_score": "A",
                         "type": "business",
                         "last_validated_at": "2026-03-04"
                       },
@@ -1204,6 +1220,19 @@
                         "email": {
                           "type": "string",
                           "nullable": true
+                        },
+                        "risk_score": {
+                          "type": "string",
+                          "nullable": true,
+                          "enum": [
+                            "A",
+                            "B",
+                            "C",
+                            "D",
+                            "F",
+                            null
+                          ],
+                          "description": "Send-safety risk grade after email validation: A=validated deliverable, B=known engagement no bounce, C=catch-all/unknowable, D=hard invalid/bounce/complaint/trap, F=no signal."
                         },
                         "type": {
                           "type": "string",
@@ -1315,6 +1344,19 @@
                         "email": {
                           "type": "string",
                           "description": "Valid business email address"
+                        },
+                        "risk_score": {
+                          "type": "string",
+                          "nullable": true,
+                          "enum": [
+                            "A",
+                            "B",
+                            "C",
+                            "D",
+                            "F",
+                            null
+                          ],
+                          "description": "Send-safety risk grade after email validation: A=validated deliverable, B=known engagement no bounce, C=catch-all/unknowable, D=hard invalid/bounce/complaint/trap, F=no signal."
                         }
                       }
                     },
@@ -1332,7 +1374,8 @@
                     "summary": "Data found",
                     "value": {
                       "results": {
-                        "email": "john.smith@example.com"
+                        "email": "john.smith@example.com",
+                        "risk_score": "A"
                       },
                       "status": "ok",
                       "metadata": {
@@ -1443,6 +1486,7 @@
                     "value": {
                       "results": {
                         "email": "john.smith@gmail.com",
+                        "risk_score": "A",
                         "last_validated_at": "2026-03-04"
                       },
                       "status": "ok",
@@ -1554,6 +1598,7 @@
                     "value": {
                       "results": {
                         "email": "john.smith@gmail.com",
+                        "risk_score": "A",
                         "last_validated_at": "2026-03-04"
                       },
                       "status": "ok",
@@ -1937,9 +1982,14 @@
                         "seniority": "Senior",
                         "linkedin_url": "https://linkedin.com/in/john-smith-123",
                         "business_email": "john.smith@example.com",
+                        "business_email_risk_score": "A",
                         "personal_email": "john.smith@gmail.com",
+                        "personal_email_risk_score": "A",
                         "personal_emails": [
                           "john.smith@gmail.com"
+                        ],
+                        "personal_emails_risk_score": [
+                          "A"
                         ],
                         "country": "United States",
                         "current_industry": "Information Technology",
