@@ -79,10 +79,23 @@ body {
 }
 
 /* Everything flat by default — the library uses --radius-0 throughout.
-   Delete this block to bring rounded corners back. */
+   Delete both blocks below to bring rounded corners back. */
 *,
 *::before,
 *::after {
+  border-radius: 0 !important;
+}
+
+/* Mintlify ships radius utilities that carry !important AND outrank the `*`
+   selector above, so it can never reach them:
+     - rounded-xt on [data-component-part=code-block-root]  -> specificity 0,2,0
+     - .rounded-2xl!, .rounded-xl!, .rounded-lg!, .rounded-full!  -> 0,1,0
+   Repeating the attribute selector lifts these to 0,2,1 so they win on
+   specificity alone, independent of stylesheet load order. */
+html [class][class],
+html [class][class]::before,
+html [class][class]::after,
+html [data-component-part][data-component-part] {
   border-radius: 0 !important;
 }
 
@@ -95,7 +108,7 @@ body {
 /* ---------- CHROME: header, sidebar, footer ---------- */
 #header,
 #navbar {
-  background-color: var(--ms-bg-elevated);
+  padding-bottom: 20px;
   border-bottom: 1px dashed var(--ms-orange-ash);
 }
 
@@ -211,6 +224,26 @@ pre code {
   border: 1px dashed var(--ms-brand);
 }
 
+/* The fade overlay behind the copy button is pinned to top:0/right:0 at
+   z-index 1 and ends in an opaque swatch, so it paints straight over the
+   dashed border for its full 44px height. Inset it past the border and
+   match its colour to the canvas (the element carries --fade-color-dark
+   inline, so this needs !important to win). */
+[data-fade-overlay] {
+  top: 1px !important;
+  right: 1px !important;
+  height: 42px !important;
+  --fade-color-dark: rgb(10, 11, 14) !important;
+}
+
+/* Copy button: flat, no chip background, brand orange on hover. */
+[data-testid="copy-code-button"] {
+  background: transparent !important;
+  transition: color 60ms steps(1);
+}
+[data-testid="copy-code-button"] svg { color: var(--ms-fg-muted) !important; }
+[data-testid="copy-code-button"]:hover svg { color: var(--ms-brand) !important; }
+
 table code { white-space: nowrap !important; }
 
 /* ---------- TABLES (library .stats-table) ---------- */
@@ -219,25 +252,38 @@ table {
   border-collapse: collapse;
 }
 
+/* Column rules and padding live on both th and td so the grid runs
+   unbroken through the header instead of starting below it. */
+th,
+td {
+  padding: 10px 14px !important;
+  border-left: 1px dashed var(--ms-divider-dim);
+  border-bottom: 1px dashed var(--ms-divider-dim);
+  text-align: left;
+  vertical-align: top;
+}
+
+th:first-child,
+td:first-child { border-left: none; }
+
 th {
   background: var(--ms-bg-elevated);
   color: var(--ms-brand) !important;
   font-weight: 700;
   font-size: 12px;
+  line-height: 1.4;
   letter-spacing: var(--ms-ls-title);
-  padding: 10px !important;
-  border-bottom: 1px dashed var(--ms-divider-dim);
+  white-space: nowrap;
 }
 
 th strong { color: var(--ms-brand) !important; }
 
 td {
   font-size: 12px;
+  line-height: 1.6;
   color: var(--ms-slate-200);
-  border-bottom: 1px dashed var(--ms-divider-dim);
-  border-left: 1px dashed var(--ms-divider-dim);
 }
-td:first-child { border-left: none; }
+
 tbody tr:last-child td { border-bottom: none; }
 
 /* ---------- CARDS (library .tcard) ---------- */
