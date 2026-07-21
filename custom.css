@@ -79,24 +79,29 @@ body {
 }
 
 /* Everything flat by default — the library uses --radius-0 throughout.
-   Delete both blocks below to bring rounded corners back. */
-*,
-*::before,
-*::after {
-  border-radius: 0 !important;
-}
+   Delete this block to bring rounded corners back.
 
-/* Mintlify ships radius utilities that carry !important AND outrank the `*`
-   selector above, so it can never reach them:
-     - rounded-xt on [data-component-part=code-block-root]  -> specificity 0,2,0
-     - .rounded-2xl!, .rounded-xl!, .rounded-lg!, .rounded-full!  -> 0,1,0
-   Repeating the attribute selector lifts these to 0,2,1 so they win on
-   specificity alone, independent of stylesheet load order. */
-html [class][class],
-html [class][class]::before,
-html [class][class]::after,
-html [data-component-part][data-component-part] {
-  border-radius: 0 !important;
+   This has to live in a cascade layer. Mintlify's stylesheet declares its
+   layers in the order:  properties, theme, base, components, utilities
+   and generates radius utilities that carry !important into `utilities`
+   (`.rounded-2xl!`, `.rounded-full!`, and a `rounded-xt!` rule targeting
+   [data-component-part=code-block-root]).
+
+   For !important declarations the cascade runs in REVERSE layer order, and
+   unlayered !important is the weakest of all — so an unlayered
+   `border-radius: 0 !important` loses to those utilities no matter how much
+   specificity it carries. Declaring into `properties` (the earliest layer)
+   puts these ahead of `utilities` for important declarations, which is the
+   only thing that actually wins here.
+
+   Everything else in this file stays unlayered on purpose: for NORMAL
+   declarations unlayered beats every layer, so those rules already win. */
+@layer properties {
+  *,
+  *::before,
+  *::after {
+    border-radius: 0 !important;
+  }
 }
 
 /* ---------- SCROLLBAR ---------- */
@@ -130,7 +135,6 @@ html [data-component-part][data-component-part] {
 }
 
 #footer {
-  background-color: var(--ms-bg-elevated);
   border-top: 1px dashed var(--ms-orange-ash);
   font-size: 12px;
 }
@@ -253,6 +257,16 @@ table {
   border-collapse: collapse;
 }
 
+/* Tailwind's preflight sets `border: 0 solid` on every element and Mintlify's
+   prose styles then add `border-bottom-width: 1px` to `tbody tr`, so each row
+   carries a solid border in a near-invisible dark colour. Under
+   border-collapse a solid border outranks a dashed one of equal width, so that
+   row border wins the table's bottom edge and swallows our rule. Zero the row
+   and section borders so the cells own every line. */
+table thead,
+table tbody,
+table tr { border: 0 !important; }
+
 /* Column rules and padding live on both th and td so the grid runs
    unbroken through the header instead of starting below it. */
 th,
@@ -285,10 +299,6 @@ td {
   color: var(--ms-slate-200);
 }
 
-/* The last row keeps its bottom rule rather than deferring to the table's own
-   border — that edge sits on the boundary of Mintlify's overflow:scroll table
-   wrapper and gets clipped. border-collapse merges the two, so no double line. */
-tbody tr:last-child td { border-bottom: 1px dashed var(--ms-divider-dim); }
 
 /* ---------- CARDS (library .tcard) ---------- */
 .card {
