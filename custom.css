@@ -1,41 +1,312 @@
+/* ============================================================
+   MoltSets docs — styled to match the Skills Library
+   (moltsets.com/library) design system.
+   Terminal-native UI language. Monospace, flat, dashed strokes.
+   ============================================================ */
+
+/* ---------- TOKENS (mirrors library colors_and_type.css) ---------- */
+:root {
+  /* backgrounds */
+  --ms-bg-base:       rgb(10, 11, 14);          /* the canvas */
+  --ms-bg-elevated:   rgb(30, 30, 30);          /* panel, header, footer */
+  --ms-bg-terminal:   rgba(244, 128, 93, 0.10); /* content wash */
+  --ms-bg-hover:      #120f11;                  /* card hover */
+  --ms-bg-chip:       rgb(55, 65, 81);
+  --ms-bg-chip-alt:   rgb(31, 41, 55);
+
+  /* orange — the brand accent */
+  --ms-orange-400:    rgb(244, 128, 93);
+  --ms-orange-500:    rgb(249, 115, 22);
+  --ms-orange-600:    rgb(220, 115, 84);
+  --ms-orange-tint:   rgb(245, 141, 109);
+  --ms-orange-ash:    rgb(57, 41, 29);
+
+  /* neutrals */
+  --ms-slate-100:     rgb(241, 245, 249);
+  --ms-slate-200:     rgb(226, 232, 240);
+  --ms-slate-300:     rgb(203, 213, 225);
+  --ms-slate-400:     rgb(148, 163, 184);
+  --ms-slate-600:     rgb(55, 65, 81);
+
+  /* status */
+  --ms-green:         rgb(52, 211, 153);
+  --ms-green-deep:    rgb(4, 120, 87);
+  --ms-yellow:        rgb(253, 224, 71);
+  --ms-red:           rgb(248, 113, 113);
+
+  --ms-divider-dim:   rgba(206, 206, 206, 0.5);
+
+  /* semantic */
+  --ms-brand:         var(--ms-orange-400);
+  --ms-fg-primary:    var(--ms-slate-100);
+  --ms-fg-secondary:  var(--ms-slate-300);
+  --ms-fg-muted:      var(--ms-slate-400);
+
+  /* type */
+  --ms-font-mono: 'SF Mono', ui-monospace, SFMono-Regular, Menlo, Consolas,
+                  'Liberation Mono', monospace;
+  --ms-ls-title: 0.6px;
+
+  /* ---------- remap Mintlify's ramp onto the library palette ----------
+     Mintlify consumes these as rgb(var(--token)) — space-separated triplets,
+     no commas. */
+  --background-dark: 10 11 14;   /* --ms-bg-base */
+  --gray-50:  248 250 252;
+  --gray-100: 241 245 249;
+  --gray-200: 226 232 240;
+  --gray-300: 203 213 225;
+  --gray-400: 148 163 184;
+  --gray-500: 100 116 139;
+  --gray-600: 71 85 105;
+  --gray-700: 55 65 81;          /* --ms-bg-chip: borders */
+  --gray-800: 31 41 55;          /* --ms-bg-chip-alt */
+  --gray-900: 30 30 30;          /* --ms-bg-elevated: panels */
+  --gray-950: 10 11 14;          /* --ms-bg-base */
+}
+
+/* ---------- BASE ---------- */
 * {
-  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace !important;
+  font-family: var(--ms-font-mono) !important;
 }
 
-th {
-  background: #312925;
-  padding: 10px !important;
-  color: #F4805D !important;
+body {
+  background-color: var(--ms-bg-base);
+  background-image: url('https://moltsets.com/library/assets/bg-texture.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
 }
 
-th strong { color: #F4805D !important; }
-
-.border { border-style: dashed; }
-
-.callout[data-callout-type="note"] {
-  background-color: rgba(52,211,153,0.3) !important;
-  border-color: #34D399 !important;
+/* Everything flat by default — the library uses --radius-0 throughout.
+   Delete this block to bring rounded corners back. */
+*,
+*::before,
+*::after {
+  border-radius: 0 !important;
 }
 
-.callout[data-callout-type="note"] svg.dark:text-blue-300 {
-  color: #34D399 !important;
-  fill: #34D399 !important;
+/* ---------- SCROLLBAR ---------- */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--ms-bg-base); }
+::-webkit-scrollbar-thumb { background: var(--ms-orange-ash); }
+::-webkit-scrollbar-thumb:hover { background: var(--ms-orange-500); }
+
+/* ---------- CHROME: header, sidebar, footer ---------- */
+#header,
+#navbar {
+  background-color: var(--ms-bg-elevated);
+  border-bottom: 1px dashed var(--ms-orange-ash);
 }
 
-.callout[data-callout-type="note"] .prose { color: #34D399 !important; }
+#sidebar,
+#table-of-contents {
+  font-size: 12px;
+}
 
+/* active nav item reads brand orange, like a checked library filter */
+#navigation-items a[data-active="true"],
+#sidebar a[data-active="true"] {
+  color: var(--ms-brand) !important;
+}
+
+#navigation-items a:hover,
+#sidebar a:hover {
+  color: var(--ms-fg-primary);
+  background: rgba(244, 128, 93, 0.04);
+}
+
+#footer {
+  background-color: var(--ms-bg-elevated);
+  border-top: 1px dashed var(--ms-orange-ash);
+  font-size: 12px;
+}
+
+#search-bar-entry {
+  background: var(--ms-bg-chip);
+  border: none;
+}
+#search-bar-entry:focus-within { outline: 1px solid var(--ms-brand); }
+
+/* ---------- CONTENT WIDTH ---------- */
 #content-area { max-width: 1500px !important; }
 
-table code { white-space: nowrap !important; }
+/* ---------- TYPE SCALE ----------
+   Library rhythm: brand orange headings, yellow secondary, 0.6px tracking. */
+#page-title,
+.prose h1 {
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1.15;
+  color: var(--ms-fg-primary);
+  letter-spacing: 0;
+}
 
-code { background: rgba(244,128,93,0.4) !important; }
+.prose h2 {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.2;
+  color: var(--ms-brand);
+  letter-spacing: var(--ms-ls-title);
+}
 
-pre code { background: none !important; }
+.prose h3 {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.3;
+  color: var(--ms-yellow);
+  letter-spacing: var(--ms-ls-title);
+}
+
+.prose h4 {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ms-brand);
+  letter-spacing: var(--ms-ls-title);
+}
+
+.prose p,
+.prose li {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ms-fg-secondary);
+}
 
 .text-lg {
   font-size: 1rem !important;
-  line-height: 1.75 !important; 
+  line-height: 1.75 !important;
 }
+
+/* dashed underline on hover — the library's link signature */
+.prose a {
+  color: var(--ms-brand);
+  text-decoration: none;
+  transition: color 60ms steps(1);
+}
+.prose a:hover {
+  color: var(--ms-orange-tint);
+  border-bottom: 1px dashed var(--ms-brand);
+}
+
+.prose hr { border-top: 1px dashed var(--ms-orange-ash); }
+
+/* ---------- CODE ---------- */
+code {
+  background: var(--ms-bg-terminal) !important;
+  border: 1px solid var(--ms-orange-ash);
+  color: var(--ms-brand);
+  padding: 1px 5px;
+  font-size: 12px;
+}
+
+pre code {
+  background: none !important;
+  border: none;
+  color: inherit;
+  padding: 0;
+}
+
+[data-component-part="code-block-root"] {
+  background: var(--ms-bg-base) !important;
+  border: 1px dashed var(--ms-brand);
+}
+
+table code { white-space: nowrap !important; }
+
+/* ---------- TABLES (library .stats-table) ---------- */
+table {
+  border: 1px dashed var(--ms-divider-dim);
+  border-collapse: collapse;
+}
+
+th {
+  background: var(--ms-bg-elevated);
+  color: var(--ms-brand) !important;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: var(--ms-ls-title);
+  padding: 10px !important;
+  border-bottom: 1px dashed var(--ms-divider-dim);
+}
+
+th strong { color: var(--ms-brand) !important; }
+
+td {
+  font-size: 12px;
+  color: var(--ms-slate-200);
+  border-bottom: 1px dashed var(--ms-divider-dim);
+  border-left: 1px dashed var(--ms-divider-dim);
+}
+td:first-child { border-left: none; }
+tbody tr:last-child td { border-bottom: none; }
+
+/* ---------- CARDS (library .tcard) ---------- */
+.card {
+  border: 1px solid var(--ms-bg-chip) !important;
+  background: var(--ms-bg-elevated) !important;
+  transition: border-color 100ms steps(2), background 100ms steps(2);
+}
+
+.card:hover {
+  border-color: var(--ms-slate-600) !important;
+  background: var(--ms-bg-hover) !important;
+}
+
+[data-component-part="card-title"] {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: var(--ms-fg-primary);
+}
+
+[data-component-part="card-content"] {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ms-fg-muted);
+}
+
+/* ---------- CALLOUTS (library .helpp-feat: flat + dashed) ---------- */
+.callout {
+  border-width: 1px !important;
+  border-style: dashed !important;
+  padding: 18px !important;
+}
+
+.callout[data-callout-type="note"],
+.callout[data-callout-type="check"],
+.callout[data-callout-type="tip"] {
+  background-color: rgba(52, 211, 153, 0.12) !important;
+  border-color: var(--ms-green) !important;
+}
+.callout[data-callout-type="note"] .prose,
+.callout[data-callout-type="check"] .prose,
+.callout[data-callout-type="tip"] .prose { color: var(--ms-green) !important; }
+.callout[data-callout-type="note"] svg,
+.callout[data-callout-type="check"] svg,
+.callout[data-callout-type="tip"] svg {
+  color: var(--ms-green) !important;
+  fill: var(--ms-green) !important;
+}
+
+.callout[data-callout-type="warning"] {
+  background-color: rgba(253, 224, 71, 0.07) !important;
+  border-color: rgba(253, 224, 71, 0.5) !important;
+}
+.callout[data-callout-type="warning"] .prose { color: var(--ms-yellow) !important; }
+
+.callout[data-callout-type="danger"] {
+  background-color: rgba(248, 113, 113, 0.08) !important;
+  border-color: rgba(248, 113, 113, 0.5) !important;
+}
+.callout[data-callout-type="danger"] .prose { color: var(--ms-red) !important; }
+
+.callout[data-callout-type="info"] {
+  background-color: var(--ms-bg-terminal) !important;
+  border-color: var(--ms-orange-ash) !important;
+}
+
+/* ---------- MISC ---------- */
+.border { border-style: dashed; }
 
 [data-testid="api-playground-modal"] .lg\:grid-cols-2 {
   grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
