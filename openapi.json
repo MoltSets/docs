@@ -147,7 +147,7 @@
                 "properties": {
                   "query": {
                     "type": "string",
-                    "description": "Full-text search across full_name, first_name, last_name, company name, title (~85% filled), and headline (~65% filled) using cross-field matching. Multi-word queries distribute terms across fields — \"John Smith\" matches first_name: John AND last_name: Smith rather than either alone. Job title and role keywords belong here — both the title field (e.g. \"Account Executive\", \"Head of Sales\", \"Data Scientist\", \"Software Engineer\", \"Marketing Lead\") and the headline field (e.g. \"Helping SaaS companies grow\", \"B2B sales leader\") are searched. For seniority level (VP, Director, C-suite) use the seniority filter instead; use this field for specific role or function keywords. Combine with filters for precision — e.g. query: \"Account Executive\", country: \"United States\", seniority: \"Senior\". Extract names, company names, and role keywords from the human's request. Examples: \"Jane Doe\", \"Account Executive Salesforce\", \"Head of Sales fintech\", \"Data Scientist\", \"software engineer Netflix\", \"recruiter London\". Do NOT put categorical values like country or seniority here — use the dedicated filter params for those."
+                    "description": "Full-text search across full_name, first_name, last_name, company name, title (~85% filled), and headline (~65% filled) using cross-field matching. Multi-word queries distribute terms across fields — \"John Smith\" matches first_name: John AND last_name: Smith rather than requiring either field alone to contain the full string. Job titles and role keywords are matched against both the title field (e.g. \"Account Executive\", \"Head of Sales\") and the headline field (e.g. \"B2B sales leader\"). For seniority level (VP, Director, C-suite) use the `seniority` filter instead — this field is best suited to specific role or function keywords, combined with other filters for precision, e.g. `query: \"Account Executive\"`, `country: \"United States\"`, `seniority: \"Senior\"`. Categorical values like country or seniority belong in their own filter params rather than this field."
                   },
                   "company": {
                     "type": "string",
@@ -156,7 +156,7 @@
                   },
                   "company_domain": {
                     "type": "string",
-                    "description": "Exact domain filter. Omit the protocol (no https://). Prefer this over `query` when you have a known domain — it's a precise match.",
+                    "description": "Exact match filter on company domain. Omit the protocol (no https://). Use this instead of `query` when you already know the exact domain, since it performs a precise match rather than a text search.",
                     "example": "moltsets.com"
                   },
                   "country": {
@@ -166,7 +166,7 @@
                   },
                   "seniority": {
                     "type": "string",
-                    "description": "Exact seniority level filter (~60% filled). Map the human's language to one of these exact values: \"Intern\" (intern, trainee, student ambassador), \"Entry\" (entry-level, junior, associate, coordinator, analyst, assistant — most common), \"Senior\" (senior, experienced individual contributor), \"Manager\" (manager, supervisor, team lead, head of small team), \"Director\" (director, senior director), \"VP\" (vice president, VP, SVP, EVP), \"Head\" (head of department, chief of staff), \"C Suite\" (CEO, CTO, CFO, COO, CMO, CRO, president, chief), \"Owner\" (owner, founder, co-founder, principal), \"Partner\" (partner, managing partner). Use the exact string shown — note \"C Suite\" has a space, not a hyphen.",
+                    "description": "Exact seniority level filter (~60% filled). Must match one of the enumerated values exactly, including the space in \"C Suite\" (not a hyphen).",
                     "enum": [
                       "Intern",
                       "Entry",
@@ -182,7 +182,7 @@
                   },
                   "industry": {
                     "type": "string",
-                    "description": "This field takes one exact value from the fixed list below, and it's currently about 60% filled in. When someone describes their industry in their own words, find the closest match from the list and type it in exactly as shown, including the capitalisation, spelling, and any punctuation (for example the ampersand in \"Marketing & Advertising\").\n\nUse the cues in brackets to decide which value fits:\n\n- Information Technology (tech, software, IT, SaaS, startup)\n- Professional and Business Services (consulting, business services, staffing)\n- Finance and Banking (finance, banking, fintech, investment, insurance)\n- Education (school, university, edtech, e-learning)\n- Health and Pharmaceuticals (healthcare, pharma, biotech, medical, hospital)\n- Manufacturing (manufacturing, industrial, production)\n- Government and Public Administration (government, public sector, military)\n- Retail (retail, e-commerce, consumer goods)\n- Food and Beverage (food, beverage, restaurant, CPG)\n- Creative Arts and Entertainment (media, entertainment, arts, gaming)\n- Non-Profit and Social Services (nonprofit, NGO, charity, social)\n- Transportation and Logistics (logistics, supply chain, shipping, trucking)\n- Construction (construction, real estate development, architecture)\n- Tourism and Hospitality (travel, hotel, tourism, hospitality)\n- Energy (energy, oil, gas, renewables, utilities)\n- Marketing & Advertising (marketing, advertising, PR, digital marketing)\n- Telecommunications (telecom, wireless, broadband)\n- Real Estate (real estate, property)\n- Automotive (automotive, car, vehicle)\n- Media and Publishing (media, publishing, journalism, news)\n- Agriculture (agriculture, farming, agtech)",
+                    "description": "Exact industry filter (~60% filled). Must match one of the enumerated values exactly, including capitalisation and punctuation (e.g. the ampersand in \"Marketing & Advertising\").",
                     "enum": [
                       "Information Technology",
                       "Professional and Business Services",
@@ -209,7 +209,7 @@
                   },
                   "department": {
                     "type": "string",
-                    "description": "This field takes one exact value from the fixed list below, and it's currently about 60% filled in. Note that it shares its data with the functional_area field, so populate one or the other, not both. When someone describes their department in their own words, find the closest match and type it in exactly as shown, including capitalisation and punctuation (for example the ampersand in \"Medical & Health\").\n\nUse the cues in brackets to decide which value fits:\n\n- Operations (ops, general, administration, management — this is the most common one)\n- Sales (sales, business development, account management)\n- Information Technology (IT, tech, software, engineering — use this for IT and tech roles)\n- Education (teaching, academic, training)\n- Engineering (engineering, R&D, product engineering)\n- Finance (finance, accounting, treasury)\n- Medical & Health (healthcare, medical, nursing, clinical)\n- Marketing (marketing, growth, demand gen, content)\n- Human Resources (HR, people, talent, recruiting)\n- Design (design, UX, creative)\n- Consulting (consulting, advisory, strategy)\n- Legal (legal, compliance, counsel)",
+                    "description": "Exact department filter (~60% filled). Shares its underlying data with `functional_area` — use one or the other, not both. Must match one of the enumerated values exactly, including capitalisation and punctuation (e.g. the ampersand in \"Medical & Health\").",
                     "enum": [
                       "Operations",
                       "Sales",
@@ -227,7 +227,7 @@
                   },
                   "functional_area": {
                     "type": "string",
-                    "description": "Exact functional area filter (~60% filled, co-populated with department — same doc counts, same enumerated values, sourced together). Use department or functional_area, not both. Use the exact string shown.",
+                    "description": "Exact functional area filter (~60% filled). Shares its underlying data with `department` — use one or the other, not both.",
                     "enum": [
                       "Operations",
                       "Sales",
@@ -245,7 +245,7 @@
                   },
                   "employee_range": {
                     "type": "string",
-                    "description": "Exact employee count range filter on the person's CURRENT employer — finds people at companies of a certain size without needing a specific company. Map the human's language to one of these exact values (same vocabulary as search_companies): \"1-10\" (solo, micro, very small), \"11-20\" (tiny team), \"21-50\" (small startup), \"51-200\" (small-mid), \"201-500\" (mid-size), \"501-1000\", \"1001-5000\" (large), \"5001+\" (enterprise, very large). Dirty values that also exist: \"Small\", \"Mid-Market\", \"Enterprise\", \"Unknown\" — prefer the numeric ranges when the human gives a size. Use the exact string shown. Combine with other filters — e.g. seniority: \"VP\", employee_range: \"51-200\".",
+                    "description": "Exact employee-count range filter on the person's current employer — finds people at companies of a certain size without needing to name a specific company. Values are fixed bucket ranges (e.g. \"51-200\", \"1001-5000\"). Legacy values (\"Small\", \"Mid-Market\", \"Enterprise\", \"Unknown\") also exist in older records but have far less coverage than the numeric ranges. Combine with other filters, e.g. `seniority: \"VP\"`, `employee_range: \"51-200\"`.",
                     "enum": [
                       "1-10",
                       "11-20",
@@ -263,7 +263,7 @@
                   },
                   "revenue_range": {
                     "type": "string",
-                    "description": "Exact annual revenue range filter on the person's CURRENT employer — finds people at companies of a certain revenue without needing a specific company. Map the human's language to one of these exact values (same vocabulary as search_companies): \"Below $500k\", \"$500k - $1M\", \"$1M - $5M\", \"$5M - $10M\", \"$10M - $20M\", \"$20M - $50M\", \"Above $50M\", \"$50M - $100M\", \"$100M - $250M\", \"$250M - $500M\", \"$500M - $1B\", \"$1B - $2.5B\", \"$2.5B - $5B\", \"Over $5B\" (largest enterprises). Note: \"$1 - $1M\" is a legacy format that maps to the same range as \"$500k - $1M\" but has far fewer records — prefer \"$500k - $1M\" for that range. Use the exact string shown.",
+                    "description": "Exact annual revenue range filter on the person's current employer — finds people at companies of a certain revenue without needing to name a specific company. Values are fixed bucket ranges. \"$1 - $1M\" is a legacy format equivalent to \"$500k - $1M\" but with far fewer records.",
                     "enum": [
                       "Below $500k",
                       "$500k - $1M",
@@ -284,7 +284,7 @@
                   },
                   "limit": {
                     "type": "integer",
-                    "description": "Number of results to return (default: 10, max: 25). Increase when the human wants more options.",
+                    "description": "Number of results to return (default: 10, max: 25).",
                     "default": 10,
                     "minimum": 1,
                     "maximum": 25
@@ -436,12 +436,12 @@
                   },
                   "domain": {
                     "type": "string",
-                    "description": "Exact domain filter. Omit the protocol (no https://). Prefer this over `query` when you have a known domain — it's a precise match.",
+                    "description": "Exact match filter on company domain. Omit the protocol (no https://). Use this instead of `query` when you already know the exact domain, since it performs a precise match rather than a text search.",
                     "example": "moltsets.com"
                   },
                   "industry": {
                     "type": "string",
-                    "description": "Exact industry filter. Map the request to one of the supported values.",
+                    "description": "Exact industry filter. Must match one of the enumerated values exactly.",
                     "enum": [
                       "Professional and Business Services",
                       "Information Technology",
@@ -477,7 +477,7 @@
                   },
                   "employee_range": {
                     "type": "string",
-                    "description": "Exact employee count range filter. Prefer the numeric ranges when a size is given.",
+                    "description": "Exact employee count range filter. Values are fixed bucket ranges (e.g. \"51-200\", \"1001-5000\"); legacy values (\"Small\", \"Mid-Market\", \"Enterprise\", \"Unknown\") also exist but have far less coverage than the numeric ranges.",
                     "enum": [
                       "1-10",
                       "11-20",
