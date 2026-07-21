@@ -22,3 +22,36 @@ To keep things transparent, MoltSets assigns every email an **Email Risk Score**
 ## How it works
 
 The Email Risk Score is appended to each record in the API payload. You retain full control over which emails to send to based on this score and your own risk tolerance.
+
+## Best Practices for Using Email Risk Scores
+
+Treat the grade as a filter, not a guarantee. A "Send" recommendation lowers risk, it doesn't eliminate it. Always pair risk scores with your own sending domain reputation and list hygiene practices.
+
+### By Grade
+
+#### A — Valid
+Safe to send to immediately. These have the strongest engagement signal available.
+
+#### B — Known send, no bounce
+Solid to include in regular sends. If you're running a particularly reputation-sensitive campaign (e.g. cold outreach on a new domain), consider a smaller batch size for this tier before scaling up.
+
+#### C — Catch-all
+These addresses accept all mail at the domain, so deliverability can't be confirmed either way.
+
+Recommendations:
+- Segment catch-alls into a separate send, not mixed with A/B contacts
+- Warm with lower volume first
+- Watch engagement (opens/clicks) closely and suppress non-responders after 1-2 attempts
+
+#### D — Hard invalid
+Never send. Sending to D-scored addresses is the fastest way to trip spam traps and damage sender reputation, which affects deliverability for your entire list, not just that one email.
+
+#### F — No data available
+Treat as unknown risk, not as safe. Recommend either re-verification before sending or routing into the same cautious treatment as C.
+
+### General Sending Hygiene
+
+- Suppress D scores automatically at the list level rather than relying on manual review
+- Monitor bounce rate by grade over time to validate the scoring is holding up for your specific use case
+- If sending cold outreach, warm up new domains regardless of score tier
+- Re-score contacts periodically; email validity decays over time (job changes, inbox closures)
