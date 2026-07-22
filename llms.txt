@@ -14,14 +14,22 @@ MoltSets returns contact and company data an agent can act on directly. Differen
 - Developer docs: https://developer.moltsets.com - MoltSets Developer Documentation that includes API reference as well as information on connecting AI agents to the MoltSets MCP.
 - Skills library: https://moltsets.com/library - Claude Skills for MoltSets — pre-built, ready to run. Start with identity resolution, enrichment, and more.
 
-## Key pages
-
+## Getting Started
 - [Overview](https://developer.moltsets.com/getting-started/overview): What MoltSets is, base URL, request/response structure, plans, and available tools.
 - [Authentication](https://developer.moltsets.com/getting-started/authentication): API key format (`ms_XXXXXXXXXXX`), how to create/revoke keys, Bearer token usage, error responses.
 - [Rate Limits](https://developer.moltsets.com/getting-started/rate-limits): Per-plan limits, what counts as a request, 429 handling, exponential backoff, multi-key strategies.
 - [MoltSets App](https://developer.moltsets.com/getting-started/moltsets-app): Logging in, navigating the app.
+
+## Use Cases
 - [I Have X, I Want Y](https://developer.moltsets.com/integrations/use-cases/i-have-x-i-want-y): Tool selection guide — pick based on what data you have (email, HEM, LinkedIn, IP) and what you need. Covers email/people finding, identity resolution, company lookup, IP resolution, search, and chained workflows.
 - [Find Companies and Contacts](https://developer.moltsets.com/use-cases/find-companies-and-contacts): Search guide — build prospect lists, look up companies by domain, and find contacts matching an ICP via the MCP or API. Covers filters, pagination, and code examples.
+
+## Best Practices
+- [Searching for People](https://developer.moltsets.com/best-practices/searching-for-people): How to build precise people searches with MoltSets — choosing the right filter, avoiding over-filtering on sparse fields, and paginating without burning records.
+- [Searching for Companies](https://developer.moltsets.com/best-practices/searching-for-companies): How to qualify accounts with MoltSets — exact domain lookups, choosing an industry vocabulary, and the location caveat that trips up multinational targeting.
+- [Getting Valid Emails](https://developer.moltsets.com/best-practices/getting-valid-emails): Which MoltSets email endpoint to call, how to read the risk score before you send, and how to avoid paying for the same lookup twice.
+- [Getting Carrier-Verified Mobile Phones](https://developer.moltsets.com/best-practices/getting-carrier-verified-mobile-phones): How to append verified mobile numbers with MoltSets — batching up to 100 profiles per call, budgeting external tokens, and reading the validation date.
+- [Getting Ad Audiences](https://developer.moltsets.com/best-practices/getting-ad-audiences): How to turn MoltSets contacts into privacy-safe advertising audiences — hashed email match keys for customer match, and MAIDs for mobile retargeting.
 
 ## Integrations
 - [MoltSets MCP Server](https://developer.moltsets.com/integrations/moltsets-mcp): MCP server URL (`https://mcp.moltsets.com/mcp`), setup for Claude.ai, Claude Desktop, and Claude Code, example prompts, troubleshooting.
