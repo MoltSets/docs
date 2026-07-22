@@ -151,18 +151,28 @@
                   },
                   "company": {
                     "type": "string",
-                    "description": "Full-text search across company name only. Do not put domain, industry, employee size, or revenue here — use the dedicated filter params for those.",
+                    "description": "Company name filter — scopes results to people whose employer's name matches. Analysed match: every word you provide must appear in the company name, so extra words in the stored name are fine (\"Acme\" matches \"Acme Corporation\"). Use this when you have a company name but not its domain; if you have the domain, prefer `company_domain`, which is more precise.",
                     "example": "MoltSets"
                   },
                   "company_domain": {
                     "type": "string",
-                    "description": "Exact match filter on company domain. Omit the protocol (no https://). Use this instead of `query` when you already know the exact domain, since it performs a precise match rather than a text search.",
+                    "description": "Company domain filter — scopes results to people at the company with this website domain. Full URLs are normalised automatically (\"https://www.acme.com/about\" → \"acme.com\"), so there is no need to strip the protocol or path yourself. The most precise way to target a single company — prefer it over `company` whenever you know the domain.",
                     "example": "moltsets.com"
                   },
                   "country": {
                     "type": "string",
                     "description": "Exact country name filter (~99% filled — most reliable filter). Must match the stored value exactly. Top values by volume: \"United States\", \"India\", \"United Kingdom\", \"Brazil\", \"Canada\", \"France\", \"Mexico\", \"Australia\", \"China\", \"Spain\", \"Netherlands\", \"Italy\", \"Indonesia\", \"Germany\", \"Philippines\", \"Turkey\", \"South Africa\", \"Saudi Arabia\", \"Argentina\", \"Singapore\", \"United Arab Emirates\", \"Colombia\", \"South Korea\", \"Malaysia\", \"Poland\", \"Belgium\", \"Switzerland\", \"Ireland\", \"Sweden\", \"Denmark\", \"Norway\", \"Austria\", \"Portugal\", \"Israel\", \"New Zealand\", \"Finland\", \"Greece\", \"Hungary\", \"Romania\", \"Ukraine\". Use the full English country name.",
                     "example": "United States"
+                  },
+                  "state": {
+                    "type": "string",
+                    "description": "Exact state or region name filter on the person's location. Must match the stored value exactly — full names with standard capitalisation, not abbreviations (\"Texas\", not \"TX\"). Combine with `country` for precision.",
+                    "example": "Texas"
+                  },
+                  "city": {
+                    "type": "string",
+                    "description": "Exact city name filter on the person's location. Must match the stored value exactly, with standard capitalisation. City names repeat across regions, so combine with `state` and/or `country` to disambiguate — e.g. city: \"Portland\", state: \"Oregon\". Matches only the exact stored city, not its suburbs — for a metro-area search prefer `state` or `country`.",
+                    "example": "Austin"
                   },
                   "seniority": {
                     "type": "string",
@@ -281,6 +291,16 @@
                       "Over $5B",
                       "$1 - $1M"
                     ]
+                  },
+                  "naics_code": {
+                    "type": "string",
+                    "description": "Exact NAICS industry code filter on the person's current employer (~50% filled). Works at any level of the hierarchy, from the 2-digit sector (\"23\" = Construction, \"54\" = Professional Services) through to the 6-digit national industry (\"541120\" = Offices of Notaries, \"511210\" = Software Publishers). Use a short code for broad industry targeting and a longer code for precision. The most standardised industry filter available — prefer it over `industry` when you need fine-grained targeting.",
+                    "example": "541120"
+                  },
+                  "linkedin_industry": {
+                    "type": "string",
+                    "description": "Exact LinkedIn industry label filter on the person's current employer (~50% filled). Uses LinkedIn's own ~150-value industry vocabulary, which is far finer-grained than the 21 buckets in `industry`. Must match the stored label exactly, with standard capitalisation — for example \"Software Development\", \"Hospitality\", \"Legal Services\", \"Wellness and Fitness Services\", \"Construction\", \"Staffing and Recruiting\". Use when a niche industry cannot be expressed by the broad `industry` buckets.",
+                    "example": "Software Development"
                   },
                   "limit": {
                     "type": "integer",
@@ -495,7 +515,7 @@
                   },
                   "revenue_range": {
                     "type": "string",
-                    "description": "Exact annual revenue range filter.",
+                    "description": "Exact annual revenue range filter. \"$1 - $1M\" is a legacy format equivalent to \"$500k - $1M\" but with far fewer records — prefer \"$500k - $1M\" for that range.",
                     "enum": [
                       "Below $500k",
                       "$500k - $1M",
@@ -510,19 +530,40 @@
                       "$500M - $1B",
                       "$1B - $2.5B",
                       "$2.5B - $5B",
-                      "Over $5B"
+                      "Over $5B",
+                      "$1 - $1M"
                     ]
+                  },
+                  "naics_code": {
+                    "type": "string",
+                    "description": "Exact NAICS industry code filter (~50% filled). Works at any level of the hierarchy, from the 2-digit sector (\"23\" = Construction, \"54\" = Professional Services) through to the 6-digit national industry (\"541120\" = Offices of Notaries, \"511210\" = Software Publishers). Use a short code for broad industry targeting and a longer code for precision — the most standardised industry filter available.",
+                    "example": "541120"
+                  },
+                  "linkedin_industry": {
+                    "type": "string",
+                    "description": "Exact LinkedIn industry label filter (~50% filled). Uses LinkedIn's own ~150-value industry vocabulary, which is finer-grained than the buckets in `industry`. Must match the stored label exactly, with standard capitalisation — for example \"Software Development\", \"Hospitality\", \"Legal Services\", \"Staffing and Recruiting\", \"Wellness and Fitness Services\".",
+                    "example": "Software Development"
+                  },
+                  "country": {
+                    "type": "string",
+                    "description": "Exact country name filter on the company's location. Use the full English country name. Note that company location is derived from where the company's team is based: this is accurate for the small companies that dominate the index, but large multinationals are attributed to a single one of their offices — combine it with other filters rather than relying on location alone when targeting global companies.",
+                    "example": "United States"
+                  },
+                  "state": {
+                    "type": "string",
+                    "description": "Exact state or region name filter on the company's location. Full names with standard capitalisation (\"Texas\", not \"TX\"). Combine with `country` for precision. Location is team-derived in the same way as `country`, so it is most accurate for smaller companies.",
+                    "example": "Texas"
                   },
                   "limit": {
                     "type": "integer",
-                    "description": "Number of results to return.",
+                    "description": "Number of results to return (default: 10, max: 25).",
                     "default": 10,
                     "minimum": 1,
                     "maximum": 25
                   },
                   "offset": {
                     "type": "integer",
-                    "description": "Number of results to skip for pagination. Use with limit to page through results.",
+                    "description": "Number of results to skip for pagination (default: 0). Use with limit to page through results — e.g. offset: 10 to get the second page of 10 results.",
                     "default": 0
                   }
                 }
