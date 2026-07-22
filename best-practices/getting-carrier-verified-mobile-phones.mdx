@@ -1,0 +1,91 @@
+---
+title: "Getting Carrier-Verified Mobile Phones"
+description: "How to append verified mobile numbers with MoltSets — batching up to 100 profiles per call, budgeting external tokens, and reading the validation date."
+---
+
+`linkedin_to_mobile_phone` is the only phone endpoint in the API. It takes a LinkedIn profile and returns a carrier-verified mobile number with the date it was last verified.
+
+```json
+{
+  "mobile_phone": "+15551234567",
+  "last_validated_at": "2026-03-04"
+}
+```
+
+## Mobile only, by design
+
+Only mobile numbers are returned — **no landlines, no VoIP**. Every result is a real device, which is what makes the output usable for SMS and direct dial rather than a switchboard you have to navigate.
+
+The practical consequence: contacts whose only number is a desk line simply won't return a result. A miss here isn't a data gap so much as a filter working as intended.
+
+## Batch up to 100 per call
+
+The endpoint takes either a single URL or a batch:
+
+| Parameter | Type | Use |
+|---|---|---|
+| `linkedin_url` | string | One profile |
+| `linkedin_urls` | array | Up to **100** profiles in a single call |
+
+Batching is the single highest-leverage practice here. One call for 100 profiles instead of 100 calls cuts your request count by 99%, which matters because **every request counts toward your rate limit regardless of whether it returns data**.
+
+```json
+{
+  "linkedin_urls": [
+    "https://linkedin.com/in/person-one",
+    "https://linkedin.com/in/person-two"
+  ]
+}
+```
+
+For lists longer than 100, chunk into batches of 100 and pause briefly between them rather than firing everything at once. See [Rate Limits](/getting-started/rate-limits) for the per-plan ceilings.
+
+## Budget external tokens first
+
+<Warning>
+  Mobile phone lookups **require external tokens**, at a cost of **10 external tokens per returned result**. This is a separate balance from your regular tokens, and it is the most expensive lookup in the API per result.
+</Warning>
+
+A 100-profile batch that resolves fully costs 1,000 external tokens. Plan runs against your balance before you start:
+
+| Plan | External tokens |
+|---|---|
+| \$0 | 100 |
+| \$27 / month | 100 / month |
+| \$97 / month | 500 / month |
+| \$997 / month | 2,500 / month |
+
+`get_account` and `get_billing` are **free** and never cost tokens. Read `external_token_balance` before a large run so a job doesn't stall halfway through.
+
+You're only charged for results that come back — profiles with no mobile on file cost nothing.
+
+## Qualify before you enrich
+
+Because this is the priciest per-result lookup, it pays to narrow the list before calling it rather than after. Run your [people search](/best-practices/searching-for-people) filters first and enrich only the contacts you'd actually call:
+
+1. `search_people` with `seniority`, `department`, and location filters
+2. Review `results.total` and tighten until the list is the size you intend to work
+3. Batch the resulting LinkedIn URLs into `linkedin_to_mobile_phone`, 100 at a time
+
+Enriching a 5,000-row list "just in case" is how an external token balance disappears in one afternoon.
+
+## Read the validation date
+
+`last_validated_at` is the date the number was last confirmed active and in service.
+
+<Note>
+  Unlike email, MoltSets does **not** assign a risk score or confidence grade to phone numbers. The validation date is the signal — a number confirmed last week carries more confidence than one confirmed a year ago, and it's your call how much weight to give it. See [Understanding Phone Number Validation](/moltsets-data/phone-number-validation).
+</Note>
+
+Set a staleness threshold that matches the channel. Cold calling a number verified 18 months ago wastes a dial; sending SMS to one wastes money and can generate complaints.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Phone Number Validation" icon="phone" href="/moltsets-data/phone-number-validation">
+    What the validation date does and doesn't tell you.
+  </Card>
+  <Card title="Rate Limits" icon="gauge" href="/getting-started/rate-limits">
+    Batching, backoff, and per-plan ceilings.
+  </Card>
+</CardGroup>

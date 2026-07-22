@@ -1,0 +1,116 @@
+---
+title: "Searching for People"
+description: "How to build precise people searches with MoltSets — choosing the right filter, avoiding over-filtering on sparse fields, and paginating without burning records."
+---
+
+`search_people` is the widest surface in the API: sixteen parameters, most of them exact-match. The difference between a good search and a wasted one is almost always **which filter you reach for**, not how many you stack.
+
+## Start with a free count
+
+`search_linkedin_profile` accepts `count_only: true`, which returns the number of matching results **without fetching data or charging tokens**. Use it to size a search before committing to it.
+
+```json
+{ "name": "John Smith", "company_domain": "acme.com", "count_only": true }
+```
+
+<Note>
+  Tokens are only charged when data is found and returned. A search that matches nothing costs nothing — but it still counts against your rate limit. See [Rate Limits](/getting-started/rate-limits).
+</Note>
+
+## Put the right thing in `query`
+
+`query` is a full-text search across `full_name`, `first_name`, `last_name`, company name, `title` (~85% filled), and `headline` (~65% filled). Multi-word queries distribute terms across fields — `"John Smith"` matches `first_name: John` **and** `last_name: Smith` rather than either alone.
+
+| Put this in `query` | Use a dedicated filter instead |
+|---|---|
+| Names — `"Jane Doe"` | Country, state, city |
+| Role and function keywords — `"Account Executive"`, `"Head of Sales"` | Seniority level (`VP`, `Director`, `C Suite`) |
+| Headline phrases — `"B2B sales leader"` | Industry, department, company size, revenue |
+
+Naming a company in `query` gets it diluted across the name and title fields. Use `company` or `company_domain` to scope to an employer.
+
+## Know each filter's fill rate
+
+Every exact-match filter silently discards records where that field is empty. Stacking three sparse filters can cut a viable audience to nothing.
+
+| Filter | Fill rate | Notes |
+|---|---|---|
+| `country` | ~99% | The most reliable filter available |
+| `query` → `title` | ~85% | |
+| `query` → `headline` | ~65% | |
+| `seniority` | ~60% | |
+| `industry` | ~60% | |
+| `department` / `functional_area` | ~60% | Co-populated — use one or the other, never both |
+| `naics_code` | ~50% | |
+| `linkedin_industry` | ~50% | |
+
+<Warning>
+  `department` and `functional_area` share the same underlying data, the same document counts, and the same values. Filtering on both narrows nothing and risks contradicting yourself — pick one.
+</Warning>
+
+## Choose your industry granularity
+
+Three filters describe industry at different resolutions. Pick the one that matches how specific your targeting actually is.
+
+| Filter | Vocabulary | Use when |
+|---|---|---|
+| `industry` | 21 broad buckets | You're thinking in categories like "software" or "healthcare" |
+| `linkedin_industry` | LinkedIn's own ~150 labels | You need a niche the broad buckets can't express — `"Wellness and Fitness Services"`, `"Staffing and Recruiting"` |
+| `naics_code` | Full NAICS hierarchy | You need standardised codes, or want to control breadth precisely |
+
+`naics_code` works at **any** level of the hierarchy. A 2-digit sector is broad (`"54"` = Professional Services); a 6-digit code is surgical (`"541120"` = Offices of Notaries). Shorten the code to widen the net.
+
+## Get location right
+
+`country`, `state`, and `city` all filter the **person's** location and all require exact stored values.
+
+- Use full English names, not abbreviations — `"Texas"`, not `"TX"`.
+- `"UK"` and `"HK"` exist in the data as dirty values. Prefer `"United Kingdom"` and `"Hong Kong"`.
+- City names repeat across regions. Combine with `state` or `country` to disambiguate — `city: "Portland"`, `state: "Oregon"`.
+- `city` matches the **exact stored city, not its suburbs**. For metro-area coverage, filter on `state` or `country` instead.
+
+## Target by company size without naming a company
+
+`employee_range` and `revenue_range` on `search_people` filter on the person's **current employer**. This finds people at companies of a given size or revenue without you having to supply a company at all.
+
+```json
+{ "seniority": "VP", "employee_range": "51-200", "country": "United States" }
+```
+
+Both use the same vocabulary as `search_companies`. Legacy values (`"Small"`, `"Mid-Market"`, `"Enterprise"`, `"Unknown"`) exist but have far thinner coverage — prefer the numeric ranges.
+
+## Match exact strings exactly
+
+Every non-`query` filter is an exact match. The most common failure is a near-miss on capitalisation or spacing:
+
+- `"C Suite"` has a **space**, not a hyphen
+- `"Marketing & Advertising"` uses an ampersand
+- `"Medical & Health"` uses an ampersand
+- `"5001+"` and `"$500k - $1M"` must match character for character
+
+## Emails come back in the search
+
+`search_people` results already include `business_email` and its `business_email_risk_score`. For contacts where the search returns an email, you don't need a follow-up enrichment call. See [Getting Valid Emails](/best-practices/getting-valid-emails) for what the grades mean.
+
+## Paginate deliberately
+
+Results are ranked — a higher `_score` means a stronger match, so the first page is the best page.
+
+| | Limit |
+|---|---|
+| Results per call | 25 max, 10 default |
+| Results per call (Free plan) | 5 max |
+| Free plan lifetime search records | 100 |
+
+Every response carries `results.total`, the count of matching records across all pages. Read it **before** paginating to decide whether the search is worth walking, then increment `offset` by your `limit`.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Searching for Companies" icon="building" href="/best-practices/searching-for-companies">
+    Qualify accounts first, then find people at them.
+  </Card>
+  <Card title="Getting Valid Emails" icon="envelope" href="/best-practices/getting-valid-emails">
+    Turn a contact into a deliverable address.
+  </Card>
+</CardGroup>

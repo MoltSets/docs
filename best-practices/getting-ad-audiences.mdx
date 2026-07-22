@@ -1,0 +1,81 @@
+---
+title: "Getting Ad Audiences"
+description: "How to turn MoltSets contacts into privacy-safe advertising audiences — hashed email match keys for customer match, and MAIDs for mobile retargeting."
+---
+
+Three endpoints convert a known contact into identifiers you can upload to ad platforms. All of them return **hashes or device IDs rather than raw personal emails**, which is what makes them usable in customer match and custom audience workflows.
+
+## Choose the right endpoint
+
+| You have | You want | Call |
+|---|---|---|
+| LinkedIn URL | The widest possible set of match keys | `linkedin_to_sha256` |
+| Business email | Hashed personal emails to match on | `business_email_to_sha256` |
+| Any email | Mobile device IDs for in-app targeting | `email_to_maid` |
+
+## Maximise match rate with `linkedin_to_sha256`
+
+Match rate is the whole game with customer match uploads — a platform can only find the users whose identifiers you supply. `linkedin_to_sha256` returns the broadest set MoltSets holds for one person: **both address types, in both hash formats**.
+
+```json
+{
+  "linkedin_slug": "john-smith-123",
+  "business_SHA256_array": ["..."],
+  "business_md5_array": ["..."],
+  "personal_SHA256_array": ["..."],
+  "personal_md5_array": ["..."]
+}
+```
+
+Four arrays, not four values — a contact with several known addresses returns several hashes per array. Upload everything a platform accepts. Supplying both SHA256 and MD5 where supported, and both business and personal addresses, is the single biggest lever on match rate.
+
+## Bridge work identities to personal devices
+
+`business_email_to_sha256` takes a **business** email and returns **hashed personal** emails:
+
+```json
+{ "personal_email_SHA256": ["..."] }
+```
+
+This is the endpoint that solves a specific B2B problem. Your CRM is full of work addresses, but people are logged into Meta, Google, and TikTok with their personal accounts — so uploading work emails to those platforms matches almost nothing. This crosses that gap without ever exposing a raw personal address.
+
+## Reach devices with `email_to_maid`
+
+`email_to_maid` resolves an email to one or more **Mobile Advertising IDs** — AAIDs on Android, IDFAs on Apple. These are the identifiers ad platforms use to target a specific device.
+
+Use it for mobile retargeting, programmatic activation, and cross-device campaigns where you want to reach a known contact in-app rather than in an inbox.
+
+## Where these go
+
+The hashes returned by `business_email_to_sha256` and `linkedin_to_sha256` upload directly to any platform supporting customer match or custom audiences — **Meta, Google, LinkedIn, TikTok**, and others.
+
+<Note>
+  Check each platform's expected hash format before uploading. Most customer match products expect SHA256 of a normalised, lowercased email; a few still accept MD5. Supplying the format a platform doesn't expect is the most common reason a well-built audience matches at near zero.
+</Note>
+
+## Build the audience, then activate it
+
+The full path from an ICP to a live audience is a search followed by a hash lookup:
+
+1. [`search_people`](/best-practices/searching-for-people) with your ICP filters → contacts with LinkedIn URLs
+2. `linkedin_to_sha256` on each URL → hashed match keys
+3. Upload to your ad platform as a customer match audience
+
+Starting from a contact list you already own instead, `business_email_to_sha256` takes work emails straight to personal-address hashes in one step — no LinkedIn URL needed.
+
+## Practical notes
+
+- **Only pay for hits.** Tokens are charged only when data is found and returned. Contacts with no resolvable identifiers cost nothing, though the request still counts toward your rate limit.
+- **Audiences decay.** People change devices and reset advertising IDs; MAIDs go stale faster than email hashes. Rebuild rather than reuse an old upload.
+- **Mind platform minimums.** Most ad platforms won't activate an audience below a minimum size, and a list that matches thinly can fall under it. Check `results.total` on your source search before committing to the enrichment run.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Getting Valid Emails" icon="envelope" href="/best-practices/getting-valid-emails">
+    Source the addresses that feed these audiences.
+  </Card>
+  <Card title="Searching for People" icon="users" href="/best-practices/searching-for-people">
+    Build the ICP list to activate against.
+  </Card>
+</CardGroup>

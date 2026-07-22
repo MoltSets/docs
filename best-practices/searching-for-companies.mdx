@@ -1,0 +1,130 @@
+---
+title: "Searching for Companies"
+description: "How to qualify accounts with MoltSets — exact domain lookups, choosing an industry vocabulary, and the location caveat that trips up multinational targeting."
+---
+
+`search_companies` is how you build and qualify an account list before you go looking for people at those accounts. It shares most of its vocabulary with [`search_people`](/best-practices/searching-for-people), so filters you learn here transfer directly.
+
+## Use `domain` when you have one
+
+If you know the website domain, `domain` is an exact match and always beats a free-text `query`:
+
+```json
+{ "domain": "acme.com" }
+```
+
+Full URLs are **normalised automatically** — `https://www.acme.com/about` becomes `acme.com`. There's no need to strip the protocol or path first.
+
+Reach for `query` only when you have a name and no domain. It searches the company name only; domain and industry are keyword fields and aren't covered by it.
+
+## Choose your industry granularity
+
+As with people search, three filters describe industry at different resolutions:
+
+| Filter | Vocabulary | Use when |
+|---|---|---|
+| `industry` | 23 primary buckets plus long-tail values | You're thinking in broad categories |
+| `linkedin_industry` | LinkedIn's own ~150 labels | You need a niche the buckets can't express |
+| `naics_code` | Full NAICS hierarchy | You want standardised codes, or precise control over breadth |
+
+The `industry` enum also carries long-tail values — `"Insurance"`, `"Banks"`, `"Computer Software"`, `"Pharmaceuticals and Biotechnology"`, `"Aerospace and Defense"`, `"Electronics"`, `"Mining and Metals"`. These overlap conceptually with the broad buckets, so a company in computer software may be filed under either `"Information Technology"` or `"Computer Software"`. If a search comes back thinner than expected, try the neighbouring value.
+
+<Note>
+  `naics_code` matches at any hierarchy level. Use a 2-digit sector (`"23"` = Construction) to cast wide, a 6-digit code (`"511210"` = Software Publishers) to go narrow. Shortening the code is the cleanest way to widen a search that's returning too little.
+</Note>
+
+## Understand the location caveat
+
+`country` and `state` filter the company's location — but that location is **derived from where the company's team is based**.
+
+<Warning>
+  This is accurate for the small companies that dominate the index, but **large multinationals are attributed to a single one of their offices**. A global company headquartered in one country may resolve to another entirely. When targeting large or international companies, combine location with other filters rather than relying on it alone.
+</Warning>
+
+Both require exact stored values with standard capitalisation — `"Texas"`, not `"TX"`. Combine `state` with `country` for precision.
+
+## Watch the size and revenue distributions
+
+Both range filters are exact-match, and both have a heavily skewed distribution.
+
+**`employee_range`** — `"1-10"` is the most common value by a wide margin. A search filtered to small bands will return a great deal; one filtered to `"5001+"` will return very little.
+
+| Value | Reads as |
+|---|---|
+| `"1-10"` | Solo, micro, very small — most common by far |
+| `"11-20"` | Tiny team |
+| `"21-50"` | Small startup |
+| `"51-200"` | Small-mid |
+| `"201-500"` | Mid-size |
+| `"501-1000"` | |
+| `"1001-5000"` | Large |
+| `"5001+"` | Enterprise, very large |
+
+Legacy values `"Small"`, `"Mid-Market"`, `"Enterprise"`, and `"Unknown"` also exist. Prefer the numeric ranges — they carry far more coverage.
+
+**`revenue_range`** — `"$500k - $1M"` is the most common band.
+
+<Warning>
+  `"$1 - $1M"` is a **legacy format** covering the same range as `"$500k - $1M"` but holding far fewer records. Always prefer `"$500k - $1M"`, or you'll miss most of the band.
+</Warning>
+
+## Identify companies from traffic
+
+`ip_to_company` resolves an IPv4 address to the domain of the organisation behind it — useful for de-anonymising website visitors and triggering account-based workflows.
+
+```json
+{ "ip_address": "8.8.8.8" }
+```
+
+<Note>
+  This is a B2B tool. Consumer ISP addresses will typically **not** resolve to a named company, so expect a meaningful miss rate on general web traffic.
+</Note>
+
+## Chain company search into people search
+
+The most common workflow is two calls: qualify accounts, then find contacts at them.
+
+1. `search_companies` with your firmographic filters → gives you a list of domains
+2. `search_people` with `company_domain` set to each domain → gives you contacts
+
+```javascript
+const companies = await search("search_companies", {
+  industry: "Computer Software",
+  employee_range: "51-200",
+  revenue_range: "$10M - $20M",
+  limit: 25
+});
+
+for (const company of companies.results.results) {
+  const people = await search("search_people", {
+    company_domain: company.domain,
+    seniority: "VP",
+    limit: 25
+  });
+}
+```
+
+`search_people` can also filter on `employee_range` and `revenue_range` directly, applied to the person's current employer. If firmographics are the only reason you're calling `search_companies`, you can often skip it and filter in one call.
+
+## Paginate deliberately
+
+Results are ranked by `_score`, so the first page is the strongest.
+
+| | Limit |
+|---|---|
+| Results per call | 25 max, 10 default |
+| Results per call (Free plan) | 5 max |
+| Free plan lifetime search records | 100 |
+
+Read `results.total` before walking pages, then increment `offset` by your `limit`.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Searching for People" icon="users" href="/best-practices/searching-for-people">
+    Find contacts at the accounts you've qualified.
+  </Card>
+  <Card title="Rate Limits" icon="gauge" href="/getting-started/rate-limits">
+    Search records are capped separately from enrichment.
+  </Card>
+</CardGroup>

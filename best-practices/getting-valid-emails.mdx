@@ -1,0 +1,93 @@
+---
+title: "Getting Valid Emails"
+description: "Which MoltSets email endpoint to call, how to read the risk score before you send, and how to avoid paying for the same lookup twice."
+---
+
+MoltSets has five ways to get an email address. They differ in what you put in, what kind of address comes out, and whether you get a fallback. Picking the right one is mostly about what identifier you're starting from.
+
+## Choose the right endpoint
+
+| You have | You want | Call |
+|---|---|---|
+| LinkedIn URL | Any working address, don't care which kind | `linkedin_to_best_email` |
+| LinkedIn URL | Work address only | `linkedin_to_business_email` |
+| LinkedIn URL | Personal address only | `linkedin_to_personal_email` |
+| LinkedIn URL | The single highest-confidence personal address | `linkedin_to_best_personal_email` |
+| Name + company domain | Work address, no LinkedIn URL needed | `search_business_email_by_name` |
+
+**`linkedin_to_best_email`** is the sensible default. It returns a business email when one exists and **falls back to a personal email** when one doesn't, so it has the highest match rate of the four. The `type` field tells you which kind you got:
+
+```json
+{
+  "email": "john.smith@example.com",
+  "risk_score": "A",
+  "type": "business",
+  "last_validated_at": "2026-03-04"
+}
+```
+
+**`search_business_email_by_name`** runs a LinkedIn profile search and an email lookup in a single call, and returns the matched `linkedin_url` alongside the email. Use it when you have a name and a company domain but no LinkedIn URL — it saves you a lookup.
+
+## Read the risk score before you send
+
+Every email MoltSets returns carries a `risk_score` — a single-letter grade for send safety, assigned after validation.
+
+| Grade | Meaning | Action |
+|---|---|---|
+| **A** | Validated deliverable — known reply, open, or click | Send |
+| **B** | Known send with no bounce recorded | Probably send |
+| **C** | Catch-all server — deliverability can't be determined | Your call |
+| **D** | Hard invalid — bounce, complaint, or spam trap | **Don't send** |
+| **F** | No signal either way | Your call |
+
+The single rule worth automating: **suppress `D` at the list level.** It's the fastest way to trip spam traps and damage sender reputation for an entire list, and it's the one grade where the answer never depends on your risk tolerance.
+
+Segment `C` and `F` away from `A`/`B` rather than dropping them — they're unknown, not bad. Warm them at lower volume and suppress non-responders after one or two attempts.
+
+<Note>
+  For the full grading rationale, including why other validation vendors began returning more false "invalid" results in 2026, see [Understanding Email Risk Scores](/moltsets-data/email-risk-scores).
+</Note>
+
+## Check the validation date
+
+`last_validated_at` tells you when the address was last confirmed. Emails decay — people change jobs and close inboxes — so a grade from a recent check carries more weight than an old one.
+
+`linkedin_to_best_personal_email` re-checks every address within the last 30 days, so its results always come with a recent validation date.
+
+## Don't pay for the same lookup twice
+
+Two places already return emails with risk scores attached, and calling a dedicated email endpoint afterwards is redundant:
+
+- **`search_people`** results include `business_email` and `business_email_risk_score`
+- **`reverse_linkedin_lookup`** returns `business_email`, `personal_email`, and the full `personal_emails` array — each with its own risk score — in a single call
+
+If you're already running a search or a reverse lookup, check what came back before enriching further.
+
+<Note>
+  Tokens are only charged when data is found and returned. A lookup that finds nothing costs nothing — though it still counts against your rate limit.
+</Note>
+
+## Business or personal — pick by channel
+
+The two address types aren't interchangeable, and the right one depends on what you're sending.
+
+**Business** (`linkedin_to_business_email`) suits B2B outreach, CRM enrichment, and account-based campaigns — anywhere reaching someone in a work context is the point.
+
+**Personal** (`linkedin_to_personal_email`, `linkedin_to_best_personal_email`) suits recruitment, consumer marketing, and re-engagement. It's also the only address that survives a job change, which makes it the better choice for contacts who may have left the employer you have on file.
+
+## A note on external tokens
+
+Most email data resolves from MoltSets' own database. When a request can't be satisfied there, MoltSets may call a third-party source, and those calls consume **external tokens** — a separate balance from your regular tokens.
+
+`get_account`, `get_billing`, and `get_usage` are free and never cost tokens. Check `external_token_balance` before a large run so a job doesn't stall halfway through.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Understanding Email Risk Scores" icon="shield-check" href="/moltsets-data/email-risk-scores">
+    Per-grade sending practice and list hygiene.
+  </Card>
+  <Card title="Getting Ad Audiences" icon="bullseye" href="/best-practices/getting-ad-audiences">
+    Turn those emails into privacy-safe ad audiences.
+  </Card>
+</CardGroup>

@@ -10,36 +10,50 @@ If you already have a LinkedIn URL, email, or IP address and want to enrich it, 
 <Warning>
   Search results are capped at **25 per call** (`limit` max 25, default 10). **Free-plan accounts are capped at 5 per call** (`limit` max 5) and get 100 search results total, lifetime. Use `limit` and `offset` together to paginate through larger result sets. See [Pagination](#pagination) below for examples.
 
-  Neither endpoint supports city/region or founding-year filters. `employee_range` and `revenue_range` apply to **`search_companies` only** — `search_people` cannot filter by company size or revenue. Industry and range filters use fixed enumerations — see the API reference for accepted values.
+  Neither endpoint supports a founding-year filter. Industry and range filters use fixed enumerations — see the API reference for accepted values.
 </Warning>
 
 ## Available Filters
 
-The two endpoints take **different** filter sets. `industry`, `limit`, and `offset` are shared; the rest are endpoint-specific.
+The two endpoints share most of their vocabulary. `industry`, `employee_range`, `revenue_range`, `naics_code`, `linkedin_industry`, `country`, `state`, `limit`, and `offset` appear on both; the rest are endpoint-specific.
 
 ### `search_companies`
 
 | Filter | What it does | Notes |
 |---|---|---|
 | `query` | Free-text search across company name | Do not use for domain, industry, or size — use the dedicated filters for those |
-| `domain` | Exact company domain match | Omit the protocol — use `acme.com` not `https://acme.com`. Prefer this over `query` when you have a known domain |
+| `domain` | Exact company domain match | Full URLs are normalised automatically (`https://www.acme.com/about` → `acme.com`). Prefer this over `query` when you have a known domain |
 | `industry` | Filter by industry | Fixed enumeration — see [Search Company Profiles](/api-reference/search/search-company-profiles) for accepted values |
+| `linkedin_industry` | Filter by LinkedIn's industry label | LinkedIn's own ~150-value vocabulary — finer-grained than `industry` |
+| `naics_code` | Filter by NAICS industry code | Matches at any hierarchy level — 2-digit sector through 6-digit national industry |
 | `employee_range` | Filter by headcount band | Fixed enumeration — see [Search Company Profiles](/api-reference/search/search-company-profiles) for accepted values |
 | `revenue_range` | Filter by annual revenue band | Fixed enumeration — see [Search Company Profiles](/api-reference/search/search-company-profiles) for accepted values |
+| `country` | Exact country name filter | Company location is team-derived — see the caveat below |
+| `state` | Exact state or region filter | Full names, not abbreviations. Combine with `country` |
 | `limit` | Number of results to return | Max 25 per call, default 10 (Free plan: max 5) |
 | `offset` | Number of results to skip | Use with `limit` to paginate |
+
+<Warning>
+  `country` and `state` on `search_companies` describe where the company's **team** is based. That's accurate for the small companies that dominate the index, but large multinationals are attributed to a single one of their offices — combine location with other filters rather than relying on it alone for global companies.
+</Warning>
 
 ### `search_people`
 
 | Filter | What it does | Notes |
 |---|---|---|
 | `query` | Free-text search across name, company, title, and headline | Put names and role keywords here |
-| `company` | Free-text company name match | Company name only — not domain, industry, or size |
-| `company_domain` | Exact company domain match | Omit the protocol — use `acme.com`. Prefer this over `company` when you have a known domain |
+| `company` | Company name filter | Scopes to the person's employer. Every word you supply must appear in the name (`Acme` matches `Acme Corporation`) |
+| `company_domain` | Exact company domain match | Full URLs are normalised automatically. Prefer this over `company` when you have a known domain |
 | `country` | Exact country name filter | Most reliable filter (~99% filled). Must match the stored value |
+| `state` | Exact state or region filter | Full names, not abbreviations — `Texas`, not `TX` |
+| `city` | Exact city name filter | Matches the exact stored city, not its suburbs. Combine with `state`/`country` to disambiguate |
 | `seniority` | Exact seniority level | Fixed enumeration — see [Search Business Profiles](/api-reference/search/search-business-profiles) for accepted values |
 | `industry` | Filter by industry | Fixed enumeration — see the API reference for accepted values |
-| `department` / `functional_area` | Team or function filter | Fixed enumerations — see the API reference for accepted values |
+| `linkedin_industry` | Filter by LinkedIn's industry label | ~150-value vocabulary, finer-grained than `industry` |
+| `naics_code` | Filter by NAICS industry code | Matches at any hierarchy level |
+| `department` / `functional_area` | Team or function filter | Co-populated from the same data — use one or the other, never both |
+| `employee_range` | Filter by employer headcount band | Applies to the person's **current employer** |
+| `revenue_range` | Filter by employer revenue band | Applies to the person's **current employer** |
 | `limit` | Number of results to return | Max 25 per call, default 10 (Free plan: max 5) |
 | `offset` | Number of results to skip | Use with `limit` to paginate |
 
@@ -70,10 +84,12 @@ Use `search_people` when your output is a list of people. Returns name, title, s
 | Decision-makers at a company | Find senior contacts at acme.com | `company_domain`, `seniority` |
 | Contacts in a specific team | Find engineering contacts at acme.com | `company_domain`, `department` |
 | Contacts in an industry and country | Find marketing contacts at software companies in the United States | `industry`, `country` |
+| Contacts in a specific city | Find sales contacts in Austin, Texas | `city`, `state` |
+| Contacts at companies of a given size | Find VPs at companies with 51–200 employees | `seniority`, `employee_range` |
 | Contacts matching an ICP | Find senior engineering contacts at information technology companies in the United States | `industry`, `seniority`, `department`, `country` |
 
 <Note>
-  To target contacts by **company size or revenue**, filter companies first with `search_companies` (`employee_range` / `revenue_range`), then run `search_people` on each returned domain — `search_people` has no size or revenue filter of its own.
+  To target contacts by **company size or revenue**, filter directly on `search_people` — `employee_range` and `revenue_range` apply to the person's current employer, so you can find people at companies of a given size without naming a company. Chain through `search_companies` only when you also want the company records themselves.
 </Note>
 
 ## Pagination
@@ -191,5 +207,6 @@ async function fetchAllResults(filters, endpoint) {
 }
 
 // Example: fetch all contacts at acme.com
-const contacts = await fetchAllResults({ domain: "acme.com" }, "search_people");
+// note: search_people scopes by `company_domain`; `domain` is the search_companies filter
+const contacts = await fetchAllResults({ company_domain: "acme.com" }, "search_people");
 ```
