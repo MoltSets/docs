@@ -456,7 +456,7 @@
                   },
                   "domain": {
                     "type": "string",
-                    "description": "Exact match filter on company domain. Omit the protocol (no https://). Use this instead of `query` when you already know the exact domain, since it performs a precise match rather than a text search.",
+                    "description": "Exact company domain filter. Full URLs are normalised automatically (\"https://www.acme.com/about\" → \"acme.com\"), so there is no need to strip the protocol or path yourself. Prefer this over `query` when you know the domain, since it is a precise match rather than a text search.",
                     "example": "moltsets.com"
                   },
                   "industry": {
