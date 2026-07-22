@@ -5,6 +5,32 @@ description: "How to qualify accounts with MoltSets — exact domain lookups, ch
 
 `search_companies` is how you build and qualify an account list before you go looking for people at those accounts. It shares most of its vocabulary with [`search_people`](/best-practices/searching-for-people), so filters you learn here transfer directly.
 
+## Filters are free precision
+
+Search cost is driven by the free-text `query`, not by the filters attached to it.
+
+| Query shape | Relative cost to execute |
+|---|---|
+| `query` alone | Baseline |
+| `query` + any number of filters | **The same** — filters add nothing |
+| Filters alone, no `query` | **~40× cheaper** |
+
+Two rules follow.
+
+**Never send a bare `query`.** Adding `industry`, `employee_range`, or `revenue_range` costs nothing and sharply narrows the result set. A query-only call is the least precise shape available and no cheaper than a filtered one.
+
+**Drop `query` entirely when filters can carry the whole intent.** Most account lists are pure firmographics — "software companies with 51–200 employees and $10M–$20M revenue" needs no free text at all, and runs ~40× cheaper without it.
+
+```json
+{ "industry": "Computer Software", "employee_range": "51-200", "revenue_range": "$10M - $20M" }
+```
+
+Reach for `query` only when you're matching a company by **name**. Everything else belongs in a filter.
+
+<Note>
+  This is about execution cost, not billing. Tokens are charged per record returned regardless of query shape — a cheaper query returns faster and puts less load on search capacity, but it doesn't change what you're charged.
+</Note>
+
 ## Use `domain` when you have one
 
 If you know the website domain, `domain` is an exact match and always beats a free-text `query`:

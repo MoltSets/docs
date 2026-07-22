@@ -57,7 +57,9 @@ The two endpoints share most of their vocabulary. `industry`, `employee_range`, 
 | `limit` | Number of results to return | Max 25 per call, default 10 (Free plan: max 5) |
 | `offset` | Number of results to skip | Use with `limit` to paginate |
 
-Combine `query` with filters for best precision. Results are ranked by relevance — higher `_score` means a stronger match.
+Combine `query` with filters for best precision — filters cost nothing extra to attach, and a search built from filters alone runs far cheaper than one driven by free text. See [Searching for People](/best-practices/searching-for-people) and [Searching for Companies](/best-practices/searching-for-companies) for the full guidance.
+
+Results are ranked by relevance — higher `_score` means a stronger match.
 
 ## Finding Companies
 

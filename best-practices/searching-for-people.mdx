@@ -17,6 +17,34 @@ description: "How to build precise people searches with MoltSets — choosing th
   Tokens are only charged when data is found and returned. A search that matches nothing costs nothing — but it still counts against your rate limit. See [Rate Limits](/getting-started/rate-limits).
 </Note>
 
+## Filters are free precision
+
+Search cost is driven by the free-text `query`, not by the filters attached to it.
+
+| Query shape | Relative cost to execute |
+|---|---|
+| `query` alone | Baseline |
+| `query` + any number of filters | **The same** — filters add nothing |
+| Filters alone, no `query` | **~40× cheaper** |
+
+Two rules follow.
+
+**Never send a bare `query`.** Attaching `country`, `seniority`, or anything else costs nothing and sharply narrows the result set. A query-only call is the least precise shape available and no cheaper than a filtered one.
+
+**Drop `query` entirely when filters can carry the whole intent.** "VPs of sales at US software companies" is fully expressible as `seniority`, `department`, `industry`, and `country` — as a pure filter search it runs ~40× cheaper than the same request phrased as free text.
+
+<Note>
+  This is about execution cost, not billing. Tokens are charged per record returned regardless of query shape — a cheaper query returns faster and puts less load on search capacity, but it doesn't change what you're charged.
+</Note>
+
+### If all you have is text, add a country
+
+`country` is ~99% filled — the highest fill rate of any filter. Attaching it to a free-text search discards almost no legitimate matches while removing everything from other markets. It is the cheapest precision available, and the default filter to reach for when you have nothing else.
+
+```json
+{ "query": "Account Executive", "country": "United States" }
+```
+
 ## Put the right thing in `query`
 
 `query` is a full-text search across `full_name`, `first_name`, `last_name`, company name, `title` (~85% filled), and `headline` (~65% filled). Multi-word queries distribute terms across fields — `"John Smith"` matches `first_name: John` **and** `last_name: Smith` rather than either alone.
