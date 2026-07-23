@@ -53,7 +53,7 @@ All requests are `POST` with a JSON body. All responses return HTTP 200 with env
 - [POST /search_companies](https://developer.moltsets.com/api-reference/search/search-for-companies): Search companies by name, domain, industry, size, or revenue → ranked company profiles.
 - [POST /search_linkedin_profile](https://developer.moltsets.com/api-reference/search/search-for-linkedin-profile): Search a person or company by name + company domain → LinkedIn slug. Use `count_only: true` (free) to check result volume before spending tokens.
 - [POST /search_business_email_by_name](https://developer.moltsets.com/api-reference/search/search-business-email-by-name): Name + company domain → valid business email + matched LinkedIn URL. One-call shortcut for `search_linkedin_profile` + `linkedin_to_business_email`. Charged only when found.
-- [POST /search_business_profile_by_name](https://developer.moltsets.com/api-reference/search/search-business-profile-by-name): [Advanced] Name + company domain → full business profile (company, title, firmographics). Optional `include_mobile_phone`. Charged only when found.
+- [POST /search_business_profile_by_name](https://developer.moltsets.com/api-reference/search/search-business-profile-by-name): [Advanced] Name + company domain → full business profile (company, title, firmographics).
 
 ### Get Valid Emails
 
@@ -68,8 +68,8 @@ All requests are `POST` with a JSON body. All responses return HTTP 200 with env
 
 ### Reverse Lookups
 
-- [POST /reverse_email_lookup](https://developer.moltsets.com/api-reference/reverse-lookups/reverse-email-lookup): Email → full business profile (name, title, seniority, company, LinkedIn, firmographics, emails on file). Optional `include_mobile_phone`.
-- [POST /reverse_linkedin_lookup](https://developer.moltsets.com/api-reference/reverse-lookups/reverse-linkedin-lookup): LinkedIn URL → complete business profile (name, title, seniority, company, industry, revenue, business + personal email). Optional `include_mobile_phone`. Most complete LinkedIn enrichment.
+- [POST /reverse_email_lookup](https://developer.moltsets.com/api-reference/reverse-lookups/reverse-email-lookup): Email → full business profile (name, title, seniority, company, LinkedIn, firmographics, emails on file).
+- [POST /reverse_linkedin_lookup](https://developer.moltsets.com/api-reference/reverse-lookups/reverse-linkedin-lookup): LinkedIn URL → complete business profile (name, title, seniority, company, industry, revenue, business + personal email). Most complete LinkedIn enrichment.
 
 ### Get Ad Audience
 
