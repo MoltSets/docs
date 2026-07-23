@@ -23,6 +23,8 @@ MoltSets returns contact and company data an agent can act on directly. Differen
 ## MoltSets' Data
 - [Understanding Email Risk Scores](https://developer.moltsets.com/moltsets-data/email-risk-scores): Why third-party validators increasingly mislabel deliverable inboxes as "invalid," and how MoltSets' Email Risk Score (A–F) gives a more accurate send/don't-send signal.
 - [Understanding Phone Number Validation](https://developer.moltsets.com/moltsets-data/phone-number-validation): How MoltSets validates mobile numbers and how to weigh the `last_validated_at` date when deciding whether to use a number.
+- [Understanding NAICS Codes](https://developer.moltsets.com/moltsets-data/understanding-naics-codes): What NAICS codes are, the 2-to-6-digit hierarchy, and how the `naics_code` filter on `search_companies`/`search_people` matches at any level. Includes all 20 sectors and their subsector tables.
+- [Six-Digit NAICS Codes & Titles](https://developer.moltsets.com/moltsets-data/six-digit-naics-codes-titles): The complete six-digit NAICS national industry list (1,012 codes) organized by sector — the most specific level for the `naics_code` filter.
 
 ## Use Cases
 - [I Have X, I Want Y](https://developer.moltsets.com/use-cases/i-have-x-i-want-y): Tool selection guide — pick based on what data you have (email, HEM, LinkedIn, IP) and what you need. Covers email/people finding, identity resolution, company lookup, IP resolution, search, and chained workflows.
