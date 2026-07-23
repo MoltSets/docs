@@ -3429,12 +3429,16 @@
       "description": "Enrich carrier-verified mobile phone numbers."
     },
     {
-      "name": "Get Full Business Profile",
-      "description": "Resolve identifiers to full business profiles and company firmographics."
+      "name": "Reverse Lookups",
+      "description": "Resolve an email address or LinkedIn URL to a full business profile."
     },
     {
       "name": "Get Ad Audience",
       "description": "Resolve identifiers to hashed email (HEM) and mobile advertising IDs (MAIDs) for audience matching."
+    },
+    {
+      "name": "Get LinkedIn",
+      "description": "Resolve an email address to its LinkedIn profile URL."
     },
     {
       "name": "Get Company",
