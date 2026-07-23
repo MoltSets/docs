@@ -20,8 +20,12 @@ MoltSets returns contact and company data an agent can act on directly. Differen
 - [Rate Limits](https://developer.moltsets.com/getting-started/rate-limits): Per-plan limits, what counts as a request, 429 handling, exponential backoff, multi-key strategies.
 - [MoltSets App](https://developer.moltsets.com/getting-started/moltsets-app): Logging in, navigating the app.
 
+## MoltSets' Data
+- [Understanding Email Risk Scores](https://developer.moltsets.com/moltsets-data/email-risk-scores): Why third-party validators increasingly mislabel deliverable inboxes as "invalid," and how MoltSets' Email Risk Score (A–F) gives a more accurate send/don't-send signal.
+- [Understanding Phone Number Validation](https://developer.moltsets.com/moltsets-data/phone-number-validation): How MoltSets validates mobile numbers and how to weigh the `last_validated_at` date when deciding whether to use a number.
+
 ## Use Cases
-- [I Have X, I Want Y](https://developer.moltsets.com/integrations/use-cases/i-have-x-i-want-y): Tool selection guide — pick based on what data you have (email, HEM, LinkedIn, IP) and what you need. Covers email/people finding, identity resolution, company lookup, IP resolution, search, and chained workflows.
+- [I Have X, I Want Y](https://developer.moltsets.com/use-cases/i-have-x-i-want-y): Tool selection guide — pick based on what data you have (email, HEM, LinkedIn, IP) and what you need. Covers email/people finding, identity resolution, company lookup, IP resolution, search, and chained workflows.
 - [Find Companies and Contacts](https://developer.moltsets.com/use-cases/find-companies-and-contacts): Search guide — build prospect lists, look up companies by domain, and find contacts matching an ICP via the MCP or API. Covers filters, pagination, and code examples.
 
 ## Best Practices
@@ -91,10 +95,10 @@ All requests are `POST` with a JSON body. All responses return HTTP 200 with env
 
 | **Plan** | **Lifetime Tokens** | **Rate Limit** | **External Tokens** |
 | :-- | :-- | :-- | :-- |
-| $0 | 1000 | 1k requests per minute & 1k results per day | 100 |
-| \$27 / month | Unlimited | 30 requests per minute & 1k results per day | 100 / month |
-| \$97 / month | Unlimited | 1k requests per minute & 15k results per day | 500 / month |
-| \$997 | Unlimited | 5k requests per minute & 100k results per day | 2500 / month |
+| \$0 | 1000 | 1k enrichment records lifetime | 100 |
+| \$27 / month | Unlimited | 5k enrichment & 2.5k search records / week | 100 / month |
+| \$97 / month | Unlimited | 75k enrichment & 37.5k search records / week | 500 / month |
+| \$997 | Unlimited | 900k enrichment & 450k search records / week | 2500 / month |
 
 > [Getting the \$997/month plan for \$497/month with the UGC Discount — How It Works](https://support.moltsets.com/en/articles/15207288).
 
