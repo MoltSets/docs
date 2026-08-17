@@ -1102,7 +1102,11 @@
       "post": {
         "summary": "LinkedIn to Best Email",
         "operationId": "enrichEmail",
+<<<<<<< HEAD
         "description": "The LinkedIn to Email API finds the best available email address for any LinkedIn profile.\n\nIt returns a valid business email when one exists, and automatically falls back to a personal email if not, so you get a result whenever the data is available. The `type` field in the response tells you which kind was returned. Use this as your default LinkedIn-to-email enrichment endpoint when the type of email doesn't matter to you.\n\n**Use this endpoint to:**\n- Enrich LinkedIn-sourced leads with a working email address\n- Maximise match rate across business and personal inboxes\n- Fill contact records that only have a LinkedIn URL\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.",
+=======
+        "description": "The LinkedIn to Email API finds the best available email address for any LinkedIn profile. It supports single lookups (`linkedin_url`) and batch lookups of up to 100 profiles at once (`linkedin_urls`).\n\nIt returns a valid business email when one exists, and automatically falls back to a personal email if not, so you get a result whenever the data is available. The `type` field in the response tells you which kind was returned. Use this as your default LinkedIn-to-email enrichment endpoint when the type of email doesn't matter to you.\n\n**Use this endpoint to:**\n- Enrich LinkedIn-sourced leads with a working email address\n- Maximise match rate across business and personal inboxes\n- Fill contact records that only have a LinkedIn URL\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**External Tokens:**\nMoltSets resolves most contact data — emails, phone numbers, et al. — from its own database. For some requests, the data you're looking for isn't in that database, and MoltSets will make a call to a third-party data source to try to find it. Those calls cost external tokens. For more information on external tokens, <a href=\"https://support.moltsets.com/en/articles/15280420-external-tokens\" target=\"_blank\" rel=\"noopener\">click here</a>. Set `use_external_tokens` to `false` to skip third-party lookups and only return matches already in MoltSets' database, at no external token cost.",
+>>>>>>> main
         "tags": [
           "Get Valid Emails"
         ],
@@ -1112,14 +1116,48 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "linkedin_url"
-                ],
                 "properties": {
                   "linkedin_url": {
                     "type": "string",
-                    "description": "Full LinkedIn profile URL or slug.",
-                    "example": "https://linkedin.com/in/retentionadam"
+                    "description": "Single LinkedIn profile URL or slug."
+                  },
+                  "linkedin_urls": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 100,
+                    "description": "Batch of LinkedIn profile URLs or slugs, up to 100."
+                  },
+                  "use_external_tokens": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether MoltSets may fall back to a third-party data source (billed in external tokens) when the email isn't already in MoltSets' own database. Defaults to true. In batch requests, this applies to every profile in `linkedin_urls`."
+                  }
+                }
+              },
+              "examples": {
+                "single": {
+                  "summary": "Single lookup",
+                  "value": {
+                    "linkedin_url": "https://linkedin.com/in/retentionadam"
+                  }
+                },
+                "single_no_external_tokens": {
+                  "summary": "Single lookup, database-only (no external tokens)",
+                  "value": {
+                    "linkedin_url": "https://linkedin.com/in/retentionadam",
+                    "use_external_tokens": false
+                  }
+                },
+                "batch": {
+                  "summary": "Batch lookup",
+                  "value": {
+                    "linkedin_urls": [
+                      "https://linkedin.com/in/retentionadam",
+                      "https://linkedin.com/in/jane-doe"
+                    ],
+                    "use_external_tokens": false
                   }
                 }
               }
@@ -1323,7 +1361,11 @@
       "post": {
         "summary": "LinkedIn to Business Email",
         "operationId": "enrichBusinessEmail",
+<<<<<<< HEAD
         "description": "The LinkedIn to Business Email API retrieves the valid work email address for any LinkedIn profile.\n\nIt only returns corporate email addresses, no personal inboxes. Use this when you need to reach contacts at their workplace domain, for example for B2B outreach, CRM enrichment, or account-based marketing campaigns. If you also want a personal email fallback, use `linkedin_to_best_email` instead.\n\n**Use this endpoint to:**\n- Reach prospects at their work email address\n- Enrich B2B lead lists with corporate emails\n- Power account-based marketing and sales sequences\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.",
+=======
+        "description": "The LinkedIn to Business Email API retrieves the valid work email address for any LinkedIn profile. It supports single lookups (`linkedin_url`) and batch lookups of up to 100 profiles at once (`linkedin_urls`).\n\nIt only returns corporate email addresses, no personal inboxes. Use this when you need to reach contacts at their workplace domain, for example for B2B outreach, CRM enrichment, or account-based marketing campaigns. If you also want a personal email fallback, use `linkedin_to_best_email` instead.\n\n**Use this endpoint to:**\n- Reach prospects at their work email address\n- Enrich B2B lead lists with corporate emails\n- Power account-based marketing and sales sequences\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**External Tokens:**\nMoltSets resolves most contact data — emails, phone numbers, et al. — from its own database. For some requests, the data you're looking for isn't in that database, and MoltSets will make a call to a third-party data source to try to find it. Those calls cost external tokens. For more information on external tokens, <a href=\"https://support.moltsets.com/en/articles/15280420-external-tokens\" target=\"_blank\" rel=\"noopener\">click here</a>. Set `use_external_tokens` to `false` to skip third-party lookups and only return matches already in MoltSets' database, at no external token cost.",
+>>>>>>> main
         "tags": [
           "Get Valid Emails"
         ],
@@ -1333,14 +1375,48 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "linkedin_url"
-                ],
                 "properties": {
                   "linkedin_url": {
                     "type": "string",
-                    "description": "Full LinkedIn profile URL or slug.",
-                    "example": "https://linkedin.com/in/retentionadam"
+                    "description": "Single LinkedIn profile URL or slug."
+                  },
+                  "linkedin_urls": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 100,
+                    "description": "Batch of LinkedIn profile URLs or slugs, up to 100."
+                  },
+                  "use_external_tokens": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether MoltSets may fall back to a third-party data source (billed in external tokens) when the email isn't already in MoltSets' own database. Defaults to true. In batch requests, this applies to every profile in `linkedin_urls`."
+                  }
+                }
+              },
+              "examples": {
+                "single": {
+                  "summary": "Single lookup",
+                  "value": {
+                    "linkedin_url": "https://linkedin.com/in/retentionadam"
+                  }
+                },
+                "single_no_external_tokens": {
+                  "summary": "Single lookup, database-only (no external tokens)",
+                  "value": {
+                    "linkedin_url": "https://linkedin.com/in/retentionadam",
+                    "use_external_tokens": false
+                  }
+                },
+                "batch": {
+                  "summary": "Batch lookup",
+                  "value": {
+                    "linkedin_urls": [
+                      "https://linkedin.com/in/retentionadam",
+                      "https://linkedin.com/in/jane-doe"
+                    ],
+                    "use_external_tokens": false
                   }
                 }
               }
@@ -1466,7 +1542,11 @@
       "post": {
         "summary": "LinkedIn to Personal Email",
         "operationId": "enrichPersonalEmail",
+<<<<<<< HEAD
         "description": "The LinkedIn to Personal Email API retrieves the valid personal email address, such as Gmail or iCloud, for any LinkedIn profile.\n\nUse this to reach contacts outside their work inbox. It's well suited to recruitment outreach, consumer marketing, or re-engagement campaigns where a personal address improves deliverability.\n\n**Use this endpoint to:**\n- Reach candidates or prospects outside working hours\n- Improve deliverability for consumer marketing sends\n- Re-engage contacts who've left their previous employer\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**Plan Availability:**\nThis endpoint is not available on the $997 plan. Accounts on that plan should use `linkedin_to_business_email` instead.",
+=======
+        "description": "The LinkedIn to Personal Email API retrieves the valid personal email address, such as Gmail or iCloud, for any LinkedIn profile. It supports single lookups (`linkedin_url`) and batch lookups of up to 100 profiles at once (`linkedin_urls`).\n\nUse this to reach contacts outside their work inbox. It's well suited to recruitment outreach, consumer marketing, or re-engagement campaigns where a personal address improves deliverability.\n\n**Use this endpoint to:**\n- Reach candidates or prospects outside working hours\n- Improve deliverability for consumer marketing sends\n- Re-engage contacts who've left their previous employer\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**External Tokens:**\nMoltSets resolves most contact data — emails, phone numbers, et al. — from its own database. For some requests, the data you're looking for isn't in that database, and MoltSets will make a call to a third-party data source to try to find it. Those calls cost external tokens. For more information on external tokens, <a href=\"https://support.moltsets.com/en/articles/15280420-external-tokens\" target=\"_blank\" rel=\"noopener\">click here</a>. Set `use_external_tokens` to `false` to skip third-party lookups and only return matches already in MoltSets' database, at no external token cost.",
+>>>>>>> main
         "tags": [
           "Get Valid Emails"
         ],
@@ -1476,14 +1556,48 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "linkedin_url"
-                ],
                 "properties": {
                   "linkedin_url": {
                     "type": "string",
-                    "description": "Full LinkedIn profile URL or slug.",
-                    "example": "https://linkedin.com/in/retentionadam"
+                    "description": "Single LinkedIn profile URL or slug."
+                  },
+                  "linkedin_urls": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 100,
+                    "description": "Batch of LinkedIn profile URLs or slugs, up to 100."
+                  },
+                  "use_external_tokens": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether MoltSets may fall back to a third-party data source (billed in external tokens) when the email isn't already in MoltSets' own database. Defaults to true. In batch requests, this applies to every profile in `linkedin_urls`."
+                  }
+                }
+              },
+              "examples": {
+                "single": {
+                  "summary": "Single lookup",
+                  "value": {
+                    "linkedin_url": "https://linkedin.com/in/retentionadam"
+                  }
+                },
+                "single_no_external_tokens": {
+                  "summary": "Single lookup, database-only (no external tokens)",
+                  "value": {
+                    "linkedin_url": "https://linkedin.com/in/retentionadam",
+                    "use_external_tokens": false
+                  }
+                },
+                "batch": {
+                  "summary": "Batch lookup",
+                  "value": {
+                    "linkedin_urls": [
+                      "https://linkedin.com/in/retentionadam",
+                      "https://linkedin.com/in/jane-doe"
+                    ],
+                    "use_external_tokens": false
                   }
                 }
               }
@@ -1576,7 +1690,11 @@
       "post": {
         "summary": "LinkedIn to Best Personal Email",
         "operationId": "linkedinToBestPersonalEmail",
+<<<<<<< HEAD
         "description": "The LinkedIn to Best Personal Email API turns a LinkedIn profile into a valid personal email address in a single call.\n\nPass a LinkedIn URL or slug and get back the highest-confidence personal email MoltSets holds for that person, along with the date it was last validated. Every email is re-checked within the last 30 days, so each result comes with a recent validation date you can act on with confidence.\n\n**Use this endpoint to:**\n- Get the single best personal email for a contact, with confidence\n- Confirm an email is still active before sending\n- Enrich records where deliverability matters most\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**Plan Availability:**\nThis endpoint is not available on the $997 plan. Accounts on that plan should use `linkedin_to_business_email` instead.",
+=======
+        "description": "The LinkedIn to Best Personal Email API turns a LinkedIn profile into a valid personal email address in a single call. It supports single lookups (`linkedin_url`) and batch lookups of up to 100 profiles at once (`linkedin_urls`).\n\nPass a LinkedIn URL or slug and get back the highest-confidence personal email MoltSets holds for that person, along with the date it was last validated. Every email is re-checked within the last 30 days, so each result comes with a recent validation date you can act on with confidence.\n\n**Use this endpoint to:**\n- Get the single best personal email for a contact, with confidence\n- Confirm an email is still active before sending\n- Enrich records where deliverability matters most\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**External Tokens:**\nMoltSets resolves most contact data — emails, phone numbers, et al. — from its own database. For some requests, the data you're looking for isn't in that database, and MoltSets will make a call to a third-party data source to try to find it. Those calls cost external tokens. For more information on external tokens, <a href=\"https://support.moltsets.com/en/articles/15280420-external-tokens\" target=\"_blank\" rel=\"noopener\">click here</a>. Set `use_external_tokens` to `false` to skip third-party lookups and only return matches already in MoltSets' database, at no external token cost.",
+>>>>>>> main
         "tags": [
           "Get Valid Emails"
         ],
@@ -1586,14 +1704,48 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "linkedin_url"
-                ],
                 "properties": {
                   "linkedin_url": {
                     "type": "string",
-                    "description": "LinkedIn profile URL — accepts a full URL (https://linkedin.com/in/janedoe), a partial URL (linkedin.com/in/janedoe), or a bare slug (janedoe).",
-                    "example": "https://linkedin.com/in/johndoe"
+                    "description": "Single LinkedIn profile URL or slug."
+                  },
+                  "linkedin_urls": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 100,
+                    "description": "Batch of LinkedIn profile URLs or slugs, up to 100."
+                  },
+                  "use_external_tokens": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether MoltSets may fall back to a third-party data source (billed in external tokens) when the email isn't already in MoltSets' own database. Defaults to true. In batch requests, this applies to every profile in `linkedin_urls`."
+                  }
+                }
+              },
+              "examples": {
+                "single": {
+                  "summary": "Single lookup",
+                  "value": {
+                    "linkedin_url": "https://linkedin.com/in/johndoe"
+                  }
+                },
+                "single_no_external_tokens": {
+                  "summary": "Single lookup, database-only (no external tokens)",
+                  "value": {
+                    "linkedin_url": "https://linkedin.com/in/johndoe",
+                    "use_external_tokens": false
+                  }
+                },
+                "batch": {
+                  "summary": "Batch lookup",
+                  "value": {
+                    "linkedin_urls": [
+                      "https://linkedin.com/in/johndoe",
+                      "https://linkedin.com/in/jane-doe"
+                    ],
+                    "use_external_tokens": false
                   }
                 }
               }
