@@ -11,9 +11,13 @@ MoltSets has five ways to get an email address. They differ in what you put in, 
 |---|---|---|
 | LinkedIn URL | Any working address, don't care which kind | `linkedin_to_best_email` |
 | LinkedIn URL | Work address only | `linkedin_to_business_email` |
-| LinkedIn URL | Personal address only | `linkedin_to_personal_email` |
-| LinkedIn URL | The single highest-confidence personal address | `linkedin_to_best_personal_email` |
+| LinkedIn URL | Personal address only | `linkedin_to_personal_email` * |
+| LinkedIn URL | The single highest-confidence personal address | `linkedin_to_best_personal_email` * |
 | Name + company domain | Work address, no LinkedIn URL needed | `search_business_email_by_name` |
+
+<Note>
+  \* The two personal-only endpoints are **not available on the \$997 plan**. On that plan, use `linkedin_to_business_email` instead.
+</Note>
 
 **`linkedin_to_best_email`** is the sensible default. It returns a business email when one exists and **falls back to a personal email** when one doesn't, so it has the highest match rate of the four. The `type` field tells you which kind you got:
 
@@ -73,13 +77,13 @@ The two address types aren't interchangeable, and the right one depends on what 
 
 **Business** (`linkedin_to_business_email`) suits B2B outreach, CRM enrichment, and account-based campaigns — anywhere reaching someone in a work context is the point.
 
-**Personal** (`linkedin_to_personal_email`, `linkedin_to_best_personal_email`) suits recruitment, consumer marketing, and re-engagement. It's also the only address that survives a job change, which makes it the better choice for contacts who may have left the employer you have on file.
+**Personal** (`linkedin_to_personal_email`, `linkedin_to_best_personal_email` — not available on the \$997 plan) suits recruitment, consumer marketing, and re-engagement. It's also the only address that survives a job change, which makes it the better choice for contacts who may have left the employer you have on file.
 
-## A note on external tokens
+## A note on token spend
 
-Most email data resolves from MoltSets' own database. When a request can't be satisfied there, MoltSets may call a third-party source, and those calls consume **external tokens** — a separate balance from your regular tokens.
+You're only charged for verified data that is actually returned — a lookup that finds nothing costs nothing.
 
-`get_account`, `get_billing`, and `get_usage` are free and never cost tokens. Check `external_token_balance` before a large run so a job doesn't stall halfway through.
+`get_account`, `get_billing`, and `get_usage` are free and never cost tokens. Check your balance before a large run so a job doesn't stall halfway through.
 
 ## Related
 

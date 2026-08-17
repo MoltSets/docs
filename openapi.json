@@ -51,14 +51,6 @@
                 "description": "ISO 8601 timestamp when the 1-week records window resets."
               }
             }
-          },
-          "external_tokens_used": {
-            "type": "integer",
-            "description": "External tokens consumed by this request when data was resolved from a third-party source. `0` when the request was served from MoltSets's own database."
-          },
-          "external_tokens_remaining": {
-            "type": "integer",
-            "description": "External tokens remaining after this request."
           }
         }
       },
@@ -134,7 +126,7 @@
       "post": {
         "summary": "Search for People",
         "operationId": "searchBusinessProfiles",
-        "description": "The People Search API lets you search MoltSets' contact database for people by name, job title, company, industry, country, seniority, or department.\n\nUse `query` for free text search across name, company, title, and headline (this is where names and role keywords go). Use the filters (`country`, `seniority`, `industry`, `department` or `functional_area`) to narrow results further. Combining `query` with filters gives the most precise matches. Every result comes back ranked, with a higher `_score` meaning a stronger match.\n\n**Use this endpoint to:**\n- Build targeted lead lists for outbound sales\n- Identify decision makers at specific target accounts\n- Populate outbound sequences with verified contact data\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-search/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Search</a>.\n\n**External Tokens:**\nMoltSets resolves most contact data — emails, phone numbers, et al. — from its own database. For some requests, the data you're looking for isn't in that database, and MoltSets will make a call to a third-party data source to try to find it. Those calls cost external tokens. For more information on external tokens, <a href=\"https://support.moltsets.com/en/articles/15280420-external-tokens\" target=\"_blank\" rel=\"noopener\">click here</a>.",
+        "description": "The People Search API lets you search MoltSets' contact database for people by name, job title, company, industry, country, seniority, or department.\n\nUse `query` for free text search across name, company, title, and headline (this is where names and role keywords go). Use the filters (`country`, `seniority`, `industry`, `department` or `functional_area`) to narrow results further. Combining `query` with filters gives the most precise matches. Every result comes back ranked, with a higher `_score` meaning a stronger match.\n\n**Use this endpoint to:**\n- Build targeted lead lists for outbound sales\n- Identify decision makers at specific target accounts\n- Populate outbound sequences with verified contact data\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-search/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Search</a>.",
         "tags": [
           "Search"
         ],
@@ -372,9 +364,7 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        },
-                        "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000
+                        }
                       }
                     }
                   }
@@ -629,9 +619,7 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        },
-                        "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000
+                        }
                       }
                     }
                   }
@@ -762,9 +750,7 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        },
-                        "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000
+                        }
                       }
                     }
                   },
@@ -788,9 +774,7 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        },
-                        "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000
+                        }
                       }
                     }
                   }
@@ -855,7 +839,7 @@
       "post": {
         "summary": "Search Business Email by Name",
         "operationId": "searchBusinessEmailByName",
-        "description": "The Business Email Finder API finds a person's valid work email address from just their name and company domain.\n\nIt runs a LinkedIn profile search and an email lookup in a single call, and returns the email address along with the matched LinkedIn profile URL. Pass a full name or separate `first_name` and `last_name` fields, and provide the company as a domain, for example `acme.com`. URLs are normalised automatically, and tokens are only charged when an email is found.\n\n**Use this endpoint to:**\n- Find a prospect's work email before outreach\n- Fill in missing email fields on a lead list\n- Enrich CRM records with verified contact emails\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-search/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Search</a>.\n\n**External Tokens:**\nMoltSets resolves most contact data — emails, phone numbers, et al. — from its own database. For some requests, the data you're looking for isn't in that database, and MoltSets will make a call to a third-party data source to try to find it. Those calls cost external tokens. For more information on external tokens, <a href=\"https://support.moltsets.com/en/articles/15280420-external-tokens\" target=\"_blank\" rel=\"noopener\">click here</a>.",
+        "description": "The Business Email Finder API finds a person's valid work email address from just their name and company domain.\n\nIt runs a LinkedIn profile search and an email lookup in a single call, and returns the email address along with the matched LinkedIn profile URL. Pass a full name or separate `first_name` and `last_name` fields, and provide the company as a domain, for example `acme.com`. URLs are normalised automatically, and tokens are only charged when an email is found.\n\n**Use this endpoint to:**\n- Find a prospect's work email before outreach\n- Fill in missing email fields on a lead list\n- Enrich CRM records with verified contact emails\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-search/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Search</a>.",
         "tags": [
           "Search"
         ],
@@ -917,9 +901,7 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        },
-                        "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000
+                        }
                       }
                     }
                   }
@@ -1055,9 +1037,7 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        },
-                        "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000
+                        }
                       }
                     }
                   }
@@ -1122,7 +1102,7 @@
       "post": {
         "summary": "LinkedIn to Best Email",
         "operationId": "enrichEmail",
-        "description": "The LinkedIn to Email API finds the best available email address for any LinkedIn profile.\n\nIt returns a valid business email when one exists, and automatically falls back to a personal email if not, so you get a result whenever the data is available. The `type` field in the response tells you which kind was returned. Use this as your default LinkedIn-to-email enrichment endpoint when the type of email doesn't matter to you.\n\n**Use this endpoint to:**\n- Enrich LinkedIn-sourced leads with a working email address\n- Maximise match rate across business and personal inboxes\n- Fill contact records that only have a LinkedIn URL\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**External Tokens:**\nMoltSets resolves most contact data — emails, phone numbers, et al. — from its own database. For some requests, the data you're looking for isn't in that database, and MoltSets will make a call to a third-party data source to try to find it. Those calls cost external tokens. For more information on external tokens, <a href=\"https://support.moltsets.com/en/articles/15280420-external-tokens\" target=\"_blank\" rel=\"noopener\">click here</a>.",
+        "description": "The LinkedIn to Email API finds the best available email address for any LinkedIn profile.\n\nIt returns a valid business email when one exists, and automatically falls back to a personal email if not, so you get a result whenever the data is available. The `type` field in the response tells you which kind was returned. Use this as your default LinkedIn-to-email enrichment endpoint when the type of email doesn't matter to you.\n\n**Use this endpoint to:**\n- Enrich LinkedIn-sourced leads with a working email address\n- Maximise match rate across business and personal inboxes\n- Fill contact records that only have a LinkedIn URL\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.",
         "tags": [
           "Get Valid Emails"
         ],
@@ -1218,9 +1198,7 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        },
-                        "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000
+                        }
                       }
                     }
                   }
@@ -1310,9 +1288,7 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        },
-                        "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000
+                        }
                       }
                     }
                   }
@@ -1347,7 +1323,7 @@
       "post": {
         "summary": "LinkedIn to Business Email",
         "operationId": "enrichBusinessEmail",
-        "description": "The LinkedIn to Business Email API retrieves the valid work email address for any LinkedIn profile.\n\nIt only returns corporate email addresses, no personal inboxes. Use this when you need to reach contacts at their workplace domain, for example for B2B outreach, CRM enrichment, or account-based marketing campaigns. If you also want a personal email fallback, use `linkedin_to_best_email` instead.\n\n**Use this endpoint to:**\n- Reach prospects at their work email address\n- Enrich B2B lead lists with corporate emails\n- Power account-based marketing and sales sequences\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**External Tokens:**\nMoltSets resolves most contact data — emails, phone numbers, et al. — from its own database. For some requests, the data you're looking for isn't in that database, and MoltSets will make a call to a third-party data source to try to find it. Those calls cost external tokens. For more information on external tokens, <a href=\"https://support.moltsets.com/en/articles/15280420-external-tokens\" target=\"_blank\" rel=\"noopener\">click here</a>.",
+        "description": "The LinkedIn to Business Email API retrieves the valid work email address for any LinkedIn profile.\n\nIt only returns corporate email addresses, no personal inboxes. Use this when you need to reach contacts at their workplace domain, for example for B2B outreach, CRM enrichment, or account-based marketing campaigns. If you also want a personal email fallback, use `linkedin_to_best_email` instead.\n\n**Use this endpoint to:**\n- Reach prospects at their work email address\n- Enrich B2B lead lists with corporate emails\n- Power account-based marketing and sales sequences\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.",
         "tags": [
           "Get Valid Emails"
         ],
@@ -1425,9 +1401,7 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        },
-                        "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000
+                        }
                       }
                     }
                   }
@@ -1492,7 +1466,7 @@
       "post": {
         "summary": "LinkedIn to Personal Email",
         "operationId": "enrichPersonalEmail",
-        "description": "The LinkedIn to Personal Email API retrieves the valid personal email address, such as Gmail or iCloud, for any LinkedIn profile.\n\nUse this to reach contacts outside their work inbox. It's well suited to recruitment outreach, consumer marketing, or re-engagement campaigns where a personal address improves deliverability.\n\n**Use this endpoint to:**\n- Reach candidates or prospects outside working hours\n- Improve deliverability for consumer marketing sends\n- Re-engage contacts who've left their previous employer\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**External Tokens:**\nMoltSets resolves most contact data — emails, phone numbers, et al. — from its own database. For some requests, the data you're looking for isn't in that database, and MoltSets will make a call to a third-party data source to try to find it. Those calls cost external tokens. For more information on external tokens, <a href=\"https://support.moltsets.com/en/articles/15280420-external-tokens\" target=\"_blank\" rel=\"noopener\">click here</a>.",
+        "description": "The LinkedIn to Personal Email API retrieves the valid personal email address, such as Gmail or iCloud, for any LinkedIn profile.\n\nUse this to reach contacts outside their work inbox. It's well suited to recruitment outreach, consumer marketing, or re-engagement campaigns where a personal address improves deliverability.\n\n**Use this endpoint to:**\n- Reach candidates or prospects outside working hours\n- Improve deliverability for consumer marketing sends\n- Re-engage contacts who've left their previous employer\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**Plan Availability:**\nThis endpoint is not available on the $997 plan. Accounts on that plan should use `linkedin_to_business_email` instead.",
         "tags": [
           "Get Valid Emails"
         ],
@@ -1537,9 +1511,7 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        },
-                        "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000
+                        }
                       }
                     }
                   }
@@ -1604,7 +1576,7 @@
       "post": {
         "summary": "LinkedIn to Best Personal Email",
         "operationId": "linkedinToBestPersonalEmail",
-        "description": "The LinkedIn to Best Personal Email API turns a LinkedIn profile into a valid personal email address in a single call.\n\nPass a LinkedIn URL or slug and get back the highest-confidence personal email MoltSets holds for that person, along with the date it was last validated. Every email is re-checked within the last 30 days, so each result comes with a recent validation date you can act on with confidence.\n\n**Use this endpoint to:**\n- Get the single best personal email for a contact, with confidence\n- Confirm an email is still active before sending\n- Enrich records where deliverability matters most\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**External Tokens:**\nMoltSets resolves most contact data — emails, phone numbers, et al. — from its own database. For some requests, the data you're looking for isn't in that database, and MoltSets will make a call to a third-party data source to try to find it. Those calls cost external tokens. For more information on external tokens, <a href=\"https://support.moltsets.com/en/articles/15280420-external-tokens\" target=\"_blank\" rel=\"noopener\">click here</a>.",
+        "description": "The LinkedIn to Best Personal Email API turns a LinkedIn profile into a valid personal email address in a single call.\n\nPass a LinkedIn URL or slug and get back the highest-confidence personal email MoltSets holds for that person, along with the date it was last validated. Every email is re-checked within the last 30 days, so each result comes with a recent validation date you can act on with confidence.\n\n**Use this endpoint to:**\n- Get the single best personal email for a contact, with confidence\n- Confirm an email is still active before sending\n- Enrich records where deliverability matters most\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**Plan Availability:**\nThis endpoint is not available on the $997 plan. Accounts on that plan should use `linkedin_to_business_email` instead.",
         "tags": [
           "Get Valid Emails"
         ],
@@ -1649,9 +1621,7 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        },
-                        "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000
+                        }
                       }
                     }
                   }
@@ -1716,7 +1686,7 @@
       "post": {
         "summary": "LinkedIn to Mobile Phone",
         "operationId": "enrichPhone",
-        "description": "The LinkedIn to Mobile Phone API looks up the carrier-verified mobile phone number for a LinkedIn profile, along with the date it was last verified.\n\nOnly mobile numbers are returned, no landlines or VoIP numbers, so every result is a real device. It supports single lookups (`linkedin_url`) and batch lookups of up to 100 profiles at once (`linkedin_urls`). External tokens are required for mobile phone lookups, at a cost of 10 tokens per returned result.\n\n**Use this endpoint to:**\n- Power SMS outreach and cold calling\n- Enrich sales sequences with direct-dial mobile numbers\n- Batch-append verified phone numbers to a contact list\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**External Tokens:**\nMoltSets resolves most contact data — emails, phone numbers, et al. — from its own database. For some requests, the data you're looking for isn't in that database, and MoltSets will make a call to a third-party data source to try to find it. Those calls cost external tokens. For more information on external tokens, <a href=\"https://support.moltsets.com/en/articles/15280420-external-tokens\" target=\"_blank\" rel=\"noopener\">click here</a>.",
+        "description": "The LinkedIn to Mobile Phone API looks up the carrier-verified mobile phone number for a LinkedIn profile, along with the date it was last verified.\n\nOnly mobile numbers are returned, no landlines or VoIP numbers, so every result is a real device. It supports single lookups (`linkedin_url`) and batch lookups of up to 100 profiles at once (`linkedin_urls`). Mobile lookups spend **phone tokens** — an allowance set by your plan, separate from your regular token balance — at 1 phone token per returned result.\n\n**Use this endpoint to:**\n- Power SMS outreach and cold calling\n- Enrich sales sequences with direct-dial mobile numbers\n- Batch-append verified phone numbers to a contact list\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.",
         "tags": [
           "Get Carrier-Verified Mobile Phones"
         ],
@@ -1781,9 +1751,7 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        },
-                        "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000
+                        }
                       }
                     }
                   }
@@ -1848,7 +1816,7 @@
       "post": {
         "summary": "Reverse Email Lookup",
         "operationId": "hemToBusinessProfile",
-        "description": "The Reverse Email Lookup API resolves an email address into a complete business profile, including full name, job title, seniority, company, LinkedIn URL, firmographic data, and any other email addresses on file.\n\n**Use this endpoint to:**\n- Enrich inbound leads and form fills with full contact context\n- Qualify a prospect before you reach out\n- Fill in missing profile data on an existing email list\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**External Tokens:**\nMoltSets resolves most contact data — emails, phone numbers, et al. — from its own database. For some requests, the data you're looking for isn't in that database, and MoltSets will make a call to a third-party data source to try to find it. Those calls cost external tokens. For more information on external tokens, <a href=\"https://support.moltsets.com/en/articles/15280420-external-tokens\" target=\"_blank\" rel=\"noopener\">click here</a>.",
+        "description": "The Reverse Email Lookup API resolves an email address into a complete business profile, including full name, job title, seniority, company, LinkedIn URL, firmographic data, and any other email addresses on file.\n\n**Use this endpoint to:**\n- Enrich inbound leads and form fills with full contact context\n- Qualify a prospect before you reach out\n- Fill in missing profile data on an existing email list\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.",
         "tags": [
           "Reverse Lookups"
         ],
@@ -1916,9 +1884,7 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        },
-                        "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000
+                        }
                       }
                     }
                   }
@@ -1983,7 +1949,7 @@
       "post": {
         "summary": "Reverse LinkedIn Lookup",
         "operationId": "linkedinToBusinessProfile",
-        "description": "The Reverse LinkedIn Lookup API resolves a LinkedIn profile URL into a complete business profile, including full name, job title, seniority, company name, company website, industry, revenue, a valid business email, and a personal email.\n\nThis is MoltSets' most complete LinkedIn enrichment endpoint. Use it when you need the full picture of a contact and their employer in a single call.\n\n**Use this endpoint to:**\n- Turn a LinkedIn URL into a fully enriched contact record\n- Get company firmographics alongside personal contact details\n- Power CRM enrichment workflows from a single input\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**External Tokens:**\nMoltSets resolves most contact data — emails, phone numbers, et al. — from its own database. For some requests, the data you're looking for isn't in that database, and MoltSets will make a call to a third-party data source to try to find it. Those calls cost external tokens. For more information on external tokens, <a href=\"https://support.moltsets.com/en/articles/15280420-external-tokens\" target=\"_blank\" rel=\"noopener\">click here</a>.",
+        "description": "The Reverse LinkedIn Lookup API resolves a LinkedIn profile URL into a complete business profile, including full name, job title, seniority, company name, company website, industry, revenue, a valid business email, and a personal email.\n\nThis is MoltSets' most complete LinkedIn enrichment endpoint. Use it when you need the full picture of a contact and their employer in a single call.\n\n**Use this endpoint to:**\n- Turn a LinkedIn URL into a fully enriched contact record\n- Get company firmographics alongside personal contact details\n- Power CRM enrichment workflows from a single input\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.",
         "tags": [
           "Reverse Lookups"
         ],
@@ -2049,9 +2015,7 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        },
-                        "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000
+                        }
                       }
                     }
                   }
@@ -2166,9 +2130,7 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        },
-                        "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000
+                        }
                       }
                     }
                   }
@@ -2282,9 +2244,7 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        },
-                        "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000
+                        }
                       }
                     }
                   }
@@ -2403,9 +2363,7 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        },
-                        "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000
+                        }
                       }
                     }
                   }
@@ -2517,9 +2475,7 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        },
-                        "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000
+                        }
                       }
                     }
                   }
@@ -2632,9 +2588,7 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        },
-                        "external_tokens_used": 0,
-                        "external_tokens_remaining": 5000
+                        }
                       }
                     }
                   }
@@ -2938,18 +2892,6 @@
                             }
                           }
                         },
-                        "external_token_balance": {
-                          "type": "integer",
-                          "description": "Current external token balance (allowance plus purchased, minus used)."
-                        },
-                        "external_token_allowance": {
-                          "type": "integer",
-                          "description": "External tokens included with the plan."
-                        },
-                        "external_tokens_purchased": {
-                          "type": "integer",
-                          "description": "External tokens purchased on top of the allowance."
-                        },
                         "api_key_count": {
                           "type": "integer",
                           "description": "Number of API keys on the account"
@@ -3032,9 +2974,6 @@
                         }
                       }
                     },
-                    "external_token_balance": 600,
-                    "external_token_allowance": 500,
-                    "external_tokens_purchased": 0,
                     "api_key_count": 1,
                     "user_count": 1,
                     "created_at": "2026-06-12T16:11:41Z"
@@ -3046,9 +2985,7 @@
                       "records_reset_5h": "2026-07-15T18:53:16Z",
                       "records_remaining_1w": 899999,
                       "records_reset_1w": "2026-07-22T13:53:16Z"
-                    },
-                    "external_tokens_used": 0,
-                    "external_tokens_remaining": 600
+                    }
                   }
                 }
               }
@@ -3150,18 +3087,6 @@
                           "type": "boolean",
                           "description": "true if the account has unlimited tokens"
                         },
-                        "external_token_balance": {
-                          "type": "integer",
-                          "description": "Current external token balance (allowance plus purchased, minus used)."
-                        },
-                        "external_token_allowance": {
-                          "type": "integer",
-                          "description": "External tokens included with the plan."
-                        },
-                        "external_tokens_purchased": {
-                          "type": "integer",
-                          "description": "External tokens purchased on top of the allowance."
-                        },
                         "current_period_start": {
                           "type": [
                             "string",
@@ -3202,9 +3127,6 @@
                     "subscription_status": "active",
                     "token_balance": -1,
                     "unlimited": true,
-                    "external_token_balance": 2470,
-                    "external_token_allowance": 2500,
-                    "external_tokens_purchased": 60,
                     "current_period_start": "2026-07-09",
                     "current_period_end": "2026-08-09",
                     "token_costs": {
@@ -3242,9 +3164,7 @@
                       "records_reset_5h": "2026-07-15T18:53:16Z",
                       "records_remaining_1w": 899999,
                       "records_reset_1w": "2026-07-22T13:53:16Z"
-                    },
-                    "external_tokens_used": 0,
-                    "external_tokens_remaining": 2470
+                    }
                   }
                 }
               }
@@ -3363,9 +3283,7 @@
                       "records_reset_5h": "2026-07-15T18:53:16Z",
                       "records_remaining_1w": 899999,
                       "records_reset_1w": "2026-07-22T13:53:16Z"
-                    },
-                    "external_tokens_used": 0,
-                    "external_tokens_remaining": 2470
+                    }
                   }
                 }
               }

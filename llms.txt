@@ -34,7 +34,7 @@ MoltSets returns contact and company data an agent can act on directly. Differen
 - [Searching for People](https://developer.moltsets.com/best-practices/searching-for-people): How to build precise people searches with MoltSets — choosing the right filter, avoiding over-filtering on sparse fields, and paginating without burning records.
 - [Searching for Companies](https://developer.moltsets.com/best-practices/searching-for-companies): How to qualify accounts with MoltSets — exact domain lookups, choosing an industry vocabulary, and the location caveat that trips up multinational targeting.
 - [Getting Valid Emails](https://developer.moltsets.com/best-practices/getting-valid-emails): Which MoltSets email endpoint to call, how to read the risk score before you send, and how to avoid paying for the same lookup twice.
-- [Getting Carrier-Verified Mobile Phones](https://developer.moltsets.com/best-practices/getting-carrier-verified-mobile-phones): How to append verified mobile numbers with MoltSets — batching up to 100 profiles per call, budgeting external tokens, and reading the validation date.
+- [Getting Carrier-Verified Mobile Phones](https://developer.moltsets.com/best-practices/getting-carrier-verified-mobile-phones): How to append verified mobile numbers with MoltSets — batching up to 100 profiles per call, budgeting phone tokens, and reading the validation date.
 - [Getting Ad Audiences](https://developer.moltsets.com/best-practices/getting-ad-audiences): How to turn MoltSets contacts into privacy-safe advertising audiences — hashed email match keys for customer match, and MAIDs for mobile retargeting.
 
 ## Integrations
@@ -61,12 +61,12 @@ All requests are `POST` with a JSON body. All responses return HTTP 200 with env
 
 - [POST /linkedin_to_best_email](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-best-email): LinkedIn URL → best available email (business preferred, falls back to personal). Returns `type` field (`"business"` or `"personal"`).
 - [POST /linkedin_to_business_email](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-business-email): LinkedIn URL → valid business email only.
-- [POST /linkedin_to_personal_email](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-personal-email): LinkedIn URL → valid personal email.
-- [POST /linkedin_to_best_personal_email](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-best-personal-email): LinkedIn URL → best personal email.
+- [POST /linkedin_to_personal_email](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-personal-email): LinkedIn URL → valid personal email. Not available on the \$997 plan.
+- [POST /linkedin_to_best_personal_email](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-best-personal-email): LinkedIn URL → best personal email. Not available on the \$997 plan.
 
 ### Get Carrier-Verified Mobile Phones
 
-- [POST /linkedin_to_mobile_phone](https://developer.moltsets.com/api-reference/get-carrier-verified-mobile-phones/linkedin-to-mobile-phone): LinkedIn URL → verified mobile phone (mobiles only, no landlines). Pass `linkedin_url` (single) or `linkedin_urls` (batch, up to 100).
+- [POST /linkedin_to_mobile_phone](https://developer.moltsets.com/api-reference/get-carrier-verified-mobile-phones/linkedin-to-mobile-phone): LinkedIn URL → verified mobile phone (mobiles only, no landlines). Pass `linkedin_url` (single) or `linkedin_urls` (batch, up to 100). Spends 1 phone token per returned result, from your plan's phone token allowance.
 
 ### Reverse Lookups
 
@@ -95,12 +95,14 @@ All requests are `POST` with a JSON body. All responses return HTTP 200 with env
 
 ## Plans
 
-| **Plan** | **Lifetime Tokens** | **Rate Limit** | **External Tokens** |
+| **Plan** | **Lifetime Tokens** | **Rate Limit** | **Phone Tokens** |
 | :-- | :-- | :-- | :-- |
-| \$0 | 1000 | 1k enrichment records lifetime | 100 |
-| \$27 / month | Unlimited | 5k enrichment & 2.5k search records / week | 100 / month |
-| \$97 / month | Unlimited | 75k enrichment & 37.5k search records / week | 500 / month |
-| \$997 | Unlimited | 900k enrichment & 450k search records / week | 2500 / month |
+| \$0 | 1000 | 1k enrichment records lifetime | 10 |
+| \$27 / month | Unlimited | 5k enrichment & 2.5k search records / week | 10 |
+| \$97 / month | Unlimited | 75k enrichment & 37.5k search records / week | 50 |
+| \$997 | Unlimited | 900k enrichment & 450k search records / week | 250 |
+
+Note: `linkedin_to_personal_email` and `linkedin_to_best_personal_email` are not available on the \$997 plan.
 
 > [Getting the \$997/month plan for \$497/month with the UGC Discount — How It Works](https://support.moltsets.com/en/articles/15207288).
 

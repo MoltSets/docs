@@ -1,6 +1,6 @@
 ---
 title: "Getting Carrier-Verified Mobile Phones"
-description: "How to append verified mobile numbers with MoltSets — batching up to 100 profiles per call, budgeting external tokens, and reading the validation date."
+description: "How to append verified mobile numbers with MoltSets — batching up to 100 profiles per call, budgeting phone tokens, and reading the validation date."
 ---
 
 `linkedin_to_mobile_phone` is the only phone endpoint in the API. It takes a LinkedIn profile and returns a carrier-verified mobile number with the date it was last verified.
@@ -40,34 +40,34 @@ Batching is the single highest-leverage practice here. One call for 100 profiles
 
 For lists longer than 100, chunk into batches of 100 and pause briefly between them rather than firing everything at once. See [Rate Limits](/getting-started/rate-limits) for the per-plan ceilings.
 
-## Budget external tokens first
+## Budget phone tokens first
 
-<Warning>
-  Mobile phone lookups **require external tokens**, at a cost of **10 external tokens per returned result**. This is a separate balance from your regular tokens, and it is the most expensive lookup in the API per result.
-</Warning>
+<Note>
+  Mobile lookups draw on **phone tokens**, an allowance set by your plan and separate from your regular token balance. One phone token is spent per returned result.
+</Note>
 
-A 100-profile batch that resolves fully costs 1,000 external tokens. Plan runs against your balance before you start:
+Phone tokens by plan:
 
-| Plan | External tokens |
+| Plan | Phone tokens |
 |---|---|
-| \$0 | 100 |
-| \$27 / month | 100 / month |
-| \$97 / month | 500 / month |
-| \$997 / month | 2,500 / month |
+| \$0 | 10 |
+| \$27 / month | 10 |
+| \$97 / month | 50 |
+| \$997 / month | 250 |
 
-`get_account` and `get_billing` are **free** and never cost tokens. Read `external_token_balance` before a large run so a job doesn't stall halfway through.
+You're only charged for results that come back — profiles with no mobile on file cost nothing. A batch of 100 profiles can therefore spend up to 100 phone tokens, more than the \$0, \$27, and \$97 allowances hold, so size batches to the allowance rather than to the endpoint's 100-profile ceiling.
 
-You're only charged for results that come back — profiles with no mobile on file cost nothing.
+`get_account` and `get_billing` are **free** and never cost tokens. Check your remaining allowance before a large run so a job doesn't stall halfway through.
 
 ## Qualify before you enrich
 
-Because this is the priciest per-result lookup, it pays to narrow the list before calling it rather than after. Run your [people search](/best-practices/searching-for-people) filters first and enrich only the contacts you'd actually call:
+Because phone tokens are the scarcest thing on every plan, it pays to narrow the list before calling this endpoint rather than after. Run your [people search](/best-practices/searching-for-people) filters first and enrich only the contacts you'd actually call:
 
 1. `search_people` with `seniority`, `department`, and location filters
 2. Review `results.total` and tighten until the list is the size you intend to work
-3. Batch the resulting LinkedIn URLs into `linkedin_to_mobile_phone`, 100 at a time
+3. Batch the resulting LinkedIn URLs into `linkedin_to_mobile_phone`, up to 100 at a time and within your phone token allowance
 
-Enriching a 5,000-row list "just in case" is how an external token balance disappears in one afternoon.
+Enriching a 5,000-row list "just in case" is how a phone token allowance disappears in one afternoon.
 
 ## Read the validation date
 

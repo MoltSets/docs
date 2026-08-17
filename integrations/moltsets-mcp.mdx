@@ -218,12 +218,9 @@ You only spend tokens on **verified data that is actually returned**. A few rule
 - **No data, no charge.** Calls that return `not_found` cost nothing.
 - **Counting is free.** `search_linkedin_profile` with `count_only: true` returns match counts without spending tokens — use it to size a search before committing.
 - **Free tools.** `get_account`, `get_billing`, and `get_usage` never cost tokens. Call `get_billing` for the per-tool `token_costs` map and your current balance.
+- **Phone tokens are separate.** `linkedin_to_mobile_phone` spends **phone tokens** — an allowance set by your plan, separate from your regular token balance — at 1 phone token per returned result.
 
-### External tokens
-
-MoltSets resolves most contact data from its own database. When the data you need isn't there, MoltSets can reach out to a **third-party source** to try to find it — those calls spend **external tokens**, a balance separate from your regular tokens. Every response includes `external_tokens_used` and `external_tokens_remaining` in its `metadata` so your agent can track spend in real time.
-
-For a full breakdown, see [External Tokens](https://support.moltsets.com/en/articles/15280420-external-tokens) and the [Rate Limits](/getting-started/rate-limits) guide.
+For a full breakdown, see the [Rate Limits](/getting-started/rate-limits) guide.
 
 <Note>
   New to the API? Start with [Authentication](/getting-started/authentication) to create your keys, then browse the [API Reference Overview](/getting-started/overview) for every endpoint, parameter, and response schema the MCP exposes.
