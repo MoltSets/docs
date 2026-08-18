@@ -54,12 +54,14 @@ All responses return HTTP `200` with a consistent envelope:
 
 ## Plans
 
-| **Plan** | **Lifetime Tokens** | **Rate Limit** | **Phone Tokens** |
-| :-- | :-- | :-- | :-- |
-| \$0 | 1000 | 1k enrichment records lifetime | 10 lifetime |
-| \$27 / month | Unlimited | 5k enrichment & 2.5k search records / week | 10 / month |
-| \$97 / month | Unlimited | 75k enrichment & 37.5k search records / week | 50 / month |
-| \$997 | Unlimited | 900k enrichment & 450k search records / week | 250 / month |
+| **Plan** | **Lifetime Tokens** | **Enrichment records** | **Search records** | **Phone Tokens** |
+| :-- | :-- | :-- | :-- | :-- |
+| \$0 | 1000 | 1k lifetime | 100 lifetime (5 per call max) | 10 lifetime |
+| \$27 / month | Unlimited | 1k / 5h · 5k / week | 500 / 5h · 2.5k / week | 10 / month |
+| \$97 / month | Unlimited | 15k / 5h · 75k / week | 7.5k / 5h · 37.5k / week | 50 / month |
+| \$997 / month | Unlimited | 180k / 5h · 900k / week | 90k / 5h · 450k / week | 250 / month |
+
+Records are the data rows returned; **requests** are capped separately — see [Rate Limits](/getting-started/rate-limits).
 
 <Note>
   `linkedin_to_personal_email` and `linkedin_to_best_personal_email` are **not available on the \$997 plan**.
