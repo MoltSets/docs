@@ -1836,7 +1836,9 @@
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
                         }
-                      }
+                      },
+                      "phone_tokens_used": 1,
+                      "phone_tokens_remaining": 498
                     }
                   }
                 }
