@@ -252,4 +252,19 @@ For a full breakdown, see the [Rate Limits](/getting-started/rate-limits) guide.
   <Accordion title="Network or timeout errors">
     Check your network connection and try again. If the issue persists, verify the server is reachable by opening `https://mcp.moltsets.com/mcp` in your browser. If you see a response (even an error page), the server is up and the issue is likely local to your config.
   </Accordion>
+
+  <Accordion title="`plan_restricted` on a personal email lookup">
+    `linkedin_to_personal_email` and `linkedin_to_best_personal_email` are **not available on the \$997 plan**. Calls from a \$997 account return **403**:
+
+    ```json
+    {
+      "error": {
+        "code": "plan_restricted",
+        "message": "Personal email lookups are not available on your plan. Contact support@moltsets.com to request access."
+      }
+    }
+    ```
+
+    This is a plan entitlement, not a data miss — retrying or rewording the prompt won't help. Use `linkedin_to_business_email` instead, or contact [support@moltsets.com](mailto:support@moltsets.com) to request access.
+  </Accordion>
 </AccordionGroup>

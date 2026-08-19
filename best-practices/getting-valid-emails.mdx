@@ -17,6 +17,19 @@ MoltSets has five ways to get an email address. They differ in what you put in, 
 
 <Note>
   \* The two personal-only endpoints are **not available on the \$997 plan**. On that plan, use `linkedin_to_business_email` instead.
+
+  Calls from a \$997 account return **403** with:
+
+  ```json
+  {
+    "error": {
+      "code": "plan_restricted",
+      "message": "Personal email lookups are not available on your plan. Contact support@moltsets.com to request access."
+    }
+  }
+  ```
+
+  Contact [support@moltsets.com](mailto:support@moltsets.com) to request access.
 </Note>
 
 **`linkedin_to_best_email`** is the sensible default. It returns a business email when one exists and **falls back to a personal email** when one doesn't, so it has the highest match rate of the four. The `type` field tells you which kind you got:

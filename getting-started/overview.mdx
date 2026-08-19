@@ -65,6 +65,19 @@ Records are the data rows returned; **requests** are capped separately — see [
 
 <Note>
   `linkedin_to_personal_email` and `linkedin_to_best_personal_email` are **not available on the \$997 plan**.
+
+  Calls from a \$997 account return **403** with:
+
+  ```json
+  {
+    "error": {
+      "code": "plan_restricted",
+      "message": "Personal email lookups are not available on your plan. Contact support@moltsets.com to request access."
+    }
+  }
+  ```
+
+  Contact [support@moltsets.com](mailto:support@moltsets.com) to request access.
 </Note>
 
 > [Getting the \$997/month plan for \$497/month with the UGC Discount — How It Works](https://support.moltsets.com/en/articles/15207288).
@@ -78,7 +91,7 @@ The right plan depends on how fast you need results. Higher rate limits mean fas
 | \$0 | Exploring the API and testing integrations |
 | \$27 / month | Low-volume agents or early production use |
 | \$97 / month | Teams running identity resolution at scale |
-| \$997 | High-throughput pipelines with sustained or unpredictable volume |
+| \$997 / month | High-throughput pipelines with sustained or unpredictable volume |
 
 ## More information
 
@@ -98,7 +111,7 @@ For more information on our plans, upgrading and downgrading processes, please r
 | **Account** | `get_account`, `get_billing`, `get_usage` |
 
 <Note>
-  \* `linkedin_to_personal_email` and `linkedin_to_best_personal_email` are **not available on the \$997 plan**. On that plan, use `linkedin_to_business_email` instead.
+  \* `linkedin_to_personal_email` and `linkedin_to_best_personal_email` are **not available on the \$997 plan** — see [Plans](#plans) for the error they return. On that plan, use `linkedin_to_business_email` instead.
 </Note>
 
 ## What to do next

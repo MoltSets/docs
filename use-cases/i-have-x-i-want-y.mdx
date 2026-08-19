@@ -54,6 +54,19 @@ Resolve LinkedIn profile URLs and company domains into verified business and per
 
 <Note>
   \* `linkedin_to_personal_email` and `linkedin_to_best_personal_email` are **not available on the \$997 plan**. On that plan, use `linkedin_to_business_email` instead.
+
+  Calls from a \$997 account return **403** with:
+
+  ```json
+  {
+    "error": {
+      "code": "plan_restricted",
+      "message": "Personal email lookups are not available on your plan. Contact support@moltsets.com to request access."
+    }
+  }
+  ```
+
+  Contact [support@moltsets.com](mailto:support@moltsets.com) to request access.
 </Note>
 
 ## Get Carrier-Verified Mobile Phones

@@ -93,6 +93,25 @@
           }
         }
       },
+      "ErrorPlanRestricted": {
+        "type": "object",
+        "description": "Returned when the endpoint is not available on the account's plan. Note that this error nests `code` and `message` inside `error`, unlike the other error responses.",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "example": "plan_restricted"
+              },
+              "message": {
+                "type": "string",
+                "example": "Personal email lookups are not available on your plan. Contact support@moltsets.com to request access."
+              }
+            }
+          }
+        }
+      },
       "ErrorNotFound": {
         "type": "object",
         "properties": {
@@ -1602,6 +1621,16 @@
               }
             }
           },
+          "403": {
+            "description": "Forbidden — endpoint not available on this plan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorPlanRestricted"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Not Found",
             "content": {
@@ -1729,6 +1758,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden — endpoint not available on this plan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorPlanRestricted"
                 }
               }
             }
