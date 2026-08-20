@@ -253,6 +253,24 @@ For a full breakdown, see the [Rate Limits](/getting-started/rate-limits) guide.
     Check your network connection and try again. If the issue persists, verify the server is reachable by opening `https://mcp.moltsets.com/mcp` in your browser. If you see a response (even an error page), the server is up and the issue is likely local to your config.
   </Accordion>
 
+  <Accordion title="`internal_error` / 500 responses">
+    A `500` with `internal_error` means the endpoint itself is temporarily offline:
+
+    ```json
+    {
+      "error": {
+        "code": "internal_error",
+        "message": "Unexpected connection error."
+      },
+      "metadata": {}
+    }
+    ```
+
+    Nothing about the call caused it — credentials, parameters, and plan are all fine. **The MoltSets team is alerted automatically, so there's no need to report it.**
+
+    Resolution time varies with when the outage starts — an outage during office hours is picked up sooner than one overnight or over a weekend — so there's no useful fixed wait. Have your agent stop retrying that tool, work on something else, and come back to it later in the session or in a follow-up run.
+  </Accordion>
+
   <Accordion title="`plan_restricted` on a personal email lookup">
     `linkedin_to_personal_email` and `linkedin_to_best_personal_email` are **not available on the \$997 plan**. Calls from a \$997 account return **403**:
 

@@ -93,6 +93,29 @@
           }
         }
       },
+      "ErrorInternal": {
+        "type": "object",
+        "description": "Returned when the endpoint itself is unavailable. Not caused by anything in the request. Note that this error nests `code` and `message` inside `error`, unlike most error responses, and returns an empty `metadata` object.",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "example": "internal_error"
+              },
+              "message": {
+                "type": "string",
+                "example": "Unexpected connection error."
+              }
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "example": {}
+          }
+        }
+      },
       "ErrorPlanRestricted": {
         "type": "object",
         "description": "Returned when the endpoint is not available on the account's plan. Note that this error nests `code` and `message` inside `error`, unlike the other error responses.",
@@ -440,6 +463,16 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
+                }
+              }
+            }
           }
         }
       }
@@ -695,6 +728,16 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
+                }
+              }
+            }
           }
         }
       }
@@ -850,6 +893,16 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
+                }
+              }
+            }
           }
         }
       }
@@ -974,6 +1027,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
                 }
               }
             }
@@ -1110,6 +1173,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
                 }
               }
             }
@@ -1355,6 +1428,16 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
+                }
+              }
+            }
           }
         }
       }
@@ -1519,6 +1602,16 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
+                }
+              }
+            }
           }
         }
       }
@@ -1657,6 +1750,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
                 }
               }
             }
@@ -1801,6 +1904,16 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
+                }
+              }
+            }
           }
         }
       }
@@ -1930,6 +2043,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
                 }
               }
             }
@@ -2066,6 +2189,16 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
+                }
+              }
+            }
           }
         }
       }
@@ -2197,6 +2330,16 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
+                }
+              }
+            }
           }
         }
       }
@@ -2312,6 +2455,16 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
+                }
+              }
+            }
           }
         }
       }
@@ -2423,6 +2576,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
                 }
               }
             }
@@ -2545,6 +2708,16 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
+                }
+              }
+            }
           }
         }
       }
@@ -2654,6 +2827,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
                 }
               }
             }
@@ -2767,6 +2950,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
                 }
               }
             }
@@ -3155,6 +3348,16 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
+                }
+              }
+            }
           }
         }
       }
@@ -3334,6 +3537,16 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
+                }
+              }
+            }
           }
         }
       }
@@ -3450,6 +3663,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorRateLimit"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error — the endpoint is temporarily unavailable. Not caused by the request; the MoltSets team is alerted automatically.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternal"
                 }
               }
             }

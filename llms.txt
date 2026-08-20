@@ -93,6 +93,12 @@ All requests are `POST` with a JSON body. All responses return HTTP 200 with env
 - [POST /get_billing](https://developer.moltsets.com/api-reference/account/get-billing): Retrieve billing plan, renewal date, and per-tool credit costs. Free.
 - [POST /get_usage](https://developer.moltsets.com/api-reference/account/get-usage): Retrieve credit usage for a time period. Free.
 
+## Errors
+
+- `500` with `{"error": {"code": "internal_error", "message": "Unexpected connection error."}, "metadata": {}}` means the endpoint itself is temporarily offline. It is not caused by the request — API key, parameters, plan, and rate-limit headroom are all fine. The MoltSets team is alerted automatically; there is no need to report it. Resolution time varies with when the outage starts (office hours are picked up sooner than overnight or weekends), so use no fixed retry delay — requeue the call and retry later rather than looping on it.
+- `403` with `{"error": {"code": "plan_restricted", ...}}` means the endpoint is not available on the account's plan — see the note under Plans.
+- Other errors (`400`, `401`, `404`, `422`, `429`) return a flat `{"error": "...", "message": "..."}` shape.
+
 ## Plans
 
 | **Plan** | **Lifetime Tokens** | **Enrichment records** | **Search records** | **Phone Tokens** |

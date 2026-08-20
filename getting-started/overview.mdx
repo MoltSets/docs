@@ -52,6 +52,24 @@ All responses return HTTP `200` with a consistent envelope:
 - **`metadata.tokens_used`** — credits consumed. Always `0` when no data is returned.
 - **`metadata.tokens_remaining`** — your remaining credit balance after this request.
 
+## When an endpoint is offline
+
+A `500` with `internal_error` means the endpoint itself is temporarily unavailable:
+
+```json
+{
+  "error": {
+    "code": "internal_error",
+    "message": "Unexpected connection error."
+  },
+  "metadata": {}
+}
+```
+
+Nothing about your request caused this — the API key, parameters, plan, and rate-limit headroom are all fine, and the same call will work again once the endpoint is back. **The MoltSets team is alerted automatically, so there's no need to report it.**
+
+Resolution time varies, largely with when the outage starts: one that begins during office hours is picked up sooner than one overnight or over a weekend. Because of that, don't build a fixed retry delay around it — treat it as a transient failure in your pipeline, not a bad record, and requeue the affected calls to retry later instead of looping on the endpoint. A later call succeeding is the signal that the endpoint is back.
+
 ## Plans
 
 | **Plan** | **Lifetime Tokens** | **Enrichment records** | **Search records** | **Phone Tokens** |
