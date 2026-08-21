@@ -17,7 +17,7 @@ MoltSets returns contact and company data an agent can act on directly. Differen
 ## Getting Started
 - [Overview](https://developer.moltsets.com/getting-started/overview): What MoltSets is, base URL, request/response structure, plans, and available tools.
 - [Authentication](https://developer.moltsets.com/getting-started/authentication): API key format (`ms_XXXXXXXXXXX`), how to create/revoke keys, Bearer token usage, error responses.
-- [Rate Limits](https://developer.moltsets.com/getting-started/rate-limits): Per-plan limits, what counts as a request, 429 handling, exponential backoff, multi-key strategies.
+- [Rate Limits](https://developer.moltsets.com/getting-started/rate-limits): Per-plan limits, what counts as a request, 429 handling, exponential backoff, multi-key strategies. Limits use rolling windows, not fixed daily resets — the first request opens a 5-hour window, everything in the next 5 hours draws from the same pool, and the next request after it closes opens a fresh one. The weekly window rolls the same way.
 - [MoltSets App](https://developer.moltsets.com/getting-started/moltsets-app): Logging in, navigating the app.
 
 ## MoltSets' Data

@@ -25,6 +25,14 @@ To prevent abuse, Unlimited Plans are subject to our [Fair Use Policy](https://m
 | \$97 / month | 7.5k | 37.5k | 37.5k |
 | \$997 / month | 90k | 450k | 450k |
 
+## How the window works
+
+This works as a **rolling window, not a fixed daily reset**. The moment you make your first request, a 5-hour window opens. Everything you use for the next 5 hours draws from the same pool — the figure in your plan's row above. When the window closes, the limit resets, and your next request kicks off a fresh 5-hour window.
+
+A \$97 account can therefore spend all 15k enrichment records in the first minute and then wait out the rest of that window, or spread the same 15k evenly across the five hours. The weekly window works the same way — it rolls from your first request rather than resetting on a calendar day.
+
+Nothing is scheduled, so there's no reset hour to plan around. `get_account` reports `resets_at` for each window, which is the exact moment your current pool refills — see [Check where you stand](#check-where-you-stand).
+
 ## What counts as a request
 
 Every API call counts toward the rate limit, regardless of whether it returns data. Empty results and account management calls (`get_account`, `get_billing`, `get_usage`) all count as requests.
@@ -61,7 +69,7 @@ A few approaches to keep your usage within bounds:
 
 ### Spread your automations out
 
-If you're running scheduled tasks, split them across 2–4 runs per day rather than one large burst. Smaller, more frequent runs are easier to keep under the per-second and per-minute caps.
+If you're running scheduled tasks, split them across 2–4 runs per day rather than one large burst. Because the 5-hour window rolls from your first request, spacing runs at least five hours apart gives each one a fresh pool to draw from.
 
 ### Use batching with pauses between batches
 
