@@ -152,7 +152,7 @@ Results are ranked — a higher `_score` means a stronger match, so the first pa
 | Results per call (Free plan) | 5 max |
 | Free plan lifetime search records | 100 |
 
-Every response carries `results.total`, the count of matching records across all pages. Read it **before** paginating to decide whether the search is worth walking, then increment `offset` by your `limit`.
+Every response carries `results.total`, the count of matching records across all pages. Read it **before** paginating to decide whether the search is worth walking, then increment `offset` by your `limit`. The `limit: 1` probe above gets you that total for the price of a single record.
 
 ## Related
 

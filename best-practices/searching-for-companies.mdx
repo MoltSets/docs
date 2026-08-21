@@ -151,6 +151,8 @@ for (const company of companies.results.results) {
 }
 ```
 
+Run the first iteration of that loop at `limit: 1` on both calls. A chain that looks right at one company per account is safe to fan out; one that isn't costs you the whole fan-out to find that out.
+
 `search_people` can also filter on `employee_range` and `revenue_range` directly, applied to the person's current employer. If firmographics are the only reason you're calling `search_companies`, you can often skip it and filter in one call.
 
 ## Paginate deliberately
@@ -163,7 +165,7 @@ Results are ranked by `_score`, so the first page is the strongest.
 | Results per call (Free plan) | 5 max |
 | Free plan lifetime search records | 100 |
 
-Read `results.total` before walking pages, then increment `offset` by your `limit`.
+Read `results.total` before walking pages, then increment `offset` by your `limit`. Every page you walk draws from the same search-record pool, so confirm the search is right at `limit: 1` before you commit to walking it.
 
 ## Related
 
