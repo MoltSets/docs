@@ -17,6 +17,28 @@ description: "How to build precise people searches with MoltSets — choosing th
   Tokens are only charged when data is found and returned. A search that matches nothing costs nothing — but it still counts against your rate limit. See [Rate Limits](/getting-started/rate-limits).
 </Note>
 
+## Probe with `limit: 1` before you pull a page
+
+`count_only` is only available on `search_linkedin_profile`. On `search_people` there is no free dry run — so the cheapest way to check that a search is actually returning the people you meant is to run it with `limit: 1`.
+
+```json
+{ "seniority": "VP", "department": "Sales", "industry": "Computer Software", "country": "United States", "limit": 1 }
+```
+
+One record costs one search record against your fair use pool. The same query at `limit: 25`, walked five pages deep, costs 125 — and if a filter value was misspelt, a `department`/`functional_area` pair contradicted itself, or `city` matched a suburb you didn't want, all 125 are spent on the wrong audience and can't be refunded.
+
+Read three things off the single result before you widen:
+
+1. **`results.total`** — is the audience the size you expected? A total of 0 or 3 means a filter is wrong, not that the market is empty.
+2. **The record itself** — does this person actually match your intent? Check `title`, `seniority`, location, and employer against what you asked for.
+3. **`business_email` and `business_email_risk_score`** — if you're searching in order to email, confirm the emails are present and graded well enough to be worth pulling at volume.
+
+Only when all three look right should you re-run with a larger `limit` and start paginating.
+
+<Warning>
+  Search records are capped separately from enrichment records and are consumed per record returned, on a rolling 5-hour window. A single unchecked `limit: 25` loop can burn a meaningful share of a plan's pool before you notice the filters were wrong. See [Rate Limits](/getting-started/rate-limits).
+</Warning>
+
 ## Filters are free precision
 
 Search cost is driven by the free-text `query`, not by the filters attached to it.

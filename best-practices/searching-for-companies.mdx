@@ -5,6 +5,27 @@ description: "How to qualify accounts with MoltSets — exact domain lookups, ch
 
 `search_companies` is how you build and qualify an account list before you go looking for people at those accounts. It shares most of its vocabulary with [`search_people`](/best-practices/searching-for-people), so filters you learn here transfer directly.
 
+## Probe with `limit: 1` before you pull a page
+
+`search_companies` has no free dry run — `count_only` exists only on `search_linkedin_profile` — so run every new search once at `limit: 1` before you fetch it at volume.
+
+```json
+{ "industry": "Computer Software", "employee_range": "51-200", "revenue_range": "$10M - $20M", "limit": 1 }
+```
+
+One record costs one search record against your fair use pool. The same query at `limit: 25`, walked five pages deep, costs 125 — and every filter here is exact-match, so a single wrong string spends all 125 on the wrong list. The usual culprits are all silent: `"$1 - $1M"` instead of `"$500k - $1M"`, `"TX"` instead of `"Texas"`, `"Information Technology"` where the records are filed under `"Computer Software"`, or a `country` filter pulling a multinational to the wrong office.
+
+Read two things off the single result before you widen:
+
+1. **`results.total`** — is the account universe the size you expected? A thin total means a filter value is off, not that the segment is empty. Try the neighbouring `industry` value or shorten the `naics_code`.
+2. **The record itself** — does this company actually match your intent? Check `domain`, `industry`, `employee_range`, and location against what you asked for.
+
+Only then re-run with a real `limit` and start paginating.
+
+<Warning>
+  Search records are capped separately from enrichment records and are consumed per record returned, on a rolling 5-hour window. This matters most when chaining — a `search_companies` result of 25 domains, each fanned out into a `search_people` call at `limit: 25`, is 625 search records from one loop. Probe **both** searches at `limit: 1` before running the chain. See [Rate Limits](/getting-started/rate-limits).
+</Warning>
+
 ## Filters are free precision
 
 Search cost is driven by the free-text `query`, not by the filters attached to it.
