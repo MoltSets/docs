@@ -21,11 +21,11 @@ description: "How to build precise people searches with MoltSets — choosing th
 
 Search cost is driven by the free-text `query`, not by the filters attached to it.
 
-| Query shape | Relative cost to execute |
+| Query shape | Speed and precision |
 |---|---|
-| `query` alone | Baseline |
-| `query` + any number of filters | **The same** — filters add nothing |
-| Filters alone, no `query` | **~40× cheaper** |
+| `query` alone | Slower and less precise |
+| `query` + any number of filters | Slower but **more precise** |
+| Filters alone, no `query` | **~40× faster and more precise** |
 
 Two rules follow.
 
