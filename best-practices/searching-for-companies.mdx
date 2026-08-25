@@ -10,10 +10,10 @@ description: "How to qualify accounts with MoltSets — exact domain lookups, ch
 `search_companies` has no free dry run — `count_only` exists only on `search_linkedin_profile` — so run every new search once at `limit: 1` before you fetch it at volume.
 
 ```json
-{ "industry": "Computer Software", "employee_range": "51-200", "revenue_range": "$10M - $20M", "limit": 1 }
+{ "industry": "Information Technology", "employee_range": "51-200", "revenue_range": "$10M - $20M", "limit": 1 }
 ```
 
-One record costs one search record against your fair use pool. The same query at `limit: 25`, walked five pages deep, costs 125 — and every filter here is exact-match, so a single wrong string spends all 125 on the wrong list. The usual culprits are all silent: `"$1 - $1M"` instead of `"$500k - $1M"`, `"TX"` instead of `"Texas"`, `"Information Technology"` where the records are filed under `"Computer Software"`, or a `country` filter pulling a multinational to the wrong office.
+One record costs one search record against your fair use pool. The same query at `limit: 25`, walked five pages deep, costs 125 — and every filter here is exact-match, so a single wrong string spends all 125 on the wrong list. The usual culprits are all silent: a value that isn't in the enumeration at all, `"TX"` instead of `"Texas"`, a `linkedin_industry` label capitalised differently from the stored one, or a `country` filter pulling a multinational to the wrong office.
 
 Read two things off the single result before you widen:
 
@@ -43,7 +43,7 @@ Two rules follow.
 **Drop `query` entirely when filters can carry the whole intent.** Most account lists are pure firmographics — "software companies with 51–200 employees and $10M–$20M revenue" needs no free text at all, and runs ~40× cheaper without it.
 
 ```json
-{ "industry": "Computer Software", "employee_range": "51-200", "revenue_range": "$10M - $20M" }
+{ "industry": "Information Technology", "employee_range": "51-200", "revenue_range": "$10M - $20M" }
 ```
 
 Reach for `query` only when you're matching a company by **name**. Everything else belongs in a filter.
@@ -70,15 +70,56 @@ As with people search, three filters describe industry at different resolutions:
 
 | Filter | Vocabulary | Use when |
 |---|---|---|
-| `industry` | 23 primary buckets plus long-tail values | You're thinking in broad categories |
-| `linkedin_industry` | LinkedIn's own ~150 labels | You need a niche the buckets can't express |
+| `industry` | 22 fixed buckets | You're thinking in broad categories |
+| `linkedin_industry` | LinkedIn's own vocabulary, hundreds of labels (~85% filled) | You need a niche the buckets can't express |
 | `naics_code` | Full NAICS hierarchy | You want standardised codes, or precise control over breadth |
 
-The `industry` enum also carries long-tail values — `"Insurance"`, `"Banks"`, `"Computer Software"`, `"Pharmaceuticals and Biotechnology"`, `"Aerospace and Defense"`, `"Electronics"`, `"Mining and Metals"`. These overlap conceptually with the broad buckets, so a company in computer software may be filed under either `"Information Technology"` or `"Computer Software"`. If a search comes back thinner than expected, try the neighbouring value.
+The 22 `industry` buckets are the complete list — anything outside it matches nothing and returns zero results silently. Several niches have no bucket of their own: insurance carriers, aerospace and defence, mining, electronics, and biotech all fall inside broader buckets. When you need one of those specifically, use `linkedin_industry` instead — `"Insurance"`, `"Aerospace and Defense"`, `"Mining and Metals"` and hundreds more exist there as exact labels.
 
 <Note>
   `naics_code` matches at any hierarchy level. Use a 2-digit sector (`"23"` = Construction) to cast wide, a 6-digit code (`"511210"` = Software Publishers) to go narrow. Shortening the code is the cleanest way to widen a search that's returning too little.
 </Note>
+
+## Exclude what you don't want
+
+Four filters remove companies instead of selecting them. Each takes a **list**, and each mirrors a filter you already know:
+
+| Filter | Removes | Accepts |
+|---|---|---|
+| `exclude_domain` | Specific companies | Same values as `domain` — full URLs normalised automatically |
+| `exclude_industry` | Whole industries | Same values as `industry` |
+| `exclude_employee_range` | Headcount bands | Same values as `employee_range` |
+| `exclude_revenue_range` | Revenue bands | Same values as `revenue_range` |
+
+`exclude_domain` is your suppression list. Pass the accounts you already have — existing customers, current vendors, your own company — and they never appear:
+
+```json
+{
+  "industry": "Information Technology",
+  "employee_range": "51-200",
+  "exclude_domain": ["acme.com", "stripe.com"]
+}
+```
+
+The others carve out segments you don't sell to:
+
+```json
+{
+  "industry": "Information Technology",
+  "exclude_employee_range": ["1-10", "11-20"],
+  "exclude_revenue_range": ["Below $500k"]
+}
+```
+
+**Exclude in the query, not after it.** A company you exclude is never returned, so it costs you no tokens and no search records. Pulling 25 results and dropping five yourself costs you all 25.
+
+<Note>
+  Exclusions narrow a search — they can't be the whole search. At least one positive input (`query`, `domain`, or a regular filter) is still required.
+</Note>
+
+<Warning>
+  `exclude_industry` only drops companies that **positively carry** one of the values you list. Companies with no industry on record aren't excluded by it, so they still come through. The same holds for the other exclusions — a missing value is not an excluded value.
+</Warning>
 
 ## Understand the location caveat
 
@@ -89,6 +130,10 @@ The `industry` enum also carries long-tail values — `"Insurance"`, `"Banks"`, 
 </Warning>
 
 Both require exact stored values with standard capitalisation — `"Texas"`, not `"TX"`. Combine `state` with `country` for precision.
+
+<Note>
+  Every company record comes back with a `city`, but there is no `city` filter on `search_companies` — `country` and `state` are the only location filters. To narrow to a city, filter on `state` and read `city` off the results. (`search_people` does have a `city` filter.)
+</Note>
 
 ## Watch the size and revenue distributions
 
@@ -107,12 +152,22 @@ Both range filters are exact-match, and both have a heavily skewed distribution.
 | `"1001-5000"` | Large |
 | `"5001+"` | Enterprise, very large |
 
-Legacy values `"Small"`, `"Mid-Market"`, `"Enterprise"`, and `"Unknown"` also exist. Prefer the numeric ranges — they carry far more coverage.
+These eight bands are the complete list. Older documentation mentioned `"Small"`, `"Mid-Market"`, `"Enterprise"`, and `"Unknown"` — those are retired and now return nothing.
 
 **`revenue_range`** — `"$500k - $1M"` is the most common band.
 
+| Value | Reads as |
+|---|---|
+| `"Below $500k"` | Very small, pre-revenue |
+| `"$500k - $1M"` | Most common band |
+| `"$1M - $5M"` | |
+| `"$5M - $10M"` | |
+| `"$10M - $20M"` | Rare |
+| `"$20M - $50M"` | |
+| `"Above $50M"` | Everything larger |
+
 <Warning>
-  `"$1 - $1M"` is a **legacy format** covering the same range as `"$500k - $1M"` but holding far fewer records. Always prefer `"$500k - $1M"`, or you'll miss most of the band.
+  `"Above $50M"` is a flat catch-all for **all** revenue over $50M — there is no finer band above it. Asking for $100M, $1B, or $5B companies means asking for `"Above $50M"` and narrowing with `employee_range`. Bands like `"$100M - $250M"` and `"Over $5B"` appeared in older documentation and are retired: they return nothing.
 </Warning>
 
 ## Identify companies from traffic
@@ -136,7 +191,7 @@ The most common workflow is two calls: qualify accounts, then find contacts at t
 
 ```javascript
 const companies = await search("search_companies", {
-  industry: "Computer Software",
+  industry: "Information Technology",
   employee_range: "51-200",
   revenue_range: "$10M - $20M",
   limit: 25

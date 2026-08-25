@@ -168,7 +168,7 @@
       "post": {
         "summary": "Search for People",
         "operationId": "searchBusinessProfiles",
-        "description": "The People Search API lets you search MoltSets' contact database for people by name, job title, company, industry, country, seniority, or department.\n\nUse `query` for free text search across name, company, title, and headline (this is where names and role keywords go). Use the filters (`country`, `seniority`, `industry`, `department` or `functional_area`) to narrow results further. Combining `query` with filters gives the most precise matches. Every result comes back ranked, with a higher `_score` meaning a stronger match.\n\n**Use this endpoint to:**\n- Build targeted lead lists for outbound sales\n- Identify decision makers at specific target accounts\n- Populate outbound sequences with verified contact data\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-search/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Search</a>.",
+        "description": "The People Search API lets you search MoltSets' contact database for people by name, job title, company, industry, country, seniority, or department.\n\nUse `title` for the job title or role — it matches the title field alone, so it is far more precise than putting a role in `query`. Use `query` for the person's name, or for loose natural-language phrases when you have nothing more specific. To find people at a specific company, use `company` (company name) or `company_domain` (website domain) rather than putting the employer in `query`. Use the exact filters (`country`, `state`, `city`, `seniority`, `industry`, `department` or `functional_area`, `employee_range`, `revenue_range`) to narrow further — `employee_range` and `revenue_range` scope to people at companies of that size or revenue without needing a specific company. Combining `query` with filters gives the most precise matches. Every result comes back ranked, with a higher `_score` meaning a stronger match.\n\nThe `exclude_*` parameters (`exclude_company_domain`, `exclude_country`, `exclude_state`, `exclude_industry`, `exclude_seniority`, `exclude_employee_range`) work the other way round: each one takes a list and removes matches rather than selecting them. `exclude_company_domain` is how you suppress companies you already have. Exclusions narrow a search but cannot be the whole search — you still need at least one positive input.\n\n**Use this endpoint to:**\n- Build targeted lead lists for outbound sales\n- Identify decision makers at specific target accounts\n- Populate outbound sequences with verified contact data\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-search/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Search</a>.",
         "tags": [
           "Search"
         ],
@@ -181,7 +181,13 @@
                 "properties": {
                   "query": {
                     "type": "string",
-                    "description": "Full-text search across full_name, first_name, last_name, company name, title (~85% filled), and headline (~65% filled) using cross-field matching. Multi-word queries distribute terms across fields — \"John Smith\" matches first_name: John AND last_name: Smith rather than requiring either field alone to contain the full string. Job titles and role keywords are matched against both the title field (e.g. \"Account Executive\", \"Head of Sales\") and the headline field (e.g. \"B2B sales leader\"). For seniority level (VP, Director, C-suite) use the `seniority` filter instead — this field is best suited to specific role or function keywords, combined with other filters for precision, e.g. `query: \"Account Executive\"`, `country: \"United States\"`, `seniority: \"Senior\"`. Categorical values like country or seniority belong in their own filter params rather than this field."
+                    "description": "Full-text search across full_name, first_name, last_name, company name, title (~85% filled), and headline (~65% filled) using cross-field matching. Multi-word queries distribute terms across fields — \"John Smith\" matches first_name: John AND last_name: Smith rather than requiring either field alone to contain the full string. Best for person names, and for loose natural-language phrases when nothing more specific fits. For a job title or role, use the `title` filter instead: a role placed here is diluted across names and company names and only needs most of its terms to match, so \"Account Executive\" in `query` can also return Account Managers. Likewise use `seniority` for level (VP, Director, C-suite), and `company` or `company_domain` for a specific employer. Categorical values like country or seniority belong in their own filter params rather than this field.",
+                    "example": "Jane Doe"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Job title filter (~85% filled) — scopes results to people whose job title matches, and the precise way to search by role. The match is analysed rather than literal: a one or two word title requires every word, so \"Account Executive\" will not return Account Managers. A longer title requires 75% of its words, rounded down — a three or four word title must match all but one, a five or six word title all but two. That allowance is what stops function words breaking a match, so \"VP of Sales\" still finds \"VP, Sales\". Extra words in the stored title are always fine: \"Account Executive\" matches \"Senior Account Executive, SMB\". Prefer this over putting a role in `query`. For seniority level use the `seniority` filter, which is a clean enumerated list, and use `title` for the role or function itself — the two combine, e.g. `title: \"Sales\"` with `seniority: \"VP\"`. Around 15% of profiles carry no title at all, and those can never match a title filter.",
+                    "example": "Account Executive"
                   },
                   "company": {
                     "type": "string",
@@ -195,7 +201,7 @@
                   },
                   "country": {
                     "type": "string",
-                    "description": "Exact country name filter (~99% filled — most reliable filter). Must match the stored value exactly. Top values by volume: \"United States\", \"India\", \"United Kingdom\", \"Brazil\", \"Canada\", \"France\", \"Mexico\", \"Australia\", \"China\", \"Spain\", \"Netherlands\", \"Italy\", \"Indonesia\", \"Germany\", \"Philippines\", \"Turkey\", \"South Africa\", \"Saudi Arabia\", \"Argentina\", \"Singapore\", \"United Arab Emirates\", \"Colombia\", \"South Korea\", \"Malaysia\", \"Poland\", \"Belgium\", \"Switzerland\", \"Ireland\", \"Sweden\", \"Denmark\", \"Norway\", \"Austria\", \"Portugal\", \"Israel\", \"New Zealand\", \"Finland\", \"Greece\", \"Hungary\", \"Romania\", \"Ukraine\". Use the full English country name.",
+                    "description": "Exact country name filter (~99% filled — most reliable filter). Must match the stored value exactly. Top values by volume: \"United States\", \"India\", \"United Kingdom\", \"Brazil\", \"Canada\", \"France\", \"Mexico\", \"Australia\", \"China\", \"Spain\", \"Netherlands\", \"Italy\", \"Indonesia\", \"Germany\", \"Philippines\", \"Turkey\", \"South Africa\", \"Saudi Arabia\", \"Argentina\", \"Singapore\", \"United Arab Emirates\", \"Colombia\", \"South Korea\", \"Malaysia\", \"Poland\", \"Belgium\", \"Switzerland\", \"Ireland\", \"Sweden\", \"Denmark\", \"Norway\", \"Austria\", \"Portugal\", \"Israel\", \"New Zealand\", \"Finland\", \"Greece\", \"Hungary\", \"Romania\", \"Ukraine\". Use the full English country name. \"UK\" and \"HK\" also exist in the data as dirty values — prefer \"United Kingdom\" and \"Hong Kong\".",
                     "example": "United States"
                   },
                   "state": {
@@ -226,29 +232,30 @@
                   },
                   "industry": {
                     "type": "string",
-                    "description": "Exact industry filter (~60% filled). Must match one of the enumerated values exactly, including capitalisation and punctuation (e.g. the ampersand in \"Marketing & Advertising\").",
+                    "description": "Exact current industry filter (~60% filled). These 22 buckets are the only supported values, and must match exactly, including capitalisation and punctuation (e.g. the ampersand in \"Marketing & Advertising\").",
                     "enum": [
-                      "Information Technology",
                       "Professional and Business Services",
-                      "Finance and Banking",
-                      "Education",
-                      "Health and Pharmaceuticals",
+                      "Information Technology",
                       "Manufacturing",
-                      "Government and Public Administration",
                       "Retail",
-                      "Food and Beverage",
+                      "Health and Pharmaceuticals",
                       "Creative Arts and Entertainment",
-                      "Non-Profit and Social Services",
-                      "Transportation and Logistics",
                       "Construction",
-                      "Tourism and Hospitality",
-                      "Energy",
                       "Marketing & Advertising",
-                      "Telecommunications",
+                      "Finance and Banking",
+                      "Tourism and Hospitality",
+                      "Non-Profit and Social Services",
+                      "Food and Beverage",
                       "Real Estate",
-                      "Automotive",
+                      "Education",
+                      "Transportation and Logistics",
                       "Media and Publishing",
-                      "Agriculture"
+                      "Energy",
+                      "Government and Public Administration",
+                      "Automotive",
+                      "Telecommunications",
+                      "Agriculture",
+                      "Utilities"
                     ]
                   },
                   "department": {
@@ -289,7 +296,7 @@
                   },
                   "employee_range": {
                     "type": "string",
-                    "description": "Exact employee-count range filter on the person's current employer — finds people at companies of a certain size without needing to name a specific company. Values are fixed bucket ranges (e.g. \"51-200\", \"1001-5000\"). Legacy values (\"Small\", \"Mid-Market\", \"Enterprise\", \"Unknown\") also exist in older records but have far less coverage than the numeric ranges. Combine with other filters, e.g. `seniority: \"VP\"`, `employee_range: \"51-200\"`.",
+                    "description": "Exact employee-count range filter on the person's current employer — finds people at companies of a certain size without needing to name a specific company. These eight numeric bands are the only supported values, and use the same vocabulary as `search_companies`. Combine with other filters, e.g. `seniority: \"VP\"`, `employee_range: \"51-200\"`.",
                     "enum": [
                       "1-10",
                       "11-20",
@@ -298,16 +305,12 @@
                       "201-500",
                       "501-1000",
                       "1001-5000",
-                      "5001+",
-                      "Small",
-                      "Mid-Market",
-                      "Enterprise",
-                      "Unknown"
+                      "5001+"
                     ]
                   },
                   "revenue_range": {
                     "type": "string",
-                    "description": "Exact annual revenue range filter on the person's current employer — finds people at companies of a certain revenue without needing to name a specific company. Values are fixed bucket ranges. \"$1 - $1M\" is a legacy format equivalent to \"$500k - $1M\" but with far fewer records.",
+                    "description": "Exact annual revenue range filter on the person's current employer — finds people at companies of a certain revenue without needing to name a specific company. These seven bands are the only supported values, and use the same vocabulary as `search_companies`. \"Above $50M\" is a flat catch-all for all revenue over $50M; there is no finer band above it.",
                     "enum": [
                       "Below $500k",
                       "$500k - $1M",
@@ -315,15 +318,7 @@
                       "$5M - $10M",
                       "$10M - $20M",
                       "$20M - $50M",
-                      "Above $50M",
-                      "$50M - $100M",
-                      "$100M - $250M",
-                      "$250M - $500M",
-                      "$500M - $1B",
-                      "$1B - $2.5B",
-                      "$2.5B - $5B",
-                      "Over $5B",
-                      "$1 - $1M"
+                      "Above $50M"
                     ]
                   },
                   "naics_code": {
@@ -333,8 +328,74 @@
                   },
                   "linkedin_industry": {
                     "type": "string",
-                    "description": "Exact LinkedIn industry label filter on the person's current employer (~50% filled). Uses LinkedIn's own ~150-value industry vocabulary, which is far finer-grained than the 21 buckets in `industry`. Must match the stored label exactly, with standard capitalisation — for example \"Software Development\", \"Hospitality\", \"Legal Services\", \"Wellness and Fitness Services\", \"Construction\", \"Staffing and Recruiting\". Use when a niche industry cannot be expressed by the broad `industry` buckets.",
+                    "description": "Exact LinkedIn industry label filter on the person's current employer. Uses LinkedIn's own industry vocabulary, which is far finer-grained than the 22 buckets in `industry`. Must match the stored label exactly, with standard capitalisation — for example \"Software Development\", \"Hospitality\", \"Legal Services\", \"Wellness and Fitness Services\", \"Construction\", \"Staffing and Recruiting\". Use when a niche industry cannot be expressed by the broad `industry` buckets.",
                     "example": "Software Development"
+                  },
+                  "exclude_company_domain": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Company domains to exclude. People at any listed company are dropped from the results — this is the suppression list, so pass the accounts you already have (existing customers, current vendors, your own company) and they never come back. Full URLs are normalised automatically, exactly as with `company_domain`. Excluded records cost you nothing: they consume no tokens and no fair use records, so excluding here is always cheaper than filtering the results yourself.",
+                    "example": [
+                      "acme.com",
+                      "stripe.com"
+                    ]
+                  },
+                  "exclude_country": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Countries to exclude. People in any listed country are dropped. Accepts the same values as `country` — use it when you want everywhere except a few places.",
+                    "example": [
+                      "India",
+                      "Philippines"
+                    ]
+                  },
+                  "exclude_state": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "States or regions to exclude. People in any listed state are dropped. Accepts the same values as `state` (full names, never abbreviations). Combine with a positive `country` — for example `country: \"United States\"` with `exclude_state: [\"California\"]`.",
+                    "example": [
+                      "California",
+                      "New York"
+                    ]
+                  },
+                  "exclude_industry": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Industries to exclude. People whose current industry is any listed value are dropped. Accepts the same values as `industry`. Around 40% of profiles carry no industry at all, and exclusion only removes profiles that positively carry a listed value — so those profiles still appear.",
+                    "example": [
+                      "Education",
+                      "Government and Public Administration"
+                    ]
+                  },
+                  "exclude_seniority": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Seniority levels to exclude. People at any listed level are dropped. Accepts the same values as `seniority` (note the space in \"C Suite\"). Same caveat as `exclude_industry`: profiles with no seniority on record are not excluded.",
+                    "example": [
+                      "Intern",
+                      "Entry"
+                    ]
+                  },
+                  "exclude_employee_range": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Employer size bands to exclude. People at companies in any listed band are dropped. Accepts the same values as `employee_range` — for example [\"1-10\", \"11-20\"] to skip very small companies, or [\"5001+\"] to skip enterprises.",
+                    "example": [
+                      "1-10",
+                      "11-20"
+                    ]
                   },
                   "limit": {
                     "type": "integer",
@@ -351,9 +412,13 @@
                 }
               },
               "example": {
-                "query": "Account Executive",
+                "title": "Account Executive",
                 "country": "United States",
                 "seniority": "Senior",
+                "exclude_company_domain": [
+                  "acme.com",
+                  "stripe.com"
+                ],
                 "limit": 10,
                 "offset": 0
               }
@@ -372,28 +437,46 @@
                       "results": {
                         "results": [
                           {
-                            "title": "Senior Associate - Technical Director",
-                            "company": {
-                              "name": "MoltSets",
-                              "size": "57",
-                              "revenue": "1200000000",
-                              "industry": "Information Technology",
-                              "logo_url": "https://cdn.mixrank.com/md5/0bb6181a215bac707d7af3276be5XXXXX",
-                              "website_url": "https://moltsets.com",
-                              "linkedin_url": "https://linkedin.com/company/moltsets"
-                            },
-                            "country": "United States",
-                            "headline": "Senior Associate - Technical Director @ MoltSets",
-                            "full_name": "John Smith",
-                            "last_name": "Smith",
+                            "full_name": "Morgan Hebb",
+                            "first_name": "Morgan",
+                            "last_name": "Hebb",
+                            "title": "Account Executive",
+                            "headline": "EdTech | Account Executive | Teacher by Training",
                             "seniority": "Senior",
-                            "first_name": "John",
-                            "linkedin_url": "https://linkedin.com/in/john-smith-123",
-                            "business_email": "john.smith@example.com",
-                            "business_email_risk_score": "A",
+                            "city": "Chicago",
+                            "state": "Illinois",
+                            "country": "United States",
                             "current_industry": "Information Technology",
-                            "linkedin_slug": "john-smith-123",
-                            "_id": "john-smith-123",
+                            "functional_area": [
+                              "Sales"
+                            ],
+                            "linkedin_url": "https://linkedin.com/in/morganhebb",
+                            "business_email": "morgan.hebb@packback.co",
+                            "business_email_risk_score": "A",
+                            "business_email_validated_at": "2026-08-25",
+                            "current_role_start_date": "2025-10-01",
+                            "last_updated_at": "2026-08-01",
+                            "company": {
+                              "name": "Packback",
+                              "size": "101",
+                              "industry": "Information Technology",
+                              "website_url": "https://www.packback.co/",
+                              "domain": "packback.co",
+                              "linkedin_url": "linkedin.com/company/packback",
+                              "naics_codes": [
+                                "5112",
+                                "51121",
+                                "511210"
+                              ],
+                              "naics_titles": [
+                                "Software Publishers"
+                              ],
+                              "linkedin_industry": [
+                                "E-Learning Providers"
+                              ],
+                              "logo_url": "https://cdn.mixrank.com/md5/0c5b75379a35b0e1fc8a4b6e77fb2ba8"
+                            },
+                            "_id": "morganhebb",
                             "_score": 9.1714
                           }
                         ],
@@ -402,10 +485,10 @@
                       "status": "ok",
                       "metadata": {
                         "fair_use": {
-                          "records_remaining_5h": 179999,
-                          "records_reset_5h": "2026-07-15T18:53:16Z",
-                          "records_remaining_1w": 899999,
-                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                          "records_remaining_5h": 89999,
+                          "records_reset_5h": "2026-08-25T15:46:15Z",
+                          "records_remaining_1w": 300423,
+                          "records_reset_1w": "2026-08-30T08:00:07Z"
                         }
                       }
                     }
@@ -481,7 +564,7 @@
       "post": {
         "summary": "Search for Companies",
         "operationId": "searchCompanyProfiles",
-        "description": "The Company Search API lets you search MoltSets' company database by name, domain, industry, employee count, or annual revenue, so you can find and qualify target accounts.\n\nUse `query` for free text company name search, `domain` for an exact lookup by website domain, and the filters (`industry`, `employee_range`, `revenue_range`) to narrow your results. Combining `query` with filters gives the most precise matches. Every result comes back ranked, with a higher `_score` meaning a stronger match.\n\n**Use this endpoint to:**\n- Build prospect lists for account-based marketing\n- Qualify target accounts before outreach\n- Enrich CRM records with firmographic data\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-search/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Search</a>.",
+        "description": "The Company Search API lets you search MoltSets' company database by name, domain, industry, employee count, or annual revenue, so you can find and qualify target accounts.\n\nUse `query` for free text company name search, `domain` for an exact lookup by website domain, and the filters (`industry`, `employee_range`, `revenue_range`) to narrow your results. Combining `query` with filters gives the most precise matches. Every result comes back ranked, with a higher `_score` meaning a stronger match.\n\nThe `exclude_*` parameters (`exclude_domain`, `exclude_industry`, `exclude_employee_range`, `exclude_revenue_range`) work the other way round: each one takes a list and removes matches rather than selecting them. `exclude_domain` is how you suppress accounts you already have. Exclusions narrow a search but cannot be the whole search — you still need at least one positive input.\n\n**Use this endpoint to:**\n- Build prospect lists for account-based marketing\n- Qualify target accounts before outreach\n- Enrich CRM records with firmographic data\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-search/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Search</a>.",
         "tags": [
           "Search"
         ],
@@ -503,7 +586,7 @@
                   },
                   "industry": {
                     "type": "string",
-                    "description": "Exact industry filter. Must match one of the enumerated values exactly.",
+                    "description": "Exact industry filter. These 22 buckets are the only supported values, and must match exactly, including capitalisation and punctuation (note the ampersand in \"Marketing & Advertising\"). For a niche the buckets cannot express — insurance carriers, aerospace, mining — use `linkedin_industry` instead.",
                     "enum": [
                       "Professional and Business Services",
                       "Information Technology",
@@ -522,24 +605,16 @@
                       "Transportation and Logistics",
                       "Media and Publishing",
                       "Energy",
-                      "Automotive",
                       "Government and Public Administration",
+                      "Automotive",
                       "Telecommunications",
                       "Agriculture",
-                      "Utilities",
-                      "Corporate Services",
-                      "Insurance",
-                      "Banks",
-                      "Computer Software",
-                      "Pharmaceuticals and Biotechnology",
-                      "Aerospace and Defense",
-                      "Electronics",
-                      "Mining and Metals"
+                      "Utilities"
                     ]
                   },
                   "employee_range": {
                     "type": "string",
-                    "description": "Exact employee count range filter. Values are fixed bucket ranges (e.g. \"51-200\", \"1001-5000\"); legacy values (\"Small\", \"Mid-Market\", \"Enterprise\", \"Unknown\") also exist but have far less coverage than the numeric ranges.",
+                    "description": "Exact employee count range filter. These eight numeric bands are the only supported values — \"1-10\" holds the most records by a wide margin, \"5001+\" the fewest.",
                     "enum": [
                       "1-10",
                       "11-20",
@@ -548,16 +623,12 @@
                       "201-500",
                       "501-1000",
                       "1001-5000",
-                      "5001+",
-                      "Small",
-                      "Mid-Market",
-                      "Enterprise",
-                      "Unknown"
+                      "5001+"
                     ]
                   },
                   "revenue_range": {
                     "type": "string",
-                    "description": "Exact annual revenue range filter. \"$1 - $1M\" is a legacy format equivalent to \"$500k - $1M\" but with far fewer records — prefer \"$500k - $1M\" for that range.",
+                    "description": "Exact annual revenue range filter. These seven bands are the only supported values — \"$500k - $1M\" is the most common. \"Above $50M\" is a flat catch-all for all revenue over $50M; there is no finer band above it, so use it for any large-enterprise revenue target.",
                     "enum": [
                       "Below $500k",
                       "$500k - $1M",
@@ -565,15 +636,7 @@
                       "$5M - $10M",
                       "$10M - $20M",
                       "$20M - $50M",
-                      "Above $50M",
-                      "$50M - $100M",
-                      "$100M - $250M",
-                      "$250M - $500M",
-                      "$500M - $1B",
-                      "$1B - $2.5B",
-                      "$2.5B - $5B",
-                      "Over $5B",
-                      "$1 - $1M"
+                      "Above $50M"
                     ]
                   },
                   "naics_code": {
@@ -583,7 +646,7 @@
                   },
                   "linkedin_industry": {
                     "type": "string",
-                    "description": "Exact LinkedIn industry label filter (~50% filled). Uses LinkedIn's own ~150-value industry vocabulary, which is finer-grained than the buckets in `industry`. Must match the stored label exactly, with standard capitalisation — for example \"Software Development\", \"Hospitality\", \"Legal Services\", \"Staffing and Recruiting\", \"Wellness and Fitness Services\".",
+                    "description": "Exact LinkedIn industry label filter (~85% filled). Uses LinkedIn's own industry vocabulary, which is far finer-grained than the 22 buckets in `industry`. Must match the stored label exactly, with standard capitalisation — for example \"Software Development\", \"Hospitality\", \"Legal Services\", \"Staffing and Recruiting\", \"Wellness and Fitness Services\".",
                     "example": "Software Development"
                   },
                   "country": {
@@ -595,6 +658,49 @@
                     "type": "string",
                     "description": "Exact state or region name filter on the company's location. Full names with standard capitalisation (\"Texas\", not \"TX\"). Combine with `country` for precision. Location is team-derived in the same way as `country`, so it is most accurate for smaller companies.",
                     "example": "Texas"
+                  },
+                  "exclude_domain": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Company domains to exclude. Any company on this list is dropped from the results — this is the suppression list, so pass the accounts you already have (existing customers, current vendors, your own company) and they never come back. Full URLs are normalised automatically, exactly as with `domain`. Excluded records cost you nothing: they consume no tokens and no fair use records, so excluding here is always cheaper than filtering the results yourself.",
+                    "example": [
+                      "acme.com",
+                      "stripe.com"
+                    ]
+                  },
+                  "exclude_industry": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Industries to exclude. Companies in any listed industry are dropped. Accepts the same values as `industry`. Exclusion only removes companies that positively carry one of these values, so companies with no industry on record still appear in your results.",
+                    "example": [
+                      "Education",
+                      "Non-Profit and Social Services"
+                    ]
+                  },
+                  "exclude_employee_range": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Employee count bands to exclude. Companies in any listed band are dropped. Accepts the same values as `employee_range` — for example [\"1-10\", \"11-20\"] to skip the very smallest companies, or [\"5001+\"] to skip enterprises.",
+                    "example": [
+                      "1-10",
+                      "11-20"
+                    ]
+                  },
+                  "exclude_revenue_range": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Revenue bands to exclude. Companies in any listed band are dropped. Accepts the same values as `revenue_range` — for example [\"Below $500k\"] to skip the smallest companies, or [\"Above $50M\"] to skip large enterprises.",
+                    "example": [
+                      "Below $500k"
+                    ]
                   },
                   "limit": {
                     "type": "integer",
@@ -611,9 +717,13 @@
                 }
               },
               "example": {
-                "query": "MoltSets",
                 "industry": "Information Technology",
                 "employee_range": "51-200",
+                "revenue_range": "$10M - $20M",
+                "exclude_domain": [
+                  "acme.com",
+                  "stripe.com"
+                ],
                 "limit": 10,
                 "offset": 0
               }
@@ -632,34 +742,73 @@
                       "results": {
                         "results": [
                           {
-                            "logo": "https://cdn.mixrank.com/md5/0e4e81c8ff584b1ce3e4c3067e8cXXXXX",
-                            "name": "MoltSets",
-                            "type": "Privately Held",
+                            "name": "Moltsets",
                             "domain": "moltsets.com",
                             "industry": "Information Technology",
-                            "linkedin_url": "https://linkedin.com/company/moltsets",
-                            "exact_revenue": 1200000000.0,
-                            "revenue_range": "Above $50M",
-                            "employee_count": 57,
-                            "employee_range": "51-200",
-                            "follower_count": 3677,
-                            "linkedin_company_id": "13223077",
+                            "linkedin_url": "linkedin.com/company/moltsets-contact-data",
+                            "revenue_range": "$1M - $5M",
+                            "employee_count": "5",
+                            "employee_range": "1-10",
+                            "city": "San Carlos",
+                            "state": "California",
+                            "country": "United States",
+                            "naics_codes": [
+                              "5112",
+                              "51121",
+                              "511210"
+                            ],
+                            "naics_titles": [
+                              "Software Publishers"
+                            ],
+                            "linkedin_industry": [
+                              "Software Development"
+                            ],
+                            "logo_url": "https://cdn.mixrank.com/md5/48188bb7d0df12849cabfeea895243ae",
                             "_id": "moltsets.com",
-                            "_score": 15.2394
+                            "_score": 18.4271
                           },
                           {
-                            "name": "Acme",
-                            "type": "Privately Held",
-                            "domain": "acme.com",
+                            "name": "Acme Infolabs",
+                            "domain": "acmeinfolabs.com",
                             "industry": "Information Technology",
-                            "linkedin_url": "https://linkedin.com/company/acme",
-                            "revenue_range": "$10M - $20M",
-                            "employee_count": 90,
+                            "linkedin_url": "linkedin.com/company/acmeinfolabs",
+                            "revenue_range": "$20M - $50M",
+                            "employee_count": "57",
                             "employee_range": "51-200",
-                            "follower_count": 121,
-                            "linkedin_company_id": "82353383",
-                            "_id": "acme.com",
-                            "_score": 13.1942
+                            "city": "Bengaluru",
+                            "state": "Karnataka",
+                            "country": "India",
+                            "naics_codes": [
+                              "5415",
+                              "54151",
+                              "541511",
+                              "541519"
+                            ],
+                            "naics_titles": [
+                              "Computer Systems Design and Related Services",
+                              "Custom Computer Programming Services",
+                              "Other Computer Related Services"
+                            ],
+                            "linkedin_industry": [
+                              "IT Services and IT Consulting"
+                            ],
+                            "logo_url": "https://cdn.mixrank.com/md5/0e4e81c8ff584b1ce3e4c3067e8cb033",
+                            "_id": "acmeinfolabs.com",
+                            "_score": 15.0141
+                          },
+                          {
+                            "name": "Acme Inc",
+                            "domain": "atmexpressfinancial.com",
+                            "industry": "Information Technology",
+                            "linkedin_url": "linkedin.com/company/acme-inc",
+                            "revenue_range": "Above $50M",
+                            "employee_count": "150",
+                            "employee_range": "51-200",
+                            "city": "Denver",
+                            "state": "Colorado",
+                            "country": "United States",
+                            "_id": "atmexpressfinancial.com",
+                            "_score": 15.0141
                           }
                         ],
                         "total": 210
@@ -667,10 +816,10 @@
                       "status": "ok",
                       "metadata": {
                         "fair_use": {
-                          "records_remaining_5h": 179999,
-                          "records_reset_5h": "2026-07-15T18:53:16Z",
-                          "records_remaining_1w": 899999,
-                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                          "records_remaining_5h": 89999,
+                          "records_reset_5h": "2026-08-25T15:46:15Z",
+                          "records_remaining_1w": 300423,
+                          "records_reset_1w": "2026-08-30T08:00:07Z"
                         }
                       }
                     }

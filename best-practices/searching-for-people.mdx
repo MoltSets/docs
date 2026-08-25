@@ -3,7 +3,7 @@ title: "Searching for People"
 description: "How to build precise people searches with MoltSets — choosing the right filter, avoiding over-filtering on sparse fields, and paginating without burning records."
 ---
 
-`search_people` is the widest surface in the API: sixteen parameters, most of them exact-match. The difference between a good search and a wasted one is almost always **which filter you reach for**, not how many you stack.
+`search_people` is the widest surface in the API: twenty-three parameters, most of them exact-match. The difference between a good search and a wasted one is almost always **which filter you reach for**, not how many you stack.
 
 ## Start with a free count
 
@@ -22,7 +22,7 @@ description: "How to build precise people searches with MoltSets — choosing th
 `count_only` is only available on `search_linkedin_profile`. On `search_people` there is no free dry run — so the cheapest way to check that a search is actually returning the people you meant is to run it with `limit: 1`.
 
 ```json
-{ "seniority": "VP", "department": "Sales", "industry": "Computer Software", "country": "United States", "limit": 1 }
+{ "seniority": "VP", "department": "Sales", "industry": "Information Technology", "country": "United States", "limit": 1 }
 ```
 
 One record costs one search record against your fair use pool. The same query at `limit: 25`, walked five pages deep, costs 125 — and if a filter value was misspelt, a `department`/`functional_area` pair contradicted itself, or `city` matched a suburb you didn't want, all 125 are spent on the wrong audience and can't be refunded.
@@ -64,7 +64,7 @@ Two rules follow.
 `country` is ~99% filled — the highest fill rate of any filter. Attaching it to a free-text search discards almost no legitimate matches while removing everything from other markets. It is the cheapest precision available, and the default filter to reach for when you have nothing else.
 
 ```json
-{ "query": "Account Executive", "country": "United States" }
+{ "title": "Account Executive", "country": "United States" }
 ```
 
 ## Put the right thing in `query`
@@ -73,11 +73,40 @@ Two rules follow.
 
 | Put this in `query` | Use a dedicated filter instead |
 |---|---|
-| Names — `"Jane Doe"` | Country, state, city |
-| Role and function keywords — `"Account Executive"`, `"Head of Sales"` | Seniority level (`VP`, `Director`, `C Suite`) |
-| Headline phrases — `"B2B sales leader"` | Industry, department, company size, revenue |
+| Names — `"Jane Doe"` | Job titles and roles — use `title` |
+| Loose phrases with nothing better — `"recruiter London"` | Seniority level — use `seniority` |
+| | A specific employer — use `company` or `company_domain` |
+| | Country, state, city, industry, department, company size, revenue |
 
 Naming a company in `query` gets it diluted across the name and title fields. Use `company` or `company_domain` to scope to an employer.
+
+## Search roles with `title`, not `query`
+
+`title` filters on the job title field alone, which makes it the precise way to search by role. A role dropped into `query` is spread across names, company names, and the headline, so it matches loosely — `query: "Account Executive"` will also bring back Account Managers.
+
+```json
+{ "title": "Account Executive", "country": "United States" }
+```
+
+The match is analysed rather than literal, and how strict it is depends on the length of what you pass:
+
+| Words you pass | Words that must match |
+|---|---|
+| One or two | **All of them** — `"Account Executive"` never returns Account Managers |
+| Three or four | All but one |
+| Five or six | All but two |
+
+That allowance is what keeps function words from breaking a match: `"VP of Sales"` still finds someone stored as `"VP, Sales"`. Extra words in the **stored** title are always fine — `"Account Executive"` matches `"Senior Account Executive, SMB"`.
+
+`title` and `seniority` answer different questions and combine well. Use `seniority` for the level, `title` for the role:
+
+```json
+{ "title": "Sales", "seniority": "VP", "country": "United States" }
+```
+
+<Warning>
+  `title` is ~85% filled. The ~15% of profiles with no title on record can never match a `title` filter, no matter what you pass — so a title filter always trades some reach for its precision.
+</Warning>
 
 ## Know each filter's fill rate
 
@@ -86,13 +115,13 @@ Every exact-match filter silently discards records where that field is empty. St
 | Filter | Fill rate | Notes |
 |---|---|---|
 | `country` | ~99% | The most reliable filter available |
-| `query` → `title` | ~85% | |
+| `title` | ~85% | Profiles with no title can never match a `title` filter |
 | `query` → `headline` | ~65% | |
 | `seniority` | ~60% | |
 | `industry` | ~60% | |
 | `department` / `functional_area` | ~60% | Co-populated — use one or the other, never both |
 | `naics_code` | ~50% | |
-| `linkedin_industry` | ~50% | |
+| `linkedin_industry` | ~85% | |
 
 <Warning>
   `department` and `functional_area` share the same underlying data, the same document counts, and the same values. Filtering on both narrows nothing and risks contradicting yourself — pick one.
@@ -104,8 +133,8 @@ Three filters describe industry at different resolutions. Pick the one that matc
 
 | Filter | Vocabulary | Use when |
 |---|---|---|
-| `industry` | 21 broad buckets | You're thinking in categories like "software" or "healthcare" |
-| `linkedin_industry` | LinkedIn's own ~150 labels | You need a niche the broad buckets can't express — `"Wellness and Fitness Services"`, `"Staffing and Recruiting"` |
+| `industry` | 22 fixed buckets (~60% filled) | You're thinking in categories like "software" or "healthcare" |
+| `linkedin_industry` | LinkedIn's own vocabulary, hundreds of labels | You need a niche the broad buckets can't express — `"Wellness and Fitness Services"`, `"Staffing and Recruiting"` |
 | `naics_code` | Full NAICS hierarchy | You need standardised codes, or want to control breadth precisely |
 
 `naics_code` works at **any** level of the hierarchy. A 2-digit sector is broad (`"54"` = Professional Services); a 6-digit code is surgical (`"541120"` = Offices of Notaries). Shorten the code to widen the net.
@@ -127,7 +156,51 @@ Three filters describe industry at different resolutions. Pick the one that matc
 { "seniority": "VP", "employee_range": "51-200", "country": "United States" }
 ```
 
-Both use the same vocabulary as `search_companies`. Legacy values (`"Small"`, `"Mid-Market"`, `"Enterprise"`, `"Unknown"`) exist but have far thinner coverage — prefer the numeric ranges.
+Both use the same vocabulary as `search_companies` — eight employee bands and seven revenue bands, and nothing else. Older documentation mentioned `"Small"`, `"Mid-Market"`, `"Enterprise"`, and `"Unknown"` for size, and finer revenue bands above `"Above $50M"`; those are retired and now return nothing.
+
+## Exclude what you don't want
+
+Six filters remove people instead of selecting them. Each takes a **list**, and each mirrors a filter you already know:
+
+| Filter | Removes | Accepts |
+|---|---|---|
+| `exclude_company_domain` | People at specific companies | Same values as `company_domain` — full URLs normalised automatically |
+| `exclude_country` | Whole countries | Same values as `country` |
+| `exclude_state` | States or regions | Same values as `state` |
+| `exclude_industry` | Whole industries | Same values as `industry` |
+| `exclude_seniority` | Seniority levels | Same values as `seniority` |
+| `exclude_employee_range` | Employer size bands | Same values as `employee_range` |
+
+`exclude_company_domain` is your suppression list — pass the accounts you already have and nobody from them appears:
+
+```json
+{
+  "seniority": "VP",
+  "industry": "Information Technology",
+  "exclude_company_domain": ["acme.com", "stripe.com"]
+}
+```
+
+The rest carve out segments. "US VPs, but not California, and no interns or entry-level":
+
+```json
+{
+  "seniority": "VP",
+  "country": "United States",
+  "exclude_state": ["California"],
+  "exclude_seniority": ["Intern", "Entry"]
+}
+```
+
+**Exclude in the query, not after it.** An excluded person is never returned, so they cost you no tokens and no search records. Pulling 25 results and discarding five yourself costs you all 25.
+
+<Note>
+  Exclusions narrow a search — they can't be the whole search. At least one positive input is still required.
+</Note>
+
+<Warning>
+  Exclusion only drops profiles that **positively carry** the value you list. `industry` and `seniority` are each ~60% filled, so the ~40% of profiles with nothing on record are never excluded by `exclude_industry` or `exclude_seniority` — they still come through. A missing value is not an excluded value.
+</Warning>
 
 ## Match exact strings exactly
 

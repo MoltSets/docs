@@ -29,7 +29,7 @@ Search MoltSets's company and contact database by name, domain, industry, employ
 | Company + department or function | Contacts in a specific team | Find engineering contacts at acme.com | `search_people` |
 
 <Note>
-  `search_people` filters on `query`, `company`, `company_domain`, `country`, `seniority`, `industry`, `department`, and `functional_area`. It does **not** take `employee_range` or `revenue_range` — those are company filters. To target contacts by company size or revenue, first run `search_companies` with those filters, then `search_people` on each returned domain (see [Common Workflows](#common-workflows)).
+  `search_people` filters on `query`, `title`, `company`, `company_domain`, `country`, `state`, `city`, `seniority`, `industry`, `department`, `functional_area`, `naics_code`, `linkedin_industry`, `employee_range`, and `revenue_range`, plus six `exclude_*` filters. `employee_range` and `revenue_range` apply to the person's **current employer**, so you can target contacts by company size or revenue in a single call — no need to run `search_companies` first and fan out over its domains.
 </Note>
 | Person name + company domain | LinkedIn slug for that person | Find the LinkedIn profile for John Smith at acme.com | `search_linkedin_profile` |
 | Person name + company domain | Result count before spending tokens | How many people named John Smith are at acme.com | `search_linkedin_profile` (`count_only: true`) |
