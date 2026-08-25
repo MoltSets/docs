@@ -82,6 +82,10 @@ Look up carrier-verified mobile phone numbers from LinkedIn profiles and company
 | Person name + company domain | Mobile phone for that person | Find John Smith at acme.com and get their mobile phone number | `search_linkedin_profile` → `linkedin_to_mobile_phone` |
 | LinkedIn URL | Email address and mobile phone | Get the email address and mobile phone number for linkedin.com/in/username | `linkedin_to_best_email` + `linkedin_to_mobile_phone` |
 
+<Warning>
+  MoltSets does **not** currently provide Do Not Call (DNC) status. A returned number is not a number cleared to call — scrub against the applicable registries before you dial or send. See [Getting Carrier-Verified Mobile Phones](/best-practices/getting-carrier-verified-mobile-phones).
+</Warning>
+
 ## Reverse Lookups
 
 Resolve a single identifier — an email address or a LinkedIn URL — into a complete business profile in one call. Returns name, job title, seniority, company, firmographic data, and emails on file. Use these to enrich inbound leads, form fills, or existing CRM records.

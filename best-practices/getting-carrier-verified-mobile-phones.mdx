@@ -79,6 +79,16 @@ Enriching a 5,000-row list "just in case" is how a phone token allowance disappe
 
 Set a staleness threshold that matches the channel. Cold calling a number verified 18 months ago wastes a dial; sending SMS to one wastes money and can generate complaints.
 
+## Screen against DNC yourself
+
+MoltSets does **not** currently provide Do Not Call status. No field in the response indicates whether a number is on a DNC registry, and a returned number is not a number that has been cleared to call.
+
+<Warning>
+  `last_validated_at` confirms only that the number was active and in service on that date. It is not a permission signal. Scrubbing against the applicable DNC registries before you dial or send, and complying with the calling and messaging rules that apply to you, is your responsibility.
+</Warning>
+
+Practically, that means putting a DNC scrub between enrichment and outreach: take the numbers this endpoint returns, run them through your own registry check or your dialer's built-in scrubbing, and call only what survives. The endpoint fits the enrichment step of that pipeline, not the compliance step.
+
 ## Related
 
 <CardGroup cols={2}>
