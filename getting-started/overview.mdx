@@ -82,9 +82,9 @@ Resolution time varies, largely with when the outage starts: one that begins dur
 Records are the data rows returned; **requests** are capped separately — see [Rate Limits](/getting-started/rate-limits).
 
 <Note>
-  `linkedin_to_personal_email` and `linkedin_to_best_personal_email` are **not available on the \$997 plan**.
+  `linkedin_to_personal_email` and `linkedin_to_best_personal_email` are **not available on every plan** — access is set per account, not by price tier. Call `get_account` and read `personal_email_available` to know where yours stands.
 
-  Calls from a \$997 account return **403** with:
+  Calls from an account without access return **403** with:
 
   ```json
   {
@@ -129,7 +129,7 @@ For more information on our plans, upgrading and downgrading processes, please r
 | **Account** | `get_account`, `get_billing`, `get_usage` |
 
 <Note>
-  \* `linkedin_to_personal_email` and `linkedin_to_best_personal_email` are **not available on the \$997 plan** — see [Plans](#plans) for the error they return. On that plan, use `linkedin_to_business_email` instead.
+  \* `linkedin_to_personal_email` and `linkedin_to_best_personal_email` are **not available on every plan** — access is set per account, not by price tier. Call `get_account` and read `personal_email_available` to know where yours stands. See [Plans](#plans) for the error they return. Without access, use `linkedin_to_business_email` instead.
 </Note>
 
 ## What to do next

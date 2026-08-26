@@ -29,7 +29,7 @@ One record costs one search record against your fair use pool. The same query at
 
 Read three things off the single result before you widen:
 
-1. **`results.total`** — is the audience the size you expected? A total of 0 or 3 means a filter is wrong, not that the market is empty.
+1. **`total`** — is the audience the size you expected? A total of 0 or 3 means a filter is wrong, not that the market is empty. `total` sits at the top level of the response, alongside `results` — not inside it. Over raw HTTP the body nests one level deeper, so the path is `results.total`.
 2. **The record itself** — does this person actually match your intent? Check `title`, `seniority`, location, and employer against what you asked for.
 3. **`business_email` and `business_email_risk_score`** — if you're searching in order to email, confirm the emails are present and graded well enough to be worth pulling at volume.
 
@@ -47,13 +47,13 @@ Search cost is driven by the free-text `query`, not by the filters attached to i
 |---|---|
 | `query` alone | Slower and less precise |
 | `query` + any number of filters | Slower but **more precise** |
-| Filters alone, no `query` | **~40× faster and more precise** |
+| Filters alone, no `query` | **Much faster and more precise** |
 
 Two rules follow.
 
 **Never send a bare `query`.** Attaching `country`, `seniority`, or anything else costs nothing and sharply narrows the result set. A query-only call is the least precise shape available and no cheaper than a filtered one.
 
-**Drop `query` entirely when filters can carry the whole intent.** "VPs of sales at US software companies" is fully expressible as `seniority`, `department`, `industry`, and `country` — as a pure filter search it runs ~40× cheaper than the same request phrased as free text.
+**Drop `query` entirely when filters can carry the whole intent.** "VPs of sales at US software companies" is fully expressible as `seniority`, `department`, `industry`, and `country` — as a pure filter search it runs much faster than the same request phrased as free text.
 
 <Note>
   This is about execution cost, not billing. Tokens are charged per record returned regardless of query shape — a cheaper query returns faster and puts less load on search capacity, but it doesn't change what you're charged.
@@ -225,7 +225,11 @@ Results are ranked — a higher `_score` means a stronger match, so the first pa
 | Results per call (Free plan) | 5 max |
 | Free plan lifetime search records | 100 |
 
-Every response carries `results.total`, the count of matching records across all pages. Read it **before** paginating to decide whether the search is worth walking, then increment `offset` by your `limit`. The `limit: 1` probe above gets you that total for the price of a single record.
+Every response carries a top-level `total`, the count of matching records across all pages (`results.total` in the raw HTTP body). Read it **before** paginating to decide whether the search is worth walking, then increment `offset` by your `limit`. The `limit: 1` probe above gets you that total for the price of a single record.
+
+<Warning>
+  **`total` stops counting at 10,000, and pagination stops there too.** A `total` of `10000` means *at least* 10,000 matches, not exactly 10,000 — don't size a run off it. `offset + limit` can't exceed 10,000 either, so no amount of paging reaches record 10,001. To pull a larger audience, split the search into narrower slices — by `state`, `industry`, `employee_range`, or `seniority` — and walk each slice separately.
+</Warning>
 
 ## Related
 

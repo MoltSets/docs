@@ -199,6 +199,10 @@ const data = await response.json();
 
 **Paginating through results**
 
+<Warning>
+  `total` stops counting at 10,000. A `total` of `10000` means *at least* 10,000 matches, not exactly 10,000 — don't plan a pull off it. `offset + limit` is capped at 10,000 too, so paging can't reach record 10,001. For a larger list, split the search into narrower slices and walk each one separately.
+</Warning>
+
 ```javascript
 async function fetchAllResults(filters, endpoint) {
   const results = [];
@@ -223,6 +227,9 @@ async function fetchAllResults(filters, endpoint) {
     if (results.length >= data.results.total || page.length < limit) break;
 
     offset += limit;
+
+    // `offset + limit` can't exceed 10,000 — the search window is capped there
+    if (offset + limit > 10000) break;
   }
 
   return results;

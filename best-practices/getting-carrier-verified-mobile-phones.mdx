@@ -64,7 +64,7 @@ You're only charged for results that come back — profiles with no mobile on fi
 Because phone tokens are the scarcest thing on every plan, it pays to narrow the list before calling this endpoint rather than after. Run your [people search](/best-practices/searching-for-people) filters first and enrich only the contacts you'd actually call:
 
 1. `search_people` with `seniority`, `department`, and location filters
-2. Review `results.total` and tighten until the list is the size you intend to work
+2. Review the top-level `total` and tighten until the list is the size you intend to work (`total` stops counting at 10,000)
 3. Batch the resulting LinkedIn URLs into `linkedin_to_mobile_phone`, up to 100 at a time and within your phone token allowance
 
 Enriching a 5,000-row list "just in case" is how a phone token allowance disappears in one afternoon.
