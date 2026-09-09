@@ -112,8 +112,6 @@ Records are the data rows returned; requests are capped separately — see https
 
 Note: `linkedin_to_personal_email` and `linkedin_to_best_personal_email` are not available on every plan. Access is set per account, not by price tier — call `get_account` and read `personal_email_available`. Calls from an account without access return HTTP 403 with `{"error": {"code": "plan_restricted", "message": "Personal email lookups are not available on your plan. Contact support@moltsets.com to request access."}}` — note this error nests `code` and `message` inside `error`, unlike other MoltSets errors. Use `linkedin_to_business_email` instead, or contact support@moltsets.com to request access.
 
-> [Getting the \$997/month plan for \$497/month with the UGC Discount — How It Works](https://support.moltsets.com/en/articles/15207288).
-
 ## MCP Server
 
 MCP Server URL: `https://mcp.moltsets.com/mcp`
@@ -130,11 +128,11 @@ Credentials (Client ID + Client Secret) are created at https://app.moltsets.com/
 ## More information about MoltSets
 
 - https://moltsets.com/ — Homepage. Unlimited contact data APIs built for Clay and Claude Code, from $27/mo. Enrich your prospect lists with 100% verified contact data. Currently in closed beta — connect your agent and join the closed beta. Beta APIs cover verified business emails, verified personal emails, verified mobile phones, and ad audience identifiers; company search and people search are in alpha.
-- https://moltsets.com/pricing — Pricing. Every plan includes unlimited API calls (rate limits vary by plan) and 100% verified emails with a date of last validation under 30 days; real-time carrier-validated mobile numbers. Tiers: Free (1,000 calls), $27/mo (unlimited), $97/mo (unlimited), and the $497/mo UGC plan (50% off the $997 list price, by promo).
+- https://moltsets.com/pricing — Pricing. Every plan includes unlimited API calls (rate limits vary by plan) and 100% verified emails with a date of last validation under 30 days; real-time carrier-validated mobile numbers. Tiers: Free (1,000 calls), $27/mo (unlimited), $97/mo (unlimited), and the $997/mo (unlimited) plan.
 - https://moltsets.com/how-it-works — How it works. MoltSets enriches lists in Clay and Claude Code. Sign up and get an API key, try it free or pick an unlimited plan, then connect to Clay or Claude Code. Emails are verified across three sources, mobile numbers are carrier-verified in real time, and only contacts validated in the last 30 days are returned so you never burn tokens on bad data.
 - https://moltsets.com/our-data — Our data. The data categories MoltSets covers: 100% verified business emails, personal emails, mobile phones, people search, company search, reverse email lookup, email validation, and Sha256 hashes for ad audiences. Multi-provider waterfalls maximize coverage on every call, and every email carries a validation date under 30 days.
 - https://moltsets.com/for-agents — For agents. AI agents can buy MoltSets data with Stripe's MPP or Coinbase's x402 — no API key and no subscription. Create an MPP or x402 wallet, choose the API that fits the task in the docs, then call the MoltSets MCP with the required input; if the wallet has sufficient funds, MoltSets enriches and charges per record. MCP- and REST-compatible, with agent-first docs and transparent pricing.
-- https://moltsets.com/partnerships — Partnerships. Partner with MoltSets to lower your data bill, boost your personal brand, and make more money. Three programs: the UGC Plan (50% off, post 2x/mo tagging MoltSets, Adam comments on every post), the Affiliate Program (20% recurring on every dollar from signups you drive), and the Live Show Partner program (demo Claude/Clay skills to 500+ live viewers and get featured in the MoltSets skill library).
+- https://moltsets.com/partnerships — Partnerships. Partner with MoltSets to lower your data bill, boost your personal brand, and make more money. Two programs: the Affiliate Program (20% recurring on every dollar from signups you drive), and the Live Show Partner program (demo Claude/Clay skills to 500+ live viewers and get featured in the MoltSets skill library).
 - https://moltsets.com/terms-of-service — Terms of Service for MoltSets.
 - https://moltsets.com/privacy-policy — Privacy Policy for MoltSets.
 - https://moltsets.com/data-protection-addendum - Data Protection Addendum for MoltSets.
