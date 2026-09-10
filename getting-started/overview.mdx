@@ -118,7 +118,7 @@ Branch on `error.code`, not on the message text.
 | :-- | :-- | :-- | :-- |
 | `invalid_input` | `422` | A parameter is missing, malformed, or outside its allowed values | Fix the parameter and retry. Retrying unchanged returns the same error |
 | `unauthorized` | `401` | Missing, invalid, or revoked API key | Check the `Authorization` header, or issue a new key |
-| `account_inactive` | `403` | The account is not active | Contact [support@moltsets.com](mailto:support@moltsets.com) |
+| `account_inactive` | `403` | The account is not active | Account is canceled either by choice or because of a payment issue. Login to your account to fix |
 | `insufficient_tokens` | `402` | Token balance can't cover the call | Top up or upgrade. On a batch, unaffordable items are dropped and the rest still return |
 | `insufficient_phone_tokens` | `402` | Phone-token allowance can't cover a mobile result | Phone tokens are a separate allowance — see [Rate Limits](/getting-started/rate-limits). Batches drop the excess rather than failing |
 | `plan_restricted` | `403` | The tool isn't part of your plan — today, the dedicated personal-email tools | A plan condition: no `Retry-After`, and topping up tokens won't clear it. Use `linkedin_to_business_email`, or contact support |
