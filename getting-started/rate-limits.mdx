@@ -35,7 +35,11 @@ Nothing is scheduled, so there's no reset hour to plan around. `get_account` rep
 
 ## What counts as a request
 
-Every API call counts toward the rate limit, regardless of whether it returns data. Empty results and account management calls (`get_account`, `get_billing`, `get_usage`) all count as requests.
+Every API call counts toward the rate limit, regardless of whether it returns data — a `not_found` is still a request. Each item of a batch counts separately, so a batch of 100 counts as 100 requests. The free account tools (`get_account`, `get_billing`, `get_usage`) never count.
+
+## What counts as a miss
+
+A lookup that finds nothing still counts as a **request**, but consumes no **records** and no tokens. It returns HTTP `200` with `status: "not_found"` — see [Reading an outcome](/getting-started/overview#reading-an-outcome). Records are only consumed when data is actually returned, and are handed back if a later cap drops the result.
 
 ## Check where you stand
 
@@ -82,20 +86,39 @@ If you need help adapting your code to work within these limits, any AI coding a
 
 ## Rate limit errors
 
-When you exceed your plan's rate limit, the API returns a `429 Too Many Requests` response:
+When you exceed a limit, the API returns `429 Too Many Requests` with one of three codes:
+
+| Code | What ran out |
+| :-- | :-- |
+| `fair_use_limit_exceeded` | A Fair Use **record** window — the records columns in the tables above. On the free tier, also the one-time search trial |
+| `fair_use_requests_exceeded` | The 5-hour **request** window — every call attempted, hits and misses alike |
+| `rate_limited` | The burst guard, which fires on too many requests in too short a time regardless of your plan headroom |
 
 ```json
 {
-  "error": "Too Many Requests",
-  "message": "Rate limit exceeded."
+  "error": {
+    "code": "fair_use_limit_exceeded",
+    "message": "Fair use record limit reached. Retry after the window resets."
+  },
+  "metadata": {
+    "retry_after": 7200
+  }
 }
 ```
 
+Fair Use `429`s carry `metadata.retry_after` — seconds until the binding window unlocks — and the same value in a `Retry-After` header. Wait that long rather than guessing a backoff.
+
+The exception is a limit that is a plan condition rather than a window: an exhausted free-tier search trial returns `fair_use_limit_exceeded` with an upgrade message and **no** `Retry-After`, because that grant never refreshes. Retrying will not clear it.
+
 The request is not retried automatically — your client is responsible for handling `429` responses.
+
+### Batches return partial results, not a 429
+
+When a batch runs past a Fair Use window, the items beyond your allowance are dropped unprocessed and the call still returns **`200`** with the results it did produce, plus an error block naming the cap that fired. That `200` carries `metadata.retry_after` and a `Retry-After` header, exactly like the single-call `429` — a half-succeeded batch is the response most likely to be retried in a tight loop, so read the header before resending. Resend only the items that were dropped.
 
 ## Handling rate limits
 
-**Exponential backoff** is the recommended approach. When you receive a `429`, wait before retrying:
+When a `429` carries `Retry-After`, honour it — it is the exact number of seconds until the binding window unlocks, and retrying sooner just burns request quota. Where there is no header, fall back to **exponential backoff**:
 
 ```javascript
 async function callWithBackoff(fn, retries = 4) {

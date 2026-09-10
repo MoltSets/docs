@@ -172,8 +172,9 @@ const response = await fetch("https://api.moltsets.com/api/v1/tools/search_compa
 });
 
 const data = await response.json();
+// data.status         — "ok" on a hit, "not_found" when nothing matched (still HTTP 200)
 // data.results.results — array of matching companies
-// data.results.total — total matching records across all pages
+// data.results.total  — total matching records across all pages
 ```
 
 **Find contacts at a specific company**
@@ -220,6 +221,10 @@ async function fetchAllResults(filters, endpoint) {
     });
 
     const data = await response.json();
+
+    // A search that matches nothing is a normal 200 with status "not_found"
+    if (data.status === "not_found") break;
+
     const page = data.results.results;
 
     results.push(...page);

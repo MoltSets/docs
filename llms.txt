@@ -15,7 +15,7 @@ MoltSets returns contact and company data an agent can act on directly. Differen
 - Skills library: https://moltsets.com/library - Claude Skills for MoltSets — pre-built, ready to run. Start with identity resolution, enrichment, and more.
 
 ## Getting Started
-- [Overview](https://developer.moltsets.com/getting-started/overview): What MoltSets is, base URL, request/response structure, plans, and available tools.
+- [Overview](https://developer.moltsets.com/getting-started/overview): What MoltSets is, base URL, request/response structure, the three outcomes (found / not found / error) and how to read them, plans, and available tools.
 - [Authentication](https://developer.moltsets.com/getting-started/authentication): API key format (`ms_XXXXXXXXXXX`), how to create/revoke keys, Bearer token usage, error responses.
 - [Rate Limits](https://developer.moltsets.com/getting-started/rate-limits): Per-plan limits, what counts as a request, 429 handling, exponential backoff, multi-key strategies. Limits use rolling windows, not fixed daily resets — the first request opens a 5-hour window, everything in the next 5 hours draws from the same pool, and the next request after it closes opens a fresh one. The weekly window rolls the same way.
 - [MoltSets App](https://developer.moltsets.com/getting-started/moltsets-app): Logging in, navigating the app.
@@ -47,7 +47,14 @@ Base URL: `https://api.moltsets.com/api/v1/tools/`
 
 Authentication: `Authorization: Bearer YOUR_API_KEY` on every request.
 
-All requests are `POST` with a JSON body. All responses return HTTP 200 with envelope: `{ "results": {...}, "status": "ok", "metadata": { "tokens_used": N, "tokens_remaining": N } }`.
+All requests are `POST` with a JSON body. Every call that completes returns HTTP 200 with envelope: `{ "results": {...}, "status": "ok", "metadata": { "tokens_used": N, "tokens_remaining": N } }`.
+
+Three outcomes, and the HTTP status only says whether the call completed — read `status` in the body to tell a hit from a miss:
+- Found: HTTP 200, `status: "ok"`, populated `results`. Tokens charged.
+- Not found: HTTP 200, `status: "not_found"`, `results` empty or with `null` fields, plus the usual `metadata`. No tokens charged; still counts as one request against the Fair Use requests limit. A miss is a normal outcome, not a failure — do not report it as an API error. Batches behave the same way: a batch returns 200 with its per-item results intact, and a batch where nothing matched is 200 with `status: "not_found"`.
+- Error: HTTP 4xx/5xx with an `error` object and no `results`. No tokens charged.
+
+Changed: lookups that find nothing used to return HTTP 404. They now return 200 with `status: "not_found"`. The API's only 404 is `tool_not_found` — an unknown or retired tool name in the URL.
 
 ### Search
 
@@ -95,9 +102,25 @@ All requests are `POST` with a JSON body. All responses return HTTP 200 with env
 
 ## Errors
 
-- `500` with `{"error": {"code": "internal_error", "message": "Unexpected connection error."}, "metadata": {}}` means the endpoint itself is temporarily offline. It is not caused by the request — API key, parameters, plan, and rate-limit headroom are all fine. The MoltSets team is alerted automatically; there is no need to report it. Resolution time varies with when the outage starts (office hours are picked up sooner than overnight or weekends), so use no fixed retry delay — requeue the call and retry later rather than looping on it.
-- `403` with `{"error": {"code": "plan_restricted", ...}}` means the endpoint is not available on the account's plan — see the note under Plans.
-- Other errors (`400`, `401`, `404`, `422`, `429`) return a flat `{"error": "...", "message": "..."}` shape.
+Every error, on REST and MCP alike, uses one shape: `{"error": {"code": "...", "message": "..."}}`. Branch on `error.code`, not on the message text. Nothing is charged on an error.
+
+| Code | HTTP | Meaning | Next step |
+|---|---|---|---|
+| `invalid_input` | 422 | A parameter is missing, malformed, or outside its allowed values | Fix the parameter; retrying unchanged repeats the error |
+| `unauthorized` | 401 | Missing, invalid, or revoked API key | Check the `Authorization` header or issue a new key |
+| `account_inactive` | 403 | The account is not active | Contact support@moltsets.com |
+| `insufficient_tokens` | 402 | Token balance cannot cover the call | Top up or upgrade. Batches drop unaffordable items and return the rest |
+| `insufficient_phone_tokens` | 402 | Phone-token allowance cannot cover a mobile result | Phone tokens are a separate per-plan allowance. Batches drop the excess |
+| `plan_restricted` | 403 | The tool is not part of the account's plan (today: the dedicated personal-email tools) | A plan condition — no Retry-After, topping up does not clear it. Use `linkedin_to_business_email` or contact support@moltsets.com |
+| `fair_use_limit_exceeded` | 429 | A fair-use RECORD window is exhausted, or the free-tier search trial is used up | Wait `metadata.retry_after` seconds. The free search trial never refreshes, so it carries no Retry-After |
+| `fair_use_requests_exceeded` | 429 | The 5-hour REQUEST window is exhausted | Wait `metadata.retry_after` seconds |
+| `rate_limited` | 429 | Burst guard — too many requests too quickly | Back off and retry |
+| `tool_not_found` | 404 | Unknown or retired tool name in the URL | Check the tool name. This is the API's ONLY 404 — it never means "no data found" |
+| `internal_error` | 500 | The endpoint itself is temporarily offline | Not caused by the request (key, parameters, plan, and headroom are all fine). The team is alerted automatically. Resolution time varies with when the outage starts, so use no fixed retry delay — requeue and retry later rather than looping |
+
+Fair-use 429s carry `metadata.retry_after` and a `Retry-After` header (seconds until the binding window unlocks). A batch that dropped items for fair use returns 200 with partial results and carries the same `metadata.retry_after` and `Retry-After` header — resend only the dropped items.
+
+Every tool response also carries an `X-MoltSets-Outcome` header (`ok` / `not_found` / error code) for clients and proxies that do not parse the body. It is absent on requests that ran no tool, such as auth failures.
 
 ## Plans
 

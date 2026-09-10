@@ -70,7 +70,26 @@ Repeat for each field you need.
 
 ## Handling no results
 
-When MoltSets finds no data for a given input, it returns a 404 error.
+When MoltSets finds no data for a given input, the call still succeeds: HTTP `200`, with `status` set to `"not_found"` and the fields in `results` empty or `null`. No tokens are charged.
+
+In Clay, that means the row is not an error row — the HTTP API column fills in with a body like this:
+
+```json
+{
+  "results": {
+    "email": null,
+    "risk_score": null
+  },
+  "status": "not_found",
+  "metadata": { ... }
+}
+```
+
+Add a formula column on `status` if you want to split hits from misses — for example, only run a follow-up enrichment where `status` is `"ok"`. Filtering on the HTTP status code will not separate them, because both outcomes return `200`.
+
+<Note>
+  **This changed.** MoltSets used to return `404` when a lookup found nothing. Tables built to treat a `404` as "no data" should now read `status` instead. The only `404` left is an unknown or retired tool name in the URL.
+</Note>
 
 ---
 

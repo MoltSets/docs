@@ -65,7 +65,7 @@ Starting from a contact list you already own instead, `business_email_to_sha256`
 
 ## Practical notes
 
-- **Only pay for hits.** Tokens are charged only when data is found and returned. Contacts with no resolvable identifiers cost nothing, though the request still counts toward your rate limit.
+- **Only pay for hits.** Tokens are charged only when data is found and returned. Contacts with no resolvable identifiers cost nothing — the call returns HTTP `200` with `status: "not_found"` and empty `results` — though the request still counts toward your rate limit.
 - **Audiences decay.** People change devices and reset advertising IDs; MAIDs go stale faster than email hashes. Rebuild rather than reuse an old upload.
 - **Mind platform minimums.** Most ad platforms won't activate an audience below a minimum size, and a list that matches thinly can fall under it. Check the top-level `total` on your source search before committing to the enrichment run — and note it stops counting at 10,000, so a `total` of `10000` means *at least* that many, not exactly that many.
 

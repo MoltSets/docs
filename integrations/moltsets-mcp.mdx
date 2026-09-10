@@ -211,11 +211,57 @@ Visit "[**I Have X, I Want Y**](/use-cases/i-have-x-i-want-y)" for more example 
 
 ---
 
+## Reading an outcome
+
+Every MoltSets tool call ends in one of three outcomes, and the agent should tell them apart before it reports back to you:
+
+| Outcome | MCP response | What it means |
+| :-- | :-- | :-- |
+| **Found** | `isError: false`, `status: "ok"` | Data was found and returned. Tokens charged. |
+| **Not found** | `isError: false`, `status: "not_found"` | The tool ran fine; MoltSets holds no data for that input. **Nothing charged.** |
+| **Error** | `isError: true` with an error `code` | The call did not complete — bad input, no tokens, plan restriction, rate limit, or an outage. |
+
+**A not-found is a normal, uncharged result — not a failure.** The lookup was clean, the data simply isn't on file for that input. It still consumes one request against your Fair Use requests limit. An agent should say "no email on file for that profile" and move on — or try a neighbouring tool — rather than reporting that the API errored.
+
+Where to go next after a miss:
+
+| Missed on | Try next |
+| :-- | :-- |
+| `linkedin_to_business_email` | `linkedin_to_best_email`, then `linkedin_to_personal_email` (where your plan allows) |
+| `linkedin_to_best_email` | `reverse_linkedin_lookup` for the wider profile |
+| `search_business_email_by_name` | `search_linkedin_profile` to confirm the person exists, then enrich |
+| `email_to_linkedin` | `reverse_email_lookup` for the profile without the URL |
+| `ip_to_company` | Nothing — consumer ISP traffic often has no company behind it |
+
+### When it really is an error
+
+A genuine error comes back with `isError: true` and an `error.code`. What the agent should do next depends on the code:
+
+| Code | Means | Next step |
+| :-- | :-- | :-- |
+| `invalid_input` | A parameter is wrong | Fix the parameter — rerunning it unchanged repeats the error |
+| `insufficient_tokens` | Out of tokens | Top up or upgrade; `get_billing` shows the balance |
+| `insufficient_phone_tokens` | Out of phone tokens | A separate allowance from regular tokens |
+| `plan_restricted` | The tool isn't on your plan | A plan condition, not a data miss — switch tools or contact support |
+| `fair_use_limit_exceeded` / `fair_use_requests_exceeded` | A Fair Use window is exhausted | Wait `metadata.retry_after` seconds, then resume |
+| `rate_limited` | Too many calls too quickly | Back off briefly |
+| `unauthorized` / `account_inactive` | Credentials or account problem | Recheck the connector; contact support if the account is inactive |
+| `tool_not_found` | Unknown or retired tool name | Check the name against `tools/list` |
+| `internal_error` | The endpoint is temporarily offline | Stop retrying that tool, do something else, come back later |
+
+Nothing is charged on an error. The full table with REST status codes is in [Errors](/getting-started/overview#errors).
+
+<Note>
+  Over REST the same three outcomes map to HTTP status this way: found and not-found are both `200` (read `status` in the body to tell them apart), and errors are `4xx`/`5xx`. See [Reading an outcome](/getting-started/overview#reading-an-outcome).
+</Note>
+
+---
+
 ## Tokens & Costs
 
 You only spend tokens on **verified data that is actually returned**. A few rules the agent follows automatically:
 
-- **No data, no charge.** Calls that return `not_found` cost nothing.
+- **No data, no charge.** Calls that come back with `status: "not_found"` cost nothing — a miss is a normal outcome, not an error.
 - **Counting is free.** `search_linkedin_profile` with `count_only: true` returns match counts without spending tokens — use it to size a search before committing.
 - **Free tools.** `get_account`, `get_billing`, and `get_usage` never cost tokens. Call `get_billing` for the per-tool `token_costs` map and your current balance.
 - **Phone tokens are separate.** `linkedin_to_mobile_phone` spends **phone tokens** — an allowance set by your plan, separate from your regular token balance — at 1 phone token per returned result.
@@ -284,5 +330,11 @@ For a full breakdown, see the [Rate Limits](/getting-started/rate-limits) guide.
     ```
 
     This is an account entitlement, not a data miss — retrying or rewording the prompt won't help. Use `linkedin_to_business_email` instead, or contact [support@moltsets.com](mailto:support@moltsets.com) to request access.
+  </Accordion>
+
+  <Accordion title="The agent reports an error when the lookup simply found nothing">
+    Check the `status` field on the response. A clean miss comes back as a **success** — `isError: false` with `status: "not_found"` — and costs nothing. It is not an error, and retrying the same input will return the same miss.
+
+    Older integrations saw a `404` for this case. That is no longer sent: over REST both a hit and a miss return `200`, and the body's `status` tells them apart. If an agent is relaying misses as API failures, tell it to read `status` before reporting, and to try the next tool in the [chain above](#reading-an-outcome).
   </Accordion>
 </AccordionGroup>

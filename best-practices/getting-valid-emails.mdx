@@ -83,7 +83,7 @@ Two places already return emails with risk scores attached, and calling a dedica
 If you're already running a search or a reverse lookup, check what came back before enriching further.
 
 <Note>
-  Tokens are only charged when data is found and returned. A lookup that finds nothing costs nothing — though it still counts against your rate limit.
+  Tokens are only charged when data is found and returned. A lookup that finds nothing costs nothing — though it still counts against your rate limit. A miss comes back as HTTP `200` with `status: "not_found"`, so branch your fallback chain on `status`, not on the HTTP code.
 </Note>
 
 ## Business or personal — pick by channel

@@ -14,7 +14,7 @@ description: "How to build precise people searches with MoltSets — choosing th
 ```
 
 <Note>
-  Tokens are only charged when data is found and returned. A search that matches nothing costs nothing — but it still counts against your rate limit. See [Rate Limits](/getting-started/rate-limits).
+  Tokens are only charged when data is found and returned. A search that matches nothing costs nothing — but it still counts against your rate limit. A zero-hit search is HTTP `200` with `status: "not_found"` and `total: 0`, not an error. See [Rate Limits](/getting-started/rate-limits).
 </Note>
 
 ## Probe with `limit: 1` before you pull a page

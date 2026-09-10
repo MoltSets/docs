@@ -54,14 +54,19 @@ All API keys have the same permissions — there are no read-only or scoped keys
 
 ## Error responses
 
-| Status | Meaning |
-|---|---|
-| `401 Unauthorized` | Missing or invalid API key |
-| `403 Forbidden` | Valid key but insufficient account access |
+| Status | Code | Meaning |
+|---|---|---|
+| `401 Unauthorized` | `unauthorized` | Missing, invalid, or revoked API key |
+| `403 Forbidden` | `account_inactive` | Valid key, but the account is not active |
+| `403 Forbidden` | `plan_restricted` | Valid key, but the tool isn't part of the account's plan |
 
 ```json
 {
-  "error": "Unauthorized",
-  "message": "Invalid or missing API key."
+  "error": {
+    "code": "unauthorized",
+    "message": "Invalid API key."
+  }
 }
 ```
+
+Every MoltSets error uses this shape — an `error` object with a `code` and a `message`. Branch on `code`; the message is for humans. The full list is in [Errors](/getting-started/overview#errors).
