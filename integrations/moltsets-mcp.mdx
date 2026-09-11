@@ -186,43 +186,16 @@ With the MoltSets MCP Server connected:
     </Note>
   </Tab>
   <Tab title="Other MCP clients">
-    Any MCP client that speaks OAuth 2.1 can connect — including CLI tools and desktop apps that complete the flow on a local port. Point the client at the server URL and let it discover the rest:
+    Any MCP client that supports remote servers over HTTP can connect — CLI agents, desktop apps, and IDE extensions included.
 
-    ```text
-    https://mcp.moltsets.com/mcp
-    ```
+    1. Add `https://mcp.moltsets.com/mcp` as a remote MCP server in your client.
+    2. When the client asks for OAuth credentials, paste the **Client ID** and **Client Secret** from the **Connectors** page at [app.moltsets.com](https://app.moltsets.com). Clients that register themselves can skip this step.
+    3. Approve access on the MoltSets consent screen when the browser opens. The client stores the token from there; re-run the flow if it expires.
 
-    Discovery follows the standard metadata documents. `https://mcp.moltsets.com/.well-known/oauth-protected-resource` names the authorization server, and `https://app.moltsets.com/.well-known/oauth-authorization-server` carries the endpoints:
-
-    | | |
-    | :-- | :-- |
-    | Authorization | `https://app.moltsets.com/oauth/authorize` |
-    | Token | `https://app.moltsets.com/oauth/token` |
-    | Dynamic registration | `https://app.moltsets.com/oauth/register` |
-    | Grant type | `authorization_code` |
-    | PKCE | `S256` |
-    | Scopes | `mcp`, `read`, `tokens` |
-
-    Clients that can't do dynamic registration use the Client ID and Client Secret from the **Connectors** page at [app.moltsets.com](https://app.moltsets.com).
-
-    ### Redirect URIs
-
-    A native or CLI client can't host HTTPS on an ephemeral local port, so it listens on a loopback address instead — the pattern described in [RFC 8252 §7.3](https://datatracker.ietf.org/doc/html/rfc8252#section-7.3). MoltSets accepts that:
-
-    | Redirect URI | Accepted |
-    | :-- | :-- |
-    | `https://…` on any host | Yes |
-    | `http://127.0.0.1:<port>/callback` | Yes — loopback |
-    | `http://[::1]:<port>/callback` | Yes — loopback |
-    | `http://localhost:<port>/callback` | Yes — loopback |
-    | `http://` on any other host | **No** — https required |
-
-    **The port may vary.** A CLI binds a different ephemeral port on each run, so a registered loopback URI matches regardless of the port it later listens on. Everything else — scheme, host, path, and query — must match the registered URI exactly. Port variance is loopback-only: a registered `https://example.com:8443/cb` still won't match `:9999`.
-
-    **PKCE is mandatory for loopback redirects**, and is enforced at `/oauth/authorize` — an authorization request from a loopback client without a `code_challenge` is refused before any code is minted. Use `S256`. For `https` redirect URIs PKCE stays optional, so nothing changes for the Claude.ai connector flow.
+    Clients that run in a terminal complete this on a local port — `http://127.0.0.1:<port>/callback` and its `localhost` and `[::1]` equivalents are supported, so no HTTPS callback is needed on your machine.
 
     <Note>
-      `127.0.0.1` is preferred over `localhost`. Both are accepted because real clients use both, but `localhost` resolution depends on the host's resolver, which RFC 8252 notes is the weaker of the two. PKCE is what protects the code either way.
+      Endpoints, scopes, and redirect URI rules are on the [Authentication](/getting-started/authentication#oauth--connecting-an-mcp-client) page, and are discoverable from the server itself at `https://mcp.moltsets.com/.well-known/oauth-protected-resource`.
     </Note>
   </Tab>
 </Tabs>
@@ -332,13 +305,11 @@ For a full breakdown, see the [Rate Limits](/getting-started/rate-limits) guide.
   </Accordion>
 
   <Accordion title="The authorization request is rejected (invalid redirect URI)">
-    `/oauth/authorize` accepts `https` on any host, and `http` **only** on a loopback host — `127.0.0.1`, `[::1]`, or `localhost`. Anything else over plain `http` is refused, including addresses that merely look like loopback: `http://127.0.0.1@evil.com/cb`, `http://evil.com#127.0.0.1`, and `http://127.0.0.1.evil.com/cb` all resolve to a non-loopback host and are denied.
+    Terminal clients must call back to a loopback address — `127.0.0.1`, `localhost`, or `[::1]`. A plain `http` callback on any other host is refused; everything else must use `https`.
 
-    If your redirect URI is loopback and the request is still refused, check that:
+    If your callback is loopback and it is still refused, check that the client sends a PKCE `code_challenge` (method `S256`) — it is required for loopback — and that the callback path matches the one registered for your connector. The port is allowed to change between runs; the path is not.
 
-    - The request carries a PKCE `code_challenge` (method `S256`). PKCE is **required** for loopback authorizations and is enforced up front, at `/oauth/authorize`.
-    - The scheme, host, path, and query match the registered URI exactly. Only the **port** is allowed to differ, and only on loopback.
-    - The token exchange sends back the same `redirect_uri` it was redirected to, port included.
+    Full rules are on the [Authentication](/getting-started/authentication#redirect-uris) page.
   </Accordion>
 
   <Accordion title="Authentication errors (invalid credentials)">
