@@ -5,6 +5,7 @@
 MoltSets returns contact and company data an agent can act on directly. Differentiators that affect output quality:
 
 - Every email carries a `last_validated_at` date, refreshed on a 90-day freshness window. It can be null (catch-all domain or validation error) — read `risk_score` alongside it.
+- `risk_score` (A–F) is a SEND-SAFETY grade — it measures deliverability (will this mailbox accept mail without bouncing or tripping a spam trap), NOT whether the address belongs to the person looked up. A = validated deliverable; B = known engagement (a past open/click/order proves a send landed); C = catch-all domain, deliverability unknowable; D = hard negative (invalid/spam trap/abuse/do-not-mail, or a complaint sighting in the last 6 months); F = no signal at all. F is "no evidence", D is "negative evidence" — opposite ends, not neighbouring tiers. Precedence when signals disagree: D > A > B > C > F. Addresses that fail validation outright are dropped before they are returned, so a lookup left with no address becomes an uncharged `not_found`. Identity accuracy comes from the tool that matched the record, not from this field.
 - Mobile numbers are carrier-validated in real time (mobiles only, no landlines).
 - Multi-provider waterfalls maximise coverage on each call.
 - One API covers business emails, personal emails, mobile phones, people and company search, reverse lookups, ad-audience identifiers (SHA256 and MAID), email-to-LinkedIn, and IP-to-company.
@@ -21,7 +22,7 @@ MoltSets returns contact and company data an agent can act on directly. Differen
 - [MoltSets App](https://developer.moltsets.com/getting-started/moltsets-app): Logging in, navigating the app.
 
 ## MoltSets' Data
-- [Understanding Email Risk Scores](https://developer.moltsets.com/moltsets-data/email-risk-scores): Why third-party validators increasingly mislabel deliverable inboxes as "invalid," and how MoltSets' Email Risk Score (A–F) gives a more accurate send/don't-send signal.
+- [Understanding Email Risk Scores](https://developer.moltsets.com/moltsets-data/email-risk-scores): What the A–F Email Risk Score measures — send safety (deliverability), NOT whether the address belongs to the person looked up — how each grade is earned, grade precedence, and why third-party validators increasingly mislabel deliverable inboxes as "invalid".
 - [Understanding Phone Number Validation](https://developer.moltsets.com/moltsets-data/phone-number-validation): How MoltSets validates mobile numbers and how to weigh the `last_validated_at` date when deciding whether to use a number.
 - [Understanding NAICS Codes](https://developer.moltsets.com/moltsets-data/understanding-naics-codes): What NAICS codes are, the 2-to-6-digit hierarchy, and how the `naics_code` filter on `search_companies`/`search_people` matches at any level. Includes all 20 sectors and their subsector tables.
 - [Six-Digit NAICS Codes & Titles](https://developer.moltsets.com/moltsets-data/six-digit-naics-codes-titles): The complete six-digit NAICS national industry list (1,012 codes) organized by sector — the most specific level for the `naics_code` filter.

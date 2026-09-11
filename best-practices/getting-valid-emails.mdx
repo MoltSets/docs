@@ -47,22 +47,24 @@ MoltSets has five ways to get an email address. They differ in what you put in, 
 
 ## Read the risk score before you send
 
-Every email MoltSets returns carries a `risk_score` — a single-letter grade for send safety, assigned after validation.
+Every email MoltSets returns carries a `risk_score` — a single-letter grade for **send safety**. It grades the mailbox, not the match: an `A` means the address is safe to send to, not that MoltSets is more certain it belongs to the person you looked up.
 
 | Grade | Meaning | Action |
 |---|---|---|
-| **A** | Validated deliverable — known reply, open, or click | Send |
-| **B** | Known send with no bounce recorded | Probably send |
+| **A** | Validated deliverable — confirmed at validation time | Send |
+| **B** | Known engagement — a past open, click, or order, so a send reached the inbox | Probably send |
 | **C** | Catch-all server — deliverability can't be determined | Your call |
-| **D** | Hard invalid — bounce, complaint, or spam trap | **Don't send** |
+| **D** | Hard negative — invalid, spam trap, abuse, or a complaint sighting in the last 6 months | **Don't send** |
 | **F** | No signal either way | Your call |
+
+When signals disagree the order is **D > A > B > C > F** — a hard negative outranks even a fresh deliverable verdict.
 
 The single rule worth automating: **suppress `D` at the list level.** It's the fastest way to trip spam traps and damage sender reputation for an entire list, and it's the one grade where the answer never depends on your risk tolerance.
 
 Segment `C` and `F` away from `A`/`B` rather than dropping them — they're unknown, not bad. Warm them at lower volume and suppress non-responders after one or two attempts.
 
 <Note>
-  For the full grading rationale, including why other validation vendors began returning more false "invalid" results in 2026, see [Understanding Email Risk Scores](/moltsets-data/email-risk-scores).
+  For what the grade does and doesn't measure, how each one is earned, and why other validation vendors began returning more false "invalid" results in 2026, see [Understanding Email Risk Scores](/moltsets-data/email-risk-scores).
 </Note>
 
 ## Check the validation date

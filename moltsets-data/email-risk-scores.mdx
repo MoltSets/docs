@@ -1,45 +1,99 @@
 ---
 title: "Understanding Email Risk Scores"
-description: "Why some emails are flagged \"invalid\" by other tools, and how MoltSets' Email Risk Score gives you a more accurate way to decide who to send to."
+description: "What the A–F Email Risk Score measures — send safety, not identity accuracy — how each grade is earned, and how to act on it."
 ---
 
-## Why you might see more "invalid" results from other tools
+The Email Risk Score is a **send-safety grade**. It answers one question: *if you send to this address, how likely is it to land in an inbox rather than bounce, hit a spam trap, or damage your sending reputation?*
 
-In spring 2026, Microsoft began blocking SMTP-based email validation checks. Because of this, third-party validation vendors (NeverBounce, ZeroBounce, and others) have started marking fully configured, deliverable inboxes as "invalid" — even though these addresses can receive mail and should be sent to.
+It is **not** a confidence score for whether the address belongs to the person you looked up.
 
-## How MoltSets addresses this
+<Warning>
+  **The most common misreading.** An `A` does not mean "we are certain this is their address." It means the mailbox is live and safe to send to. A `C` or `F` does not mean the match is wrong — it means we can't confirm deliverability. Grade the send, not the identity.
+</Warning>
 
-To keep things transparent, MoltSets assigns every email an **Email Risk Score**. This score reflects what we actually know about deliverability, rather than relying solely on SMTP checks that are increasingly unreliable.
+## What the score does and doesn't measure
 
-| Score | What it means | Recommendation |
-| :-- | :-- | :-- |
-| **A** | Valid — known reply, open, or click | Send |
-| **B** | Known send with no bounce | Probably send |
-| **C** | Catch-all | Your call |
-| **D** | Hard invalid — bounce, complaint, or spam trap | Don't send |
-| **F** | No data available | Your call |
-
-## How it works
-
-The Email Risk Score is appended to each record in the API payload. You retain full control over which emails to send to based on this score and your own risk tolerance.
-
-## Best Practices for Using Email Risk Scores
-
-Treat the grade as a filter, not a guarantee. A "Send" recommendation lowers risk, it doesn't eliminate it. Always pair risk scores with your own sending domain reputation and list hygiene practices.
-
-### By Grade
-
-| Grade | Best Practice |
+| The score tells you | The score does not tell you |
 | :-- | :-- |
-| **A** | Safe to send to immediately. Strongest engagement signal available. |
-| **B** | Solid to include in regular sends. For reputation-sensitive campaigns (e.g. cold outreach on a new domain), consider a smaller batch size before scaling up. |
-| **C** | Deliverability can't be confirmed. Segment separately from A/B, warm with lower volume, watch engagement closely, and suppress non-responders after 1-2 attempts. |
-| **D** | Never send. Fastest way to trip spam traps and damage sender reputation for the whole list. |
-| **F** | Treat as unknown risk, not safe. Re-verify before sending, or route into the same cautious treatment as C. |
+| Whether the mailbox exists and accepts mail | Whether the address belongs to the person you searched for |
+| Whether a past send to it landed without bouncing | Whether the person still works at that company |
+| Whether the address has been seen as a spam trap or complaint source | How current the underlying record is |
+| Whether the domain accepts everything (catch-all), making deliverability unknowable | How the address was sourced or derived |
 
-### General Sending Hygiene
+Identity accuracy comes from the tool you called, not from this field. `search_business_email_by_name`, for example, matched a name against a company domain; the risk score then grades the resulting address for sending. The two are independent — a correctly matched address can be catch-all (`C`), and a deliverable address (`A`) can belong to a person who has since changed jobs. Read `last_validated_at` alongside the grade for freshness.
 
-- Suppress D scores automatically at the list level rather than relying on manual review
-- Monitor bounce rate by grade over time to validate the scoring is holding up for your specific use case
-- If sending cold outreach, warm up new domains regardless of score tier
-- Re-score contacts periodically; email validity decays over time (job changes, inbox closures)
+## Why the grade exists
+
+In spring 2026, Microsoft began blocking SMTP-based validation checks. Third-party validators (NeverBounce, ZeroBounce, and others) consequently started marking fully configured, deliverable inboxes as "invalid" — addresses that receive mail perfectly well. A single vendor verdict is no longer a reliable send/don't-send signal.
+
+The Email Risk Score is computed from everything MoltSets holds about the address — live validation, its own validation history, real engagement, and spam sightings — rather than from one SMTP probe.
+
+## The grades
+
+| Score | What it means | How it's earned | Recommendation |
+| :-- | :-- | :-- | :-- |
+| **A** | Validated deliverable | Confirmed `valid` at validation time, or a prior validation whose deliverable flag holds | Send |
+| **B** | Known engagement, deliverability not re-validated | A recorded open, click, or order — proof a past send reached the inbox without bouncing | Probably send |
+| **C** | Catch-all — deliverability unknowable | The receiving server accepts mail for every address at that domain, so acceptance proves nothing | Your call |
+| **D** | Hard negative | A standing invalid, spam-trap, abuse, or do-not-mail verdict, or a spam/complaint sighting in the last 6 months | Don't send |
+| **F** | No signal | No validation record and no engagement history — nothing is known either way | Your call |
+
+Two points that trip people up:
+
+- **`F` is not a bad grade, and `D` is not a strong one.** `F` means *no evidence*; `D` means *negative evidence*. They are opposite ends of what we know, not neighbouring tiers.
+- **`C` is a property of the domain, not the person.** A catch-all server accepts everything, so no validator — ours or anyone else's — can confirm an individual mailbox behind it.
+
+**Precedence** when signals disagree: **D > A > B > C > F**. A hard negative outranks everything, including a fresh deliverable verdict. A live catch-all verdict outranks older date-based evidence, because the server-level unknowable is the more current fact.
+
+## How it reaches you
+
+The grade is appended to every email a tool returns, next to the validation date:
+
+```json
+{
+  "results": {
+    "email": "john.smith@example.com",
+    "risk_score": "A",
+    "last_validated_at": "2026-08-25"
+  },
+  "status": "ok"
+}
+```
+
+Tools that return more than one address carry a companion field per address — `business_email_risk_score`, `personal_email_risk_score`, and a `personal_emails_risk_score` array index-aligned with `personal_emails`. `reverse_email_lookup` keeps its own field names. `search_people` rows carry `business_email_risk_score` alongside each contact.
+
+Addresses that fail validation outright are **dropped before they reach you** rather than returned with a low grade — which is why most payloads skew toward `A`, `B`, and `C`. A lookup whose only address was dropped comes back as a `not_found`, and costs nothing.
+
+Scoring is best-effort and never fails a call: if a scoring lookup is degraded, the `risk_score` field is simply absent. Treat a missing grade like `F` — unknown, not safe.
+
+## Best practices
+
+Treat the grade as a filter, not a guarantee. A "Send" recommendation lowers risk; it doesn't eliminate it. Pair it with your own domain reputation and list hygiene.
+
+### By grade
+
+| Grade | Best practice |
+| :-- | :-- |
+| **A** | Safe to send immediately. Strongest deliverability signal available. |
+| **B** | Solid for regular sends. For reputation-sensitive campaigns (cold outreach on a new domain), send a smaller batch before scaling. |
+| **C** | Deliverability can't be confirmed. Segment separately from A/B, warm with lower volume, watch engagement closely, and suppress non-responders after 1–2 attempts. |
+| **D** | Never send. The fastest way to trip spam traps and damage sender reputation for the whole list. |
+| **F** | Unknown risk, not safe. Re-verify before sending, or route into the same cautious treatment as C. |
+
+### General sending hygiene
+
+- Suppress `D` at the list level automatically rather than relying on manual review
+- Monitor bounce rate by grade over time to confirm the scoring holds up for your use case
+- Warm up new domains regardless of grade when sending cold outreach
+- Re-score periodically. Deliverability decays — job changes, inbox closures — and the grade reflects what was known at the time of the call, which `last_validated_at` dates for you
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Getting Valid Emails" icon="envelope" href="/best-practices/getting-valid-emails">
+    Which email endpoint to call, and how to avoid paying twice.
+  </Card>
+  <Card title="Phone Number Validation" icon="phone" href="/moltsets-data/phone-number-validation">
+    The phone-side equivalent, and how to read its validation date.
+  </Card>
+</CardGroup>

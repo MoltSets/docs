@@ -1638,7 +1638,7 @@
                             "F",
                             null
                           ],
-                          "description": "Send-safety risk grade after email validation: A=validated deliverable, B=known engagement no bounce, C=catch-all/unknowable, D=hard invalid/bounce/complaint/trap, F=no signal."
+                          "description": "Send-safety grade for the mailbox — deliverability, NOT whether the address belongs to the person looked up. A=validated deliverable; B=known engagement (a past open/click/order proves a send landed without bouncing); C=catch-all domain, deliverability unknowable; D=hard negative (invalid/spam trap/abuse/do-not-mail, or a complaint sighting in the last 6 months); F=no signal. Precedence when signals disagree: D > A > B > C > F. Absent when a scoring lookup is degraded — treat a missing grade as F."
                         },
                         "type": {
                           "type": "string",
@@ -1863,7 +1863,7 @@
                             "F",
                             null
                           ],
-                          "description": "Send-safety risk grade after email validation: A=validated deliverable, B=known engagement no bounce, C=catch-all/unknowable, D=hard invalid/bounce/complaint/trap, F=no signal."
+                          "description": "Send-safety grade for the mailbox — deliverability, NOT whether the address belongs to the person looked up. A=validated deliverable; B=known engagement (a past open/click/order proves a send landed without bouncing); C=catch-all domain, deliverability unknowable; D=hard negative (invalid/spam trap/abuse/do-not-mail, or a complaint sighting in the last 6 months); F=no signal. Precedence when signals disagree: D > A > B > C > F. Absent when a scoring lookup is degraded — treat a missing grade as F."
                         }
                       }
                     },
