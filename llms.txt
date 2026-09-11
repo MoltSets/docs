@@ -16,7 +16,7 @@ MoltSets returns contact and company data an agent can act on directly. Differen
 
 ## Getting Started
 - [Overview](https://developer.moltsets.com/getting-started/overview): What MoltSets is, base URL, request/response structure, the three outcomes (found / not found / error) and how to read them, plans, and available tools.
-- [Authentication](https://developer.moltsets.com/getting-started/authentication): API key format (`ms_XXXXXXXXXXX`), how to create/revoke keys, Bearer token usage, error responses.
+- [Authentication](https://developer.moltsets.com/getting-started/authentication): API key format (`ms_XXXXXXXXXXX`), how to create/revoke keys, Bearer token usage, error responses, and the OAuth flow for MCP clients (endpoints, PKCE, loopback redirect URIs).
 - [Rate Limits](https://developer.moltsets.com/getting-started/rate-limits): Per-plan limits, what counts as a request, 429 handling, exponential backoff, multi-key strategies. Limits use rolling windows, not fixed daily resets — the first request opens a 5-hour window, everything in the next 5 hours draws from the same pool, and the next request after it closes opens a fresh one. The weekly window rolls the same way.
 - [MoltSets App](https://developer.moltsets.com/getting-started/moltsets-app): Logging in, navigating the app.
 
@@ -38,7 +38,7 @@ MoltSets returns contact and company data an agent can act on directly. Differen
 - [Getting Ad Audiences](https://developer.moltsets.com/best-practices/getting-ad-audiences): How to turn MoltSets contacts into privacy-safe advertising audiences — hashed email match keys for customer match, and MAIDs for mobile retargeting.
 
 ## Integrations
-- [MoltSets MCP Server](https://developer.moltsets.com/integrations/moltsets-mcp): MCP server URL (`https://mcp.moltsets.com/mcp`), setup for Claude.ai, Claude Desktop, and Claude Code, example prompts, troubleshooting.
+- [MoltSets MCP Server](https://developer.moltsets.com/integrations/moltsets-mcp): MCP server URL (`https://mcp.moltsets.com/mcp`), setup for Claude.ai, Claude Desktop, Claude Code, and any other OAuth MCP client (loopback redirect URIs, PKCE), example prompts, troubleshooting.
 - [Clay HTTP API](https://developer.moltsets.com/integrations/clay) - Use MoltSets tools directly in Clay via the HTTP API enrichment.
 
 ## API reference
@@ -147,6 +147,14 @@ claude mcp add --transport http moltsets https://mcp.moltsets.com/mcp \
 ```
 
 Credentials (Client ID + Client Secret) are created at https://app.moltsets.com/dashboard/api_keys.
+
+OAuth (any MCP client, including CLI and desktop clients):
+- Metadata: `https://mcp.moltsets.com/.well-known/oauth-protected-resource` → authorization server `https://app.moltsets.com`, whose metadata is at `https://app.moltsets.com/.well-known/oauth-authorization-server`.
+- Authorization `https://app.moltsets.com/oauth/authorize` · token `https://app.moltsets.com/oauth/token` · dynamic registration `https://app.moltsets.com/oauth/register`. Grant type `authorization_code`, PKCE `S256`, scopes `mcp` / `read` / `tokens`.
+- Redirect URIs: `https` on any host; plain `http` ONLY on a loopback host (`127.0.0.1`, `[::1]`, `localhost`) — the RFC 8252 §7.3 native-app pattern, so a CLI can listen on an ephemeral local port. Every other host requires https.
+- For a registered loopback URI the PORT may vary between runs; scheme, host, path and query must match exactly. Non-loopback URIs are matched exactly, port included.
+- PKCE is MANDATORY for loopback authorizations and is enforced at `/oauth/authorize`, before a code is minted. It stays optional for https redirect URIs, so the Claude.ai connector flow is unchanged.
+- Tokens are sent the same way as API keys: `Authorization: Bearer <token>`.
 
 ## More information about MoltSets
 

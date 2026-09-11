@@ -48,6 +48,37 @@ You can revoke credentials individually or all at once:
 
 Revocation is immediate and irreversible.
 
+## OAuth — connecting an MCP client
+
+MCP clients authenticate with an OAuth access token instead of a raw API key. Both credential types reach the same account and the same tools; use an API key for direct REST calls, and OAuth for anything connecting over the [MCP server](/integrations/moltsets-mcp).
+
+Create the Client ID and Client Secret under **Connectors** at [app.moltsets.com](https://app.moltsets.com). Clients that support dynamic registration can register themselves instead.
+
+| | |
+| :-- | :-- |
+| Authorization | `https://app.moltsets.com/oauth/authorize` |
+| Token | `https://app.moltsets.com/oauth/token` |
+| Dynamic registration | `https://app.moltsets.com/oauth/register` |
+| Grant type | `authorization_code` |
+| PKCE | `S256` |
+| Scopes | `mcp`, `read`, `tokens` |
+
+Metadata is discoverable at `https://mcp.moltsets.com/.well-known/oauth-protected-resource` and `https://app.moltsets.com/.well-known/oauth-authorization-server`.
+
+### Redirect URIs
+
+`https` is accepted on any host. Plain `http` is accepted **only** on a loopback host — `127.0.0.1`, `[::1]`, or `localhost` — which is what lets a CLI or desktop client complete the flow on an ephemeral local port, the native-app pattern from [RFC 8252 §7.3](https://datatracker.ietf.org/doc/html/rfc8252#section-7.3). Every other host requires `https`.
+
+For a registered loopback URI the **port may vary** between runs; scheme, host, path, and query must still match exactly. Non-loopback URIs are matched exactly, port included.
+
+**PKCE is mandatory for loopback redirects** and is enforced at `/oauth/authorize`, before an authorization code exists. It remains optional for `https` redirect URIs.
+
+A granted token is used the same way as an API key:
+
+```bash
+Authorization: Bearer YOUR_ACCESS_TOKEN
+```
+
 ## Key permissions
 
 All API keys have the same permissions — there are no read-only or scoped keys. Any key can call any tool on your account.

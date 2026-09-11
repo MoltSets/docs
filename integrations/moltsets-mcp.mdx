@@ -177,10 +177,52 @@ With the MoltSets MCP Server connected:
       **Personal account:** the command above works as-is.
 
       **Team or Enterprise account:** on business plans, only admins can add MCP servers to Claude Code. If you sign into Claude Code with your Claude.ai account, any MoltSets connector already added there is available in Claude Code automatically — no `claude mcp add` needed.
+
+      Either way each seat authorizes over OAuth in the browser, so there's no need to distribute `ms_` API keys across an organization.
     </Note>
 
     <Note>
       To get your credentials, log into [app.moltsets.com](https://app.moltsets.com) and go to **Connectors** to create a new connector.
+    </Note>
+  </Tab>
+  <Tab title="Other MCP clients">
+    Any MCP client that speaks OAuth 2.1 can connect — including CLI tools and desktop apps that complete the flow on a local port. Point the client at the server URL and let it discover the rest:
+
+    ```text
+    https://mcp.moltsets.com/mcp
+    ```
+
+    Discovery follows the standard metadata documents. `https://mcp.moltsets.com/.well-known/oauth-protected-resource` names the authorization server, and `https://app.moltsets.com/.well-known/oauth-authorization-server` carries the endpoints:
+
+    | | |
+    | :-- | :-- |
+    | Authorization | `https://app.moltsets.com/oauth/authorize` |
+    | Token | `https://app.moltsets.com/oauth/token` |
+    | Dynamic registration | `https://app.moltsets.com/oauth/register` |
+    | Grant type | `authorization_code` |
+    | PKCE | `S256` |
+    | Scopes | `mcp`, `read`, `tokens` |
+
+    Clients that can't do dynamic registration use the Client ID and Client Secret from the **Connectors** page at [app.moltsets.com](https://app.moltsets.com).
+
+    ### Redirect URIs
+
+    A native or CLI client can't host HTTPS on an ephemeral local port, so it listens on a loopback address instead — the pattern described in [RFC 8252 §7.3](https://datatracker.ietf.org/doc/html/rfc8252#section-7.3). MoltSets accepts that:
+
+    | Redirect URI | Accepted |
+    | :-- | :-- |
+    | `https://…` on any host | Yes |
+    | `http://127.0.0.1:<port>/callback` | Yes — loopback |
+    | `http://[::1]:<port>/callback` | Yes — loopback |
+    | `http://localhost:<port>/callback` | Yes — loopback |
+    | `http://` on any other host | **No** — https required |
+
+    **The port may vary.** A CLI binds a different ephemeral port on each run, so a registered loopback URI matches regardless of the port it later listens on. Everything else — scheme, host, path, and query — must match the registered URI exactly. Port variance is loopback-only: a registered `https://example.com:8443/cb` still won't match `:9999`.
+
+    **PKCE is mandatory for loopback redirects**, and is enforced at `/oauth/authorize` — an authorization request from a loopback client without a `code_challenge` is refused before any code is minted. Use `S256`. For `https` redirect URIs PKCE stays optional, so nothing changes for the Claude.ai connector flow.
+
+    <Note>
+      `127.0.0.1` is preferred over `localhost`. Both are accepted because real clients use both, but `localhost` resolution depends on the host's resolver, which RFC 8252 notes is the weaker of the two. PKCE is what protects the code either way.
     </Note>
   </Tab>
 </Tabs>
@@ -287,6 +329,16 @@ For a full breakdown, see the [Rate Limits](/getting-started/rate-limits) guide.
     ```
 
     No trailing slash, no extra path segments.
+  </Accordion>
+
+  <Accordion title="The authorization request is rejected (invalid redirect URI)">
+    `/oauth/authorize` accepts `https` on any host, and `http` **only** on a loopback host — `127.0.0.1`, `[::1]`, or `localhost`. Anything else over plain `http` is refused, including addresses that merely look like loopback: `http://127.0.0.1@evil.com/cb`, `http://evil.com#127.0.0.1`, and `http://127.0.0.1.evil.com/cb` all resolve to a non-loopback host and are denied.
+
+    If your redirect URI is loopback and the request is still refused, check that:
+
+    - The request carries a PKCE `code_challenge` (method `S256`). PKCE is **required** for loopback authorizations and is enforced up front, at `/oauth/authorize`.
+    - The scheme, host, path, and query match the registered URI exactly. Only the **port** is allowed to differ, and only on loopback.
+    - The token exchange sends back the same `redirect_uri` it was redirected to, port included.
   </Accordion>
 
   <Accordion title="Authentication errors (invalid credentials)">
