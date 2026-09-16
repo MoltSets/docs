@@ -37,8 +37,9 @@ Enter the endpoint URL for the MoltSets tool you want to use. Find the correct U
 |-----|-------|
 | `Content-Type` | `application/json` |
 | `Authorization` | `Bearer YOUR_API_KEY` |
+| `User-Agent` | `Clay` |
 
-Replace `YOUR_API_KEY` with your MoltSets API key.
+Replace `YOUR_API_KEY` with your MoltSets API key. `User-Agent` is required on every request — MoltSets accepts any non-empty value, so `Clay` (or any label you prefer) works; requests without it are rejected with `403 Forbidden`.
 
 **Body**
 

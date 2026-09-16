@@ -30,8 +30,17 @@ Pass the key as a Bearer token on every request:
 curl -X POST https://api.moltsets.com/api/v1/tools/get_account \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
+  -H "User-Agent: YOUR_APP_NAME/1.0" \
   -d '{}'
 ```
+
+## User-Agent header
+
+Every request — REST or MCP — must also send a `User-Agent` header. MoltSets doesn't check its contents, only that it's present; any non-empty value is accepted.
+
+Requests missing it are rejected with `403 Forbidden` (`error.code`: `forbidden`) before authentication is even checked.
+
+Most HTTP clients and MCP clients set a `User-Agent` by default, so this usually needs no extra work. If you've built a custom client that sends bare requests (or an MCP client that lets you omit the header), set one explicitly — see [Other MCP clients](/integrations/moltsets-mcp#setup) for the MCP case.
 
 ## Multiple keys
 
@@ -79,6 +88,8 @@ A granted token is used the same way as an API key:
 Authorization: Bearer YOUR_ACCESS_TOKEN
 ```
 
+MCP connections need a `User-Agent` header too — see [above](#user-agent-header). Claude, Claude Desktop, and Claude Code set one automatically; other MCP clients may need to set one explicitly.
+
 ## Key permissions
 
 All API keys have the same permissions — there are no read-only or scoped keys. Any key can call any tool on your account.
@@ -88,6 +99,7 @@ All API keys have the same permissions — there are no read-only or scoped keys
 | Status | Code | Meaning |
 |---|---|---|
 | `401 Unauthorized` | `unauthorized` | Missing, invalid, or revoked API key |
+| `403 Forbidden` | `forbidden` | Missing `User-Agent` header |
 | `403 Forbidden` | `account_inactive` | Valid key, but the account is not active |
 | `403 Forbidden` | `plan_restricted` | Valid key, but the tool isn't part of the account's plan |
 

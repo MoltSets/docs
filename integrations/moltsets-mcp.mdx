@@ -197,6 +197,10 @@ With the MoltSets MCP Server connected:
     <Note>
       Endpoints, scopes, and redirect URI rules are on the [Authentication](/getting-started/authentication#oauth--connecting-an-mcp-client) page, and are discoverable from the server itself at `https://mcp.moltsets.com/.well-known/oauth-protected-resource`.
     </Note>
+
+    <Warning>
+      MoltSets requires every request — including MCP connections — to send a `User-Agent` header. Any non-empty value works; MoltSets doesn't validate its contents, only that it's present. Most MCP clients set one automatically, but if your client lets you send bare requests (or omit the header), set one explicitly or the server rejects the connection with `403 Forbidden` (`error.code`: `forbidden`). See [User-Agent header](/getting-started/authentication#user-agent-header).
+    </Warning>
   </Tab>
 </Tabs>
 
@@ -255,6 +259,7 @@ A genuine error comes back with `isError: true` and an `error.code`. What the ag
 | Code | Means | Next step |
 | :-- | :-- | :-- |
 | `invalid_input` | A parameter is wrong | Fix the parameter — rerunning it unchanged repeats the error |
+| `forbidden` | The connection is missing a `User-Agent` header | Set a `User-Agent` on the client — any non-empty value works |
 | `insufficient_tokens` | Out of tokens | Top up or upgrade; `get_billing` shows the balance |
 | `insufficient_phone_tokens` | Out of phone tokens | A separate allowance from regular tokens |
 | `plan_restricted` | The tool isn't on your plan | A plan condition, not a data miss — switch tools or contact support |
@@ -310,6 +315,12 @@ For a full breakdown, see the [Rate Limits](/getting-started/rate-limits) guide.
     If your callback is loopback and it is still refused, check that the client sends a PKCE `code_challenge` (method `S256`) — it is required for loopback — and that the callback path matches the one registered for your connector. The port is allowed to change between runs; the path is not.
 
     Full rules are on the [Authentication](/getting-started/authentication#redirect-uris) page.
+  </Accordion>
+
+  <Accordion title="Connection rejected with `forbidden` / 403">
+    MoltSets requires a `User-Agent` header on every connection, MCP included. A `403` with `error.code: "forbidden"` means the request didn't include one.
+
+    Any non-empty value is accepted — MoltSets doesn't check its contents. Most MCP clients send a `User-Agent` automatically; if you built a custom client or it lets you send bare requests, configure it to set one explicitly. See [User-Agent header](/getting-started/authentication#user-agent-header).
   </Accordion>
 
   <Accordion title="Authentication errors (invalid credentials)">

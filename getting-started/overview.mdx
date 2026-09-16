@@ -23,14 +23,19 @@ POST https://api.moltsets.com/api/v1/tools/get_account
 
 ## How a request works
 
-Every request is a `POST` with a JSON body, an `Authorization` header, and a `Content-Type` header:
+Every request is a `POST` with a JSON body, an `Authorization` header, a `Content-Type` header, and a `User-Agent` header:
 
 ```bash
 curl -X POST https://api.moltsets.com/api/v1/tools/linkedin_to_best_email \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
+  -H "User-Agent: YOUR_APP_NAME/1.0" \
   -d '{"linkedin_url": "https://linkedin.com/in/retentionadam"}'
 ```
+
+<Note>
+  `User-Agent` can be any non-empty value — MoltSets doesn't validate its contents, only that it's present. Requests without one are rejected with a `403` (`forbidden`). See [Errors](#errors).
+</Note>
 
 ## How a response works
 
@@ -118,6 +123,7 @@ Branch on `error.code`, not on the message text.
 | :-- | :-- | :-- | :-- |
 | `invalid_input` | `422` | A parameter is missing, malformed, or outside its allowed values | Fix the parameter and retry. Retrying unchanged returns the same error |
 | `unauthorized` | `401` | Missing, invalid, or revoked API key | Check the `Authorization` header, or issue a new key |
+| `forbidden` | `403` | Missing `User-Agent` header | Add a `User-Agent` header — any non-empty value works |
 | `account_inactive` | `403` | The account is not active | Account is canceled either by choice or because of a payment issue. Login to your account to fix |
 | `insufficient_tokens` | `402` | Token balance can't cover the call | Top up or upgrade. On a batch, unaffordable items are dropped and the rest still return |
 | `insufficient_phone_tokens` | `402` | Phone-token allowance can't cover a mobile result | Phone tokens are a separate allowance — see [Rate Limits](/getting-started/rate-limits). Batches drop the excess rather than failing |
