@@ -24,6 +24,18 @@
         "description": "Pass your API key as a Bearer token. Keys follow the format `ms_XXXXXXXXXXX`."
       }
     },
+    "parameters": {
+      "UserAgentHeader": {
+        "name": "User-Agent",
+        "in": "header",
+        "required": true,
+        "description": "Identifies the calling client. Any non-empty value is accepted — MoltSets does not validate its contents. Requests without this header are rejected with `403 Forbidden` (`error.code`: `forbidden`).",
+        "schema": {
+          "type": "string"
+        },
+        "example": "YOUR_APP_NAME/1.0"
+      }
+    },
     "schemas": {
       "Metadata": {
         "type": "object",
@@ -660,7 +672,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     },
     "/search_companies": {
@@ -1019,7 +1036,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     },
     "/search_linkedin_profile": {
@@ -1209,7 +1231,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     },
     "/search_business_email_by_name": {
@@ -1375,7 +1402,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     },
     "/search_business_profile_by_name": {
@@ -1559,7 +1591,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     },
     "/linkedin_to_best_email": {
@@ -1784,7 +1821,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     },
     "/linkedin_to_business_email": {
@@ -1991,7 +2033,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     },
     "/linkedin_to_personal_email": {
@@ -2161,7 +2208,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     },
     "/linkedin_to_best_personal_email": {
@@ -2331,7 +2383,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     },
     "/linkedin_to_mobile_phone": {
@@ -2503,7 +2560,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     },
     "/reverse_email_lookup": {
@@ -2690,7 +2752,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     },
     "/reverse_linkedin_lookup": {
@@ -2878,7 +2945,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     },
     "/email_to_maid": {
@@ -3028,7 +3100,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     },
     "/business_email_to_sha256": {
@@ -3179,7 +3256,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     },
     "/linkedin_to_sha256": {
@@ -3339,7 +3421,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     },
     "/email_to_linkedin": {
@@ -3488,7 +3575,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     },
     "/ip_to_company": {
@@ -3638,7 +3730,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     },
     "/get_account": {
@@ -4033,7 +4130,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     },
     "/get_billing": {
@@ -4222,7 +4324,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     },
     "/get_usage": {
@@ -4351,7 +4458,12 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAgentHeader"
+          }
+        ]
       }
     }
   },
