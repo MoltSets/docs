@@ -69,8 +69,8 @@ Changed: lookups that find nothing used to return HTTP 404. They now return 200 
 
 - [POST /linkedin_to_best_email](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-best-email): LinkedIn URL → best available email (business preferred, falls back to personal). Returns `type` field (`"business"` or `"personal"`).
 - [POST /linkedin_to_business_email](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-business-email): LinkedIn URL → valid business email only.
-- [POST /linkedin_to_personal_email_usa](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-personal-email): LinkedIn URL → valid personal email. Not available on every plan — `get_account` reports `personal_email_available`.
-- [POST /linkedin_to_best_personal_email_usa](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-best-personal-email): LinkedIn URL → best personal email. Not available on every plan — `get_account` reports `personal_email_available`.
+- [POST /linkedin_to_personal_email_usa](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-personal-email-us-only): LinkedIn URL → valid personal email. Not available on every plan — `get_account` reports `personal_email_available`.
+- [POST /linkedin_to_best_personal_email_usa](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-best-personal-email-us-only): LinkedIn URL → best personal email. Not available on every plan — `get_account` reports `personal_email_available`.
 
 ### Get Carrier-Verified Mobile Phones
 
