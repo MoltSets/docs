@@ -7,7 +7,7 @@ description: "How to append verified mobile numbers with MoltSets — batching u
 
 ```json
 {
-  "mobile_phone": "+15551234567",
+  "mobile_phone": "5551234567",
   "last_validated_at": "2026-03-04"
 }
 ```
@@ -27,7 +27,7 @@ The endpoint takes either a single URL or a batch:
 | `linkedin_url` | string | One profile |
 | `linkedin_urls` | array | Up to **100** profiles in a single call |
 
-Batching is the single highest-leverage practice here. One call for 100 profiles instead of 100 calls cuts your request count by 99%, which matters because **every request counts toward your rate limit regardless of whether it returns data**.
+Batching is the simplest way to move a large list: one call for 100 profiles instead of 100 separate calls means less network overhead and fewer calls to retry. It doesn't reduce your request count, though — **each item in a batch counts as one request**, hit or miss, so a batch of 100 draws 100 requests from your Fair Use requests limit.
 
 ```json
 {
@@ -50,11 +50,11 @@ Phone tokens by plan:
 
 | Plan | Phone tokens |
 |---|---|
-| \$0 | 10 |
-| \$27 / month | 10 |
-| \$97 / month | 50 |
-| \$397 / month | 150 |
-| \$997 / month | 250 |
+| \$0 | 10 lifetime |
+| \$27 / month | 10 / month |
+| \$97 / month | 50 / month |
+| \$397 / month | 150 / month |
+| \$997 / month | 250 / month |
 
 You're only charged for results that come back — profiles with no mobile on file cost nothing, and come back as HTTP `200` with `status: "not_found"` rather than an error. A batch of 100 profiles can therefore spend up to 100 phone tokens, more than the \$0, \$27, and \$97 allowances hold, so size batches to the allowance rather than to the endpoint's 100-profile ceiling.
 

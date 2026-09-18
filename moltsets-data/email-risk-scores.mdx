@@ -35,7 +35,7 @@ The Email Risk Score is computed from everything MoltSets holds about the addres
 | **A** | Validated deliverable | Confirmed `valid` at validation time, or a prior validation whose deliverable flag holds | Send |
 | **B** | Known engagement, deliverability not re-validated | A recorded open, click, or order — proof a past send reached the inbox without bouncing | Probably send |
 | **C** | Catch-all — deliverability unknowable | The receiving server accepts mail for every address at that domain, so acceptance proves nothing | Your call |
-| **D** | Hard negative | A standing invalid, spam-trap, abuse, or do-not-mail verdict, or a spam/complaint sighting in the last 6 months | Don't send |
+| **D** | Hard negative | A standing spam-trap, abuse, or do-not-mail verdict, or a spam/complaint sighting in the last 6 months | Don't send |
 | **F** | No signal | No validation record and no engagement history — nothing is known either way | Your call |
 
 Two points that trip people up:
@@ -47,7 +47,7 @@ Two points that trip people up:
 
 ## How it reaches you
 
-The grade is appended to every email a tool returns, next to the validation date:
+The grade is appended to every email a tool returns, next to the validation date. The one exception is `reverse_email_lookup`: it doesn't grade the address you pass in, since you supplied it.
 
 ```json
 {
@@ -60,7 +60,7 @@ The grade is appended to every email a tool returns, next to the validation date
 }
 ```
 
-Tools that return more than one address carry a companion field per address — `business_email_risk_score`, `personal_email_risk_score`, and a `personal_emails_risk_score` array index-aligned with `personal_emails`. `reverse_email_lookup` keeps its own field names. `search_people` rows carry `business_email_risk_score` alongside each contact.
+Tools that return more than one address carry a companion field per address — `business_email_risk_score`, `personal_email_risk_score`, and a `personal_emails_risk_score` array index-aligned with `personal_emails`. `search_people` rows carry `business_email_risk_score` alongside each contact.
 
 Addresses that fail validation outright are **dropped before they reach you** rather than returned with a low grade — which is why most payloads skew toward `A`, `B`, and `C`. A lookup whose only address was dropped comes back as a `not_found`, and costs nothing.
 

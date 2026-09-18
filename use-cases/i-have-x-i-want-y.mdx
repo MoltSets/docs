@@ -27,14 +27,14 @@ Search MoltSets's company and contact database by name, domain, industry, employ
 | Company + seniority | Decision-makers at a company | Find senior contacts at acme.com | `search_people` |
 | Industry + country | Contacts in an industry and country | Find marketing contacts at software companies in the United States | `search_people` |
 | Company + department or function | Contacts in a specific team | Find engineering contacts at acme.com | `search_people` |
-
-<Note>
-  `search_people` filters on `query`, `title`, `company`, `company_domain`, `country`, `state`, `city`, `seniority`, `industry`, `department`, `functional_area`, `naics_code`, `linkedin_industry`, `employee_range`, and `revenue_range`, plus six `exclude_*` filters. `employee_range` and `revenue_range` apply to the person's **current employer**, so you can target contacts by company size or revenue in a single call — no need to run `search_companies` first and fan out over its domains.
-</Note>
 | Person name + company domain | LinkedIn slug for that person | Find the LinkedIn profile for John Smith at acme.com | `search_linkedin_profile` |
 | Person name + company domain | Result count before spending tokens | How many people named John Smith are at acme.com | `search_linkedin_profile` (`count_only: true`) |
 | Person name + company domain | Verified business email in one call (plus matched LinkedIn URL) | Find the business email for John Smith at acme.com | `search_business_email_by_name` |
 | Person name + company domain | Full business profile in one call (company, title, firmographics) | Find the business profile for John Smith at acme.com | `search_business_profile_by_name` |
+
+<Note>
+  `search_people` filters on `query`, `title`, `company`, `company_domain`, `country`, `state`, `city`, `seniority`, `industry`, `department`, `functional_area`, `naics_code`, `linkedin_industry`, `employee_range`, and `revenue_range`, plus six `exclude_*` filters. `employee_range` and `revenue_range` apply to the person's **current employer**, so you can target contacts by company size or revenue in a single call — no need to run `search_companies` first and fan out over its domains.
+</Note>
 
 ## Get Verified Emails
 
@@ -53,7 +53,7 @@ Resolve LinkedIn profile URLs and company domains into verified business and per
 | LinkedIn URL | Business email, falling back to personal if not found | Try to find the business email for linkedin.com/in/username, fall back to personal if nothing is found | `linkedin_to_business_email` → `linkedin_to_personal_email_usa` * |
 
 <Note>
-  \* `linkedin_to_personal_email_usa` and `linkedin_to_best_personal_email_usa` are **not available on every plan** — access is set by price tier. Call `get_account` and read `personal_email_available` to know where yours stands. Without access, use `linkedin_to_business_email` instead.
+  \* `linkedin_to_personal_email_usa` and `linkedin_to_best_personal_email_usa` are **not available on every plan** — access is set by price tier. Call `get_account` and read `personal_email_available` to know where yours stands. Without access, use `linkedin_to_business_email` instead. Both return **US records only** — non-US records are filtered out, so a non-US profile comes back as a `not_found`.
 
   Calls from an account without access return **403** with:
 
@@ -121,11 +121,11 @@ You have a target company and want a list of contacts with their best email addr
 
 ### Company size or revenue to contact list
 
-`search_companies` → `search_people`
+`search_people` with `employee_range` or `revenue_range`
 
-`search_people` can't filter by company size or revenue directly. Find the companies that match those firmographics first, then pull contacts from each matching domain.
+`search_people` filters on company size and revenue directly — both apply to the person's current employer — so one call does it. Chain `search_companies` → `search_people` only when you also want the company records themselves.
 
-"Find computer software companies with 201–500 employees, then get contacts at each one."
+"Find VPs at information technology companies with 201–500 employees."
 
 ---
 

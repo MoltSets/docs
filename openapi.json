@@ -79,32 +79,21 @@
           "retry_after": {
             "type": "integer",
             "description": "Seconds until the binding Fair Use window unlocks. Present on Fair Use 429s, and on a batch that returned partial results because items were dropped for Fair Use — the same value is sent as a `Retry-After` header."
+          },
+          "phone_tokens_used": {
+            "type": "integer",
+            "description": "Phone tokens consumed by this call. `linkedin_to_mobile_phone` only; `0` on a `not_found`."
+          },
+          "phone_tokens_remaining": {
+            "type": "integer",
+            "description": "Phone-token allowance remaining after this call. `linkedin_to_mobile_phone` only."
           }
         },
         "description": "Per-call metadata. `fair_use` is always present on a tool call; the remaining fields appear only where they apply."
       },
-      "ErrorBadRequest": {
-        "type": "object",
-        "description": "Malformed request — the body could not be processed.",
-        "properties": {
-          "error": {
-            "type": "object",
-            "properties": {
-              "code": {
-                "type": "string",
-                "example": "invalid_input"
-              },
-              "message": {
-                "type": "string",
-                "example": "The request could not be processed."
-              }
-            }
-          }
-        }
-      },
       "ErrorInvalidInput": {
         "type": "object",
-        "description": "A parameter is missing, malformed, or outside its allowed values.",
+        "description": "The request body is malformed, or a parameter is missing, malformed, or outside its allowed values.",
         "properties": {
           "error": {
             "type": "object",
@@ -165,7 +154,7 @@
       },
       "ErrorPlanRestricted": {
         "type": "object",
-        "description": "The account cannot call this tool. `plan_restricted` means the tool is not part of the account's plan — today, the dedicated personal-email tools on a plan without the personal-email surface. It is a plan condition, so there is no `Retry-After` and topping up tokens does not clear it. `account_inactive` means the account itself is not active.",
+        "description": "The request is refused. `forbidden` means the request has no `User-Agent` header — add one (any non-empty value). `plan_restricted` means the tool is not part of the account's plan — today, the dedicated personal-email tools on a plan without the personal-email surface. It is a plan condition, so there is no `Retry-After` and topping up tokens does not clear it. `account_inactive` means the account itself is not active — log in and subscribe to a plan.",
         "properties": {
           "error": {
             "type": "object",
@@ -243,6 +232,24 @@
               "message": {
                 "type": "string",
                 "example": "You have 0 tokens remaining."
+              }
+            }
+          }
+        }
+      },
+      "ErrorForbidden": {
+        "type": "object",
+        "description": "The request has no `User-Agent` header. Add one — any non-empty value is accepted.",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "example": "forbidden"
+              },
+              "message": {
+                "type": "string"
               }
             }
           }
@@ -602,16 +609,6 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -633,7 +630,7 @@
             }
           },
           "403": {
-            "description": "Forbidden — tool not on the plan, or account inactive",
+            "description": "Forbidden — missing `User-Agent` header, tool not on the plan, or account inactive",
             "content": {
               "application/json": {
                 "schema": {
@@ -643,7 +640,7 @@
             }
           },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -966,16 +963,6 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -997,7 +984,7 @@
             }
           },
           "403": {
-            "description": "Forbidden — tool not on the plan, or account inactive",
+            "description": "Forbidden — missing `User-Agent` header, tool not on the plan, or account inactive",
             "content": {
               "application/json": {
                 "schema": {
@@ -1007,7 +994,7 @@
             }
           },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -1161,16 +1148,6 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -1192,7 +1169,7 @@
             }
           },
           "403": {
-            "description": "Forbidden — tool not on the plan, or account inactive",
+            "description": "Forbidden — missing `User-Agent` header, tool not on the plan, or account inactive",
             "content": {
               "application/json": {
                 "schema": {
@@ -1202,7 +1179,7 @@
             }
           },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -1332,16 +1309,6 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -1363,7 +1330,7 @@
             }
           },
           "403": {
-            "description": "Forbidden — tool not on the plan, or account inactive",
+            "description": "Forbidden — missing `User-Agent` header, tool not on the plan, or account inactive",
             "content": {
               "application/json": {
                 "schema": {
@@ -1373,7 +1340,7 @@
             }
           },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -1473,9 +1440,9 @@
                         "company_domain": "acme.com",
                         "linkedin_url": "https://linkedin.com/in/john-smith-123",
                         "firmographics": {
-                          "industry": "Software",
-                          "employee_count": "201-500",
-                          "revenue": "$50M-$100M"
+                          "industry": "Information Technology",
+                          "employee_count": "350",
+                          "revenue": "$20M - $50M"
                         }
                       },
                       "status": "ok",
@@ -1521,16 +1488,6 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -1552,7 +1509,7 @@
             }
           },
           "403": {
-            "description": "Forbidden — tool not on the plan, or account inactive",
+            "description": "Forbidden — missing `User-Agent` header, tool not on the plan, or account inactive",
             "content": {
               "application/json": {
                 "schema": {
@@ -1562,7 +1519,7 @@
             }
           },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -1675,7 +1632,7 @@
                             "F",
                             null
                           ],
-                          "description": "Send-safety grade for the mailbox — deliverability, NOT whether the address belongs to the person looked up. A=validated deliverable; B=known engagement (a past open/click/order proves a send landed without bouncing); C=catch-all domain, deliverability unknowable; D=hard negative (invalid/spam trap/abuse/do-not-mail, or a complaint sighting in the last 6 months); F=no signal. Precedence when signals disagree: D > A > B > C > F. Absent when a scoring lookup is degraded — treat a missing grade as F."
+                          "description": "Send-safety grade for the mailbox — deliverability, NOT whether the address belongs to the person looked up. A=validated deliverable; B=known engagement (a past open/click/order proves a send landed without bouncing); C=catch-all domain, deliverability unknowable; D=hard negative (spam trap/abuse/do-not-mail, or a complaint sighting in the last 6 months); F=no signal. Precedence when signals disagree: D > A > B > C > F. Absent when a scoring lookup is degraded — treat a missing grade as F."
                         },
                         "type": {
                           "type": "string",
@@ -1751,16 +1708,6 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -1782,7 +1729,7 @@
             }
           },
           "403": {
-            "description": "Forbidden — tool not on the plan, or account inactive",
+            "description": "Forbidden — missing `User-Agent` header, tool not on the plan, or account inactive",
             "content": {
               "application/json": {
                 "schema": {
@@ -1792,7 +1739,7 @@
             }
           },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -1905,7 +1852,7 @@
                             "F",
                             null
                           ],
-                          "description": "Send-safety grade for the mailbox — deliverability, NOT whether the address belongs to the person looked up. A=validated deliverable; B=known engagement (a past open/click/order proves a send landed without bouncing); C=catch-all domain, deliverability unknowable; D=hard negative (invalid/spam trap/abuse/do-not-mail, or a complaint sighting in the last 6 months); F=no signal. Precedence when signals disagree: D > A > B > C > F. Absent when a scoring lookup is degraded — treat a missing grade as F."
+                          "description": "Send-safety grade for the mailbox — deliverability, NOT whether the address belongs to the person looked up. A=validated deliverable; B=known engagement (a past open/click/order proves a send landed without bouncing); C=catch-all domain, deliverability unknowable; D=hard negative (spam trap/abuse/do-not-mail, or a complaint sighting in the last 6 months); F=no signal. Precedence when signals disagree: D > A > B > C > F. Absent when a scoring lookup is degraded — treat a missing grade as F."
                         }
                       }
                     },
@@ -1963,16 +1910,6 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -1994,7 +1931,7 @@
             }
           },
           "403": {
-            "description": "Forbidden — tool not on the plan, or account inactive",
+            "description": "Forbidden — missing `User-Agent` header, tool not on the plan, or account inactive",
             "content": {
               "application/json": {
                 "schema": {
@@ -2004,7 +1941,7 @@
             }
           },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -2138,16 +2075,6 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -2169,7 +2096,7 @@
             }
           },
           "403": {
-            "description": "Forbidden — tool not on the plan, or account inactive",
+            "description": "Forbidden — missing `User-Agent` header, tool not on the plan, or account inactive",
             "content": {
               "application/json": {
                 "schema": {
@@ -2179,7 +2106,7 @@
             }
           },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -2313,16 +2240,6 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -2344,7 +2261,7 @@
             }
           },
           "403": {
-            "description": "Forbidden — tool not on the plan, or account inactive",
+            "description": "Forbidden — missing `User-Agent` header, tool not on the plan, or account inactive",
             "content": {
               "application/json": {
                 "schema": {
@@ -2354,7 +2271,7 @@
             }
           },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -2460,10 +2377,10 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        }
-                      },
-                      "phone_tokens_used": 1,
-                      "phone_tokens_remaining": 498
+                        },
+                        "phone_tokens_used": 1,
+                        "phone_tokens_remaining": 498
+                      }
                     }
                   },
                   "not_found": {
@@ -2480,22 +2397,12 @@
                           "records_reset_5h": "2026-07-15T18:53:16Z",
                           "records_remaining_1w": 899999,
                           "records_reset_1w": "2026-07-22T13:53:16Z"
-                        }
-                      },
-                      "phone_tokens_used": 0,
-                      "phone_tokens_remaining": 498
+                        },
+                        "phone_tokens_used": 0,
+                        "phone_tokens_remaining": 498
+                      }
                     }
                   }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
                 }
               }
             }
@@ -2521,7 +2428,7 @@
             }
           },
           "403": {
-            "description": "Forbidden — tool not on the plan, or account inactive",
+            "description": "Forbidden — missing `User-Agent` header, tool not on the plan, or account inactive",
             "content": {
               "application/json": {
                 "schema": {
@@ -2531,7 +2438,7 @@
             }
           },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -2622,8 +2529,8 @@
                         "country": "United States",
                         "company_employee_count": "3",
                         "company_employee_range": "1-10",
-                        "company_revenue": "1200000000",
-                        "company_revenue_range": "$1-10M",
+                        "company_revenue": "1200000",
+                        "company_revenue_range": "$1M - $5M",
                         "work_email_confirmed": "a4cd87c390c98385297fbe9250XXXXX",
                         "work_email_confirmed_status": "2025-10-12",
                         "personal_emails": [
@@ -2682,16 +2589,6 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -2713,7 +2610,7 @@
             }
           },
           "403": {
-            "description": "Forbidden — tool not on the plan, or account inactive",
+            "description": "Forbidden — missing `User-Agent` header, tool not on the plan, or account inactive",
             "content": {
               "application/json": {
                 "schema": {
@@ -2723,7 +2620,7 @@
             }
           },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -2820,7 +2717,7 @@
                           "website_url": "https://moltsets.com",
                           "linkedin_url": "https://linkedin.com/company/moltsets",
                           "industry": "Information Technology",
-                          "revenue": "1200000000"
+                          "revenue": "1200000"
                         }
                       },
                       "status": "ok",
@@ -2875,16 +2772,6 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -2906,7 +2793,7 @@
             }
           },
           "403": {
-            "description": "Forbidden — tool not on the plan, or account inactive",
+            "description": "Forbidden — missing `User-Agent` header, tool not on the plan, or account inactive",
             "content": {
               "application/json": {
                 "schema": {
@@ -2916,7 +2803,7 @@
             }
           },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -3030,16 +2917,6 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -3061,7 +2938,7 @@
             }
           },
           "403": {
-            "description": "Forbidden — tool not on the plan, or account inactive",
+            "description": "Forbidden — missing `User-Agent` header, tool not on the plan, or account inactive",
             "content": {
               "application/json": {
                 "schema": {
@@ -3071,7 +2948,7 @@
             }
           },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -3186,16 +3063,6 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -3217,7 +3084,7 @@
             }
           },
           "403": {
-            "description": "Forbidden — tool not on the plan, or account inactive",
+            "description": "Forbidden — missing `User-Agent` header, tool not on the plan, or account inactive",
             "content": {
               "application/json": {
                 "schema": {
@@ -3227,7 +3094,7 @@
             }
           },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -3351,16 +3218,6 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -3382,7 +3239,7 @@
             }
           },
           "403": {
-            "description": "Forbidden — tool not on the plan, or account inactive",
+            "description": "Forbidden — missing `User-Agent` header, tool not on the plan, or account inactive",
             "content": {
               "application/json": {
                 "schema": {
@@ -3392,7 +3249,7 @@
             }
           },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -3505,16 +3362,6 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -3536,7 +3383,7 @@
             }
           },
           "403": {
-            "description": "Forbidden — tool not on the plan, or account inactive",
+            "description": "Forbidden — missing `User-Agent` header, tool not on the plan, or account inactive",
             "content": {
               "application/json": {
                 "schema": {
@@ -3546,7 +3393,7 @@
             }
           },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -3660,16 +3507,6 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -3691,7 +3528,7 @@
             }
           },
           "403": {
-            "description": "Forbidden — tool not on the plan, or account inactive",
+            "description": "Forbidden — missing `User-Agent` header, tool not on the plan, or account inactive",
             "content": {
               "application/json": {
                 "schema": {
@@ -3701,7 +3538,7 @@
             }
           },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -3742,7 +3579,7 @@
       "post": {
         "summary": "Get Account",
         "operationId": "getAccount",
-        "description": "The Get Account API retrieves your MoltSets account details: account name, current plan, account status, remaining credit balance, number of API keys, and user count.\n\n**Use this endpoint to:**\n- Check account health programmatically\n- Verify your account is active\n- Display account information inside your own application or dashboard",
+        "description": "The Get Account API retrieves your MoltSets account details: account name, current plan, account status, remaining credit balance, whether personal-email lookups are on your plan (`personal_email_available`), live Fair Use standing (`fair_use`), number of API keys, and user count.\n\n**Use this endpoint to:**\n- Check account health programmatically\n- Verify your account is active\n- Check whether `linkedin_to_personal_email_usa` and `linkedin_to_best_personal_email_usa` are available on your plan\n- Display account information inside your own application or dashboard",
         "tags": [
           "Account"
         ],
@@ -3796,6 +3633,10 @@
                         "unlimited": {
                           "type": "boolean",
                           "description": "true if the account has unlimited tokens"
+                        },
+                        "personal_email_available": {
+                          "type": "boolean",
+                          "description": "`true` if the account's plan includes the dedicated personal-email tools (`linkedin_to_personal_email_usa`, `linkedin_to_best_personal_email_usa`). Where `false`, those tools return `403` with `plan_restricted`."
                         },
                         "fair_use": {
                           "type": "object",
@@ -4013,6 +3854,7 @@
                     "plan": "subscription_97",
                     "token_balance": -1,
                     "unlimited": true,
+                    "personal_email_available": true,
                     "fair_use": {
                       "enrich": {
                         "records": {
@@ -4080,16 +3922,6 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -4100,8 +3932,18 @@
               }
             }
           },
+          "403": {
+            "description": "Forbidden — missing `User-Agent` header",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorForbidden"
+                }
+              }
+            }
+          },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -4111,7 +3953,7 @@
             }
           },
           "429": {
-            "description": "Rate limit exceeded",
+            "description": "Too Many Requests — burst guard (`rate_limited`). Account tools don't count toward the enrichment or search Fair Use limits.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4234,19 +4076,14 @@
                     "current_period_start": "2026-07-09",
                     "current_period_end": "2026-08-09",
                     "token_costs": {
-                      "get_account": 1,
-                      "get_billing": 1,
-                      "get_usage": 1,
+                      "get_account": 0,
+                      "get_billing": 0,
+                      "get_usage": 0,
                       "business_email_to_sha256": 1,
                       "email_to_linkedin": 1,
                       "email_to_maid": 1,
-                      "hem_to_email": 1,
-                      "hem_to_linkedin": 1,
                       "reverse_email_lookup": 1,
                       "ip_to_company": 1,
-                      "ip_to_hem": 1,
-                      "ip_to_maid": 1,
-                      "linkedin_to_all_personal_emails": 1,
                       "linkedin_to_best_email": 1,
                       "linkedin_to_best_personal_email_usa": 1,
                       "linkedin_to_business_email": 1,
@@ -4274,16 +4111,6 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -4294,8 +4121,18 @@
               }
             }
           },
+          "403": {
+            "description": "Forbidden — missing `User-Agent` header",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorForbidden"
+                }
+              }
+            }
+          },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -4305,7 +4142,7 @@
             }
           },
           "429": {
-            "description": "Rate limit exceeded",
+            "description": "Too Many Requests — burst guard (`rate_limited`). Account tools don't count toward the enrichment or search Fair Use limits.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4408,16 +4245,6 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -4428,8 +4255,18 @@
               }
             }
           },
+          "403": {
+            "description": "Forbidden — missing `User-Agent` header",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorForbidden"
+                }
+              }
+            }
+          },
           "422": {
-            "description": "Invalid Input",
+            "description": "Invalid Input — malformed body, or a parameter is missing, malformed, or outside its allowed values",
             "content": {
               "application/json": {
                 "schema": {
@@ -4439,7 +4276,7 @@
             }
           },
           "429": {
-            "description": "Rate limit exceeded",
+            "description": "Too Many Requests — burst guard (`rate_limited`). Account tools don't count toward the enrichment or search Fair Use limits.",
             "content": {
               "application/json": {
                 "schema": {

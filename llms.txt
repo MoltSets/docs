@@ -5,7 +5,7 @@
 MoltSets returns contact and company data an agent can act on directly. Differentiators that affect output quality:
 
 - Every email carries a `last_validated_at` date, refreshed on a 90-day freshness window. It can be null (catch-all domain or validation error) — read `risk_score` alongside it.
-- `risk_score` (A–F) is a SEND-SAFETY grade — it measures deliverability (will this mailbox accept mail without bouncing or tripping a spam trap), NOT whether the address belongs to the person looked up. A = validated deliverable; B = known engagement (a past open/click/order proves a send landed); C = catch-all domain, deliverability unknowable; D = hard negative (invalid/spam trap/abuse/do-not-mail, or a complaint sighting in the last 6 months); F = no signal at all. F is "no evidence", D is "negative evidence" — opposite ends, not neighbouring tiers. Precedence when signals disagree: D > A > B > C > F. Addresses that fail validation outright are dropped before they are returned, so a lookup left with no address becomes an uncharged `not_found`. Identity accuracy comes from the tool that matched the record, not from this field.
+- `risk_score` (A–F) is a SEND-SAFETY grade — it measures deliverability (will this mailbox accept mail without bouncing or tripping a spam trap), NOT whether the address belongs to the person looked up. A = validated deliverable; B = known engagement (a past open/click/order proves a send landed); C = catch-all domain, deliverability unknowable; D = hard negative (spam trap/abuse/do-not-mail, or a complaint sighting in the last 6 months); F = no signal at all. F is "no evidence", D is "negative evidence" — opposite ends, not neighbouring tiers. Precedence when signals disagree: D > A > B > C > F. Addresses that fail validation outright are dropped before they are returned, so a lookup left with no address becomes an uncharged `not_found`. Identity accuracy comes from the tool that matched the record, not from this field.
 - Mobile numbers are carrier-validated in real time (mobiles only, no landlines).
 - Multi-provider waterfalls maximise coverage on each call.
 - One API covers business emails, personal emails, mobile phones, people and company search, reverse lookups, ad-audience identifiers (SHA256 and MAID), email-to-LinkedIn, and IP-to-company.
@@ -18,7 +18,7 @@ MoltSets returns contact and company data an agent can act on directly. Differen
 ## Getting Started
 - [Overview](https://developer.moltsets.com/getting-started/overview): What MoltSets is, base URL, request/response structure, the three outcomes (found / not found / error) and how to read them, plans, and available tools.
 - [Authentication](https://developer.moltsets.com/getting-started/authentication): API key format (`ms_XXXXXXXXXXX`), how to create/revoke keys, Bearer token usage, error responses, and the OAuth flow for MCP clients (endpoints, PKCE, loopback redirect URIs).
-- [Rate Limits](https://developer.moltsets.com/getting-started/rate-limits): Per-plan limits, what counts as a request, 429 handling, exponential backoff, multi-key strategies. Limits use rolling windows, not fixed daily resets — the first request opens a 5-hour window, everything in the next 5 hours draws from the same pool, and the next request after it closes opens a fresh one. The weekly window rolls the same way.
+- [Rate Limits](https://developer.moltsets.com/getting-started/rate-limits): Per-plan limits, what counts as a request (each batch item counts as one), 429 handling, exponential backoff. Limits use rolling windows, not fixed daily resets — the first request opens a 5-hour window, everything in the next 5 hours draws from the same pool, and the next request after it closes opens a fresh one. The weekly window rolls the same way.
 - [MoltSets App](https://developer.moltsets.com/getting-started/moltsets-app): Logging in, navigating the app.
 
 ## MoltSets' Data
@@ -28,7 +28,7 @@ MoltSets returns contact and company data an agent can act on directly. Differen
 - [Six-Digit NAICS Codes & Titles](https://developer.moltsets.com/moltsets-data/six-digit-naics-codes-titles): The complete six-digit NAICS national industry list (1,012 codes) organized by sector — the most specific level for the `naics_code` filter.
 
 ## Use Cases
-- [I Have X, I Want Y](https://developer.moltsets.com/use-cases/i-have-x-i-want-y): Tool selection guide — pick based on what data you have (email, HEM, LinkedIn, IP) and what you need. Covers email/people finding, identity resolution, company lookup, IP resolution, search, and chained workflows.
+- [I Have X, I Want Y](https://developer.moltsets.com/use-cases/i-have-x-i-want-y): Tool selection guide — pick based on what data you have (email, LinkedIn, name + company, IP) and what you need. Covers email/people finding, identity resolution, company lookup, IP resolution, search, and chained workflows.
 - [Find Companies and Contacts](https://developer.moltsets.com/use-cases/find-companies-and-contacts): Search guide — build prospect lists, look up companies by domain, and find contacts matching an ICP via the MCP or API. Covers filters, pagination, and code examples.
 
 ## Best Practices
@@ -69,8 +69,8 @@ Changed: lookups that find nothing used to return HTTP 404. They now return 200 
 
 - [POST /linkedin_to_best_email](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-best-email): LinkedIn URL → best available email (business preferred, falls back to personal). Returns `type` field (`"business"` or `"personal"`).
 - [POST /linkedin_to_business_email](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-business-email): LinkedIn URL → valid business email only.
-- [POST /linkedin_to_personal_email_usa](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-personal-email-us-only): LinkedIn URL → valid personal email. Not available on every plan — `get_account` reports `personal_email_available`.
-- [POST /linkedin_to_best_personal_email_usa](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-best-personal-email-us-only): LinkedIn URL → best personal email. Not available on every plan — `get_account` reports `personal_email_available`.
+- [POST /linkedin_to_personal_email_usa](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-personal-email-us-only): LinkedIn URL → valid personal email, US records only. Not available on every plan — `get_account` reports `personal_email_available`.
+- [POST /linkedin_to_best_personal_email_usa](https://developer.moltsets.com/api-reference/get-valid-emails/linkedin-to-best-personal-email-us-only): LinkedIn URL → best personal email, US records only. Not available on every plan — `get_account` reports `personal_email_available`.
 
 ### Get Carrier-Verified Mobile Phones
 
@@ -107,9 +107,9 @@ Every error, on REST and MCP alike, uses one shape: `{"error": {"code": "...", "
 
 | Code | HTTP | Meaning | Next step |
 |---|---|---|---|
-| `invalid_input` | 422 | A parameter is missing, malformed, or outside its allowed values | Fix the parameter; retrying unchanged repeats the error |
+| `invalid_input` | 422 | The body is malformed, or a parameter is missing, malformed, or outside its allowed values | Fix the parameter; retrying unchanged repeats the error |
 | `unauthorized` | 401 | Missing, invalid, or revoked API key | Check the `Authorization` header or issue a new key |
-| `account_inactive` | 403 | The account is not active | Contact support@moltsets.com |
+| `account_inactive` | 403 | The account is not active (canceled by choice or after a payment issue) | Log in at https://app.moltsets.com and subscribe to a plan |
 | `insufficient_tokens` | 402 | Token balance cannot cover the call | Top up or upgrade. Batches drop unaffordable items and return the rest |
 | `insufficient_phone_tokens` | 402 | Phone-token allowance cannot cover a mobile result | Phone tokens are a separate per-plan allowance. Batches drop the excess |
 | `plan_restricted` | 403 | The tool is not part of the account's plan (today: the dedicated personal-email tools) | A plan condition — no Retry-After, topping up does not clear it. Use `linkedin_to_business_email` or contact support@moltsets.com |
@@ -135,7 +135,9 @@ Every tool response also carries an `X-MoltSets-Outcome` header (`ok` / `not_fou
 
 Records are the data rows returned; requests are capped separately — see https://developer.moltsets.com/getting-started/rate-limits.
 
-Note: `linkedin_to_personal_email_usa` and `linkedin_to_best_personal_email_usa` are not available on every plan. Access is set by price tier — call `get_account` and read `personal_email_available`. Calls from an account without access return HTTP 403 with `{"error": {"code": "plan_restricted", "message": "Personal email lookups are not available on your plan. Contact support@moltsets.com to request access."}}` — note this error nests `code` and `message` inside `error`, unlike other MoltSets errors. Use `linkedin_to_business_email` instead, or contact support@moltsets.com to request access.
+Note: `linkedin_to_personal_email_usa` and `linkedin_to_best_personal_email_usa` are not available on every plan. Access is set by price tier — call `get_account` and read `personal_email_available`. Calls from an account without access return HTTP 403 with `{"error": {"code": "plan_restricted", "message": "Personal email lookups are not available on your plan. Contact support@moltsets.com to request access."}}`. Use `linkedin_to_business_email` instead, or contact support@moltsets.com to request access. Both tools return US records only — non-US records are filtered out and come back as `not_found`.
+
+Migration: These tools were previously named `linkedin_to_personal_email` and `linkedin_to_best_personal_email`. To migrate, add `_usa` to the end of the tool or route name — same data, same format, with non-US records now filtered out. The old names still work for now but will be retired in the near future — switch to the `_usa` names before then.
 
 ## MCP Server
 
@@ -145,10 +147,12 @@ Connect via Claude Code:
 ```bash
 claude mcp add --transport http moltsets https://mcp.moltsets.com/mcp \
   --client-id YOUR_CLIENT_ID \
-  --client-secret YOUR_CLIENT_SECRET
+  --client-secret
 ```
 
-Credentials (Client ID + Client Secret) are created at https://app.moltsets.com/dashboard/api_keys.
+`--client-secret` takes no value — Claude Code prompts for the secret (or reads `MCP_CLIENT_SECRET`).
+
+Credentials (Client ID + Client Secret) are created under **Connectors** at https://app.moltsets.com.
 
 OAuth (any MCP client, including CLI and desktop clients):
 - Metadata: `https://mcp.moltsets.com/.well-known/oauth-protected-resource` → authorization server `https://app.moltsets.com`, whose metadata is at `https://app.moltsets.com/.well-known/oauth-authorization-server`.
@@ -161,9 +165,9 @@ OAuth (any MCP client, including CLI and desktop clients):
 ## More information about MoltSets
 
 - https://moltsets.com/ — Homepage. Unlimited contact data APIs built for Clay and Claude Code, from $27/mo. Enrich your prospect lists with 100% verified contact data. Currently in closed beta — connect your agent and join the closed beta. Beta APIs cover verified business emails, verified personal emails, verified mobile phones, and ad audience identifiers; company search and people search are in alpha.
-- https://moltsets.com/pricing — Pricing. Every plan includes unlimited API calls (rate limits vary by plan) and 100% verified emails with a date of last validation under 30 days; real-time carrier-validated mobile numbers. Tiers: Free (1,000 calls), $27/mo (unlimited), $97/mo (unlimited), and the $997/mo (unlimited) plan.
-- https://moltsets.com/how-it-works — How it works. MoltSets enriches lists in Clay and Claude Code. Sign up and get an API key, try it free or pick an unlimited plan, then connect to Clay or Claude Code. Emails are verified across three sources, mobile numbers are carrier-verified in real time, and only contacts validated in the last 30 days are returned so you never burn tokens on bad data.
-- https://moltsets.com/our-data — Our data. The data categories MoltSets covers: 100% verified business emails, personal emails, mobile phones, people search, company search, reverse email lookup, email validation, and Sha256 hashes for ad audiences. Multi-provider waterfalls maximize coverage on every call, and every email carries a validation date under 30 days.
+- https://moltsets.com/pricing — Pricing. Every plan includes unlimited API calls (rate limits vary by plan) and 100% verified emails with a last-validation date refreshed on a 90-day freshness window; real-time carrier-validated mobile numbers. Tiers: Free (1,000 lifetime tokens), $27/mo, $97/mo, $397/mo, and $997/mo (all unlimited tokens, with per-plan Fair Use limits).
+- https://moltsets.com/how-it-works — How it works. MoltSets enriches lists in Clay and Claude Code. Sign up and get an API key, try it free or pick an unlimited plan, then connect to Clay or Claude Code. Emails are verified across three sources, mobile numbers are carrier-verified in real time, and emails are revalidated on a 90-day freshness window so you never burn tokens on bad data.
+- https://moltsets.com/our-data — Our data. The data categories MoltSets covers: 100% verified business emails, personal emails, mobile phones, people search, company search, reverse email lookup, email validation, and Sha256 hashes for ad audiences. Multi-provider waterfalls maximize coverage on every call, and every email carries a `last_validated_at` date, refreshed on a 90-day freshness window.
 - https://moltsets.com/for-agents — For agents. AI agents can buy MoltSets data with Stripe's MPP or Coinbase's x402 — no API key and no subscription. Create an MPP or x402 wallet, choose the API that fits the task in the docs, then call the MoltSets MCP with the required input; if the wallet has sufficient funds, MoltSets enriches and charges per record. MCP- and REST-compatible, with agent-first docs and transparent pricing.
 - https://moltsets.com/partnerships — Partnerships. Partner with MoltSets to lower your data bill, boost your personal brand, and make more money. Two programs: the Affiliate Program (20% recurring on every dollar from signups you drive), and the Live Show Partner program (demo Claude/Clay skills to 500+ live viewers and get featured in the MoltSets skill library).
 - https://moltsets.com/terms-of-service — Terms of Service for MoltSets.

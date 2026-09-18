@@ -23,11 +23,11 @@ The two endpoints share most of their vocabulary. `industry`, `employee_range`, 
 |---|---|---|
 | `query` | Free-text search across company name | Do not use for domain, industry, or size — use the dedicated filters for those |
 | `domain` | Exact company domain match | Full URLs are normalised automatically (`https://www.acme.com/about` → `acme.com`). Prefer this over `query` when you have a known domain |
-| `industry` | Filter by industry | Fixed enumeration — see [Search Company Profiles](/api-reference/search/search-company-profiles) for accepted values |
+| `industry` | Filter by industry | Fixed enumeration — see [Search for Companies](/api-reference/search/search-for-companies) for accepted values |
 | `linkedin_industry` | Filter by LinkedIn's industry label | LinkedIn's own vocabulary, hundreds of labels — finer-grained than `industry` |
 | `naics_code` | Filter by NAICS industry code | Matches at any hierarchy level — 2-digit sector through 6-digit national industry |
-| `employee_range` | Filter by headcount band | Fixed enumeration — see [Search Company Profiles](/api-reference/search/search-company-profiles) for accepted values |
-| `revenue_range` | Filter by annual revenue band | Fixed enumeration — see [Search Company Profiles](/api-reference/search/search-company-profiles) for accepted values |
+| `employee_range` | Filter by headcount band | Fixed enumeration — see [Search for Companies](/api-reference/search/search-for-companies) for accepted values |
+| `revenue_range` | Filter by annual revenue band | Fixed enumeration — see [Search for Companies](/api-reference/search/search-for-companies) for accepted values |
 | `country` | Exact country name filter | Company location is team-derived — see the caveat below |
 | `state` | Exact state or region filter | Full names, not abbreviations. Combine with `country` |
 | `exclude_domain` | Removes specific companies | Your suppression list — pass the accounts you already have. Takes a list |
@@ -56,7 +56,7 @@ The two endpoints share most of their vocabulary. `industry`, `employee_range`, 
 | `country` | Exact country name filter | Most reliable filter (~99% filled). Must match the stored value |
 | `state` | Exact state or region filter | Full names, not abbreviations — `Texas`, not `TX` |
 | `city` | Exact city name filter | Matches the exact stored city, not its suburbs. Combine with `state`/`country` to disambiguate |
-| `seniority` | Exact seniority level | Fixed enumeration — see [Search Business Profiles](/api-reference/search/search-business-profiles) for accepted values |
+| `seniority` | Exact seniority level | Fixed enumeration — see [Search for People](/api-reference/search/search-for-people) for accepted values |
 | `industry` | Filter by industry | Fixed enumeration — see the API reference for accepted values |
 | `linkedin_industry` | Filter by LinkedIn's industry label | Hundreds of labels, finer-grained than `industry` |
 | `naics_code` | Filter by NAICS industry code | Matches at any hierarchy level |
@@ -72,7 +72,7 @@ The two endpoints share most of their vocabulary. `industry`, `employee_range`, 
 | `limit` | Number of results to return | Max 25 per call, default 10 (Free plan: max 5) |
 | `offset` | Number of results to skip | Use with `limit` to paginate |
 
-Combine `query` with filters for best precision — filters cost nothing extra to attach, and a search built from filters alone runs far cheaper than one driven by free text. See [Searching for People](/best-practices/searching-for-people) and [Searching for Companies](/best-practices/searching-for-companies) for the full guidance.
+Combine `query` with filters for best precision — filters cost nothing extra to attach, and a search built from filters alone runs much faster than one driven by free text — though it's billed the same: each record returned counts as one search record under the [Fair Use Policy for Search](https://moltsets.com/fair-use-policy-search/). See [Searching for People](/best-practices/searching-for-people) and [Searching for Companies](/best-practices/searching-for-companies) for the full guidance.
 
 Results are ranked by relevance — higher `_score` means a stronger match.
 
@@ -86,8 +86,8 @@ Use `search_companies` when your output is a list of companies. Returns name, do
 | Companies matching a name | Find company profiles matching Acme | `query` |
 | Companies in a specific industry | Find information technology companies | `industry` |
 | Companies by industry and headcount | Find information technology companies with 51–200 employees | `industry`, `employee_range` |
-| Companies by industry and revenue | Find computer software companies with revenue above $50M | `industry`, `revenue_range` |
-| Companies matching an ICP | Find privately held computer software companies with 201–500 employees and revenue between $10M and $50M | `industry`, `employee_range`, `revenue_range` |
+| Companies by industry and revenue | Find information technology companies with revenue above $50M | `industry`, `revenue_range` |
+| Companies matching an ICP | Find information technology companies with 201–500 employees and revenue between $20M and $50M | `industry`, `employee_range`, `revenue_range` |
 | Companies minus the ones you have | Find information technology companies with 51–200 employees, but not acme.com or stripe.com | `industry`, `employee_range`, `exclude_domain` |
 | Companies minus a segment | Find software companies but skip anyone under 21 employees | `industry`, `exclude_employee_range` |
 
@@ -131,7 +131,7 @@ Look up the company record for acme.com
 
 **ICP company list**
 ```
-Find computer software companies with 51–200 employees and revenue between $10M and $50M
+Find information technology companies with 51–200 employees and revenue between $20M and $50M
 ```
 
 **ICP contact list**

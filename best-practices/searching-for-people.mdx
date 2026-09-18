@@ -56,7 +56,7 @@ Two rules follow.
 **Drop `query` entirely when filters can carry the whole intent.** "VPs of sales at US software companies" is fully expressible as `seniority`, `department`, `industry`, and `country` — as a pure filter search it runs much faster than the same request phrased as free text.
 
 <Note>
-  This is about execution cost, not billing. Tokens are charged per record returned regardless of query shape — a cheaper query returns faster and puts less load on search capacity, but it doesn't change what you're charged.
+  This is about speed, not billing. Each record returned counts as one search record against your plan's limits under the [Fair Use Policy for Search](https://moltsets.com/fair-use-policy-search/), whatever the query shape — a filter-only query returns faster and puts less load on search capacity, but it's billed the same.
 </Note>
 
 ### If all you have is text, add a country

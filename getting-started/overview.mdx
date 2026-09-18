@@ -3,7 +3,7 @@ title: "Overview"
 description: "What MoltSets is, how it works, and where to start."
 ---
 
-MoltSets is an identity resolution API. You give it a piece of data — an email address, LinkedIn URL, IP address, or hashed email — and it returns enriched contact and company information. Every tool follows the same request and response structure, so once you've made one call, you know how to make all of them.
+MoltSets is an identity resolution API. You give it a piece of data — an email address, LinkedIn URL, IP address, or a person's name and company — and it returns enriched contact and company information, including hashed emails (HEMs) for ad audiences. Every tool follows the same request and response structure, so once you've made one call, you know how to make all of them.
 
 ## Base URL
 
@@ -58,8 +58,7 @@ Every call that completes returns HTTP `200` with a consistent envelope:
 - **`metadata.tokens_used`** — credits consumed. Always `0` when no data is returned. Sent on token-bound (free) accounts only — accounts on an unlimited plan omit it.
 - **`metadata.tokens_remaining`** — your remaining credit balance after this request. Token-bound accounts only.
 - **`metadata.personal_email_restricted`** — present and `true` only when the call withheld personal-email data because your plan doesn't include that surface. Read the missing field as a plan boundary, not as absent data.
-
-`linkedin_to_mobile_phone` adds `phone_tokens_used` and `phone_tokens_remaining`; no other tool reports phone tokens.
+- **`metadata.phone_tokens_used`** / **`metadata.phone_tokens_remaining`** — `linkedin_to_mobile_phone` only; no other tool reports phone tokens.
 
 **The HTTP status says whether the call completed. The body says what happened.** Branch on `status`, not on the HTTP code.
 
@@ -121,10 +120,10 @@ Branch on `error.code`, not on the message text.
 
 | Code | HTTP | What it means | What to do |
 | :-- | :-- | :-- | :-- |
-| `invalid_input` | `422` | A parameter is missing, malformed, or outside its allowed values | Fix the parameter and retry. Retrying unchanged returns the same error |
+| `invalid_input` | `422` | The body is malformed, or a parameter is missing, malformed, or outside its allowed values | Fix the parameter and retry. Retrying unchanged returns the same error |
 | `unauthorized` | `401` | Missing, invalid, or revoked API key | Check the `Authorization` header, or issue a new key |
 | `forbidden` | `403` | Missing `User-Agent` header | Add a `User-Agent` header — any non-empty value works |
-| `account_inactive` | `403` | The account is not active | Account is canceled either by choice or because of a payment issue. Login to your account to fix |
+| `account_inactive` | `403` | The account is not active | The account was canceled, by choice or because of a payment issue. Log in at [app.moltsets.com](https://app.moltsets.com) and subscribe to a plan |
 | `insufficient_tokens` | `402` | Token balance can't cover the call | Top up or upgrade. On a batch, unaffordable items are dropped and the rest still return |
 | `insufficient_phone_tokens` | `402` | Phone-token allowance can't cover a mobile result | Phone tokens are a separate allowance — see [Rate Limits](/getting-started/rate-limits). Batches drop the excess rather than failing |
 | `plan_restricted` | `403` | The tool isn't part of your plan — today, the dedicated personal-email tools | A plan condition: no `Retry-After`, and topping up tokens won't clear it. Use `linkedin_to_business_email`, or contact support |
@@ -167,7 +166,7 @@ Resolution time varies, largely with when the outage starts: one that begins dur
 Records are the data rows returned; **requests** are capped separately — see [Rate Limits](/getting-started/rate-limits).
 
 <Note>
-  `linkedin_to_personal_email_usa` and `linkedin_to_best_personal_email_usa` are **not available on every plan** — access is set by price tier. Call `get_account` and read `personal_email_available` to know where yours stands.
+  `linkedin_to_personal_email_usa` and `linkedin_to_best_personal_email_usa` are **not available on every plan** — access is set by price tier. Call `get_account` and read `personal_email_available` to know where yours stands. Both return **US records only** — non-US records are filtered out, so a non-US profile comes back as a `not_found`.
 
   Calls from an account without access return **403** with:
 
@@ -214,6 +213,12 @@ For more information on our plans, upgrading and downgrading processes, please r
 
 <Note>
   \* `linkedin_to_personal_email_usa` and `linkedin_to_best_personal_email_usa` are **not available on every plan** — access is set by price tier. Call `get_account` and read `personal_email_available` to know where yours stands. See [Plans](#plans) for the error they return. Without access, use `linkedin_to_business_email` instead.
+
+  Both return **US records only** — non-US records are filtered out, so a non-US profile comes back as a `not_found`.
+</Note>
+
+<Note>
+  **Switch to the `_usa` tools.** The personal-email tools were previously named `linkedin_to_personal_email` and `linkedin_to_best_personal_email`. To migrate, add `_usa` to the end of the tool or route name — same data, same format, with non-US records now filtered out. **The old names still work for now but will be retired in the near future — switch to the `_usa` names before then.**
 </Note>
 
 ## What to do next

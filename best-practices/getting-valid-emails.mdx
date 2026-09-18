@@ -3,7 +3,7 @@ title: "Getting Valid Emails"
 description: "Which MoltSets email endpoint to call, how to read the risk score before you send, and how to avoid paying for the same lookup twice."
 ---
 
-MoltSets has five ways to get an email address. They differ in what you put in, what kind of address comes out, and whether you get a fallback. Picking the right one is mostly about what identifier you're starting from.
+MoltSets has multiple ways to get an email address. They differ in what you put in, what kind of address comes out, and whether you get a fallback. Picking the right one is mostly about what identifier you're starting from.
 
 ## Choose the right endpoint
 
@@ -17,6 +17,8 @@ MoltSets has five ways to get an email address. They differ in what you put in, 
 
 <Note>
   \* The two personal-only endpoints are **not available on every plan**. Access is set by price tier — call `get_account` and read `personal_email_available` to know where yours stands. Where it's `false`, use `linkedin_to_business_email` instead, or contact support@moltsets.com to request access.
+
+  Both return **US records only** — non-US records are filtered out, so a non-US profile comes back as a `not_found`. The personal-email tools were previously named `linkedin_to_personal_email` and `linkedin_to_best_personal_email`. To migrate, add `_usa` to the end of the tool or route name — same data, same format, with non-US records now filtered out. **The old names still work for now but will be retired in the near future — switch to the `_usa` names before then.**
 
   Calls from an account without access return **403** with:
 
@@ -32,7 +34,7 @@ MoltSets has five ways to get an email address. They differ in what you put in, 
   Contact [support@moltsets.com](mailto:support@moltsets.com) to request access.
 </Note>
 
-**`linkedin_to_best_email`** is the sensible default. It returns a business email when one exists and **falls back to a personal email** when one doesn't, so it has the highest match rate of the four. The `type` field tells you which kind you got:
+**`linkedin_to_best_email`** is the sensible default. It returns a business email when one exists and **falls back to a personal email** when one doesn't, so it has the highest match rate of the email endpoints. The `type` field tells you which kind you got:
 
 ```json
 {
@@ -54,7 +56,7 @@ Every email MoltSets returns carries a `risk_score` — a single-letter grade fo
 | **A** | Validated deliverable — confirmed at validation time | Send |
 | **B** | Known engagement — a past open, click, or order, so a send reached the inbox | Probably send |
 | **C** | Catch-all server — deliverability can't be determined | Your call |
-| **D** | Hard negative — invalid, spam trap, abuse, or a complaint sighting in the last 6 months | **Don't send** |
+| **D** | Hard negative — spam trap, abuse, do-not-mail, or a complaint sighting in the last 6 months | **Don't send** |
 | **F** | No signal either way | Your call |
 
 When signals disagree the order is **D > A > B > C > F** — a hard negative outranks even a fresh deliverable verdict.
@@ -94,7 +96,7 @@ The two address types aren't interchangeable, and the right one depends on what 
 
 **Business** (`linkedin_to_business_email`) suits B2B outreach, CRM enrichment, and account-based campaigns — anywhere reaching someone in a work context is the point.
 
-**Personal** (`linkedin_to_personal_email_usa`, `linkedin_to_best_personal_email_usa` — not available on every plan; see the note above) suits recruitment, consumer marketing, and re-engagement. It's also the only address that survives a job change, which makes it the better choice for contacts who may have left the employer you have on file.
+**Personal** (`linkedin_to_personal_email_usa`, `linkedin_to_best_personal_email_usa` — US records only, and not available on every plan; see the note above) suits recruitment, consumer marketing, and re-engagement. It's also the only address that survives a job change, which makes it the better choice for contacts who may have left the employer you have on file.
 
 ## A note on token spend
 
