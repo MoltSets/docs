@@ -11,8 +11,8 @@ MoltSets has five ways to get an email address. They differ in what you put in, 
 |---|---|---|
 | LinkedIn URL | Any working address, don't care which kind | `linkedin_to_best_email` |
 | LinkedIn URL | Work address only | `linkedin_to_business_email` |
-| LinkedIn URL | Personal address only | `linkedin_to_personal_email` * |
-| LinkedIn URL | The single highest-confidence personal address | `linkedin_to_best_personal_email` * |
+| LinkedIn URL | Personal address only | `linkedin_to_personal_email_usa` * |
+| LinkedIn URL | The single highest-confidence personal address | `linkedin_to_best_personal_email_usa` * |
 | Name + company domain | Work address, no LinkedIn URL needed | `search_business_email_by_name` |
 
 <Note>
@@ -71,7 +71,7 @@ Segment `C` and `F` away from `A`/`B` rather than dropping them — they're unkn
 
 `last_validated_at` tells you when the address was last confirmed. Emails decay — people change jobs and close inboxes — so a grade from a recent check carries more weight than an old one.
 
-MoltSets revalidates on a **90-day** freshness window — a cached validation older than that is re-checked on the next lookup, across every email endpoint. There is no shorter window on `linkedin_to_best_personal_email` or anywhere else.
+MoltSets revalidates on a **90-day** freshness window — a cached validation older than that is re-checked on the next lookup, across every email endpoint. There is no shorter window on `linkedin_to_best_personal_email_usa` or anywhere else.
 
 `last_validated_at` can also come back `null`. A catch-all domain has no result to record, and a vendor error leaves the date unset — so treat a missing date as *unknown*, and read `risk_score` (`C` or `F` in those cases) rather than assuming a recent check.
 
@@ -94,7 +94,7 @@ The two address types aren't interchangeable, and the right one depends on what 
 
 **Business** (`linkedin_to_business_email`) suits B2B outreach, CRM enrichment, and account-based campaigns — anywhere reaching someone in a work context is the point.
 
-**Personal** (`linkedin_to_personal_email`, `linkedin_to_best_personal_email` — not available on every plan; see the note above) suits recruitment, consumer marketing, and re-engagement. It's also the only address that survives a job change, which makes it the better choice for contacts who may have left the employer you have on file.
+**Personal** (`linkedin_to_personal_email_usa`, `linkedin_to_best_personal_email_usa` — not available on every plan; see the note above) suits recruitment, consumer marketing, and re-engagement. It's also the only address that survives a job change, which makes it the better choice for contacts who may have left the employer you have on file.
 
 ## A note on token spend
 

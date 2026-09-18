@@ -44,16 +44,16 @@ Resolve LinkedIn profile URLs and company domains into verified business and per
 |---|---|---|---|
 | LinkedIn URL | Best available email (business if found, falls back to personal) | Find the best email for linkedin.com/in/username | `linkedin_to_best_email` |
 | LinkedIn URL | Business email only | Find the business email for linkedin.com/in/username | `linkedin_to_business_email` |
-| LinkedIn URL | Personal email only | Find the personal email for linkedin.com/in/username | `linkedin_to_personal_email` * |
-| LinkedIn URL | Best personal email | Find the best personal email for linkedin.com/in/username | `linkedin_to_best_personal_email` * |
+| LinkedIn URL | Personal email only | Find the personal email for linkedin.com/in/username | `linkedin_to_personal_email_usa` * |
+| LinkedIn URL | Best personal email | Find the best personal email for linkedin.com/in/username | `linkedin_to_best_personal_email_usa` * |
 | Company name or domain | Best available email for each employee | Search for employees at acme.com and get their best email address | `search_people` → `linkedin_to_best_email` |
 | Company name or domain | Business emails for each employee | Search for employees at acme.com and get their business email addresses | `search_people` → `linkedin_to_business_email` |
-| Company name or domain | Personal emails for each employee | Search for employees at acme.com and get their personal email addresses | `search_people` → `linkedin_to_personal_email` * |
+| Company name or domain | Personal emails for each employee | Search for employees at acme.com and get their personal email addresses | `search_people` → `linkedin_to_personal_email_usa` * |
 | Person name + company domain | Best email for that person | Find John Smith at acme.com and get their best email | `search_linkedin_profile` → `linkedin_to_best_email` |
-| LinkedIn URL | Business email, falling back to personal if not found | Try to find the business email for linkedin.com/in/username, fall back to personal if nothing is found | `linkedin_to_business_email` → `linkedin_to_personal_email` * |
+| LinkedIn URL | Business email, falling back to personal if not found | Try to find the business email for linkedin.com/in/username, fall back to personal if nothing is found | `linkedin_to_business_email` → `linkedin_to_personal_email_usa` * |
 
 <Note>
-  \* `linkedin_to_personal_email` and `linkedin_to_best_personal_email` are **not available on every plan** — access is set by price tier. Call `get_account` and read `personal_email_available` to know where yours stands. Without access, use `linkedin_to_business_email` instead.
+  \* `linkedin_to_personal_email_usa` and `linkedin_to_best_personal_email_usa` are **not available on every plan** — access is set by price tier. Call `get_account` and read `personal_email_available` to know where yours stands. Without access, use `linkedin_to_business_email` instead.
 
   Calls from an account without access return **403** with:
 

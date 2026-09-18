@@ -2041,7 +2041,7 @@
         ]
       }
     },
-    "/linkedin_to_personal_email": {
+    "/linkedin_to_personal_email_usa": {
       "post": {
         "summary": "LinkedIn to Personal Email",
         "operationId": "enrichPersonalEmail",
@@ -2216,7 +2216,7 @@
         ]
       }
     },
-    "/linkedin_to_best_personal_email": {
+    "/linkedin_to_best_personal_email_usa": {
       "post": {
         "summary": "LinkedIn to Best Personal Email",
         "operationId": "linkedinToBestPersonalEmail",
@@ -4248,10 +4248,10 @@
                       "ip_to_maid": 1,
                       "linkedin_to_all_personal_emails": 1,
                       "linkedin_to_best_email": 1,
-                      "linkedin_to_best_personal_email": 1,
+                      "linkedin_to_best_personal_email_usa": 1,
                       "linkedin_to_business_email": 1,
                       "linkedin_to_mobile_phone": 1,
-                      "linkedin_to_personal_email": 1,
+                      "linkedin_to_personal_email_usa": 1,
                       "linkedin_to_sha256": 1,
                       "reverse_linkedin_lookup": 1,
                       "search_business_email_by_name": 1,
