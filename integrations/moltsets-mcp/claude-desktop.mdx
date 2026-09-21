@@ -1,0 +1,86 @@
+---
+title: "Connect MoltSets to Claude Desktop"
+sidebarTitle: "Claude Desktop"
+description: "Add the MoltSets MCP server to Claude Desktop — no config file editing — and set tool permissions in bulk."
+---
+
+Claude Desktop shares the same connectors as your Claude account — no config file editing required, and a connector you add on Claude.ai is already available here. How you add it depends on your account type. On a **personal** plan you add it yourself. On a **Team or Enterprise** plan, an Owner adds it once for the whole organization, then each member connects their own credentials.
+
+**MCP Server URL**
+
+```text
+https://mcp.moltsets.com/mcp
+```
+
+<Note>
+  To get your credentials, log into [app.moltsets.com](https://app.moltsets.com) and go to **Connectors** to create a new connector.
+</Note>
+
+---
+
+## Personal account (Free, Pro, or Max)
+
+1. In Claude Desktop, go to **Customize → Connectors**.
+2. Click **+**, then **Add custom connector**.
+3. Paste the following into **Remote MCP server URL**:
+   ```text
+   https://mcp.moltsets.com/mcp
+   ```
+4. Click **Advanced settings** and enter your MoltSets Connector credentials:
+   - **OAuth Client ID:** your Client ID
+   - **OAuth Client Secret:** your Client Secret
+5. Click **Add**, then **restart Claude Desktop** so it picks up the connector.
+
+<Note>
+  Free accounts are limited to a single custom connector. Pro and Max accounts can add multiple.
+</Note>
+
+---
+
+## Team or Enterprise account
+
+Only an **Owner or Primary Owner** can add a custom connector to a Team or Enterprise organization. Once added, each member connects to it individually — Claude only ever accesses data that the connecting member is authorized to see.
+
+### Owner / Primary Owner — add the connector for the organization
+
+1. Go to **Organization settings → Connectors**.
+2. Click **Add**.
+3. Hover over **Custom**, then select **Web**.
+4. Paste the following into **Remote MCP server URL**:
+   ```text
+   https://mcp.moltsets.com/mcp
+   ```
+5. Click **Advanced settings** and enter the MoltSets Connector credentials (**OAuth Client ID** and **OAuth Client Secret**).
+6. Click **Add**.
+
+### Each member — connect to it
+
+1. In Claude Desktop, go to **Customize → Connectors**.
+2. Find the MoltSets connector (marked with a **Custom** label).
+3. Click **Connect** and complete authentication.
+4. **Restart Claude Desktop** so it picks up the connector.
+
+---
+
+## Configuring tool permissions
+
+By default, all MoltSets tools are set to **Needs Approval** — Claude will prompt you the first time each tool is used. To update permissions in bulk:
+
+1. Go to **Customize → Connectors**
+2. Click **Configure** beside the MoltSets connector
+3. Use the bulk change tool to set all tools to **Always Allow**
+
+To restrict specific tools, set them individually to **Blocked**.
+
+---
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Example prompts" icon="comments" href="/integrations/moltsets-mcp#example-prompts">
+    Prompts to run the moment the connector is live.
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/integrations/moltsets-mcp#troubleshooting">
+    Connection, credential, and error-code fixes.
+  </Card>
+</CardGroup>

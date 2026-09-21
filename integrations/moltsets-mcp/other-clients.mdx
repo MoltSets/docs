@@ -1,0 +1,48 @@
+---
+title: "Connect any other MCP client"
+sidebarTitle: "Other MCP clients"
+description: "Connect any MCP client that supports remote HTTP servers to MoltSets — OAuth credentials, loopback redirect URIs, PKCE, and the required User-Agent header."
+---
+
+Any MCP client that supports remote servers over HTTP can connect — CLI agents, desktop apps, and IDE extensions included.
+
+**MCP Server URL**
+
+```text
+https://mcp.moltsets.com/mcp
+```
+
+---
+
+## Steps
+
+1. Add `https://mcp.moltsets.com/mcp` as a remote MCP server in your client.
+2. When the client asks for OAuth credentials, paste the **Client ID** and **Client Secret** from the **Connectors** page at [app.moltsets.com](https://app.moltsets.com). Clients that register themselves can skip this step.
+3. Approve access on the MoltSets consent screen when the browser opens. The client stores the token from there; re-run the flow if it expires.
+
+Clients that run in a terminal complete this on a local port — `http://127.0.0.1:<port>/callback` and its `localhost` and `[::1]` equivalents are supported, so no HTTPS callback is needed on your machine.
+
+<Note>
+  Endpoints, scopes, and redirect URI rules are on the [Authentication](/getting-started/authentication#oauth--connecting-an-mcp-client) page, and are discoverable from the server itself at `https://mcp.moltsets.com/.well-known/oauth-protected-resource`.
+</Note>
+
+---
+
+## User-Agent header
+
+<Warning>
+  MoltSets requires every request — including MCP connections — to send a `User-Agent` header. Any non-empty value works; MoltSets doesn't validate its contents, only that it's present. Most MCP clients set one automatically, but if your client lets you send bare requests (or omit the header), set one explicitly or the server rejects the connection with `403 Forbidden` (`error.code`: `forbidden`). See [User-Agent header](/getting-started/authentication#user-agent-header).
+</Warning>
+
+---
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Example prompts" icon="comments" href="/integrations/moltsets-mcp#example-prompts">
+    Prompts to run the moment the connector is live.
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/integrations/moltsets-mcp#troubleshooting">
+    Connection, credential, and error-code fixes.
+  </Card>
+</CardGroup>

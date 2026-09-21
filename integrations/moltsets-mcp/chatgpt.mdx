@@ -1,0 +1,53 @@
+---
+title: "Connect MoltSets to ChatGPT"
+sidebarTitle: "ChatGPT"
+description: "Add the MoltSets MCP server to ChatGPT as a custom connector, authorized with your OAuth Client ID and Secret."
+---
+
+ChatGPT connects to MCP servers through **Connectors** (formerly "Apps"), found in Settings.
+
+**MCP Server URL**
+
+```text
+https://mcp.moltsets.com/mcp
+```
+
+<Note>
+  To get your credentials, log into [app.moltsets.com](https://app.moltsets.com) and go to **Connectors** to create a new connector.
+</Note>
+
+---
+
+## Add the connector
+
+1. Go to **Settings → Connectors** (or **Apps & Connectors**, depending on your ChatGPT version).
+2. Select **Add custom connector**.
+3. Enter:
+   - **Name:** MoltSets
+   - **MCP Server URL:** `https://mcp.moltsets.com/mcp`
+4. When prompted for authentication, select **OAuth**.
+5. Enter your **Client ID** and **Client Secret** from your MoltSets dashboard.
+6. ChatGPT redirects you to [app.moltsets.com](https://app.moltsets.com) to log in and approve access, then returns you to ChatGPT.
+
+Once connected, MoltSets tools are available to invoke from any conversation where you enable the connector.
+
+<Note>
+  Custom MCP connectors require a **Plus, Team, or Enterprise** plan — they aren't available on the free tier.
+</Note>
+
+<Warning>
+  ChatGPT does not fall back to a static API key. If you only have a MoltSets API key (`ms_XXXXXXXXXXX`) rather than a Client ID / Client Secret pair, generate OAuth credentials from the **Connectors** page at [app.moltsets.com](https://app.moltsets.com) first.
+</Warning>
+
+---
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Example prompts" icon="comments" href="/integrations/moltsets-mcp#example-prompts">
+    Prompts to run the moment the connector is live.
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/integrations/moltsets-mcp#troubleshooting">
+    Connection, credential, and error-code fixes.
+  </Card>
+</CardGroup>

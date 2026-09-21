@@ -39,7 +39,15 @@ MoltSets returns contact and company data an agent can act on directly. Differen
 - [Getting Ad Audiences](https://developer.moltsets.com/best-practices/getting-ad-audiences): How to turn MoltSets contacts into privacy-safe advertising audiences — hashed email match keys for customer match, and MAIDs for mobile retargeting.
 
 ## Integrations
-- [MoltSets MCP Server](https://developer.moltsets.com/integrations/moltsets-mcp): MCP server URL (`https://mcp.moltsets.com/mcp`), setup for Claude.ai, Claude Desktop, Claude Code, and any other OAuth MCP client (loopback redirect URIs, PKCE), example prompts, troubleshooting.
+- [MoltSets MCP Server](https://developer.moltsets.com/integrations/moltsets-mcp): MCP server URL (`https://mcp.moltsets.com/mcp`), what MCP gives an agent, links to the per-client setup guides, example prompts, the three outcomes (found / not found / error) with error codes, token costs, troubleshooting.
+- [Connect MoltSets to Claude.ai](https://developer.moltsets.com/integrations/moltsets-mcp/claude-ai): add the custom connector on a personal plan (Free/Pro/Max), or org-wide on Team/Enterprise where an Owner adds it and each member connects their own credentials.
+- [Connect MoltSets to Claude Desktop](https://developer.moltsets.com/integrations/moltsets-mcp/claude-desktop): same connectors as the Claude account (no config file), restart requirement, and bulk tool-permission settings (Needs Approval / Always Allow / Blocked).
+- [Connect MoltSets to Claude Code](https://developer.moltsets.com/integrations/moltsets-mcp/claude-code): `claude mcp add --transport http` command, `local` vs `--scope user`, `MCP_CLIENT_SECRET`, OAuth browser consent, admin rules on business plans.
+- [Connect MoltSets to ChatGPT](https://developer.moltsets.com/integrations/moltsets-mcp/chatgpt): add a custom connector under Settings > Connectors (Apps & Connectors), OAuth Client ID/Secret, Plus/Team/Enterprise only, no static API key fallback.
+- [Connect MoltSets to Grok](https://developer.moltsets.com/integrations/moltsets-mcp/grok): Bring Your Own MCP at grok.com/connectors (New Connector > Custom), paid accounts any tier, OAuth Client ID/Secret, server must be publicly reachable.
+- [Connect MoltSets to Cursor](https://developer.moltsets.com/integrations/moltsets-mcp/cursor): add via Cursor Settings > MCP with HTTP/Streamable HTTP transport, or `.cursor/mcp.json`; OAuth prompt on first connect, credentials never stored in the file.
+- [Connect MoltSets to Windsurf](https://developer.moltsets.com/integrations/moltsets-mcp/windsurf): add under Settings > Cascade > MCP Servers over HTTP/Streamable, OAuth Client ID/Secret, same discovery flow as Cursor.
+- [Connect any other MCP client](https://developer.moltsets.com/integrations/moltsets-mcp/other-clients): remote HTTP MCP clients, OAuth Client ID/Secret, loopback redirect URIs (`127.0.0.1`, `localhost`, `[::1]`) with PKCE, required `User-Agent` header.
 - [Clay HTTP API](https://developer.moltsets.com/integrations/clay) - Use MoltSets tools directly in Clay via the HTTP API enrichment.
 
 ## API reference

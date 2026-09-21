@@ -1,0 +1,47 @@
+---
+title: "Connect MoltSets to Grok"
+sidebarTitle: "Grok"
+description: "Add the MoltSets MCP server to Grok with Bring Your Own MCP, authorized with your OAuth Client ID and Secret."
+---
+
+Grok connects to custom MCP servers through **Bring Your Own MCP**, available on paid Grok accounts (any tier).
+
+**MCP Server URL**
+
+```text
+https://mcp.moltsets.com/mcp
+```
+
+<Note>
+  To get your credentials, log into [app.moltsets.com](https://app.moltsets.com) and go to **Connectors** to create a new connector.
+</Note>
+
+---
+
+## Add the connector
+
+1. Go to [grok.com/connectors](https://grok.com/connectors).
+2. Select **New Connector**, then **Custom**.
+3. Enter the server URL: `https://mcp.moltsets.com/mcp`
+4. Grok detects that authentication is required and prompts for OAuth.
+5. Enter your **Client ID** and **Client Secret** from your MoltSets dashboard.
+6. Complete the login and approval step in the browser window that opens.
+
+Once connected, Grok discovers the MoltSets tools automatically and surfaces them in conversations.
+
+<Note>
+  Bring Your Own MCP requires the server to be reachable over the public internet. Not a concern for MoltSets — `mcp.moltsets.com` is publicly hosted — but worth knowing when troubleshooting on Grok's side, since local or tunneled MCP servers behave differently there: tunnel URLs expire and have to be re-added as new connectors.
+</Note>
+
+---
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Example prompts" icon="comments" href="/integrations/moltsets-mcp#example-prompts">
+    Prompts to run the moment the connector is live.
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/integrations/moltsets-mcp#troubleshooting">
+    Connection, credential, and error-code fixes.
+  </Card>
+</CardGroup>

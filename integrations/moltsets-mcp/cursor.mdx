@@ -1,0 +1,61 @@
+---
+title: "Connect MoltSets to Cursor"
+sidebarTitle: "Cursor"
+description: "Add the MoltSets MCP server to Cursor from the settings UI or a .cursor/mcp.json file, authorized over OAuth."
+---
+
+Cursor supports MCP servers through its settings UI or a config file. Either route ends in the same OAuth flow — credentials are never stored in the file.
+
+**MCP Server URL**
+
+```text
+https://mcp.moltsets.com/mcp
+```
+
+<Note>
+  To get your credentials, log into [app.moltsets.com](https://app.moltsets.com) and go to **Connectors** to create a new connector.
+</Note>
+
+---
+
+## Via the UI
+
+1. Open **Cursor Settings → MCP**.
+2. Select **Add new MCP server**.
+3. Choose **HTTP** (or **Streamable HTTP**, depending on version) as the transport.
+4. Enter the server URL: `https://mcp.moltsets.com/mcp`
+5. Cursor detects that authentication is required and prompts for OAuth.
+6. Enter your **Client ID** and **Client Secret**.
+7. Approve the connection in the browser tab that opens.
+
+---
+
+## Via `mcp.json`
+
+If you prefer manual configuration, add this to your `.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "moltsets": {
+      "url": "https://mcp.moltsets.com/mcp",
+      "transport": "http"
+    }
+  }
+}
+```
+
+Cursor triggers the OAuth flow the first time it connects, prompting for your Client ID and Secret in the UI rather than storing them in the file.
+
+---
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Example prompts" icon="comments" href="/integrations/moltsets-mcp#example-prompts">
+    Prompts to run the moment the connector is live.
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/integrations/moltsets-mcp#troubleshooting">
+    Connection, credential, and error-code fixes.
+  </Card>
+</CardGroup>

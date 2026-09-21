@@ -1,0 +1,45 @@
+---
+title: "Connect MoltSets to Windsurf"
+sidebarTitle: "Windsurf"
+description: "Add the MoltSets MCP server to Windsurf Cascade over HTTP, authorized with your OAuth Client ID and Secret."
+---
+
+Windsurf connects to MCP servers from Cascade's settings.
+
+**MCP Server URL**
+
+```text
+https://mcp.moltsets.com/mcp
+```
+
+<Note>
+  To get your credentials, log into [app.moltsets.com](https://app.moltsets.com) and go to **Connectors** to create a new connector.
+</Note>
+
+---
+
+## Add the server
+
+1. Open **Windsurf Settings → Cascade → MCP Servers**.
+2. Select **Add server**.
+3. Enter the server URL: `https://mcp.moltsets.com/mcp`
+4. Select **HTTP / Streamable** as the connection type.
+5. When prompted, enter your **Client ID** and **Client Secret**.
+6. Complete the login and approval step in the browser window that opens.
+
+<Note>
+  Windsurf follows the same OAuth discovery flow as [Cursor](/integrations/moltsets-mcp/cursor), so the [Troubleshooting](/integrations/moltsets-mcp#troubleshooting) steps apply to both.
+</Note>
+
+---
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Example prompts" icon="comments" href="/integrations/moltsets-mcp#example-prompts">
+    Prompts to run the moment the connector is live.
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/integrations/moltsets-mcp#troubleshooting">
+    Connection, credential, and error-code fixes.
+  </Card>
+</CardGroup>

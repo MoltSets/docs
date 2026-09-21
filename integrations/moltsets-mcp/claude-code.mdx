@@ -1,0 +1,59 @@
+---
+title: "Connect MoltSets to Claude Code"
+sidebarTitle: "Claude Code"
+description: "Add the MoltSets MCP server to Claude Code with one terminal command, at project or user scope, authorized over OAuth."
+---
+
+Run the following command in your terminal, replacing the placeholder values with your credentials:
+
+```bash
+claude mcp add --transport http moltsets https://mcp.moltsets.com/mcp \
+  --client-id YOUR_CLIENT_ID \
+  --client-secret
+```
+
+The `--client-secret` flag takes no value — Claude Code prompts you for the secret (or reads it from the `MCP_CLIENT_SECRET` environment variable).
+
+---
+
+## Scope
+
+By default the server is added at the `local` scope (current project only). Add `--scope user` to make MoltSets available across all your projects:
+
+```bash
+claude mcp add --transport http moltsets https://mcp.moltsets.com/mcp \
+  --scope user \
+  --client-id YOUR_CLIENT_ID \
+  --client-secret
+```
+
+Claude Code will open a browser window and prompt you to approve access on the MoltSets consent screen. Once approved, your token is stored and managed automatically.
+
+---
+
+## Account types
+
+<Note>
+  **Personal account:** the command above works as-is.
+
+  **Team or Enterprise account:** on business plans, only admins can add MCP servers to Claude Code. If you sign into Claude Code with your Claude.ai account, any MoltSets connector already added there is available in Claude Code automatically — no `claude mcp add` needed.
+
+  Either way each seat authorizes over OAuth in the browser, so there's no need to distribute `ms_` API keys across an organization.
+</Note>
+
+<Note>
+  To get your credentials, log into [app.moltsets.com](https://app.moltsets.com) and go to **Connectors** to create a new connector.
+</Note>
+
+---
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Example prompts" icon="comments" href="/integrations/moltsets-mcp#example-prompts">
+    Prompts to run the moment the connector is live.
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/integrations/moltsets-mcp#troubleshooting">
+    Connection, credential, and error-code fixes.
+  </Card>
+</CardGroup>

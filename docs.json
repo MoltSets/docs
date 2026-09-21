@@ -69,13 +69,25 @@
           {
             "group": "Integrations",
             "pages": [
-              "integrations/moltsets-mcp",
+              {
+                "group": "MoltSets MCP",
+                "pages": [
+                  "integrations/moltsets-mcp",
+                  "integrations/moltsets-mcp/claude-ai",
+                  "integrations/moltsets-mcp/claude-desktop",
+                  "integrations/moltsets-mcp/claude-code",
+                  "integrations/moltsets-mcp/chatgpt",
+                  "integrations/moltsets-mcp/cursor",
+                  "integrations/moltsets-mcp/grok",
+                  "integrations/moltsets-mcp/windsurf",
+                  "integrations/moltsets-mcp/other-clients"
+                ]
+              },
               "integrations/clay"
             ]
           }
         ]
       }
-      
     ]
   },
   "logo": "/logo/moltsets.png",

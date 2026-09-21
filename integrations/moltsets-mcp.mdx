@@ -41,168 +41,38 @@ With the MoltSets MCP Server connected:
 
 ## Setup
 
-<Tabs>
-  <Tab title="Claude (claude.ai)">
-    How you add the connector depends on your account type. On a **personal** plan you add it yourself. On a **Team or Enterprise** plan, an Owner adds it once for the whole organization, then each member connects their own credentials.
+Pick your client — each guide is a short, self-contained walkthrough.
 
-    <AccordionGroup>
-      <Accordion title="Personal account (Free, Pro, or Max)">
-        1. In Claude.ai, go to **Customize → Connectors**.
-        2. Click **+**, then **Add custom connector**.
-        3. Paste the following into **Remote MCP server URL**:
-           ```text
-           https://mcp.moltsets.com/mcp
-           ```
-        4. Click **Advanced settings** and enter your MoltSets Connector credentials:
-           - **OAuth Client ID:** your Client ID
-           - **OAuth Client Secret:** your Client Secret
-        5. Click **Add**.
+<CardGroup cols={2}>
+  <Card title="Claude.ai" icon="globe" href="/integrations/moltsets-mcp/claude-ai">
+    Add the connector on a personal plan, or roll it out across a Team or Enterprise org.
+  </Card>
+  <Card title="Claude Desktop" icon="desktop" href="/integrations/moltsets-mcp/claude-desktop">
+    Same connectors as your Claude account, plus bulk tool-permission settings.
+  </Card>
+  <Card title="Claude Code" icon="terminal" href="/integrations/moltsets-mcp/claude-code">
+    One `claude mcp add` command, at project or user scope, authorized over OAuth.
+  </Card>
+  <Card title="ChatGPT" icon="message-bot" href="/integrations/moltsets-mcp/chatgpt">
+    Add MoltSets as a custom connector — Plus, Team, or Enterprise, OAuth only.
+  </Card>
+  <Card title="Grok" icon="sparkles" href="/integrations/moltsets-mcp/grok">
+    Bring Your Own MCP at grok.com/connectors — paid accounts, any tier.
+  </Card>
+  <Card title="Cursor" icon="code" href="/integrations/moltsets-mcp/cursor">
+    Add it from Cursor Settings or `.cursor/mcp.json`, authorized over OAuth.
+  </Card>
+  <Card title="Windsurf" icon="wind" href="/integrations/moltsets-mcp/windsurf">
+    Add it in Cascade → MCP Servers over HTTP/Streamable.
+  </Card>
+  <Card title="Other MCP clients" icon="plug" href="/integrations/moltsets-mcp/other-clients">
+    Any client that supports remote HTTP servers — loopback redirect URIs and PKCE.
+  </Card>
+</CardGroup>
 
-        <Note>
-          Free accounts are limited to a single custom connector. Pro and Max accounts can add multiple.
-        </Note>
-      </Accordion>
-
-      <Accordion title="Team or Enterprise account">
-        Only an **Owner or Primary Owner** can add a custom connector to a Team or Enterprise organization. Once added, each member connects to it individually — Claude only ever accesses data that the connecting member is authorized to see.
-        
-        **Before you begin,** you will first need to invite your Owner or Primary Owner of your Claude Team/Enterprise account to MoltSets as they will need to have a MoltSets user in order to complete the connection process.
-
-        **Owner / Primary Owner — add the connector for the organization:**
-
-        1. Go to **Organization settings → Connectors**.
-        2. Click **Add**.
-        3. Hover over **Custom**, then select **Web**.
-        4. Paste the following into **Remote MCP server URL**:
-           ```text
-           https://mcp.moltsets.com/mcp
-           ```
-        5. Click **Advanced settings** and enter the MoltSets Connector credentials (**OAuth Client ID** and **OAuth Client Secret**).
-        6. Click **Add**.
-
-        **Each member — connect to it:**
-
-        1. Go to **Customize → Connectors**.
-        2. Find the MoltSets connector (marked with a **Custom** label).
-        3. Click **Connect** and complete authentication.
-      </Accordion>
-    </AccordionGroup>
-
-    <Note>
-      To get your credentials, log into [app.moltsets.com](https://app.moltsets.com) and go to **Connectors** to create a new connector.
-    </Note>
-  </Tab>
-  <Tab title="Claude Desktop">
-    Claude Desktop shares the same connectors as your Claude account — no config file editing required, and a connector you add on Claude.ai is already available here. How you add it depends on your account type. On a **personal** plan you add it yourself. On a **Team or Enterprise** plan, an Owner adds it once for the whole organization, then each member connects their own credentials.
-
-    <AccordionGroup>
-      <Accordion title="Personal account (Free, Pro, or Max)">
-        1. In Claude Desktop, go to **Customize → Connectors**.
-        2. Click **+**, then **Add custom connector**.
-        3. Paste the following into **Remote MCP server URL**:
-           ```text
-           https://mcp.moltsets.com/mcp
-           ```
-        4. Click **Advanced settings** and enter your MoltSets Connector credentials:
-           - **OAuth Client ID:** your Client ID
-           - **OAuth Client Secret:** your Client Secret
-        5. Click **Add**, then **restart Claude Desktop** so it picks up the connector.
-
-        <Note>
-          Free accounts are limited to a single custom connector. Pro and Max accounts can add multiple.
-        </Note>
-      </Accordion>
-
-      <Accordion title="Team or Enterprise account">
-        Only an **Owner or Primary Owner** can add a custom connector to a Team or Enterprise organization. Once added, each member connects to it individually — Claude only ever accesses data that the connecting member is authorized to see.
-
-        **Owner / Primary Owner — add the connector for the organization:**
-
-        1. Go to **Organization settings → Connectors**.
-        2. Click **Add**.
-        3. Hover over **Custom**, then select **Web**.
-        4. Paste the following into **Remote MCP server URL**:
-           ```text
-           https://mcp.moltsets.com/mcp
-           ```
-        5. Click **Advanced settings** and enter the MoltSets Connector credentials (**OAuth Client ID** and **OAuth Client Secret**).
-        6. Click **Add**.
-
-        **Each member — connect to it:**
-
-        1. In Claude Desktop, go to **Customize → Connectors**.
-        2. Find the MoltSets connector (marked with a **Custom** label).
-        3. Click **Connect** and complete authentication.
-        4. **Restart Claude Desktop** so it picks up the connector.
-      </Accordion>
-    </AccordionGroup>
-
-    <Note>
-      To get your credentials, log into [app.moltsets.com](https://app.moltsets.com) and go to **Connectors** to create a new connector.
-    </Note>
-
-    ### Configuring Tool Permissions
-
-    By default, all MoltSets tools are set to **Needs Approval** — Claude will prompt you the first time each tool is used. To update permissions in bulk:
-
-    1. Go to **Customize → Connectors**
-    2. Click **Configure** beside the MoltSets connector
-    3. Use the bulk change tool to set all tools to **Always Allow**
-
-    To restrict specific tools, set them individually to **Blocked**.
-  </Tab>
-  <Tab title="Claude Code">
-    Run the following command in your terminal, replacing the placeholder values with your credentials:
-
-    ```bash
-    claude mcp add --transport http moltsets https://mcp.moltsets.com/mcp \
-      --client-id YOUR_CLIENT_ID \
-      --client-secret
-    ```
-
-    The `--client-secret` flag takes no value — Claude Code prompts you for the secret (or reads it from the `MCP_CLIENT_SECRET` environment variable).
-
-    By default the server is added at the `local` scope (current project only). Add `--scope user` to make MoltSets available across all your projects:
-
-    ```bash
-    claude mcp add --transport http moltsets https://mcp.moltsets.com/mcp \
-      --scope user \
-      --client-id YOUR_CLIENT_ID \
-      --client-secret
-    ```
-
-    Claude Code will open a browser window and prompt you to approve access on the MoltSets consent screen. Once approved, your token is stored and managed automatically.
-
-    <Note>
-      **Personal account:** the command above works as-is.
-
-      **Team or Enterprise account:** on business plans, only admins can add MCP servers to Claude Code. If you sign into Claude Code with your Claude.ai account, any MoltSets connector already added there is available in Claude Code automatically — no `claude mcp add` needed.
-
-      Either way each seat authorizes over OAuth in the browser, so there's no need to distribute `ms_` API keys across an organization.
-    </Note>
-
-    <Note>
-      To get your credentials, log into [app.moltsets.com](https://app.moltsets.com) and go to **Connectors** to create a new connector.
-    </Note>
-  </Tab>
-  <Tab title="Other MCP clients">
-    Any MCP client that supports remote servers over HTTP can connect — CLI agents, desktop apps, and IDE extensions included.
-
-    1. Add `https://mcp.moltsets.com/mcp` as a remote MCP server in your client.
-    2. When the client asks for OAuth credentials, paste the **Client ID** and **Client Secret** from the **Connectors** page at [app.moltsets.com](https://app.moltsets.com). Clients that register themselves can skip this step.
-    3. Approve access on the MoltSets consent screen when the browser opens. The client stores the token from there; re-run the flow if it expires.
-
-    Clients that run in a terminal complete this on a local port — `http://127.0.0.1:<port>/callback` and its `localhost` and `[::1]` equivalents are supported, so no HTTPS callback is needed on your machine.
-
-    <Note>
-      Endpoints, scopes, and redirect URI rules are on the [Authentication](/getting-started/authentication#oauth--connecting-an-mcp-client) page, and are discoverable from the server itself at `https://mcp.moltsets.com/.well-known/oauth-protected-resource`.
-    </Note>
-
-    <Warning>
-      MoltSets requires every request — including MCP connections — to send a `User-Agent` header. Any non-empty value works; MoltSets doesn't validate its contents, only that it's present. Most MCP clients set one automatically, but if your client lets you send bare requests (or omit the header), set one explicitly or the server rejects the connection with `403 Forbidden` (`error.code`: `forbidden`). See [User-Agent header](/getting-started/authentication#user-agent-header).
-    </Warning>
-  </Tab>
-</Tabs>
+<Note>
+  To get your credentials, log into [app.moltsets.com](https://app.moltsets.com) and go to **Connectors** to create a new connector.
+</Note>
 
 ---
 

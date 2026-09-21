@@ -40,7 +40,7 @@ Every request — REST or MCP — must also send a `User-Agent` header. MoltSets
 
 Requests missing it are rejected with `403 Forbidden` (`error.code`: `forbidden`) before authentication is even checked.
 
-Most HTTP clients and MCP clients set a `User-Agent` by default, so this usually needs no extra work. If you've built a custom client that sends bare requests (or an MCP client that lets you omit the header), set one explicitly — see [Other MCP clients](/integrations/moltsets-mcp#setup) for the MCP case.
+Most HTTP clients and MCP clients set a `User-Agent` by default, so this usually needs no extra work. If you've built a custom client that sends bare requests (or an MCP client that lets you omit the header), set one explicitly — see [Other MCP clients](/integrations/moltsets-mcp/other-clients) for the MCP case.
 
 ## Multiple keys
 
