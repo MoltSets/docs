@@ -80,6 +80,26 @@ The 22 `industry` buckets are the complete list — anything outside it matches 
   `naics_code` matches at any hierarchy level. Use a 2-digit sector (`"23"` = Construction) to cast wide, a 6-digit code (`"511210"` = Software Publishers) to go narrow. Shortening the code is the cleanest way to widen a search that's returning too little.
 </Note>
 
+## Match several values in one search
+
+Every positive filter accepts a single value or a list. A list is **OR within its field** and **AND across fields**:
+
+```json
+{ "industry": ["Information Technology", "Finance and Banking"], "country": ["United States", "Canada"] }
+```
+
+That reads as (Information Technology or Finance and Banking) in (United States or Canada). It's one search instead of one per value, and every match is ranked together.
+
+Lists work on `domain`, `industry`, `employee_range`, `revenue_range`, `naics_code`, `linkedin_industry`, `country`, and `state`. Each value in a list follows the same exact-match rules as a single value. Adjacent bands are the common case:
+
+```json
+{ "employee_range": ["51-200", "201-500"], "revenue_range": ["$10M - $20M", "$20M - $50M"] }
+```
+
+<Note>
+  A list widens the search, so `total` grows with it. Probe at `limit: 1` after adding values, the same as for any new search.
+</Note>
+
 ## Exclude what you don't want
 
 Four filters remove companies instead of selecting them. Each takes a **list**, and each mirrors a filter you already know:
@@ -207,6 +227,18 @@ for (const company of companies.results.results) {
 ```
 
 Run the first iteration of that loop at `limit: 1` on both calls. A chain that looks right at one company per account is safe to fan out; one that isn't costs you the whole fan-out to find that out.
+
+If you don't need a set number of contacts per account, skip the loop. `company_domain` accepts a list, so one call searches every account at once and ranks the matches together:
+
+```javascript
+const people = await search("search_people", {
+  company_domain: companies.results.results.map((c) => c.domain),
+  seniority: "VP",
+  limit: 25
+});
+```
+
+The trade-off is coverage: one ranked pool can return several people from a strong account and none from a weaker one. Keep the loop when every account needs contacts.
 
 `search_people` can also filter on `employee_range` and `revenue_range` directly, applied to the person's current employer. If firmographics are the only reason you're calling `search_companies`, you can often skip it and filter in one call.
 

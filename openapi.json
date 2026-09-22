@@ -262,7 +262,7 @@
       "post": {
         "summary": "Search for People",
         "operationId": "searchBusinessProfiles",
-        "description": "The People Search API lets you search MoltSets' contact database for people by name, job title, company, industry, country, seniority, or department.\n\nUse `title` for the job title or role — it matches the title field alone, so it is far more precise than putting a role in `query`. Use `query` for the person's name, or for loose natural-language phrases when you have nothing more specific. To find people at a specific company, use `company` (company name) or `company_domain` (website domain) rather than putting the employer in `query`. Use the exact filters (`country`, `state`, `city`, `seniority`, `industry`, `department` or `functional_area`, `employee_range`, `revenue_range`) to narrow further — `employee_range` and `revenue_range` scope to people at companies of that size or revenue without needing a specific company. Combining `query` with filters gives the most precise matches. Every result comes back ranked, with a higher `_score` meaning a stronger match.\n\nThe `exclude_*` parameters (`exclude_company_domain`, `exclude_country`, `exclude_state`, `exclude_industry`, `exclude_seniority`, `exclude_employee_range`) work the other way round: each one takes a list and removes matches rather than selecting them. `exclude_company_domain` is how you suppress companies you already have. Exclusions narrow a search but cannot be the whole search — you still need at least one positive input.\n\n**Use this endpoint to:**\n- Build targeted lead lists for outbound sales\n- Identify decision makers at specific target accounts\n- Populate outbound sequences with verified contact data\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-search/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Search</a>.\n\n**Outcomes:**\nA lookup that finds nothing is not an error. It returns HTTP `200` with `status: \"not_found\"`, empty or null `results`, and the usual `metadata` — and costs no tokens, though it still counts as one request against your Fair Use requests limit. Read `status`, not the HTTP code, to tell a hit from a miss. The API's only `404` is an unknown or retired tool name.",
+        "description": "The People Search API lets you search MoltSets' contact database for people by name, job title, company, industry, country, seniority, or department.\n\nUse `title` for the job title or role — it matches the title field alone, so it is far more precise than putting a role in `query`. Use `query` for the person's name, or for loose natural-language phrases when you have nothing more specific. To find people at a specific company, use `company` (company name) or `company_domain` (website domain) rather than putting the employer in `query`. Use the exact filters (`country`, `state`, `city`, `seniority`, `industry`, `department` or `functional_area`, `employee_range`, `revenue_range`) to narrow further — `employee_range` and `revenue_range` scope to people at companies of that size or revenue without needing a specific company. Combining `query` with filters gives the most precise matches. Every result comes back ranked, with a higher `_score` meaning a stronger match.\n\nEvery positive filter accepts either a single value or a list of values. A list is OR within its field and AND across fields, so `title: [\"CEO\", \"CMO\"]` with `country: [\"United States\", \"Canada\"]` means (CEO or CMO) in (United States or Canada) — one search instead of one per value, with every match ranked together.\n\nThe `exclude_*` parameters (`exclude_company_domain`, `exclude_country`, `exclude_state`, `exclude_industry`, `exclude_seniority`, `exclude_employee_range`) work the other way round: each one also takes a list, but removes matches rather than selecting them. `exclude_company_domain` is how you suppress companies you already have. Exclusions narrow a search but cannot be the whole search — you still need at least one positive input.\n\n**Use this endpoint to:**\n- Build targeted lead lists for outbound sales\n- Identify decision makers at specific target accounts\n- Populate outbound sequences with verified contact data\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-search/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Search</a>.\n\n**Outcomes:**\nA lookup that finds nothing is not an error. It returns HTTP `200` with `status: \"not_found\"`, empty or null `results`, and the usual `metadata` — and costs no tokens, though it still counts as one request against your Fair Use requests limit. Read `status`, not the HTTP code, to tell a hit from a miss. The API's only `404` is an unknown or retired tool name.",
         "tags": [
           "Search"
         ],
@@ -279,150 +279,373 @@
                     "example": "Jane Doe"
                   },
                   "title": {
-                    "type": "string",
-                    "description": "Job title filter (~85% filled) — scopes results to people whose job title matches, and the precise way to search by role. The match is analysed rather than literal: a one or two word title requires every word, so \"Account Executive\" will not return Account Managers. A longer title requires 75% of its words, rounded down — a three or four word title must match all but one, a five or six word title all but two. That allowance is what stops function words breaking a match, so \"VP of Sales\" still finds \"VP, Sales\". Extra words in the stored title are always fine: \"Account Executive\" matches \"Senior Account Executive, SMB\". Prefer this over putting a role in `query`. For seniority level use the `seniority` filter, which is a clean enumerated list, and use `title` for the role or function itself — the two combine, e.g. `title: \"Sales\"` with `seniority: \"VP\"`. Around 15% of profiles carry no title at all, and those can never match a title filter.",
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    ],
+                    "description": "Job title filter (~85% filled) — scopes results to people whose job title matches, and the precise way to search by role. The match is analysed rather than literal: a one or two word title requires every word, so \"Account Executive\" will not return Account Managers. A longer title requires 75% of its words, rounded down — a three or four word title must match all but one, a five or six word title all but two. That allowance is what stops function words breaking a match, so \"VP of Sales\" still finds \"VP, Sales\". Extra words in the stored title are always fine: \"Account Executive\" matches \"Senior Account Executive, SMB\". Prefer this over putting a role in `query`. For seniority level use the `seniority` filter, which is a clean enumerated list, and use `title` for the role or function itself — the two combine, e.g. `title: \"Sales\"` with `seniority: \"VP\"`. Around 15% of profiles carry no title at all, and those can never match a title filter. Accepts a single value or a list — a list matches any of its values (OR), so `title: [\"CEO\", \"CMO\"]` returns records matching either.",
                     "example": "Account Executive"
                   },
                   "company": {
-                    "type": "string",
-                    "description": "Company name filter — scopes results to people whose employer's name matches. Analysed match: every word you provide must appear in the company name, so extra words in the stored name are fine (\"Acme\" matches \"Acme Corporation\"). Use this when you have a company name but not its domain; if you have the domain, prefer `company_domain`, which is more precise.",
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    ],
+                    "description": "Company name filter — scopes results to people whose employer's name matches. Analysed match: every word you provide must appear in the company name, so extra words in the stored name are fine (\"Acme\" matches \"Acme Corporation\"). Use this when you have a company name but not its domain; if you have the domain, prefer `company_domain`, which is more precise. Accepts a single value or a list — a list matches any of its values (OR), so `company: [\"Acme\", \"Globex\"]` returns records matching either.",
                     "example": "MoltSets"
                   },
                   "company_domain": {
-                    "type": "string",
-                    "description": "Company domain filter — scopes results to people at the company with this website domain. Full URLs are normalised automatically (\"https://www.acme.com/about\" → \"acme.com\"), so there is no need to strip the protocol or path yourself. The most precise way to target a single company — prefer it over `company` whenever you know the domain.",
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    ],
+                    "description": "Company domain filter — scopes results to people at the company with this website domain. Full URLs are normalised automatically (\"https://www.acme.com/about\" → \"acme.com\"), so there is no need to strip the protocol or path yourself. The most precise way to target a single company — prefer it over `company` whenever you know the domain. Accepts a single value or a list — a list matches any of its values (OR), so `company_domain: [\"acme.com\", \"stripe.com\"]` returns records matching either.",
                     "example": "moltsets.com"
                   },
                   "country": {
-                    "type": "string",
-                    "description": "Exact country name filter (~99% filled — most reliable filter). Must match the stored value exactly. Top values by volume: \"United States\", \"India\", \"United Kingdom\", \"Brazil\", \"Canada\", \"France\", \"Mexico\", \"Australia\", \"China\", \"Spain\", \"Netherlands\", \"Italy\", \"Indonesia\", \"Germany\", \"Philippines\", \"Turkey\", \"South Africa\", \"Saudi Arabia\", \"Argentina\", \"Singapore\", \"United Arab Emirates\", \"Colombia\", \"South Korea\", \"Malaysia\", \"Poland\", \"Belgium\", \"Switzerland\", \"Ireland\", \"Sweden\", \"Denmark\", \"Norway\", \"Austria\", \"Portugal\", \"Israel\", \"New Zealand\", \"Finland\", \"Greece\", \"Hungary\", \"Romania\", \"Ukraine\". Use the full English country name. \"UK\" and \"HK\" also exist in the data as dirty values — prefer \"United Kingdom\" and \"Hong Kong\".",
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    ],
+                    "description": "Exact country name filter (~99% filled — most reliable filter). Must match the stored value exactly. Top values by volume: \"United States\", \"India\", \"United Kingdom\", \"Brazil\", \"Canada\", \"France\", \"Mexico\", \"Australia\", \"China\", \"Spain\", \"Netherlands\", \"Italy\", \"Indonesia\", \"Germany\", \"Philippines\", \"Turkey\", \"South Africa\", \"Saudi Arabia\", \"Argentina\", \"Singapore\", \"United Arab Emirates\", \"Colombia\", \"South Korea\", \"Malaysia\", \"Poland\", \"Belgium\", \"Switzerland\", \"Ireland\", \"Sweden\", \"Denmark\", \"Norway\", \"Austria\", \"Portugal\", \"Israel\", \"New Zealand\", \"Finland\", \"Greece\", \"Hungary\", \"Romania\", \"Ukraine\". Use the full English country name. \"UK\" and \"HK\" also exist in the data as dirty values — prefer \"United Kingdom\" and \"Hong Kong\". Accepts a single value or a list — a list matches any of its values (OR), so `country: [\"United States\", \"Canada\"]` returns records matching either.",
                     "example": "United States"
                   },
                   "state": {
-                    "type": "string",
-                    "description": "Exact state or region name filter on the person's location. Must match the stored value exactly — full names with standard capitalisation, not abbreviations (\"Texas\", not \"TX\"). Combine with `country` for precision.",
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    ],
+                    "description": "Exact state or region name filter on the person's location. Must match the stored value exactly — full names with standard capitalisation, not abbreviations (\"Texas\", not \"TX\"). Combine with `country` for precision. Accepts a single value or a list — a list matches any of its values (OR), so `state: [\"Texas\", \"Florida\"]` returns records matching either.",
                     "example": "Texas"
                   },
                   "city": {
-                    "type": "string",
-                    "description": "Exact city name filter on the person's location. Must match the stored value exactly, with standard capitalisation. City names repeat across regions, so combine with `state` and/or `country` to disambiguate — e.g. city: \"Portland\", state: \"Oregon\". Matches only the exact stored city, not its suburbs — for a metro-area search prefer `state` or `country`.",
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    ],
+                    "description": "Exact city name filter on the person's location. Must match the stored value exactly, with standard capitalisation. City names repeat across regions, so combine with `state` and/or `country` to disambiguate — e.g. city: \"Portland\", state: \"Oregon\". Matches only the exact stored city, not its suburbs — for a metro-area search prefer `state` or `country`. Accepts a single value or a list — a list matches any of its values (OR), so `city: [\"Austin\", \"Dallas\"]` returns records matching either.",
                     "example": "Austin"
                   },
                   "seniority": {
-                    "type": "string",
-                    "description": "Exact seniority level filter (~60% filled). Must match one of the enumerated values exactly, including the space in \"C Suite\" (not a hyphen).",
-                    "enum": [
-                      "Intern",
-                      "Entry",
-                      "Senior",
-                      "Manager",
-                      "Director",
-                      "VP",
-                      "Head",
-                      "C Suite",
-                      "Owner",
-                      "Partner"
-                    ]
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "Intern",
+                          "Entry",
+                          "Senior",
+                          "Manager",
+                          "Director",
+                          "VP",
+                          "Head",
+                          "C Suite",
+                          "Owner",
+                          "Partner"
+                        ]
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "Intern",
+                            "Entry",
+                            "Senior",
+                            "Manager",
+                            "Director",
+                            "VP",
+                            "Head",
+                            "C Suite",
+                            "Owner",
+                            "Partner"
+                          ]
+                        }
+                      }
+                    ],
+                    "description": "Exact seniority level filter (~60% filled). Must match one of the enumerated values exactly, including the space in \"C Suite\" (not a hyphen). Accepts a single value or a list — a list matches any of its values (OR), so `seniority: [\"VP\", \"C Suite\"]` returns records matching either."
                   },
                   "industry": {
-                    "type": "string",
-                    "description": "Exact current industry filter (~60% filled). These 22 buckets are the only supported values, and must match exactly, including capitalisation and punctuation (e.g. the ampersand in \"Marketing & Advertising\").",
-                    "enum": [
-                      "Professional and Business Services",
-                      "Information Technology",
-                      "Manufacturing",
-                      "Retail",
-                      "Health and Pharmaceuticals",
-                      "Creative Arts and Entertainment",
-                      "Construction",
-                      "Marketing & Advertising",
-                      "Finance and Banking",
-                      "Tourism and Hospitality",
-                      "Non-Profit and Social Services",
-                      "Food and Beverage",
-                      "Real Estate",
-                      "Education",
-                      "Transportation and Logistics",
-                      "Media and Publishing",
-                      "Energy",
-                      "Government and Public Administration",
-                      "Automotive",
-                      "Telecommunications",
-                      "Agriculture",
-                      "Utilities"
-                    ]
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "Professional and Business Services",
+                          "Information Technology",
+                          "Manufacturing",
+                          "Retail",
+                          "Health and Pharmaceuticals",
+                          "Creative Arts and Entertainment",
+                          "Construction",
+                          "Marketing & Advertising",
+                          "Finance and Banking",
+                          "Tourism and Hospitality",
+                          "Non-Profit and Social Services",
+                          "Food and Beverage",
+                          "Real Estate",
+                          "Education",
+                          "Transportation and Logistics",
+                          "Media and Publishing",
+                          "Energy",
+                          "Government and Public Administration",
+                          "Automotive",
+                          "Telecommunications",
+                          "Agriculture",
+                          "Utilities"
+                        ]
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "Professional and Business Services",
+                            "Information Technology",
+                            "Manufacturing",
+                            "Retail",
+                            "Health and Pharmaceuticals",
+                            "Creative Arts and Entertainment",
+                            "Construction",
+                            "Marketing & Advertising",
+                            "Finance and Banking",
+                            "Tourism and Hospitality",
+                            "Non-Profit and Social Services",
+                            "Food and Beverage",
+                            "Real Estate",
+                            "Education",
+                            "Transportation and Logistics",
+                            "Media and Publishing",
+                            "Energy",
+                            "Government and Public Administration",
+                            "Automotive",
+                            "Telecommunications",
+                            "Agriculture",
+                            "Utilities"
+                          ]
+                        }
+                      }
+                    ],
+                    "description": "Exact current industry filter (~60% filled). These 22 buckets are the only supported values, and must match exactly, including capitalisation and punctuation (e.g. the ampersand in \"Marketing & Advertising\"). Accepts a single value or a list — a list matches any of its values (OR), so `industry: [\"Information Technology\", \"Finance and Banking\"]` returns records matching either."
                   },
                   "department": {
-                    "type": "string",
-                    "description": "Exact department filter (~60% filled). Shares its underlying data with `functional_area` — use one or the other, not both. Must match one of the enumerated values exactly, including capitalisation and punctuation (e.g. the ampersand in \"Medical & Health\").",
-                    "enum": [
-                      "Operations",
-                      "Sales",
-                      "Information Technology",
-                      "Education",
-                      "Engineering",
-                      "Finance",
-                      "Medical & Health",
-                      "Marketing",
-                      "Human Resources",
-                      "Design",
-                      "Consulting",
-                      "Legal"
-                    ]
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "Operations",
+                          "Sales",
+                          "Information Technology",
+                          "Education",
+                          "Engineering",
+                          "Finance",
+                          "Medical & Health",
+                          "Marketing",
+                          "Human Resources",
+                          "Design",
+                          "Consulting",
+                          "Legal"
+                        ]
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "Operations",
+                            "Sales",
+                            "Information Technology",
+                            "Education",
+                            "Engineering",
+                            "Finance",
+                            "Medical & Health",
+                            "Marketing",
+                            "Human Resources",
+                            "Design",
+                            "Consulting",
+                            "Legal"
+                          ]
+                        }
+                      }
+                    ],
+                    "description": "Exact department filter (~60% filled). Shares its underlying data with `functional_area` — use one or the other, not both. Must match one of the enumerated values exactly, including capitalisation and punctuation (e.g. the ampersand in \"Medical & Health\"). Accepts a single value or a list — a list matches any of its values (OR), so `department: [\"Sales\", \"Marketing\"]` returns records matching either."
                   },
                   "functional_area": {
-                    "type": "string",
-                    "description": "Exact functional area filter (~60% filled). Shares its underlying data with `department` — use one or the other, not both.",
-                    "enum": [
-                      "Operations",
-                      "Sales",
-                      "Information Technology",
-                      "Education",
-                      "Engineering",
-                      "Finance",
-                      "Medical & Health",
-                      "Marketing",
-                      "Human Resources",
-                      "Design",
-                      "Consulting",
-                      "Legal"
-                    ]
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "Operations",
+                          "Sales",
+                          "Information Technology",
+                          "Education",
+                          "Engineering",
+                          "Finance",
+                          "Medical & Health",
+                          "Marketing",
+                          "Human Resources",
+                          "Design",
+                          "Consulting",
+                          "Legal"
+                        ]
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "Operations",
+                            "Sales",
+                            "Information Technology",
+                            "Education",
+                            "Engineering",
+                            "Finance",
+                            "Medical & Health",
+                            "Marketing",
+                            "Human Resources",
+                            "Design",
+                            "Consulting",
+                            "Legal"
+                          ]
+                        }
+                      }
+                    ],
+                    "description": "Exact functional area filter (~60% filled). Shares its underlying data with `department` — use one or the other, not both. Accepts a single value or a list — a list matches any of its values (OR), so `functional_area: [\"Sales\", \"Marketing\"]` returns records matching either."
                   },
                   "employee_range": {
-                    "type": "string",
-                    "description": "Exact employee-count range filter on the person's current employer — finds people at companies of a certain size without needing to name a specific company. These eight numeric bands are the only supported values, and use the same vocabulary as `search_companies`. Combine with other filters, e.g. `seniority: \"VP\"`, `employee_range: \"51-200\"`.",
-                    "enum": [
-                      "1-10",
-                      "11-20",
-                      "21-50",
-                      "51-200",
-                      "201-500",
-                      "501-1000",
-                      "1001-5000",
-                      "5001+"
-                    ]
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "1-10",
+                          "11-20",
+                          "21-50",
+                          "51-200",
+                          "201-500",
+                          "501-1000",
+                          "1001-5000",
+                          "5001+"
+                        ]
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "1-10",
+                            "11-20",
+                            "21-50",
+                            "51-200",
+                            "201-500",
+                            "501-1000",
+                            "1001-5000",
+                            "5001+"
+                          ]
+                        }
+                      }
+                    ],
+                    "description": "Exact employee-count range filter on the person's current employer — finds people at companies of a certain size without needing to name a specific company. These eight numeric bands are the only supported values, and use the same vocabulary as `search_companies`. Combine with other filters, e.g. `seniority: \"VP\"`, `employee_range: \"51-200\"`. Accepts a single value or a list — a list matches any of its values (OR), so `employee_range: [\"51-200\", \"201-500\"]` returns records matching either."
                   },
                   "revenue_range": {
-                    "type": "string",
-                    "description": "Exact annual revenue range filter on the person's current employer — finds people at companies of a certain revenue without needing to name a specific company. These seven bands are the only supported values, and use the same vocabulary as `search_companies`. \"Above $50M\" is a flat catch-all for all revenue over $50M; there is no finer band above it.",
-                    "enum": [
-                      "Below $500k",
-                      "$500k - $1M",
-                      "$1M - $5M",
-                      "$5M - $10M",
-                      "$10M - $20M",
-                      "$20M - $50M",
-                      "Above $50M"
-                    ]
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "Below $500k",
+                          "$500k - $1M",
+                          "$1M - $5M",
+                          "$5M - $10M",
+                          "$10M - $20M",
+                          "$20M - $50M",
+                          "Above $50M"
+                        ]
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "Below $500k",
+                            "$500k - $1M",
+                            "$1M - $5M",
+                            "$5M - $10M",
+                            "$10M - $20M",
+                            "$20M - $50M",
+                            "Above $50M"
+                          ]
+                        }
+                      }
+                    ],
+                    "description": "Exact annual revenue range filter on the person's current employer — finds people at companies of a certain revenue without needing to name a specific company. These seven bands are the only supported values, and use the same vocabulary as `search_companies`. \"Above $50M\" is a flat catch-all for all revenue over $50M; there is no finer band above it. Accepts a single value or a list — a list matches any of its values (OR), so `revenue_range: [\"$10M - $20M\", \"$20M - $50M\"]` returns records matching either."
                   },
                   "naics_code": {
-                    "type": "string",
-                    "description": "Exact NAICS industry code filter on the person's current employer (~50% filled). Works at any level of the hierarchy, from the 2-digit sector (\"23\" = Construction, \"54\" = Professional Services) through to the 6-digit national industry (\"541120\" = Offices of Notaries, \"511210\" = Software Publishers). Use a short code for broad industry targeting and a longer code for precision. The most standardised industry filter available — prefer it over `industry` when you need fine-grained targeting.",
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    ],
+                    "description": "Exact NAICS industry code filter on the person's current employer (~50% filled). Works at any level of the hierarchy, from the 2-digit sector (\"23\" = Construction, \"54\" = Professional Services) through to the 6-digit national industry (\"541120\" = Offices of Notaries, \"511210\" = Software Publishers). Use a short code for broad industry targeting and a longer code for precision. The most standardised industry filter available — prefer it over `industry` when you need fine-grained targeting. Accepts a single value or a list — a list matches any of its values (OR), so `naics_code: [\"5112\", \"5415\"]` returns records matching either.",
                     "example": "541120"
                   },
                   "linkedin_industry": {
-                    "type": "string",
-                    "description": "Exact LinkedIn industry label filter on the person's current employer. Uses LinkedIn's own industry vocabulary, which is far finer-grained than the 22 buckets in `industry`. Must match the stored label exactly, with standard capitalisation — for example \"Software Development\", \"Hospitality\", \"Legal Services\", \"Wellness and Fitness Services\", \"Construction\", \"Staffing and Recruiting\". Use when a niche industry cannot be expressed by the broad `industry` buckets.",
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    ],
+                    "description": "Exact LinkedIn industry label filter on the person's current employer. Uses LinkedIn's own industry vocabulary, which is far finer-grained than the 22 buckets in `industry`. Must match the stored label exactly, with standard capitalisation — for example \"Software Development\", \"Hospitality\", \"Legal Services\", \"Wellness and Fitness Services\", \"Construction\", \"Staffing and Recruiting\". Use when a niche industry cannot be expressed by the broad `industry` buckets. Accepts a single value or a list — a list matches any of its values (OR), so `linkedin_industry: [\"Software Development\", \"IT Services and IT Consulting\"]` returns records matching either.",
                     "example": "Software Development"
                   },
                   "exclude_company_domain": {
@@ -507,7 +730,10 @@
               },
               "example": {
                 "title": "Account Executive",
-                "country": "United States",
+                "country": [
+                  "United States",
+                  "Canada"
+                ],
                 "seniority": "Senior",
                 "exclude_company_domain": [
                   "acme.com",
@@ -681,7 +907,7 @@
       "post": {
         "summary": "Search for Companies",
         "operationId": "searchCompanyProfiles",
-        "description": "The Company Search API lets you search MoltSets' company database by name, domain, industry, employee count, or annual revenue, so you can find and qualify target accounts.\n\nUse `query` for free text company name search, `domain` for an exact lookup by website domain, and the filters (`industry`, `employee_range`, `revenue_range`) to narrow your results. Combining `query` with filters gives the most precise matches. Every result comes back ranked, with a higher `_score` meaning a stronger match.\n\nThe `exclude_*` parameters (`exclude_domain`, `exclude_industry`, `exclude_employee_range`, `exclude_revenue_range`) work the other way round: each one takes a list and removes matches rather than selecting them. `exclude_domain` is how you suppress accounts you already have. Exclusions narrow a search but cannot be the whole search — you still need at least one positive input.\n\n**Use this endpoint to:**\n- Build prospect lists for account-based marketing\n- Qualify target accounts before outreach\n- Enrich CRM records with firmographic data\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-search/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Search</a>.\n\n**Outcomes:**\nA lookup that finds nothing is not an error. It returns HTTP `200` with `status: \"not_found\"`, empty or null `results`, and the usual `metadata` — and costs no tokens, though it still counts as one request against your Fair Use requests limit. Read `status`, not the HTTP code, to tell a hit from a miss. The API's only `404` is an unknown or retired tool name.",
+        "description": "The Company Search API lets you search MoltSets' company database by name, domain, industry, employee count, or annual revenue, so you can find and qualify target accounts.\n\nUse `query` for free text company name search, `domain` for an exact lookup by website domain, and the filters (`industry`, `employee_range`, `revenue_range`) to narrow your results. Combining `query` with filters gives the most precise matches. Every result comes back ranked, with a higher `_score` meaning a stronger match.\n\nEvery positive filter accepts either a single value or a list of values. A list is OR within its field and AND across fields, so `industry: [\"Information Technology\", \"Finance and Banking\"]` with `country: [\"United States\", \"Canada\"]` means (Information Technology or Finance and Banking) in (United States or Canada) — one search instead of one per value, with every match ranked together.\n\nThe `exclude_*` parameters (`exclude_domain`, `exclude_industry`, `exclude_employee_range`, `exclude_revenue_range`) work the other way round: each one also takes a list, but removes matches rather than selecting them. `exclude_domain` is how you suppress accounts you already have. Exclusions narrow a search but cannot be the whole search — you still need at least one positive input.\n\n**Use this endpoint to:**\n- Build prospect lists for account-based marketing\n- Qualify target accounts before outreach\n- Enrich CRM records with firmographic data\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-search/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Search</a>.\n\n**Outcomes:**\nA lookup that finds nothing is not an error. It returns HTTP `200` with `status: \"not_found\"`, empty or null `results`, and the usual `metadata` — and costs no tokens, though it still counts as one request against your Fair Use requests limit. Read `status`, not the HTTP code, to tell a hit from a miss. The API's only `404` is an unknown or retired tool name.",
         "tags": [
           "Search"
         ],
@@ -697,83 +923,206 @@
                     "description": "Full-text search across company name only. Do not put domain, industry, employee size, or revenue here — use the dedicated filter params for those."
                   },
                   "domain": {
-                    "type": "string",
-                    "description": "Exact company domain filter. Full URLs are normalised automatically (\"https://www.acme.com/about\" → \"acme.com\"), so there is no need to strip the protocol or path yourself. Prefer this over `query` when you know the domain, since it is a precise match rather than a text search.",
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    ],
+                    "description": "Exact company domain filter. Full URLs are normalised automatically (\"https://www.acme.com/about\" → \"acme.com\"), so there is no need to strip the protocol or path yourself. Prefer this over `query` when you know the domain, since it is a precise match rather than a text search. Accepts a single value or a list — a list matches any of its values (OR), so `domain: [\"acme.com\", \"stripe.com\"]` returns records matching either.",
                     "example": "moltsets.com"
                   },
                   "industry": {
-                    "type": "string",
-                    "description": "Exact industry filter. These 22 buckets are the only supported values, and must match exactly, including capitalisation and punctuation (note the ampersand in \"Marketing & Advertising\"). For a niche the buckets cannot express — insurance carriers, aerospace, mining — use `linkedin_industry` instead.",
-                    "enum": [
-                      "Professional and Business Services",
-                      "Information Technology",
-                      "Manufacturing",
-                      "Retail",
-                      "Health and Pharmaceuticals",
-                      "Creative Arts and Entertainment",
-                      "Construction",
-                      "Marketing & Advertising",
-                      "Finance and Banking",
-                      "Tourism and Hospitality",
-                      "Non-Profit and Social Services",
-                      "Food and Beverage",
-                      "Real Estate",
-                      "Education",
-                      "Transportation and Logistics",
-                      "Media and Publishing",
-                      "Energy",
-                      "Government and Public Administration",
-                      "Automotive",
-                      "Telecommunications",
-                      "Agriculture",
-                      "Utilities"
-                    ]
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "Professional and Business Services",
+                          "Information Technology",
+                          "Manufacturing",
+                          "Retail",
+                          "Health and Pharmaceuticals",
+                          "Creative Arts and Entertainment",
+                          "Construction",
+                          "Marketing & Advertising",
+                          "Finance and Banking",
+                          "Tourism and Hospitality",
+                          "Non-Profit and Social Services",
+                          "Food and Beverage",
+                          "Real Estate",
+                          "Education",
+                          "Transportation and Logistics",
+                          "Media and Publishing",
+                          "Energy",
+                          "Government and Public Administration",
+                          "Automotive",
+                          "Telecommunications",
+                          "Agriculture",
+                          "Utilities"
+                        ]
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "Professional and Business Services",
+                            "Information Technology",
+                            "Manufacturing",
+                            "Retail",
+                            "Health and Pharmaceuticals",
+                            "Creative Arts and Entertainment",
+                            "Construction",
+                            "Marketing & Advertising",
+                            "Finance and Banking",
+                            "Tourism and Hospitality",
+                            "Non-Profit and Social Services",
+                            "Food and Beverage",
+                            "Real Estate",
+                            "Education",
+                            "Transportation and Logistics",
+                            "Media and Publishing",
+                            "Energy",
+                            "Government and Public Administration",
+                            "Automotive",
+                            "Telecommunications",
+                            "Agriculture",
+                            "Utilities"
+                          ]
+                        }
+                      }
+                    ],
+                    "description": "Exact industry filter. These 22 buckets are the only supported values, and must match exactly, including capitalisation and punctuation (note the ampersand in \"Marketing & Advertising\"). For a niche the buckets cannot express — insurance carriers, aerospace, mining — use `linkedin_industry` instead. Accepts a single value or a list — a list matches any of its values (OR), so `industry: [\"Information Technology\", \"Finance and Banking\"]` returns records matching either."
                   },
                   "employee_range": {
-                    "type": "string",
-                    "description": "Exact employee count range filter. These eight numeric bands are the only supported values — \"1-10\" holds the most records by a wide margin, \"5001+\" the fewest.",
-                    "enum": [
-                      "1-10",
-                      "11-20",
-                      "21-50",
-                      "51-200",
-                      "201-500",
-                      "501-1000",
-                      "1001-5000",
-                      "5001+"
-                    ]
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "1-10",
+                          "11-20",
+                          "21-50",
+                          "51-200",
+                          "201-500",
+                          "501-1000",
+                          "1001-5000",
+                          "5001+"
+                        ]
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "1-10",
+                            "11-20",
+                            "21-50",
+                            "51-200",
+                            "201-500",
+                            "501-1000",
+                            "1001-5000",
+                            "5001+"
+                          ]
+                        }
+                      }
+                    ],
+                    "description": "Exact employee count range filter. These eight numeric bands are the only supported values — \"1-10\" holds the most records by a wide margin, \"5001+\" the fewest. Accepts a single value or a list — a list matches any of its values (OR), so `employee_range: [\"51-200\", \"201-500\"]` returns records matching either."
                   },
                   "revenue_range": {
-                    "type": "string",
-                    "description": "Exact annual revenue range filter. These seven bands are the only supported values — \"$500k - $1M\" is the most common. \"Above $50M\" is a flat catch-all for all revenue over $50M; there is no finer band above it, so use it for any large-enterprise revenue target.",
-                    "enum": [
-                      "Below $500k",
-                      "$500k - $1M",
-                      "$1M - $5M",
-                      "$5M - $10M",
-                      "$10M - $20M",
-                      "$20M - $50M",
-                      "Above $50M"
-                    ]
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "Below $500k",
+                          "$500k - $1M",
+                          "$1M - $5M",
+                          "$5M - $10M",
+                          "$10M - $20M",
+                          "$20M - $50M",
+                          "Above $50M"
+                        ]
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "Below $500k",
+                            "$500k - $1M",
+                            "$1M - $5M",
+                            "$5M - $10M",
+                            "$10M - $20M",
+                            "$20M - $50M",
+                            "Above $50M"
+                          ]
+                        }
+                      }
+                    ],
+                    "description": "Exact annual revenue range filter. These seven bands are the only supported values — \"$500k - $1M\" is the most common. \"Above $50M\" is a flat catch-all for all revenue over $50M; there is no finer band above it, so use it for any large-enterprise revenue target. Accepts a single value or a list — a list matches any of its values (OR), so `revenue_range: [\"$10M - $20M\", \"$20M - $50M\"]` returns records matching either."
                   },
                   "naics_code": {
-                    "type": "string",
-                    "description": "Exact NAICS industry code filter (~50% filled). Works at any level of the hierarchy, from the 2-digit sector (\"23\" = Construction, \"54\" = Professional Services) through to the 6-digit national industry (\"541120\" = Offices of Notaries, \"511210\" = Software Publishers). Use a short code for broad industry targeting and a longer code for precision — the most standardised industry filter available.",
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    ],
+                    "description": "Exact NAICS industry code filter (~50% filled). Works at any level of the hierarchy, from the 2-digit sector (\"23\" = Construction, \"54\" = Professional Services) through to the 6-digit national industry (\"541120\" = Offices of Notaries, \"511210\" = Software Publishers). Use a short code for broad industry targeting and a longer code for precision — the most standardised industry filter available. Accepts a single value or a list — a list matches any of its values (OR), so `naics_code: [\"5112\", \"5415\"]` returns records matching either.",
                     "example": "541120"
                   },
                   "linkedin_industry": {
-                    "type": "string",
-                    "description": "Exact LinkedIn industry label filter (~85% filled). Uses LinkedIn's own industry vocabulary, which is far finer-grained than the 22 buckets in `industry`. Must match the stored label exactly, with standard capitalisation — for example \"Software Development\", \"Hospitality\", \"Legal Services\", \"Staffing and Recruiting\", \"Wellness and Fitness Services\".",
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    ],
+                    "description": "Exact LinkedIn industry label filter (~85% filled). Uses LinkedIn's own industry vocabulary, which is far finer-grained than the 22 buckets in `industry`. Must match the stored label exactly, with standard capitalisation — for example \"Software Development\", \"Hospitality\", \"Legal Services\", \"Staffing and Recruiting\", \"Wellness and Fitness Services\". Accepts a single value or a list — a list matches any of its values (OR), so `linkedin_industry: [\"Software Development\", \"IT Services and IT Consulting\"]` returns records matching either.",
                     "example": "Software Development"
                   },
                   "country": {
-                    "type": "string",
-                    "description": "Exact country name filter on the company's location. Use the full English country name. Note that company location is derived from where the company's team is based: this is accurate for the small companies that dominate the index, but large multinationals are attributed to a single one of their offices — combine it with other filters rather than relying on location alone when targeting global companies.",
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    ],
+                    "description": "Exact country name filter on the company's location. Use the full English country name. Note that company location is derived from where the company's team is based: this is accurate for the small companies that dominate the index, but large multinationals are attributed to a single one of their offices — combine it with other filters rather than relying on location alone when targeting global companies. Accepts a single value or a list — a list matches any of its values (OR), so `country: [\"United States\", \"Canada\"]` returns records matching either.",
                     "example": "United States"
                   },
                   "state": {
-                    "type": "string",
-                    "description": "Exact state or region name filter on the company's location. Full names with standard capitalisation (\"Texas\", not \"TX\"). Combine with `country` for precision. Location is team-derived in the same way as `country`, so it is most accurate for smaller companies.",
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    ],
+                    "description": "Exact state or region name filter on the company's location. Full names with standard capitalisation (\"Texas\", not \"TX\"). Combine with `country` for precision. Location is team-derived in the same way as `country`, so it is most accurate for smaller companies. Accepts a single value or a list — a list matches any of its values (OR), so `state: [\"Texas\", \"Florida\"]` returns records matching either.",
                     "example": "Texas"
                   },
                   "exclude_domain": {

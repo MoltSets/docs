@@ -17,6 +17,8 @@ If you already have a LinkedIn URL, email, or IP address and want to enrich it, 
 
 The two endpoints share most of their vocabulary. `industry`, `employee_range`, `revenue_range`, `naics_code`, `linkedin_industry`, `country`, `state`, `limit`, and `offset` appear on both; the rest are endpoint-specific.
 
+Every positive filter except `query`, `limit`, and `offset` accepts a single value or a list. A list is OR within its field and AND across fields — `title: ["CEO", "CMO"]` with `country: ["United States", "Canada"]` means (CEO or CMO) in (United States or Canada), in one ranked search.
+
 ### `search_companies`
 
 | Filter | What it does | Notes |
