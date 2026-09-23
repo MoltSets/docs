@@ -13,7 +13,7 @@ description: "How to qualify accounts with MoltSets — exact domain lookups, ch
 { "industry": "Information Technology", "employee_range": "51-200", "revenue_range": "$10M - $20M", "limit": 1 }
 ```
 
-One record costs one search record against your fair use pool. The same query at `limit: 25`, walked five pages deep, costs 125 — and every filter here is exact-match, so a single wrong string spends all 125 on the wrong list. The usual culprits are all silent: a value that isn't in the enumeration at all, `"TX"` instead of `"Texas"`, a `linkedin_industry` label capitalised differently from the stored one, or a `country` filter pulling a multinational to the wrong office.
+One record costs one search record against your fair use pool. The same query at `limit: 25`, walked five pages deep, costs 125 — and every filter here is exact-match, so a single wrong string spends all 125 on the wrong list. The usual culprits are all silent: a value that isn't in the enumeration at all, a `linkedin_industry` label capitalised differently from the stored one, or a `country` filter pulling a multinational to the wrong office.
 
 Read two things off the single result before you widen:
 
@@ -149,7 +149,7 @@ The others carve out segments you don't sell to:
   This is accurate for the small companies that dominate the index, but **large multinationals are attributed to a single one of their offices**. A global company headquartered in one country may resolve to another entirely. When targeting large or international companies, combine location with other filters rather than relying on it alone.
 </Warning>
 
-Both require exact stored values with standard capitalisation — `"Texas"`, not `"TX"`. Combine `state` with `country` for precision.
+`country` requires the exact stored value with standard capitalisation. `state` accepts the full name or its abbreviation — `"Texas"` and `"TX"` both work. Combine `state` with `country` for precision.
 
 <Note>
   Every company record comes back with a `city`, but there is no `city` filter on `search_companies` — `country` and `state` are the only location filters. To narrow to a city, filter on `state` and read `city` off the results. (`search_people` does have a `city` filter.)

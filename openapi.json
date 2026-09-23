@@ -350,7 +350,7 @@
                         }
                       }
                     ],
-                    "description": "Exact state or region name filter on the person's location. Must match the stored value exactly — full names with standard capitalisation, not abbreviations (\"Texas\", not \"TX\"). Combine with `country` for precision. Accepts a single value or a list — a list matches any of its values (OR), so `state: [\"Texas\", \"Florida\"]` returns records matching either.",
+                    "description": "Exact state or region name filter on the person's location. Accepts the full name with standard capitalisation or its abbreviation — \"Texas\" and \"TX\" both work. Combine with `country` for precision. Accepts a single value or a list — a list matches any of its values (OR), so `state: [\"Texas\", \"Florida\"]` returns records matching either.",
                     "example": "Texas"
                   },
                   "city": {
@@ -675,7 +675,7 @@
                     "items": {
                       "type": "string"
                     },
-                    "description": "States or regions to exclude. People in any listed state are dropped. Accepts the same values as `state` (full names, never abbreviations). Combine with a positive `country` — for example `country: \"United States\"` with `exclude_state: [\"California\"]`.",
+                    "description": "States or regions to exclude. People in any listed state are dropped. Accepts the same values as `state` (full names or abbreviations). Combine with a positive `country` — for example `country: \"United States\"` with `exclude_state: [\"California\"]`.",
                     "example": [
                       "California",
                       "New York"
@@ -1122,7 +1122,7 @@
                         }
                       }
                     ],
-                    "description": "Exact state or region name filter on the company's location. Full names with standard capitalisation (\"Texas\", not \"TX\"). Combine with `country` for precision. Location is team-derived in the same way as `country`, so it is most accurate for smaller companies. Accepts a single value or a list — a list matches any of its values (OR), so `state: [\"Texas\", \"Florida\"]` returns records matching either.",
+                    "description": "Exact state or region name filter on the company's location. Accepts the full name with standard capitalisation or its abbreviation — \"Texas\" and \"TX\" both work. Combine with `country` for precision. Location is team-derived in the same way as `country`, so it is most accurate for smaller companies. Accepts a single value or a list — a list matches any of its values (OR), so `state: [\"Texas\", \"Florida\"]` returns records matching either.",
                     "example": "Texas"
                   },
                   "exclude_domain": {

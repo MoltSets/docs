@@ -31,7 +31,7 @@ Every positive filter except `query`, `limit`, and `offset` accepts a single val
 | `employee_range` | Filter by headcount band | Fixed enumeration — see [Search for Companies](/api-reference/search/search-for-companies) for accepted values |
 | `revenue_range` | Filter by annual revenue band | Fixed enumeration — see [Search for Companies](/api-reference/search/search-for-companies) for accepted values |
 | `country` | Exact country name filter | Company location is team-derived — see the caveat below |
-| `state` | Exact state or region filter | Full names, not abbreviations. Combine with `country` |
+| `state` | State or region filter | Full name or abbreviation (`Texas` or `TX`). Combine with `country` |
 | `exclude_domain` | Removes specific companies | Your suppression list — pass the accounts you already have. Takes a list |
 | `exclude_industry` | Removes whole industries | Same values as `industry`. Takes a list |
 | `exclude_employee_range` | Removes headcount bands | Same values as `employee_range`. Takes a list |
@@ -56,7 +56,7 @@ Every positive filter except `query`, `limit`, and `offset` accepts a single val
 | `company` | Company name filter | Scopes to the person's employer. Every word you supply must appear in the name (`Acme` matches `Acme Corporation`) |
 | `company_domain` | Exact company domain match | Full URLs are normalised automatically. Prefer this over `company` when you have a known domain |
 | `country` | Exact country name filter | Most reliable filter (~99% filled). Must match the stored value |
-| `state` | Exact state or region filter | Full names, not abbreviations — `Texas`, not `TX` |
+| `state` | State or region filter | Full name or abbreviation — `Texas` or `TX` |
 | `city` | Exact city name filter | Matches the exact stored city, not its suburbs. Combine with `state`/`country` to disambiguate |
 | `seniority` | Exact seniority level | Fixed enumeration — see [Search for People](/api-reference/search/search-for-people) for accepted values |
 | `industry` | Filter by industry | Fixed enumeration — see the API reference for accepted values |
