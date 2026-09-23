@@ -2882,11 +2882,15 @@
                         "company_revenue_range": "$1M - $5M",
                         "work_email_confirmed": "a4cd87c390c98385297fbe9250XXXXX",
                         "work_email_confirmed_status": "2025-10-12",
+                        "work_email_confirmed_risk_score": "A",
                         "personal_emails": [
                           "3018fe3a783fad1db0370ee3fXXXXX"
                         ],
                         "personal_emails_status": [
                           null
+                        ],
+                        "personal_emails_risk_score": [
+                          "A"
                         ]
                       },
                       "status": "ok",
@@ -2920,8 +2924,10 @@
                         "company_revenue_range": null,
                         "work_email_confirmed": null,
                         "work_email_confirmed_status": null,
+                        "work_email_confirmed_risk_score": null,
                         "personal_emails": [],
-                        "personal_emails_status": []
+                        "personal_emails_status": [],
+                        "personal_emails_risk_score": []
                       },
                       "status": "not_found",
                       "metadata": {
