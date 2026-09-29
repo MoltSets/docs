@@ -126,7 +126,7 @@ Branch on `error.code`, not on the message text.
 | `account_inactive` | `403` | The account is not active | The account was canceled, by choice or because of a payment issue. Log in at [app.moltsets.com](https://app.moltsets.com) and subscribe to a plan |
 | `insufficient_tokens` | `402` | Token balance can't cover the call | Top up or upgrade. On a batch, unaffordable items are dropped and the rest still return |
 | `insufficient_phone_tokens` | `402` | Phone-token allowance can't cover a mobile result | Phone tokens are a separate allowance — see [Rate Limits](/getting-started/rate-limits). Batches drop the excess rather than failing |
-| `plan_restricted` | `403` | The tool isn't part of your plan — today, the dedicated personal-email tools | A plan condition: no `Retry-After`, and topping up tokens won't clear it. Use `linkedin_to_business_email`, or contact support |
+| `plan_restricted` | `403` | The tool isn't part of your plan — today, the dedicated personal-email tools, and the ad-audience tools on the \$397 and \$997 plans | A plan condition: no `Retry-After`, and topping up tokens won't clear it. For personal-email tools, use `linkedin_to_business_email` or contact support |
 | `fair_use_limit_exceeded` | `429` | A Fair Use **record** window is exhausted — or, on the free tier, the one-time search trial | Wait for `metadata.retry_after` seconds. Where the limit is the free search trial there is no `Retry-After`, because that grant never refreshes |
 | `fair_use_requests_exceeded` | `429` | The 5-hour **request** window is exhausted | Wait for `metadata.retry_after` seconds, then resume |
 | `rate_limited` | `429` | Burst guard — too many requests too quickly | Back off and retry; see [Handling rate limits](/getting-started/rate-limits#handling-rate-limits) |
@@ -182,6 +182,10 @@ Records are the data rows returned; **requests** are capped separately — see [
   Contact [support@moltsets.com](mailto:support@moltsets.com) to request access.
 </Note>
 
+<Note>
+  `email_to_maid`, `business_email_to_sha256`, and `linkedin_to_sha256` are **not available on the \$397 / month and \$997 / month plans**. Calls from those plans return **403** with `plan_restricted`. It's a plan condition — retrying or topping up tokens won't clear it.
+</Note>
+
 ## Choosing a plan
 
 The right plan depends on how fast you need results. Higher rate limits mean faster processing — the difference between waiting an hour and wrapping up in minutes.
@@ -206,7 +210,7 @@ For more information on our plans, upgrading and downgrading processes, please r
 | **Get Valid Emails** | `linkedin_to_best_email`, `linkedin_to_business_email`, `linkedin_to_personal_email_usa` *, `linkedin_to_best_personal_email_usa` * |
 | **Get Carrier-Verified Mobile Phones** | `linkedin_to_mobile_phone` |
 | **Reverse Lookups** | `reverse_email_lookup`, `reverse_linkedin_lookup` |
-| **Get Ad Audience** | `email_to_maid`, `business_email_to_sha256`, `linkedin_to_sha256` |
+| **Get Ad Audience** | `email_to_maid` †, `business_email_to_sha256` †, `linkedin_to_sha256` † |
 | **Get LinkedIn** | `email_to_linkedin` |
 | **Get Company** | `ip_to_company` |
 | **Account** | `get_account`, `get_billing`, `get_usage` |
@@ -215,6 +219,10 @@ For more information on our plans, upgrading and downgrading processes, please r
   \* `linkedin_to_personal_email_usa` and `linkedin_to_best_personal_email_usa` are **not available on every plan** — access is set by price tier. Call `get_account` and read `personal_email_available` to know where yours stands. See [Plans](#plans) for the error they return. Without access, use `linkedin_to_business_email` instead.
 
   Both return **US records only** — non-US records are filtered out, so a non-US profile comes back as a `not_found`.
+</Note>
+
+<Note>
+  † Not available on the \$397 / month and \$997 / month plans. See [Plans](#plans).
 </Note>
 
 <Note>

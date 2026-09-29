@@ -240,6 +240,12 @@ For a full breakdown, see the [Rate Limits](/getting-started/rate-limits) guide.
     This is an account entitlement, not a data miss — retrying or rewording the prompt won't help. (Separately, both tools return US records only — a non-US profile is a `not_found`, not a `plan_restricted`.) Use `linkedin_to_business_email` instead, or contact [support@moltsets.com](mailto:support@moltsets.com) to request access.
   </Accordion>
 
+  <Accordion title="`plan_restricted` on an ad audience lookup">
+    `email_to_maid`, `business_email_to_sha256`, and `linkedin_to_sha256` are **not available on the \$397 / month and \$997 / month plans**. Calls from those plans return **403** with `plan_restricted`.
+
+    This is an account entitlement, not a data miss — retrying or rewording the prompt won't help.
+  </Accordion>
+
   <Accordion title="The agent reports an error when the lookup simply found nothing">
     Check the `status` field on the response. A clean miss comes back as a **success** — `isError: false` with `status: "not_found"` — and costs nothing. It is not an error, and retrying the same input will return the same miss.
 
