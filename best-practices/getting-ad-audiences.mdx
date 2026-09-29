@@ -9,8 +9,8 @@ Three endpoints convert a known contact into identifiers you can upload to ad pl
 
 | You have | You want | Call |
 |---|---|---|
-| LinkedIn URL | The widest possible set of match keys | `linkedin_to_sha256` |
-| Business email | Hashed personal emails to match on | `business_email_to_sha256` |
+| LinkedIn URL | Business and personal match keys | `linkedin_to_sha256` |
+| Business email | A hashed personal email to match on | `business_email_to_sha256` |
 | Any email | Mobile device IDs for in-app targeting | `email_to_maid` |
 
 <Warning>
@@ -19,26 +19,26 @@ Three endpoints convert a known contact into identifiers you can upload to ad pl
 
 ## Maximise match rate with `linkedin_to_sha256`
 
-Match rate is the whole game with customer match uploads — a platform can only find the users whose identifiers you supply. `linkedin_to_sha256` returns the broadest set MoltSets holds for one person: **both address types, in both hash formats**.
+Match rate is the whole game with customer match uploads — a platform can only find the users whose identifiers you supply. `linkedin_to_sha256` returns **both address types, in both hash formats**: one business and one personal email, each as SHA256 and MD5.
 
 ```json
 {
   "linkedin_slug": "john-smith-123",
-  "business_SHA256_array": ["..."],
-  "business_md5_array": ["..."],
-  "personal_SHA256_array": ["..."],
-  "personal_md5_array": ["..."]
+  "business_SHA256_array": "...",
+  "business_md5_array": "...",
+  "personal_SHA256_array": "...",
+  "personal_md5_array": "..."
 }
 ```
 
-Four arrays, not four values — a contact with several known addresses returns several hashes per array. Upload everything a platform accepts. Supplying both SHA256 and MD5 where supported, and both business and personal addresses, is the single biggest lever on match rate.
+Each field holds one hash, not an array. A field with no data is left out of the response, so a contact with only a business email returns just the `business_` fields. Upload everything a platform accepts. Supplying both SHA256 and MD5 where supported, and both business and personal addresses, is the single biggest lever on match rate.
 
 ## Bridge work identities to personal devices
 
-`business_email_to_sha256` takes a **business** email and returns **hashed personal** emails:
+`business_email_to_sha256` takes a **business** email and returns a **hashed personal** email:
 
 ```json
-{ "personal_email_SHA256": ["..."] }
+{ "personal_email_SHA256": "..." }
 ```
 
 This is the endpoint that solves a specific B2B problem. Your CRM is full of work addresses, but people are logged into Meta, Google, and TikTok with their personal accounts — so uploading work emails to those platforms matches almost nothing. This crosses that gap without ever exposing a raw personal address.

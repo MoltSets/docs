@@ -3344,7 +3344,7 @@
       "post": {
         "summary": "Business Email to SHA256",
         "operationId": "businessEmailToSHA256",
-        "description": "The Business Email to SHA256 API converts a business email address into SHA256-hashed personal email addresses, for privacy-safe identity resolution and paid advertising audience matching.\n\nThe hashes it returns can be uploaded directly to Meta, Google, LinkedIn, TikTok, and other ad platforms that support customer match or custom audience workflows. Use this to retarget known contacts across their personal devices without exposing raw personal email data.\n\n**Use this endpoint to:**\n- Build customer match audiences for Meta, Google, LinkedIn, or TikTok\n- Retarget contacts on their personal devices without exposing raw email addresses\n- Bridge business contacts to privacy-safe advertising identifiers\n\n**Need multiple SHA256s?**\nThis API returns only ONE SHA256. If you are running ads and want MULTIPLE SHA256's, and are willing to spend at least $10k/yr, please <a href=\"https://moltsets.com/data-sales/?product=email-to-sha256\" target=\"_blank\" rel=\"noopener\">click here</a> and talk to our data team.\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**Plan Availability:**\nThis endpoint is not available on the $397 / month and $997 / month plans. Calls from those plans return `403` with `plan_restricted`. It is a plan condition, so retrying or topping up tokens does not clear it.\n\n**Outcomes:**\nA lookup that finds nothing is not an error. It returns HTTP `200` with `status: \"not_found\"`, empty or null `results`, and the usual `metadata` — and costs no tokens, though it still counts as one request against your Fair Use requests limit. Read `status`, not the HTTP code, to tell a hit from a miss. The API's only `404` is an unknown or retired tool name.",
+        "description": "The Business Email to SHA256 API converts a business email address into a SHA256-hashed personal email address, for privacy-safe identity resolution and paid advertising audience matching.\n\nThe hash it returns can be uploaded directly to Meta, Google, LinkedIn, TikTok, and other ad platforms that support customer match or custom audience workflows. Use this to retarget known contacts across their personal devices without exposing raw personal email data.\n\n**Use this endpoint to:**\n- Build customer match audiences for Meta, Google, LinkedIn, or TikTok\n- Retarget contacts on their personal devices without exposing raw email addresses\n- Bridge business contacts to privacy-safe advertising identifiers\n\n**Need multiple SHA256s?**\nThis API returns only ONE SHA256. If you are running ads and want MULTIPLE SHA256's, and are willing to spend at least $10k/yr, please <a href=\"https://moltsets.com/data-sales/?product=email-to-sha256\" target=\"_blank\" rel=\"noopener\">click here</a> and talk to our data team.\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**Plan Availability:**\nThis endpoint is not available on the $397 / month and $997 / month plans. Calls from those plans return `403` with `plan_restricted`. It is a plan condition, so retrying or topping up tokens does not clear it.\n\n**Response fields:**\n`personal_email_SHA256` holds one string, not an array. When there's no data, the field is left out of `results`.\n\n**Outcomes:**\nA lookup that finds nothing is not an error. It returns HTTP `200` with `status: \"not_found\"`, empty or null `results`, and the usual `metadata` — and costs no tokens, though it still counts as one request against your Fair Use requests limit. Read `status`, not the HTTP code, to tell a hit from a miss. The API's only `404` is an unknown or retired tool name.",
         "tags": [
           "Get Ad Audience"
         ],
@@ -3382,9 +3382,7 @@
                     "summary": "Data found",
                     "value": {
                       "results": {
-                        "personal_email_SHA256": [
-                          "e187e84b06e1e6577bcebe42d3905434ddc89d2d5abaab8e85691882310XXXXX"
-                        ]
+                        "personal_email_SHA256": "e187e84b06e1e6577bcebe42d3905434ddc89d2d5abaab8e85691882310XXXXX"
                       },
                       "status": "ok",
                       "metadata": {
@@ -3400,9 +3398,7 @@
                   "not_found": {
                     "summary": "No data found — still HTTP 200",
                     "value": {
-                      "results": {
-                        "personal_email_SHA256": []
-                      },
+                      "results": {},
                       "status": "not_found",
                       "metadata": {
                         "fair_use": {
@@ -3490,7 +3486,7 @@
       "post": {
         "summary": "LinkedIn to SHA256",
         "operationId": "linkedinToSHA256",
-        "description": "The LinkedIn to SHA256 API retrieves all known SHA256 and MD5 hashed emails for a LinkedIn profile, covering both business and personal addresses.\n\nIt returns separate arrays for business and personal hashes in both formats, giving you the broadest possible coverage for audience matching across ad platforms. Use this when you need to build the widest match key set for a LinkedIn-identified contact, for example to maximise match rates when uploading customer lists to Meta, Google, or LinkedIn Ads.\n\n**Use this endpoint to:**\n- Maximise match rates on ad platform customer lists\n- Build a complete hashed identity set for one contact\n- Bridge LinkedIn-sourced contacts into advertising audiences\n\n**Need multiple SHA256s?**\nThis API returns only ONE SHA256. If you are running ads and want MULTIPLE SHA256's, and are willing to spend at least $10k/yr, please <a href=\"https://moltsets.com/data-sales/?product=linkedin-to-sha256\" target=\"_blank\" rel=\"noopener\">click here</a> and talk to our data team.\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**Plan Availability:**\nThis endpoint is not available on the $397 / month and $997 / month plans. Calls from those plans return `403` with `plan_restricted`. It is a plan condition, so retrying or topping up tokens does not clear it.\n\n**Outcomes:**\nA lookup that finds nothing is not an error. It returns HTTP `200` with `status: \"not_found\"`, empty or null `results`, and the usual `metadata` — and costs no tokens, though it still counts as one request against your Fair Use requests limit. Read `status`, not the HTTP code, to tell a hit from a miss. The API's only `404` is an unknown or retired tool name.",
+        "description": "The LinkedIn to SHA256 API retrieves a SHA256 and MD5 hashed email for a LinkedIn profile, covering both a business and a personal address.\n\nIt returns a single business hash and a single personal hash in each format, giving you broad coverage for audience matching across ad platforms. Use this when you need a full match key set for a LinkedIn-identified contact, for example to maximise match rates when uploading customer lists to Meta, Google, or LinkedIn Ads.\n\n**Use this endpoint to:**\n- Maximise match rates on ad platform customer lists\n- Build a complete hashed identity set for one contact\n- Bridge LinkedIn-sourced contacts into advertising audiences\n\n**Need multiple SHA256s?**\nThis API returns only ONE SHA256. If you are running ads and want MULTIPLE SHA256's, and are willing to spend at least $10k/yr, please <a href=\"https://moltsets.com/data-sales/?product=linkedin-to-sha256\" target=\"_blank\" rel=\"noopener\">click here</a> and talk to our data team.\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**Plan Availability:**\nThis endpoint is not available on the $397 / month and $997 / month plans. Calls from those plans return `403` with `plan_restricted`. It is a plan condition, so retrying or topping up tokens does not clear it.\n\n**Response fields:**\nEach hash field holds one string, not an array. A field with no data is left out of `results`, so a profile with only a business email returns just the `business_` fields. Check for a field before reading it.\n\n**Outcomes:**\nA lookup that finds nothing is not an error. It returns HTTP `200` with `status: \"not_found\"`, empty or null `results`, and the usual `metadata` — and costs no tokens, though it still counts as one request against your Fair Use requests limit. Read `status`, not the HTTP code, to tell a hit from a miss. The API's only `404` is an unknown or retired tool name.",
         "tags": [
           "Get Ad Audience"
         ],
@@ -3524,18 +3520,10 @@
                     "value": {
                       "results": {
                         "linkedin_slug": "john-smith-123",
-                        "business_SHA256_array": [
-                          "f101da855ed67dc34c9729f04df8aeefXXXXX"
-                        ],
-                        "business_md5_array": [
-                          "900b89c0e5ece81f7fb0a72ef3dXXXXX"
-                        ],
-                        "personal_SHA256_array": [
-                          "266f422db074460bb5bf41984c3aXXXXX"
-                        ],
-                        "personal_md5_array": [
-                          "0c86fde3392c84d6514de378dc1XXXXX"
-                        ]
+                        "business_SHA256_array": "f101da855ed67dc34c9729f04df8aeefXXXXX",
+                        "business_md5_array": "900b89c0e5ece81f7fb0a72ef3dXXXXX",
+                        "personal_SHA256_array": "266f422db074460bb5bf41984c3aXXXXX",
+                        "personal_md5_array": "0c86fde3392c84d6514de378dc1XXXXX"
                       },
                       "status": "ok",
                       "metadata": {
@@ -3551,13 +3539,7 @@
                   "not_found": {
                     "summary": "No data found — still HTTP 200",
                     "value": {
-                      "results": {
-                        "linkedin_slug": null,
-                        "business_SHA256_array": [],
-                        "business_md5_array": [],
-                        "personal_SHA256_array": [],
-                        "personal_md5_array": []
-                      },
+                      "results": {},
                       "status": "not_found",
                       "metadata": {
                         "fair_use": {
