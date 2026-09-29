@@ -131,7 +131,7 @@ A genuine error comes back with `isError: true` and an `error.code`. What the ag
 | `invalid_input` | A parameter is wrong | Fix the parameter — rerunning it unchanged repeats the error |
 | `forbidden` | The connection is missing a `User-Agent` header | Set a `User-Agent` on the client — any non-empty value works |
 | `insufficient_tokens` | Out of tokens | Top up or upgrade; `get_billing` shows the balance |
-| `insufficient_phone_tokens` | Out of phone tokens | A separate allowance from regular tokens |
+| `insufficient_phone_tokens` | Out of phone tokens | Phone tokens come from a separate monthly subscription |
 | `plan_restricted` | The tool isn't on your plan | A plan condition, not a data miss — switch tools or contact support |
 | `fair_use_limit_exceeded` / `fair_use_requests_exceeded` | A Fair Use window is exhausted | Wait `metadata.retry_after` seconds, then resume |
 | `rate_limited` | Too many calls too quickly | Back off briefly |
@@ -154,7 +154,7 @@ You only spend tokens on **verified data that is actually returned**. A few rule
 - **No data, no charge.** Calls that come back with `status: "not_found"` cost nothing — a miss is a normal outcome, not an error.
 - **Counting is free.** `search_linkedin_profile` with `count_only: true` returns match counts without spending tokens — use it to size a search before committing.
 - **Free tools.** `get_account`, `get_billing`, and `get_usage` never cost tokens. Call `get_billing` for the per-tool `token_costs` map and your current balance.
-- **Phone tokens are separate.** `linkedin_to_mobile_phone` spends **phone tokens** — an allowance set by your plan, separate from your regular token balance — at 1 phone token per returned result.
+- **Phone tokens are separate.** `linkedin_to_mobile_phone` spends **phone tokens** at 1 per returned result. Phone tokens are separate from your regular token balance and come from a monthly [phone token subscription](/getting-started/rate-limits#phone-tokens), available on paid plans only.
 
 For a full breakdown, see the [Rate Limits](/getting-started/rate-limits) guide.
 

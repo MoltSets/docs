@@ -86,7 +86,7 @@
           },
           "phone_tokens_remaining": {
             "type": "integer",
-            "description": "Phone-token allowance remaining after this call. `linkedin_to_mobile_phone` only."
+            "description": "Phone tokens remaining after this call. `linkedin_to_mobile_phone` only."
           }
         },
         "description": "Per-call metadata. `fair_use` is always present on a tool call; the remaining fields appear only where they apply."
@@ -220,7 +220,7 @@
       },
       "ErrorInsufficientTokens": {
         "type": "object",
-        "description": "Out of credit. `insufficient_tokens` means the token balance cannot cover the call; `insufficient_phone_tokens` means the separate phone-token allowance cannot cover a mobile-phone result. On a batch, unaffordable items are dropped and the response returns partial results with this error block rather than failing the whole call.",
+        "description": "Out of credit. `insufficient_tokens` means the token balance cannot cover the call; `insufficient_phone_tokens` means the phone token balance (from the separate phone token subscription) cannot cover a mobile-phone result. On a batch, unaffordable items are dropped and the response returns partial results with this error block rather than failing the whole call.",
         "properties": {
           "error": {
             "type": "object",
@@ -2661,7 +2661,7 @@
       "post": {
         "summary": "LinkedIn to Mobile Phone",
         "operationId": "enrichPhone",
-        "description": "The LinkedIn to Mobile Phone API looks up the carrier-verified mobile phone number for a LinkedIn profile, along with the date it was last verified.\n\nOnly mobile numbers are returned, no landlines or VoIP numbers, so every result is a real device. It supports single lookups (`linkedin_url`) and batch lookups of up to 100 profiles at once (`linkedin_urls`). Mobile lookups spend **phone tokens** — an allowance set by your plan, separate from your regular token balance — at 1 phone token per returned result.\n\n**Numbers are not screened against Do Not Call registries.** MoltSets does not currently return DNC status, and a returned number carries no indication of whether it is registered. `last_validated_at` tells you the number was active and in service on that date, nothing more. Scrubbing against the applicable DNC registries, and complying with the calling and messaging rules that apply to you, remains your responsibility.\n\n**Use this endpoint to:**\n- Power SMS outreach and cold calling\n- Enrich sales sequences with direct-dial mobile numbers\n- Batch-append verified phone numbers to a contact list\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**Outcomes:**\nA lookup that finds nothing is not an error. It returns HTTP `200` with `status: \"not_found\"`, empty or null `results`, and the usual `metadata` — and costs no tokens, though it still counts as one request against your Fair Use requests limit. Read `status`, not the HTTP code, to tell a hit from a miss. The API's only `404` is an unknown or retired tool name.",
+        "description": "The LinkedIn to Mobile Phone API looks up the carrier-verified mobile phone number for a LinkedIn profile, along with the date it was last verified.\n\nOnly mobile numbers are returned, no landlines or VoIP numbers, so every result is a real device. It supports single lookups (`linkedin_url`) and batch lookups of up to 100 profiles at once (`linkedin_urls`). Mobile lookups spend **phone tokens** at 1 phone token per returned result. Phone tokens are separate from your regular token balance and aren't included in any plan: they come from a monthly phone token subscription, available on paid plans only. Unused phone tokens roll over while the subscription is active.\n\n**Numbers are not screened against Do Not Call registries.** MoltSets does not currently return DNC status, and a returned number carries no indication of whether it is registered. `last_validated_at` tells you the number was active and in service on that date, nothing more. Scrubbing against the applicable DNC registries, and complying with the calling and messaging rules that apply to you, remains your responsibility.\n\n**Use this endpoint to:**\n- Power SMS outreach and cold calling\n- Enrich sales sequences with direct-dial mobile numbers\n- Batch-append verified phone numbers to a contact list\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**Outcomes:**\nA lookup that finds nothing is not an error. It returns HTTP `200` with `status: \"not_found\"`, empty or null `results`, and the usual `metadata` — and costs no tokens, though it still counts as one request against your Fair Use requests limit. Read `status`, not the HTTP code, to tell a hit from a miss. The API's only `404` is an unknown or retired tool name.",
         "tags": [
           "Get Carrier-Verified Mobile Phones"
         ],

@@ -43,32 +43,32 @@ For lists longer than 100, chunk into batches of 100 and pause briefly between t
 ## Budget phone tokens first
 
 <Note>
-  Mobile lookups draw on **phone tokens**, an allowance set by your plan and separate from your regular token balance. One phone token is spent per returned result.
+  Mobile lookups draw on **phone tokens**, which are separate from your regular token balance. One phone token is spent per returned result. Phone tokens aren't included in any plan — you buy them through a monthly phone token subscription on the **Pricing** page at [app.moltsets.com](https://app.moltsets.com). It's available on paid plans only; the free plan has no phone tokens.
 </Note>
 
-Phone tokens by plan:
+Public phone token subscriptions:
 
-| Plan | Phone tokens |
+| Monthly cost | Phone tokens / month |
 |---|---|
-| \$0 | 10 lifetime |
-| \$27 / month | 10 / month |
-| \$97 / month | 50 / month |
-| \$397 / month | 150 / month |
-| \$997 / month | 250 / month |
+| \$27 | 180 |
+| \$97 | 646 |
+| \$197 | 1,313 |
 
-You're only charged for results that come back — profiles with no mobile on file cost nothing, and come back as HTTP `200` with `status: "not_found"` rather than an error. A batch of 100 profiles can therefore spend up to 100 phone tokens, more than the \$0, \$27, and \$97 allowances hold, so size batches to the allowance rather than to the endpoint's 100-profile ceiling.
+Unused tokens roll over month to month while the subscription stays active. Cancelling either the phone token subscription or your main plan forfeits them. See [Phone tokens](/getting-started/rate-limits#phone-tokens) for proration, larger subscriptions, and cancellation.
 
-`get_account` and `get_billing` are **free** and never cost tokens. Check your remaining allowance before a large run so a job doesn't stall halfway through.
+You're only charged for results that come back — profiles with no mobile on file cost nothing, and come back as HTTP `200` with `status: "not_found"` rather than an error. A batch of 100 profiles can therefore spend up to 100 phone tokens, so check your balance and size batches to it rather than to the endpoint's 100-profile ceiling.
+
+`get_account` and `get_billing` are **free** and never cost tokens. Check your remaining phone tokens before a large run so a job doesn't stall halfway through.
 
 ## Qualify before you enrich
 
-Because phone tokens are the scarcest thing on every plan, it pays to narrow the list before calling this endpoint rather than after. Run your [people search](/best-practices/searching-for-people) filters first and enrich only the contacts you'd actually call:
+Because phone tokens are a paid add-on, it pays to narrow the list before calling this endpoint rather than after. Run your [people search](/best-practices/searching-for-people) filters first and enrich only the contacts you'd actually call:
 
 1. `search_people` with `seniority`, `department`, and location filters
 2. Review the top-level `total` and tighten until the list is the size you intend to work (`total` stops counting at 10,000)
-3. Batch the resulting LinkedIn URLs into `linkedin_to_mobile_phone`, up to 100 at a time and within your phone token allowance
+3. Batch the resulting LinkedIn URLs into `linkedin_to_mobile_phone`, up to 100 at a time and within your phone token balance
 
-Enriching a 5,000-row list "just in case" is how a phone token allowance disappears in one afternoon.
+Enriching a 5,000-row list "just in case" is how a month of phone tokens disappears in one afternoon.
 
 ## Read the validation date
 

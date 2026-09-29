@@ -29,17 +29,30 @@ To prevent abuse, Unlimited Plans are subject to our [Fair Use Policy](https://m
 
 ## Phone tokens
 
-`linkedin_to_mobile_phone` spends **phone tokens** — a separate allowance from your regular token balance and from the Fair Use windows above. One phone token is spent per returned result; a miss costs nothing.
+`linkedin_to_mobile_phone` spends **phone tokens**. They're separate from your regular token balance and from the Fair Use windows above. One phone token is spent per returned result; a miss costs nothing.
 
-| **Plan** | **Phone tokens** |
+Phone tokens aren't included in any plan. You buy them through a **phone token subscription**, a monthly add-on billed separately from your main plan. You must be on a paid plan to buy one — the free plan has no phone tokens.
+
+To subscribe, log into [app.moltsets.com](https://app.moltsets.com) and go to **Pricing**.
+
+| **Monthly cost** | **Phone tokens / month** |
 | :-- | :-- |
-| Free | 10 lifetime |
-| \$27 / month | 10 / month |
-| \$97 / month | 50 / month |
-| \$397 / month | 150 / month |
-| \$997 / month | 250 / month |
+| \$27 | 180 |
+| \$97 | 646 |
+| \$197 | 1,313 |
 
-When the allowance runs out, calls return `402` with `insufficient_phone_tokens`; a batch drops the items it can't cover and returns the rest. Each call reports `phone_tokens_used` and `phone_tokens_remaining` in `metadata`.
+Need more? Larger phone token subscriptions are available. Contact [support@moltsets.com](mailto:support@moltsets.com).
+
+How the subscription works:
+
+- **Billing follows your main plan.** The phone token subscription renews on the same date as your main plan.
+- **Mid-cycle purchases are prorated.** If you subscribe partway through a cycle, both the first charge and the first month's tokens are prorated to the days left until your renewal date.
+- **Unused tokens roll over.** Tokens you don't spend carry into the next month.
+- **You keep tokens only while subscribed.** If you cancel your phone token subscription, you lose any unused phone tokens.
+- **Cancelling your main plan cancels both.** Your phone token subscription ends with your main plan, and you lose any unused phone tokens.
+- **No one-off purchases.** You can't buy phone tokens individually. The subscription is the only way to get them.
+
+When you run out, calls return `402` with `insufficient_phone_tokens`; a batch drops the items it can't cover and returns the rest. Each call reports `phone_tokens_used` and `phone_tokens_remaining` in `metadata`.
 
 ## How the window works
 

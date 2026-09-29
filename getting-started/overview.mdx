@@ -125,7 +125,7 @@ Branch on `error.code`, not on the message text.
 | `forbidden` | `403` | Missing `User-Agent` header | Add a `User-Agent` header — any non-empty value works |
 | `account_inactive` | `403` | The account is not active | The account was canceled, by choice or because of a payment issue. Log in at [app.moltsets.com](https://app.moltsets.com) and subscribe to a plan |
 | `insufficient_tokens` | `402` | Token balance can't cover the call | Top up or upgrade. On a batch, unaffordable items are dropped and the rest still return |
-| `insufficient_phone_tokens` | `402` | Phone-token allowance can't cover a mobile result | Phone tokens are a separate allowance — see [Rate Limits](/getting-started/rate-limits). Batches drop the excess rather than failing |
+| `insufficient_phone_tokens` | `402` | Not enough phone tokens to cover a mobile result | Phone tokens come from a separate monthly subscription — see [Phone tokens](/getting-started/rate-limits#phone-tokens). Batches drop the excess rather than failing |
 | `plan_restricted` | `403` | The tool isn't part of your plan — today, the dedicated personal-email tools, and the ad-audience tools on the \$397 and \$997 plans | A plan condition: no `Retry-After`, and topping up tokens won't clear it. For personal-email tools, use `linkedin_to_business_email` or contact support |
 | `fair_use_limit_exceeded` | `429` | A Fair Use **record** window is exhausted — or, on the free tier, the one-time search trial | Wait for `metadata.retry_after` seconds. Where the limit is the free search trial there is no `Retry-After`, because that grant never refreshes |
 | `fair_use_requests_exceeded` | `429` | The 5-hour **request** window is exhausted | Wait for `metadata.retry_after` seconds, then resume |
@@ -155,15 +155,17 @@ Resolution time varies, largely with when the outage starts: one that begins dur
 
 ## Plans
 
-| **Plan** | **Lifetime Tokens** | **Enrichment records** | **Search records** | **Phone Tokens** |
-| :-- | :-- | :-- | :-- | :-- |
-| \$0 | 1000 | 1k lifetime | 100 lifetime (5 per call max) | 10 lifetime |
-| \$27 / month | Unlimited | 1k / 5h · 5k / week | 500 / 5h · 2.5k / week | 10 / month |
-| \$97 / month | Unlimited | 15k / 5h · 75k / week | 7.5k / 5h · 37.5k / week | 50 / month |
-| \$397 / month | Unlimited | 150k / 5h · 750k / week | 75k / 5h · 375k / week | 150 / month |
-| \$997 / month | Unlimited | 225k / 5h · 1.125M / week | 112.5k / 5h · 562.5k / week | 250 / month |
+| **Plan** | **Lifetime Tokens** | **Enrichment records** | **Search records** |
+| :-- | :-- | :-- | :-- |
+| \$0 | 1000 | 1k lifetime | 100 lifetime (5 per call max) |
+| \$27 / month | Unlimited | 1k / 5h · 5k / week | 500 / 5h · 2.5k / week |
+| \$97 / month | Unlimited | 15k / 5h · 75k / week | 7.5k / 5h · 37.5k / week |
+| \$397 / month | Unlimited | 150k / 5h · 750k / week | 75k / 5h · 375k / week |
+| \$997 / month | Unlimited | 225k / 5h · 1.125M / week | 112.5k / 5h · 562.5k / week |
 
 Records are the data rows returned; **requests** are capped separately — see [Rate Limits](/getting-started/rate-limits).
+
+Phone tokens for `linkedin_to_mobile_phone` aren't included in any plan. They're sold as a separate monthly subscription, available on paid plans only — see [Phone tokens](/getting-started/rate-limits#phone-tokens).
 
 <Note>
   `linkedin_to_personal_email_usa` and `linkedin_to_best_personal_email_usa` are **not available on every plan** — access is set by price tier. Call `get_account` and read `personal_email_available` to know where yours stands. Both return **US records only** — non-US records are filtered out, so a non-US profile comes back as a `not_found`.
