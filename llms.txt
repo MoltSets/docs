@@ -125,7 +125,7 @@ Every error, on REST and MCP alike, uses one shape: `{"error": {"code": "...", "
 | `fair_use_requests_exceeded` | 429 | The 5-hour REQUEST window is exhausted | Wait `metadata.retry_after` seconds |
 | `rate_limited` | 429 | Burst guard — too many requests too quickly | Back off and retry |
 | `tool_not_found` | 404 | Unknown or retired tool name in the URL | Check the tool name. This is the API's ONLY 404 — it never means "no data found" |
-| `internal_error` | 500 | The endpoint itself is temporarily offline | Not caused by the request (key, parameters, plan, and headroom are all fine). The team is alerted automatically. Resolution time varies with when the outage starts, so use no fixed retry delay — requeue and retry later rather than looping |
+| `internal_error` | 500 | The call could not complete — usually the endpoint is temporarily offline, but an oversized request can also cause it | Retry with a smaller request first (for example, split a batch). If that also fails, the endpoint is offline. The team is alerted automatically. Resolution time varies with when the outage starts, so use no fixed retry delay — requeue and retry later rather than looping |
 
 Fair-use 429s carry `metadata.retry_after` and a `Retry-After` header (seconds until the binding window unlocks). A batch that dropped items for fair use returns 200 with partial results and carries the same `metadata.retry_after` and `Retry-After` header — resend only the dropped items.
 

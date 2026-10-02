@@ -131,13 +131,13 @@ Branch on `error.code`, not on the message text.
 | `fair_use_requests_exceeded` | `429` | The 5-hour **request** window is exhausted | Wait for `metadata.retry_after` seconds, then resume |
 | `rate_limited` | `429` | Burst guard — too many requests too quickly | Back off and retry; see [Handling rate limits](/getting-started/rate-limits#handling-rate-limits) |
 | `tool_not_found` | `404` | The tool name in the URL is unknown or retired | Check the spelling against [Available tools](#available-tools). This is the API's only `404` |
-| `internal_error` | `500` | The endpoint itself is temporarily unavailable | Not caused by your request. Requeue and retry later — see below |
+| `internal_error` | `500` | The call couldn't complete — usually the endpoint is temporarily unavailable, but an oversized request can also cause it | Try a smaller request first. If that also fails, requeue and retry later — see below |
 
 Nothing is charged on an error.
 
-## When an endpoint is offline
+## When a call returns a 500
 
-A `500` with `internal_error` means the endpoint itself is temporarily unavailable:
+A `500` with `internal_error` means the call couldn't complete. Usually the endpoint is temporarily unavailable, but an unusually large or heavy request can also fail this way:
 
 ```json
 {
@@ -149,9 +149,9 @@ A `500` with `internal_error` means the endpoint itself is temporarily unavailab
 }
 ```
 
-Nothing about your request caused this — the API key, parameters, plan, and rate-limit headroom are all fine, and the same call will work again once the endpoint is back. **The MoltSets team is alerted automatically, so there's no need to report it.**
+**Try a smaller request first.** If the call was a batch, split it into smaller batches and resend them. If the smaller requests succeed, keep your batches at that size. **The MoltSets team is alerted automatically, so there's no need to report it.**
 
-Resolution time varies, largely with when the outage starts: one that begins during office hours is picked up sooner than one overnight or over a weekend. Because of that, don't build a fixed retry delay around it — treat it as a transient failure in your pipeline, not a bad record, and requeue the affected calls to retry later instead of looping on the endpoint. A later call succeeding is the signal that the endpoint is back.
+If a smaller request fails too, the endpoint is temporarily unavailable. Resolution time varies, largely with when the outage starts: one that begins during office hours is picked up sooner than one overnight or over a weekend. Because of that, don't build a fixed retry delay around it — treat it as a transient failure in your pipeline, not a bad record, and requeue the affected calls to retry later instead of looping on the endpoint. A later call succeeding is the signal that the endpoint is back.
 
 ## Plans
 

@@ -137,7 +137,7 @@ A genuine error comes back with `isError: true` and an `error.code`. What the ag
 | `rate_limited` | Too many calls too quickly | Back off briefly |
 | `unauthorized` / `account_inactive` | Credentials or account problem | Recheck the connector; if the account is inactive, log in at [app.moltsets.com](https://app.moltsets.com) and subscribe to a plan |
 | `tool_not_found` | Unknown or retired tool name | Check the name against `tools/list` |
-| `internal_error` | The endpoint is temporarily offline | Stop retrying that tool, do something else, come back later |
+| `internal_error` | The call couldn't complete | Retry with a smaller request; if that fails too, stop retrying that tool and come back later |
 
 Nothing is charged on an error. The full table with REST status codes is in [Errors](/getting-started/overview#errors).
 
@@ -204,7 +204,7 @@ For a full breakdown, see the [Rate Limits](/getting-started/rate-limits) guide.
   </Accordion>
 
   <Accordion title="`internal_error` / 500 responses">
-    A `500` with `internal_error` means the endpoint itself is temporarily offline:
+    A `500` with `internal_error` means the call couldn't complete. Usually the endpoint is temporarily offline, but an unusually large or heavy request can also fail this way:
 
     ```json
     {
@@ -216,9 +216,9 @@ For a full breakdown, see the [Rate Limits](/getting-started/rate-limits) guide.
     }
     ```
 
-    Nothing about the call caused it — credentials, parameters, and plan are all fine. **The MoltSets team is alerted automatically, so there's no need to report it.**
+    **Have your agent try a smaller request first** — for example, split a batch into smaller batches. If that works, keep the smaller size. **The MoltSets team is alerted automatically, so there's no need to report it.**
 
-    Resolution time varies with when the outage starts — an outage during office hours is picked up sooner than one overnight or over a weekend — so there's no useful fixed wait. Have your agent stop retrying that tool, work on something else, and come back to it later in the session or in a follow-up run.
+    If a smaller request fails too, the endpoint is temporarily offline. Resolution time varies with when the outage starts — an outage during office hours is picked up sooner than one overnight or over a weekend — so there's no useful fixed wait. Have your agent stop retrying that tool, work on something else, and come back to it later in the session or in a follow-up run.
   </Accordion>
 
   <Accordion title="Switching from `linkedin_to_personal_email` to `_usa`">
