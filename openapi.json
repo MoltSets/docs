@@ -3016,7 +3016,7 @@
       "post": {
         "summary": "Reverse LinkedIn Lookup",
         "operationId": "linkedinToBusinessProfile",
-        "description": "The Reverse LinkedIn Lookup API resolves a LinkedIn profile URL into a complete business profile, including full name, job title, seniority, company name, company website, industry, revenue, a valid business email, and a personal email.\n\nThis is MoltSets' most complete LinkedIn enrichment endpoint. Use it when you need the full picture of a contact and their employer in a single call.\n\n**Use this endpoint to:**\n- Turn a LinkedIn URL into a fully enriched contact record\n- Get company firmographics alongside personal contact details\n- Power CRM enrichment workflows from a single input\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**Outcomes:**\nA lookup that finds nothing is not an error. It returns HTTP `200` with `status: \"not_found\"`, empty or null `results`, and the usual `metadata` — and costs no tokens, though it still counts as one request against your Fair Use requests limit. Read `status`, not the HTTP code, to tell a hit from a miss. The API's only `404` is an unknown or retired tool name.",
+        "description": "The Reverse LinkedIn Lookup API resolves a LinkedIn profile URL into a complete business profile, including full name, job title, seniority, company name, company website, industry, headcount, revenue range, location, a valid business email, and a personal email.\n\nThis is MoltSets' most complete LinkedIn enrichment endpoint. Use it when you need the full picture of a contact and their employer in a single call.\n\n**Use this endpoint to:**\n- Turn a LinkedIn URL into a fully enriched contact record\n- Get company firmographics alongside personal contact details\n- Power CRM enrichment workflows from a single input\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**Outcomes:**\nA lookup that finds nothing is not an error. It returns HTTP `200` with `status: \"not_found\"`, empty or null `results`, and the usual `metadata` — and costs no tokens, though it still counts as one request against your Fair Use requests limit. Read `status`, not the HTTP code, to tell a hit from a miss. The API's only `404` is an unknown or retired tool name.",
         "tags": [
           "Reverse Lookups"
         ],
@@ -3049,34 +3049,43 @@
                     "summary": "Data found",
                     "value": {
                       "results": {
+                        "linkedin_url": "https://linkedin.com/in/john-smith-123",
                         "first_name": "John",
                         "last_name": "Smith",
                         "full_name": "John Smith",
                         "title": "Senior Associate - Technical Director",
+                        "headline": "Technical Director @ MoltSets | Data infrastructure for GTM teams",
                         "seniority": "Senior",
-                        "linkedin_url": "https://linkedin.com/in/john-smith-123",
+                        "functional_area": "Engineering",
+                        "city": "Denver",
+                        "state": "Colorado",
+                        "country": "United States",
                         "business_email": "john.smith@example.com",
-                        "business_email_risk_score": "A",
+                        "business_email_validated_at": "2026-09-12",
                         "personal_email": "john.smith@gmail.com",
-                        "personal_email_risk_score": "A",
+                        "personal_email_validated_at": "2026-09-29",
                         "personal_emails": [
-                          "john.smith@gmail.com"
+                          "jsmith.denver@gmail.com"
                         ],
                         "personal_emails_validated_at": [
                           "2026-08-06"
                         ],
-                        "personal_emails_risk_score": [
-                          "A"
-                        ],
-                        "country": "United States",
-                        "current_industry": "Information Technology",
+                        "current_role_start_date": "2023-09-01",
                         "company": {
                           "name": "MoltSets",
-                          "website_url": "https://moltsets.com",
-                          "linkedin_url": "https://linkedin.com/company/moltsets",
+                          "linkedin_url": "linkedin.com/company/moltsets",
+                          "website_url": "moltsets.com",
                           "industry": "Information Technology",
-                          "revenue": "1200000"
-                        }
+                          "employee_count": 9,
+                          "employee_range": "1-10",
+                          "revenue_range": "$1M - $5M"
+                        },
+                        "last_updated_at": "2025-04-01",
+                        "business_email_risk_score": "A",
+                        "personal_email_risk_score": "A",
+                        "personal_emails_risk_score": [
+                          "A"
+                        ]
                       },
                       "status": "ok",
                       "metadata": {
@@ -3093,28 +3102,37 @@
                     "summary": "No data found — still HTTP 200",
                     "value": {
                       "results": {
+                        "linkedin_url": null,
                         "first_name": null,
                         "last_name": null,
                         "full_name": null,
                         "title": null,
+                        "headline": null,
                         "seniority": null,
-                        "linkedin_url": null,
+                        "functional_area": null,
+                        "city": null,
+                        "state": null,
+                        "country": null,
                         "business_email": null,
-                        "business_email_risk_score": null,
+                        "business_email_validated_at": null,
                         "personal_email": null,
-                        "personal_email_risk_score": null,
+                        "personal_email_validated_at": null,
                         "personal_emails": [],
                         "personal_emails_validated_at": [],
-                        "personal_emails_risk_score": [],
-                        "country": null,
-                        "current_industry": null,
+                        "current_role_start_date": null,
                         "company": {
                           "name": null,
-                          "website_url": null,
                           "linkedin_url": null,
+                          "website_url": null,
                           "industry": null,
-                          "revenue": null
-                        }
+                          "employee_count": null,
+                          "employee_range": null,
+                          "revenue_range": null
+                        },
+                        "last_updated_at": null,
+                        "business_email_risk_score": null,
+                        "personal_email_risk_score": null,
+                        "personal_emails_risk_score": []
                       },
                       "status": "not_found",
                       "metadata": {
