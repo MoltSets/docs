@@ -57,6 +57,8 @@ How the subscription works:
 
 When you run out, calls return `402` with `insufficient_phone_tokens`; a batch drops the items it can't cover and returns the rest. Each call reports `phone_tokens_used` and `phone_tokens_remaining` in `metadata`.
 
+To check your phone tokens without spending any, call `get_account`. It returns `phone_token_balance`, your monthly `phone_token_allowance`, and your subscription in `phone_plan`. Without a subscription, the counts are `0` and `phone_plan` is `null`.
+
 ## How the window works
 
 This works as a **rolling window, not a fixed daily reset**. The moment you make your first request, a 5-hour window opens. Everything you use for the next 5 hours draws from the same pool — the figure in your plan's row above. When the window closes, the limit resets, and your next request kicks off a fresh 5-hour window.

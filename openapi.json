@@ -3916,7 +3916,7 @@
       "post": {
         "summary": "Get Account",
         "operationId": "getAccount",
-        "description": "The Get Account API retrieves your MoltSets account details: account name, current plan, account status, remaining credit balance, whether personal-email lookups are on your plan (`personal_email_available`), live Fair Use standing (`fair_use`), number of API keys, and user count.\n\n**Use this endpoint to:**\n- Check account health programmatically\n- Verify your account is active\n- Check whether `linkedin_to_personal_email_usa` and `linkedin_to_best_personal_email_usa` are available on your plan\n- Display account information inside your own application or dashboard",
+        "description": "The Get Account API retrieves your MoltSets account details: account name, current plan, account status, remaining credit balance, whether personal-email lookups are on your plan (`personal_email_available`), live Fair Use standing (`fair_use`), phone token balance and phone token subscription, number of API keys, and user count.\n\n**Use this endpoint to:**\n- Check account health programmatically\n- Verify your account is active\n- Check whether `linkedin_to_personal_email_usa` and `linkedin_to_best_personal_email_usa` are available on your plan\n- Check your phone token balance before running `linkedin_to_mobile_phone`\n- Display account information inside your own application or dashboard",
         "tags": [
           "Account"
         ],
@@ -3970,10 +3970,6 @@
                         "unlimited": {
                           "type": "boolean",
                           "description": "true if the account has unlimited tokens"
-                        },
-                        "personal_email_available": {
-                          "type": "boolean",
-                          "description": "`true` if the account's plan includes the dedicated personal-email tools (`linkedin_to_personal_email_usa`, `linkedin_to_best_personal_email_usa`). Where `false`, those tools return `403` with `plan_restricted`."
                         },
                         "fair_use": {
                           "type": "object",
@@ -4159,6 +4155,42 @@
                             }
                           }
                         },
+                        "search_trial": {
+                          "type": "object",
+                          "nullable": true,
+                          "description": "Free-tier search trial standing. `null` on paid plans."
+                        },
+                        "phone_token_balance": {
+                          "type": "integer",
+                          "description": "Phone tokens available to spend on `linkedin_to_mobile_phone` results. Equal to `phone_tokens_plan` plus `phone_tokens_purchased`. `0` without a phone token subscription."
+                        },
+                        "phone_token_allowance": {
+                          "type": "integer",
+                          "description": "Phone tokens granted each month by your phone token subscription. `0` without a subscription."
+                        },
+                        "phone_tokens_purchased": {
+                          "type": "integer",
+                          "description": "Portion of `phone_token_balance` that came from purchased tokens."
+                        },
+                        "phone_tokens_plan": {
+                          "type": "integer",
+                          "description": "Portion of `phone_token_balance` that came from your phone token subscription, including tokens rolled over from earlier months."
+                        },
+                        "phone_plan": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Phone token subscription identifier, for example `phone_plan_27`. `null` without a subscription."
+                        },
+                        "phone_plan_ends_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "nullable": true,
+                          "description": "ISO 8601 timestamp when a cancelled phone token subscription ends. `null` while the subscription is active, or without one."
+                        },
+                        "personal_email_available": {
+                          "type": "boolean",
+                          "description": "`true` if the account's plan includes the dedicated personal-email tools (`linkedin_to_personal_email_usa`, `linkedin_to_best_personal_email_usa`). Where `false`, those tools return `403` with `plan_restricted`."
+                        },
                         "api_key_count": {
                           "type": "integer",
                           "description": "Number of API keys on the account"
@@ -4183,76 +4215,157 @@
                     }
                   }
                 },
-                "example": {
-                  "results": {
-                    "id": "kZ9pQ2rt",
-                    "name": "BrightHollow",
-                    "status": "active",
-                    "plan": "subscription_97",
-                    "token_balance": -1,
-                    "unlimited": true,
-                    "personal_email_available": true,
-                    "fair_use": {
-                      "enrich": {
-                        "records": {
-                          "5h": {
-                            "limit": 15000,
-                            "used": 0,
-                            "remaining": 15000,
-                            "resets_at": null
+                "examples": {
+                  "with_phone_plan": {
+                    "summary": "With a phone token subscription",
+                    "value": {
+                      "results": {
+                        "id": "kZ9pQ2rt",
+                        "name": "BrightHollow",
+                        "status": "active",
+                        "plan": "subscription_397",
+                        "token_balance": -1,
+                        "unlimited": true,
+                        "fair_use": {
+                          "enrich": {
+                            "records": {
+                              "5h": {
+                                "limit": 150000,
+                                "used": 20,
+                                "remaining": 149980,
+                                "resets_at": "2026-10-07T15:34:16Z"
+                              },
+                              "1w": {
+                                "limit": 750000,
+                                "used": 197,
+                                "remaining": 749803,
+                                "resets_at": "2026-10-11T18:54:25Z"
+                              }
+                            },
+                            "requests": {
+                              "5h": {
+                                "limit": 750000,
+                                "used": 21,
+                                "remaining": 749979,
+                                "resets_at": "2026-10-07T15:34:16Z"
+                              }
+                            }
                           },
-                          "1w": {
-                            "limit": 75000,
-                            "used": 0,
-                            "remaining": 75000,
-                            "resets_at": null
+                          "search": {
+                            "records": {
+                              "5h": {
+                                "limit": 75000,
+                                "used": 0,
+                                "remaining": 75000,
+                                "resets_at": null
+                              },
+                              "1w": {
+                                "limit": 375000,
+                                "used": 67649,
+                                "remaining": 307351,
+                                "resets_at": "2026-10-11T08:00:15Z"
+                              }
+                            },
+                            "requests": {
+                              "5h": {
+                                "limit": 375000,
+                                "used": 0,
+                                "remaining": 375000,
+                                "resets_at": null
+                              }
+                            }
                           }
                         },
-                        "requests": {
-                          "5h": {
-                            "limit": 75000,
-                            "used": 0,
-                            "remaining": 75000,
-                            "resets_at": null
-                          }
-                        }
+                        "search_trial": null,
+                        "phone_token_balance": 98,
+                        "phone_token_allowance": 180,
+                        "phone_tokens_purchased": 10,
+                        "phone_tokens_plan": 88,
+                        "phone_plan": "phone_plan_27",
+                        "phone_plan_ends_at": null,
+                        "personal_email_available": true,
+                        "api_key_count": 3,
+                        "user_count": 5,
+                        "created_at": "2026-05-13T18:36:29Z"
                       },
-                      "search": {
-                        "records": {
-                          "5h": {
-                            "limit": 7500,
-                            "used": 0,
-                            "remaining": 7500,
-                            "resets_at": null
+                      "status": "ok",
+                      "metadata": {}
+                    }
+                  },
+                  "without_phone_plan": {
+                    "summary": "Without a phone token subscription",
+                    "value": {
+                      "results": {
+                        "id": "Xc4mT8wa",
+                        "name": "Northwind Labs",
+                        "status": "active",
+                        "plan": "subscription_27",
+                        "token_balance": -1,
+                        "unlimited": true,
+                        "fair_use": {
+                          "enrich": {
+                            "records": {
+                              "5h": {
+                                "limit": 1000,
+                                "used": 0,
+                                "remaining": 1000,
+                                "resets_at": null
+                              },
+                              "1w": {
+                                "limit": 5000,
+                                "used": 2,
+                                "remaining": 4998,
+                                "resets_at": "2026-10-13T09:19:03Z"
+                              }
+                            },
+                            "requests": {
+                              "5h": {
+                                "limit": 5000,
+                                "used": 0,
+                                "remaining": 5000,
+                                "resets_at": null
+                              }
+                            }
                           },
-                          "1w": {
-                            "limit": 37500,
-                            "used": 0,
-                            "remaining": 37500,
-                            "resets_at": null
+                          "search": {
+                            "records": {
+                              "5h": {
+                                "limit": 500,
+                                "used": 0,
+                                "remaining": 500,
+                                "resets_at": null
+                              },
+                              "1w": {
+                                "limit": 2500,
+                                "used": 4,
+                                "remaining": 2496,
+                                "resets_at": "2026-10-13T07:56:06Z"
+                              }
+                            },
+                            "requests": {
+                              "5h": {
+                                "limit": 2500,
+                                "used": 0,
+                                "remaining": 2500,
+                                "resets_at": null
+                              }
+                            }
                           }
                         },
-                        "requests": {
-                          "5h": {
-                            "limit": 37500,
-                            "used": 0,
-                            "remaining": 37500,
-                            "resets_at": null
-                          }
-                        }
-                      }
-                    },
-                    "api_key_count": 1,
-                    "user_count": 1,
-                    "created_at": "2026-06-12T16:11:41Z"
-                  },
-                  "status": "ok",
-                  "metadata": {
-                    "fair_use": {
-                      "records_remaining_5h": 179999,
-                      "records_reset_5h": "2026-07-15T18:53:16Z",
-                      "records_remaining_1w": 899999,
-                      "records_reset_1w": "2026-07-22T13:53:16Z"
+                        "search_trial": null,
+                        "phone_token_balance": 0,
+                        "phone_token_allowance": 0,
+                        "phone_tokens_purchased": 0,
+                        "phone_tokens_plan": 0,
+                        "phone_plan": null,
+                        "phone_plan_ends_at": null,
+                        "personal_email_available": true,
+                        "api_key_count": 1,
+                        "user_count": 2,
+                        "created_at": "2026-10-05T11:32:39Z"
+                      },
+                      "status": "ok",
+                      "metadata": {}
                     }
                   }
                 }
