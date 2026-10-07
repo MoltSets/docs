@@ -3062,6 +3062,9 @@
                         "personal_emails": [
                           "john.smith@gmail.com"
                         ],
+                        "personal_emails_validated_at": [
+                          "2026-08-06"
+                        ],
                         "personal_emails_risk_score": [
                           "A"
                         ],
@@ -3101,6 +3104,7 @@
                         "personal_email": null,
                         "personal_email_risk_score": null,
                         "personal_emails": [],
+                        "personal_emails_validated_at": [],
                         "personal_emails_risk_score": [],
                         "country": null,
                         "current_industry": null,
