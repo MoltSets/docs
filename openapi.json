@@ -76,6 +76,10 @@
             "type": "boolean",
             "description": "Present and `true` only when the call actually withheld personal-email data because the account does not have the personal-email surface. Read a missing personal email as a plan boundary, not as absent data."
           },
+          "identity_hashes_restricted": {
+            "type": "boolean",
+            "description": "Present and `true` only when the call stripped `business_email_sha256s` because the account is on the \\$397 or \\$997 plan. Read a missing SHA256 hash as a plan boundary, not as absent data."
+          },
           "retry_after": {
             "type": "integer",
             "description": "Seconds until the binding Fair Use window unlocks. Present on Fair Use 429s, and on a batch that returned partial results because items were dropped for Fair Use — the same value is sent as a `Retry-After` header."
@@ -1730,7 +1734,7 @@
       "post": {
         "summary": "Search Business Profile by Name",
         "operationId": "searchBusinessProfileByName",
-        "description": "The Business Profile Finder API finds anyone's full business profile from just their name and company domain.\n\nIt runs a LinkedIn profile search and a firmographic lookup in a single call, and returns the person's job title and company, plus company details such as industry, size, and location. Pass a full name or separate `first_name` and `last_name` fields, and provide the company as a domain, for example `acme.com`. URLs are normalised automatically, and tokens are only charged when a match is found.\n\n**Use this endpoint to:**\n- Build a complete picture of a contact and their employer in one call\n- Qualify leads with company context before outreach\n- Enrich CRM records with job title and firmographic data\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-search/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Search</a>.\n\n**Outcomes:**\nA lookup that finds nothing is not an error. It returns HTTP `200` with `status: \"not_found\"`, empty or null `results`, and the usual `metadata` — and costs no tokens, though it still counts as one request against your Fair Use requests limit. Read `status`, not the HTTP code, to tell a hit from a miss. The API's only `404` is an unknown or retired tool name.",
+        "description": "The Business Profile Finder API finds anyone's full business profile from just their name and company domain.\n\nIt runs a LinkedIn profile search and a firmographic lookup in a single call, and returns the person's full business profile: name, job title, seniority, LinkedIn summary, skills, location, business email, and hashed business emails, plus company firmographics such as industry, NAICS and SIC codes, headcount, and revenue. Pass `include_experience: true` to add the person's full job history. Pass a full name or separate `first_name` and `last_name` fields, and provide the company as a domain, for example `acme.com`. URLs are normalised automatically, and tokens are only charged when a match is found.\n\n**Use this endpoint to:**\n- Build a complete picture of a contact and their employer in one call\n- Qualify leads with company context before outreach\n- Enrich CRM records with job title and firmographic data\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-search/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Search</a>.\n\n**Response fields:**\n- `summary` is the person's LinkedIn \"about\" text. `position_summary` describes their current role.\n- `skills` and `interests` are arrays of strings. `connection_count` is the person's LinkedIn connection count.\n- `business_email_md5s` holds the MD5 of every business email MoltSets holds for the person. `business_email_sha256s` holds the SHA256 of the same emails. Both can be present even when `business_email` is empty. `business_email` stays the single best validated pick.\n- `company` adds `description`, `linkedin_industry` (LinkedIn's own industry label, next to `industry`), `naics_codes` and `sic_codes` (arrays of `{code, title}`), and `revenue` (an exact figure, next to `revenue_range`).\n- `experience` is returned only when you pass `include_experience: true`. It is an array of roles, each with `title`, `company`, `company_linkedin_url`, `start_date`, `end_date`, `is_current`, `seniority`, `function`, and `description`. A current role has no `end_date`. Any field without data is left out of a role.\n\n**Hashed email availability:**\n`business_email_md5s` is returned on all plans. `business_email_sha256s` is not available on the \\$397 / month and \\$997 / month plans. On those plans the field is stripped from `results` and `metadata.identity_hashes_restricted` is `true`. Read a missing `business_email_sha256s` as a plan boundary, not as absent data.\n\n**Outcomes:**\nA lookup that finds nothing is not an error. It returns HTTP `200` with `status: \"not_found\"`, empty or null `results`, and the usual `metadata` — and costs no tokens, though it still counts as one request against your Fair Use requests limit. Read `status`, not the HTTP code, to tell a hit from a miss. The API's only `404` is an unknown or retired tool name.",
         "tags": [
           "Search"
         ],
@@ -1761,6 +1765,11 @@
                   "company_domain": {
                     "type": "string",
                     "description": "Alias for `company` — company domain or URL."
+                  },
+                  "include_experience": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Set to `true` to add `experience`, the person's full job history. Off by default because job history is the bulk of a profile. The current role is always returned in `title`, `seniority`, `functional_area`, and `current_role_start_date`."
                   }
                 }
               },
@@ -1781,18 +1790,64 @@
                     "summary": "Data found",
                     "value": {
                       "results": {
-                        "full_name": "John Smith",
+                        "linkedin_url": "https://linkedin.com/in/john-smith-123",
                         "first_name": "John",
                         "last_name": "Smith",
-                        "title": "VP of Engineering",
-                        "company": "Acme Inc",
-                        "company_domain": "acme.com",
-                        "linkedin_url": "https://linkedin.com/in/john-smith-123",
-                        "firmographics": {
+                        "full_name": "John Smith",
+                        "title": "Senior Associate - Technical Director",
+                        "headline": "Technical Director @ MoltSets | Data infrastructure for GTM teams",
+                        "summary": "Technical director building data infrastructure for go-to-market teams.",
+                        "position_summary": "Leads the data platform behind MoltSets enrichment APIs.",
+                        "seniority": "Senior",
+                        "functional_area": "Engineering",
+                        "skills": [
+                          "Data Engineering",
+                          "Python",
+                          "PostgreSQL"
+                        ],
+                        "interests": [
+                          "B2B SaaS",
+                          "Open Source"
+                        ],
+                        "connection_count": 930,
+                        "city": "Denver",
+                        "state": "Colorado",
+                        "country": "United States",
+                        "business_email": "john.smith@example.com",
+                        "business_email_validated_at": "2026-09-12",
+                        "business_email_md5s": [
+                          "900b89c0e5ece81f7fb0a72ef3dXXXXX"
+                        ],
+                        "business_email_sha256s": [
+                          "f101da855ed67dc34c9729f04df8aeefXXXXX"
+                        ],
+                        "current_role_start_date": "2023-09-01",
+                        "company": {
+                          "name": "MoltSets",
+                          "linkedin_url": "linkedin.com/company/moltsets",
+                          "website_url": "moltsets.com",
+                          "description": "MoltSets is a go-to-market enrichment API for AI agents.",
                           "industry": "Information Technology",
-                          "employee_count": "350",
-                          "revenue": "$20M - $50M"
-                        }
+                          "linkedin_industry": "Software Development",
+                          "naics_codes": [
+                            {
+                              "code": "518210",
+                              "title": "Computing Infrastructure Providers, Data Processing, Web Hosting, and Related Services"
+                            }
+                          ],
+                          "sic_codes": [
+                            {
+                              "code": "7374",
+                              "title": "Computer Processing and Data Preparation"
+                            }
+                          ],
+                          "employee_count": 9,
+                          "employee_range": "1-10",
+                          "revenue": 3200000,
+                          "revenue_range": "$1M - $5M"
+                        },
+                        "last_updated_at": "2025-04-01",
+                        "business_email_risk_score": "A"
                       },
                       "status": "ok",
                       "metadata": {
@@ -1805,22 +1860,215 @@
                       }
                     }
                   },
+                  "found_with_experience": {
+                    "summary": "Data found, with include_experience: true",
+                    "value": {
+                      "results": {
+                        "linkedin_url": "https://linkedin.com/in/john-smith-123",
+                        "first_name": "John",
+                        "last_name": "Smith",
+                        "full_name": "John Smith",
+                        "title": "Senior Associate - Technical Director",
+                        "headline": "Technical Director @ MoltSets | Data infrastructure for GTM teams",
+                        "summary": "Technical director building data infrastructure for go-to-market teams.",
+                        "position_summary": "Leads the data platform behind MoltSets enrichment APIs.",
+                        "seniority": "Senior",
+                        "functional_area": "Engineering",
+                        "skills": [
+                          "Data Engineering",
+                          "Python",
+                          "PostgreSQL"
+                        ],
+                        "interests": [
+                          "B2B SaaS",
+                          "Open Source"
+                        ],
+                        "connection_count": 930,
+                        "city": "Denver",
+                        "state": "Colorado",
+                        "country": "United States",
+                        "business_email": "john.smith@example.com",
+                        "business_email_validated_at": "2026-09-12",
+                        "business_email_md5s": [
+                          "900b89c0e5ece81f7fb0a72ef3dXXXXX"
+                        ],
+                        "business_email_sha256s": [
+                          "f101da855ed67dc34c9729f04df8aeefXXXXX"
+                        ],
+                        "current_role_start_date": "2023-09-01",
+                        "experience": [
+                          {
+                            "title": "Senior Associate - Technical Director",
+                            "company": "MoltSets",
+                            "company_linkedin_url": "https://www.linkedin.com/company/moltsets",
+                            "start_date": "2023-09-01",
+                            "is_current": true,
+                            "seniority": "Senior",
+                            "function": "Engineering",
+                            "description": "Leads data infrastructure for GTM enrichment products."
+                          },
+                          {
+                            "title": "Data Engineer",
+                            "company": "Acme Inc",
+                            "company_linkedin_url": "https://www.linkedin.com/company/acme",
+                            "start_date": "2019-04-01",
+                            "end_date": "2023-08-01",
+                            "is_current": false,
+                            "seniority": "Entry",
+                            "function": "Engineering"
+                          }
+                        ],
+                        "company": {
+                          "name": "MoltSets",
+                          "linkedin_url": "linkedin.com/company/moltsets",
+                          "website_url": "moltsets.com",
+                          "description": "MoltSets is a go-to-market enrichment API for AI agents.",
+                          "industry": "Information Technology",
+                          "linkedin_industry": "Software Development",
+                          "naics_codes": [
+                            {
+                              "code": "518210",
+                              "title": "Computing Infrastructure Providers, Data Processing, Web Hosting, and Related Services"
+                            }
+                          ],
+                          "sic_codes": [
+                            {
+                              "code": "7374",
+                              "title": "Computer Processing and Data Preparation"
+                            }
+                          ],
+                          "employee_count": 9,
+                          "employee_range": "1-10",
+                          "revenue": 3200000,
+                          "revenue_range": "$1M - $5M"
+                        },
+                        "last_updated_at": "2025-04-01",
+                        "business_email_risk_score": "A"
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        }
+                      }
+                    }
+                  },
+                  "hashes_restricted": {
+                    "summary": "Data found on the $397 or $997 plan (SHA256 hashes stripped)",
+                    "value": {
+                      "results": {
+                        "linkedin_url": "https://linkedin.com/in/john-smith-123",
+                        "first_name": "John",
+                        "last_name": "Smith",
+                        "full_name": "John Smith",
+                        "title": "Senior Associate - Technical Director",
+                        "headline": "Technical Director @ MoltSets | Data infrastructure for GTM teams",
+                        "summary": "Technical director building data infrastructure for go-to-market teams.",
+                        "position_summary": "Leads the data platform behind MoltSets enrichment APIs.",
+                        "seniority": "Senior",
+                        "functional_area": "Engineering",
+                        "skills": [
+                          "Data Engineering",
+                          "Python",
+                          "PostgreSQL"
+                        ],
+                        "interests": [
+                          "B2B SaaS",
+                          "Open Source"
+                        ],
+                        "connection_count": 930,
+                        "city": "Denver",
+                        "state": "Colorado",
+                        "country": "United States",
+                        "business_email": "john.smith@example.com",
+                        "business_email_validated_at": "2026-09-12",
+                        "business_email_md5s": [
+                          "900b89c0e5ece81f7fb0a72ef3dXXXXX"
+                        ],
+                        "current_role_start_date": "2023-09-01",
+                        "company": {
+                          "name": "MoltSets",
+                          "linkedin_url": "linkedin.com/company/moltsets",
+                          "website_url": "moltsets.com",
+                          "description": "MoltSets is a go-to-market enrichment API for AI agents.",
+                          "industry": "Information Technology",
+                          "linkedin_industry": "Software Development",
+                          "naics_codes": [
+                            {
+                              "code": "518210",
+                              "title": "Computing Infrastructure Providers, Data Processing, Web Hosting, and Related Services"
+                            }
+                          ],
+                          "sic_codes": [
+                            {
+                              "code": "7374",
+                              "title": "Computer Processing and Data Preparation"
+                            }
+                          ],
+                          "employee_count": 9,
+                          "employee_range": "1-10",
+                          "revenue": 3200000,
+                          "revenue_range": "$1M - $5M"
+                        },
+                        "last_updated_at": "2025-04-01",
+                        "business_email_risk_score": "A"
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
+                        "identity_hashes_restricted": true
+                      }
+                    }
+                  },
                   "not_found": {
                     "summary": "No data found — still HTTP 200",
                     "value": {
                       "results": {
-                        "full_name": null,
+                        "linkedin_url": null,
                         "first_name": null,
                         "last_name": null,
+                        "full_name": null,
                         "title": null,
-                        "company": null,
-                        "company_domain": null,
-                        "linkedin_url": null,
-                        "firmographics": {
+                        "headline": null,
+                        "summary": null,
+                        "position_summary": null,
+                        "seniority": null,
+                        "functional_area": null,
+                        "skills": [],
+                        "interests": [],
+                        "connection_count": null,
+                        "city": null,
+                        "state": null,
+                        "country": null,
+                        "business_email": null,
+                        "business_email_validated_at": null,
+                        "business_email_md5s": [],
+                        "business_email_sha256s": [],
+                        "current_role_start_date": null,
+                        "company": {
+                          "name": null,
+                          "linkedin_url": null,
+                          "website_url": null,
+                          "description": null,
                           "industry": null,
+                          "linkedin_industry": null,
+                          "naics_codes": [],
+                          "sic_codes": [],
                           "employee_count": null,
-                          "revenue": null
-                        }
+                          "employee_range": null,
+                          "revenue": null,
+                          "revenue_range": null
+                        },
+                        "last_updated_at": null,
+                        "business_email_risk_score": null
                       },
                       "status": "not_found",
                       "metadata": {
@@ -3016,7 +3264,7 @@
       "post": {
         "summary": "Reverse LinkedIn Lookup",
         "operationId": "linkedinToBusinessProfile",
-        "description": "The Reverse LinkedIn Lookup API resolves a LinkedIn profile URL into a complete business profile, including full name, job title, seniority, company name, company website, industry, headcount, revenue range, location, a valid business email, and a personal email.\n\nThis is MoltSets' most complete LinkedIn enrichment endpoint. Use it when you need the full picture of a contact and their employer in a single call.\n\n**Use this endpoint to:**\n- Turn a LinkedIn URL into a fully enriched contact record\n- Get company firmographics alongside personal contact details\n- Power CRM enrichment workflows from a single input\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**Outcomes:**\nA lookup that finds nothing is not an error. It returns HTTP `200` with `status: \"not_found\"`, empty or null `results`, and the usual `metadata` — and costs no tokens, though it still counts as one request against your Fair Use requests limit. Read `status`, not the HTTP code, to tell a hit from a miss. The API's only `404` is an unknown or retired tool name.",
+        "description": "The Reverse LinkedIn Lookup API resolves a LinkedIn profile URL into a complete business profile, including full name, job title, seniority, LinkedIn summary, skills, location, a valid business email, hashed business emails, and a personal email, plus company firmographics such as industry, NAICS and SIC codes, headcount, and revenue. Pass `include_experience: true` to add the person's full job history.\n\nThis is MoltSets' most complete LinkedIn enrichment endpoint. Use it when you need the full picture of a contact and their employer in a single call.\n\n**Use this endpoint to:**\n- Turn a LinkedIn URL into a fully enriched contact record\n- Get company firmographics alongside personal contact details\n- Power CRM enrichment workflows from a single input\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**Response fields:**\n- `summary` is the person's LinkedIn \"about\" text. `position_summary` describes their current role.\n- `skills` and `interests` are arrays of strings. `connection_count` is the person's LinkedIn connection count.\n- `business_email_md5s` holds the MD5 of every business email MoltSets holds for the person. `business_email_sha256s` holds the SHA256 of the same emails. Both can be present even when `business_email` is empty. `business_email` stays the single best validated pick.\n- `company` adds `description`, `linkedin_industry` (LinkedIn's own industry label, next to `industry`), `naics_codes` and `sic_codes` (arrays of `{code, title}`), and `revenue` (an exact figure, next to `revenue_range`).\n- `experience` is returned only when you pass `include_experience: true`. It is an array of roles, each with `title`, `company`, `company_linkedin_url`, `start_date`, `end_date`, `is_current`, `seniority`, `function`, and `description`. A current role has no `end_date`. Any field without data is left out of a role.\n\n**Hashed email availability:**\n`business_email_md5s` is returned on all plans. `business_email_sha256s` is not available on the \\$397 / month and \\$997 / month plans. On those plans the field is stripped from `results` and `metadata.identity_hashes_restricted` is `true`. Read a missing `business_email_sha256s` as a plan boundary, not as absent data.\n\n**Outcomes:**\nA lookup that finds nothing is not an error. It returns HTTP `200` with `status: \"not_found\"`, empty or null `results`, and the usual `metadata` — and costs no tokens, though it still counts as one request against your Fair Use requests limit. Read `status`, not the HTTP code, to tell a hit from a miss. The API's only `404` is an unknown or retired tool name.",
         "tags": [
           "Reverse Lookups"
         ],
@@ -3033,6 +3281,26 @@
                   "linkedin_url": {
                     "type": "string",
                     "example": "https://linkedin.com/in/retentionadam"
+                  },
+                  "include_experience": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Set to `true` to add `experience`, the person's full job history. Off by default because job history is the bulk of a profile. The current role is always returned in `title`, `seniority`, `functional_area`, and `current_role_start_date`."
+                  }
+                }
+              },
+              "examples": {
+                "default": {
+                  "summary": "Profile without job history",
+                  "value": {
+                    "linkedin_url": "https://linkedin.com/in/retentionadam"
+                  }
+                },
+                "with_experience": {
+                  "summary": "Profile with full job history",
+                  "value": {
+                    "linkedin_url": "https://linkedin.com/in/retentionadam",
+                    "include_experience": true
                   }
                 }
               }
@@ -3055,13 +3323,31 @@
                         "full_name": "John Smith",
                         "title": "Senior Associate - Technical Director",
                         "headline": "Technical Director @ MoltSets | Data infrastructure for GTM teams",
+                        "summary": "Technical director building data infrastructure for go-to-market teams.",
+                        "position_summary": "Leads the data platform behind MoltSets enrichment APIs.",
                         "seniority": "Senior",
                         "functional_area": "Engineering",
+                        "skills": [
+                          "Data Engineering",
+                          "Python",
+                          "PostgreSQL"
+                        ],
+                        "interests": [
+                          "B2B SaaS",
+                          "Open Source"
+                        ],
+                        "connection_count": 930,
                         "city": "Denver",
                         "state": "Colorado",
                         "country": "United States",
                         "business_email": "john.smith@example.com",
                         "business_email_validated_at": "2026-09-12",
+                        "business_email_md5s": [
+                          "900b89c0e5ece81f7fb0a72ef3dXXXXX"
+                        ],
+                        "business_email_sha256s": [
+                          "f101da855ed67dc34c9729f04df8aeefXXXXX"
+                        ],
                         "personal_email": "john.smith@gmail.com",
                         "personal_email_validated_at": "2026-09-29",
                         "personal_emails": [
@@ -3075,9 +3361,24 @@
                           "name": "MoltSets",
                           "linkedin_url": "linkedin.com/company/moltsets",
                           "website_url": "moltsets.com",
+                          "description": "MoltSets is a go-to-market enrichment API for AI agents.",
                           "industry": "Information Technology",
+                          "linkedin_industry": "Software Development",
+                          "naics_codes": [
+                            {
+                              "code": "518210",
+                              "title": "Computing Infrastructure Providers, Data Processing, Web Hosting, and Related Services"
+                            }
+                          ],
+                          "sic_codes": [
+                            {
+                              "code": "7374",
+                              "title": "Computer Processing and Data Preparation"
+                            }
+                          ],
                           "employee_count": 9,
                           "employee_range": "1-10",
+                          "revenue": 3200000,
                           "revenue_range": "$1M - $5M"
                         },
                         "last_updated_at": "2025-04-01",
@@ -3098,6 +3399,198 @@
                       }
                     }
                   },
+                  "found_with_experience": {
+                    "summary": "Data found, with include_experience: true",
+                    "value": {
+                      "results": {
+                        "linkedin_url": "https://linkedin.com/in/john-smith-123",
+                        "first_name": "John",
+                        "last_name": "Smith",
+                        "full_name": "John Smith",
+                        "title": "Senior Associate - Technical Director",
+                        "headline": "Technical Director @ MoltSets | Data infrastructure for GTM teams",
+                        "summary": "Technical director building data infrastructure for go-to-market teams.",
+                        "position_summary": "Leads the data platform behind MoltSets enrichment APIs.",
+                        "seniority": "Senior",
+                        "functional_area": "Engineering",
+                        "skills": [
+                          "Data Engineering",
+                          "Python",
+                          "PostgreSQL"
+                        ],
+                        "interests": [
+                          "B2B SaaS",
+                          "Open Source"
+                        ],
+                        "connection_count": 930,
+                        "city": "Denver",
+                        "state": "Colorado",
+                        "country": "United States",
+                        "business_email": "john.smith@example.com",
+                        "business_email_validated_at": "2026-09-12",
+                        "business_email_md5s": [
+                          "900b89c0e5ece81f7fb0a72ef3dXXXXX"
+                        ],
+                        "business_email_sha256s": [
+                          "f101da855ed67dc34c9729f04df8aeefXXXXX"
+                        ],
+                        "personal_email": "john.smith@gmail.com",
+                        "personal_email_validated_at": "2026-09-29",
+                        "personal_emails": [
+                          "jsmith.denver@gmail.com"
+                        ],
+                        "personal_emails_validated_at": [
+                          "2026-08-06"
+                        ],
+                        "current_role_start_date": "2023-09-01",
+                        "experience": [
+                          {
+                            "title": "Senior Associate - Technical Director",
+                            "company": "MoltSets",
+                            "company_linkedin_url": "https://www.linkedin.com/company/moltsets",
+                            "start_date": "2023-09-01",
+                            "is_current": true,
+                            "seniority": "Senior",
+                            "function": "Engineering",
+                            "description": "Leads data infrastructure for GTM enrichment products."
+                          },
+                          {
+                            "title": "Data Engineer",
+                            "company": "Acme Inc",
+                            "company_linkedin_url": "https://www.linkedin.com/company/acme",
+                            "start_date": "2019-04-01",
+                            "end_date": "2023-08-01",
+                            "is_current": false,
+                            "seniority": "Entry",
+                            "function": "Engineering"
+                          }
+                        ],
+                        "company": {
+                          "name": "MoltSets",
+                          "linkedin_url": "linkedin.com/company/moltsets",
+                          "website_url": "moltsets.com",
+                          "description": "MoltSets is a go-to-market enrichment API for AI agents.",
+                          "industry": "Information Technology",
+                          "linkedin_industry": "Software Development",
+                          "naics_codes": [
+                            {
+                              "code": "518210",
+                              "title": "Computing Infrastructure Providers, Data Processing, Web Hosting, and Related Services"
+                            }
+                          ],
+                          "sic_codes": [
+                            {
+                              "code": "7374",
+                              "title": "Computer Processing and Data Preparation"
+                            }
+                          ],
+                          "employee_count": 9,
+                          "employee_range": "1-10",
+                          "revenue": 3200000,
+                          "revenue_range": "$1M - $5M"
+                        },
+                        "last_updated_at": "2025-04-01",
+                        "business_email_risk_score": "A",
+                        "personal_email_risk_score": "A",
+                        "personal_emails_risk_score": [
+                          "A"
+                        ]
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        }
+                      }
+                    }
+                  },
+                  "hashes_restricted": {
+                    "summary": "Data found on the $397 or $997 plan (SHA256 hashes stripped)",
+                    "value": {
+                      "results": {
+                        "linkedin_url": "https://linkedin.com/in/john-smith-123",
+                        "first_name": "John",
+                        "last_name": "Smith",
+                        "full_name": "John Smith",
+                        "title": "Senior Associate - Technical Director",
+                        "headline": "Technical Director @ MoltSets | Data infrastructure for GTM teams",
+                        "summary": "Technical director building data infrastructure for go-to-market teams.",
+                        "position_summary": "Leads the data platform behind MoltSets enrichment APIs.",
+                        "seniority": "Senior",
+                        "functional_area": "Engineering",
+                        "skills": [
+                          "Data Engineering",
+                          "Python",
+                          "PostgreSQL"
+                        ],
+                        "interests": [
+                          "B2B SaaS",
+                          "Open Source"
+                        ],
+                        "connection_count": 930,
+                        "city": "Denver",
+                        "state": "Colorado",
+                        "country": "United States",
+                        "business_email": "john.smith@example.com",
+                        "business_email_validated_at": "2026-09-12",
+                        "business_email_md5s": [
+                          "900b89c0e5ece81f7fb0a72ef3dXXXXX"
+                        ],
+                        "personal_email": "john.smith@gmail.com",
+                        "personal_email_validated_at": "2026-09-29",
+                        "personal_emails": [
+                          "jsmith.denver@gmail.com"
+                        ],
+                        "personal_emails_validated_at": [
+                          "2026-08-06"
+                        ],
+                        "current_role_start_date": "2023-09-01",
+                        "company": {
+                          "name": "MoltSets",
+                          "linkedin_url": "linkedin.com/company/moltsets",
+                          "website_url": "moltsets.com",
+                          "description": "MoltSets is a go-to-market enrichment API for AI agents.",
+                          "industry": "Information Technology",
+                          "linkedin_industry": "Software Development",
+                          "naics_codes": [
+                            {
+                              "code": "518210",
+                              "title": "Computing Infrastructure Providers, Data Processing, Web Hosting, and Related Services"
+                            }
+                          ],
+                          "sic_codes": [
+                            {
+                              "code": "7374",
+                              "title": "Computer Processing and Data Preparation"
+                            }
+                          ],
+                          "employee_count": 9,
+                          "employee_range": "1-10",
+                          "revenue": 3200000,
+                          "revenue_range": "$1M - $5M"
+                        },
+                        "last_updated_at": "2025-04-01",
+                        "business_email_risk_score": "A",
+                        "personal_email_risk_score": "A",
+                        "personal_emails_risk_score": [
+                          "A"
+                        ]
+                      },
+                      "status": "ok",
+                      "metadata": {
+                        "fair_use": {
+                          "records_remaining_5h": 179999,
+                          "records_reset_5h": "2026-07-15T18:53:16Z",
+                          "records_remaining_1w": 899999,
+                          "records_reset_1w": "2026-07-22T13:53:16Z"
+                        },
+                        "identity_hashes_restricted": true
+                      }
+                    }
+                  },
                   "not_found": {
                     "summary": "No data found — still HTTP 200",
                     "value": {
@@ -3108,13 +3601,20 @@
                         "full_name": null,
                         "title": null,
                         "headline": null,
+                        "summary": null,
+                        "position_summary": null,
                         "seniority": null,
                         "functional_area": null,
+                        "skills": [],
+                        "interests": [],
+                        "connection_count": null,
                         "city": null,
                         "state": null,
                         "country": null,
                         "business_email": null,
                         "business_email_validated_at": null,
+                        "business_email_md5s": [],
+                        "business_email_sha256s": [],
                         "personal_email": null,
                         "personal_email_validated_at": null,
                         "personal_emails": [],
@@ -3124,9 +3624,14 @@
                           "name": null,
                           "linkedin_url": null,
                           "website_url": null,
+                          "description": null,
                           "industry": null,
+                          "linkedin_industry": null,
+                          "naics_codes": [],
+                          "sic_codes": [],
                           "employee_count": null,
                           "employee_range": null,
+                          "revenue": null,
                           "revenue_range": null
                         },
                         "last_updated_at": null,
