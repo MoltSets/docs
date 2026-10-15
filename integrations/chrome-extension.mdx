@@ -1,0 +1,172 @@
+---
+title: "MoltSets for LinkedIn Chrome Extension"
+sidebarTitle: "Chrome Extension"
+description: "Enrich any LinkedIn profile in one click. Get a full business profile, graded business email, personal email, or carrier-verified mobile number from a side panel in Chrome."
+---
+
+## Overview
+
+The MoltSets for LinkedIn Chrome Extension puts MoltSets enrichment in a side panel next to LinkedIn. Open a profile, click a lookup, and get verified contact data from the MoltSets database in seconds.
+
+It's built for salespeople, recruiters, and founders who already prospect on LinkedIn and want accurate contact details without copying, pasting, or switching tabs.
+
+<Card title="Install from the Chrome Web Store" icon="chrome" href="https://chromewebstore.google.com/detail/moltsets-for-linkedin/bfhhpbdldppenlgnebjfpabiiiocfahp">
+  Add MoltSets for LinkedIn to Chrome.
+</Card>
+
+<Note>
+  The extension doesn't scrape LinkedIn. It reads only the URL of the profile in your active tab, then looks that URL up in the MoltSets database using the MoltSets API.
+</Note>
+
+## What you get
+
+| Lookup | What it returns | API endpoint |
+|--------|-----------------|--------------|
+| **Full business profile** | Name, headline, job title, seniority, functional area, location, time in role, skills, and company details (name, website, LinkedIn page, industry, employee count, revenue range). Includes the business email, plus personal emails if your plan includes them. | `reverse_linkedin_lookup` |
+| **Business email** | The work email only, with its risk score and last validation date. | `linkedin_to_business_email` |
+| **Personal email** | A personal inbox instead of a work one. US contacts only. | `linkedin_to_best_personal_email_usa` |
+| **Mobile phone** | A carrier-verified mobile number. No landlines. | `linkedin_to_mobile_phone` |
+
+Not sure which to pick? Start with the full business profile.
+
+Every email comes with an A–F risk score that rates how safe the mailbox is to send to. See [Email risk scores](/moltsets-data/email-risk-scores) for what each grade means.
+
+<Info>
+  Mobile lookups need a paid plan with a phone token subscription. One phone token is used per number found. See [Getting carrier-verified mobile phones](/best-practices/getting-carrier-verified-mobile-phones).
+</Info>
+
+## Requirements
+
+- Google Chrome 116 or later
+- A MoltSets account and API key. [Sign up for free](https://app.moltsets.com/signup) to start with 1,000 API calls.
+
+## Setup
+
+<Steps>
+  <Step title="Install the extension">
+    Open the [Chrome Web Store listing](https://chromewebstore.google.com/detail/moltsets-for-linkedin/bfhhpbdldppenlgnebjfpabiiiocfahp) and click **Add to Chrome**.
+  </Step>
+  <Step title="Open the side panel">
+    Click the MoltSets icon in your Chrome toolbar. Pin it from the extensions menu so it's always one click away.
+  </Step>
+  <Step title="Connect your API key">
+    Click **I already have an account**, paste your API key, and click **Connect**. MoltSets keys start with `ms_`. Find or create a key in the [MoltSets app](https://app.moltsets.com/dashboard/api_keys). See [Authentication](/getting-started/authentication) for details.
+
+    New to MoltSets? Click **Sign up for free** instead.
+  </Step>
+  <Step title="Allow LinkedIn access">
+    Click **Allow LinkedIn access** and accept the Chrome prompt. Chrome describes this as reading and changing your data on linkedin.com, but the extension only reads the address of your LinkedIn tab. Nothing on the page is read or changed.
+  </Step>
+</Steps>
+
+## Enrich a profile
+
+<Steps>
+  <Step title="Open a LinkedIn profile">
+    Navigate to any personal LinkedIn profile. The side panel recognizes the profile from the page address.
+  </Step>
+  <Step title="Choose a lookup">
+    Click **Get** next to the data you need: full business profile, business email, personal email, or mobile phone.
+  </Step>
+  <Step title="Use the results">
+    Results appear in the panel in seconds. Click an email or phone number to copy it.
+  </Step>
+</Steps>
+
+The side panel stays open as you move between profiles, so you can work through a list without reopening anything.
+
+New users see a **Getting started** checklist that ticks itself off as you open and enrich your first profile. Click the **?** icon in the footer at any time to open the in-panel guide.
+
+## Control what you spend
+
+- **Nothing runs automatically.** Every lookup starts with your click.
+- **Lookups that find nothing are free.** No tokens are charged for a `not_found` result.
+- **Saved results don't cost again.** Results are saved in your browser. Return to a profile you've already enriched and your data is waiting. Click the refresh icon when you want the latest data.
+
+### Track your usage
+
+Your usage appears at the top of the panel:
+
+- **Free plan:** the number of free tokens remaining. Each lookup that finds something uses 1 token.
+- **Paid plans:** your fair use for the last 5 hours and the last week (5h records, 1w records, 5h requests). See the [Fair Use Policy](https://moltsets.com/fair-use-policy-enrichment/) and [Rate limits](/getting-started/rate-limits).
+
+Click your account name in the footer to open the **Account** panel. It shows your plan, phone token balance, and when your limits reset. It updates as you browse, so an upgrade shows up straight away.
+
+## Enriched contacts
+
+Every profile you enrich lands in your **Enriched contacts** list, most recent first, with what was found for each person.
+
+- **Search** by name, company, or email.
+- **Download** a single profile from its page, or your whole list from the list view, as a CSV file.
+- **Delete** profiles one at a time, or select several and delete them in bulk.
+
+The enriched contacts list reads from your browser only. Opening it never calls the API.
+
+### CSV export
+
+CSV files open cleanly in Excel and Google Sheets and are ready to import into your CRM. Each file has one row per profile with these columns:
+
+| Group | Columns |
+|-------|---------|
+| Person | `linkedin_url`, `full_name`, `first_name`, `last_name`, `headline`, `title`, `seniority`, `functional_area`, `current_role_start_date`, `skills`, `interests`, `connection_count` |
+| Location | `city`, `state`, `country` |
+| Company | `company_name`, `company_website`, `company_linkedin_url`, `company_description`, `company_industry`, `company_employee_count`, `company_employee_range`, `company_revenue_range` |
+| Business email | `business_email`, `business_email_risk_score`, `business_email_validated_at` |
+| Personal email | `personal_email`, `personal_email_risk_score`, `personal_email_validated_at` |
+| Mobile | `mobile_phone`, `mobile_phone_validated_at` |
+| History | `first_enriched_at`, `last_enriched_at` |
+
+List fields such as `skills` and `interests` are joined with `; `.
+
+## Privacy and permissions
+
+- **Reads only the URL.** The extension reads the address of your active LinkedIn tab so it knows which profile you're viewing. It doesn't read page content or add anything to LinkedIn pages.
+- **Sends data only when you click.** A lookup sends the profile URL and your API key to `api.moltsets.com`. Nothing is sent until you click.
+- **Stores data locally.** Your API key and saved results stay in your browser's local extension storage. They aren't synced to other devices or to your MoltSets account.
+- **No tracking.** The extension contains no analytics or advertising code.
+
+Permissions the extension requests:
+
+| Permission | Why |
+|------------|-----|
+| Storage | Keeps your API key and saved results on your device |
+| Side panel | Shows MoltSets beside the page you're viewing |
+| `linkedin.com` | Reads the address of your active tab so the panel can tell when you're on a profile |
+| `api.moltsets.com` | Runs the lookups you ask for |
+
+### Remove your data
+
+- Click the sign-out icon in the footer to delete your API key from the browser. Saved lookups remain until you delete them.
+- Delete saved lookups for one profile, selected profiles, or all profiles from the **Enriched contacts** list.
+- Remove the extension from Chrome to delete everything it has stored.
+
+See the [MoltSets Privacy Policy](https://moltsets.com/privacy-policy) for full details.
+
+<Warning>
+  You're responsible for using contact data in line with the laws that apply to you, such as GDPR, CAN-SPAM, CASL, and the TCPA. Mobile numbers aren't screened against Do Not Call registries, so check them before you call or text.
+</Warning>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="The panel doesn't recognize the profile">
+    Make sure you're on a personal LinkedIn profile page and that you clicked **Allow LinkedIn access**. Company pages, search results, and the feed aren't profiles.
+  </Accordion>
+  <Accordion title="Mobile lookups are locked">
+    Mobile lookups need a paid plan and a phone token subscription. Click **View plans** in the panel or see [pricing](https://moltsets.com/pricing).
+  </Accordion>
+  <Accordion title="I've used all my free tokens">
+    Upgrade to a paid plan from the [MoltSets billing page](https://app.moltsets.com/dashboard/billing) to keep looking people up.
+  </Accordion>
+  <Accordion title="The data looks wrong">
+    Click **Report a problem** at the bottom of the profile view, or email [support@moltsets.com](mailto:support@moltsets.com).
+  </Accordion>
+</AccordionGroup>
+
+## Go further with the API
+
+The extension enriches one profile at a time. To enrich whole lists, search for people and companies, or connect tools like Claude, ChatGPT, and Clay, use the [MoltSets API](/getting-started/overview), the [MoltSets MCP server](/integrations/moltsets-mcp), or the [Clay integration](/integrations/clay).
+
+<Note>
+  LinkedIn is a trademark of LinkedIn Corporation. MoltSets is not affiliated with, endorsed by, or sponsored by LinkedIn.
+</Note>
