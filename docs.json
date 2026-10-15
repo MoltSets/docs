@@ -84,6 +84,7 @@
                 ]
               },
               "integrations/chrome-extension",
+              "integrations/firefox-extension",
               "integrations/clay"
             ]
           }
