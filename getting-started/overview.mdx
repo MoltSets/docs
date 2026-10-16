@@ -130,6 +130,7 @@ Branch on `error.code`, not on the message text.
 | `fair_use_limit_exceeded` | `429` | A Fair Use **record** window is exhausted — or, on the free tier, the one-time search trial | Wait for `metadata.retry_after` seconds. Where the limit is the free search trial there is no `Retry-After`, because that grant never refreshes |
 | `fair_use_requests_exceeded` | `429` | The 5-hour **request** window is exhausted | Wait for `metadata.retry_after` seconds, then resume |
 | `rate_limited` | `429` | Burst guard — too many requests too quickly | Back off and retry; see [Handling rate limits](/getting-started/rate-limits#handling-rate-limits) |
+| `search_concurrency_exceeded` | `429` | Too many `search_people` / `search_companies` calls running at the same time for your plan | Retry after 1 second (`Retry-After: 1`) and keep fewer searches running in parallel; see [Concurrent searches](/getting-started/rate-limits#concurrent-searches) |
 | `tool_not_found` | `404` | The tool name in the URL is unknown or retired | Check the spelling against [Available tools](#available-tools). This is the API's only `404` |
 | `internal_error` | `500` | The call couldn't complete — usually the endpoint is temporarily unavailable, but an oversized request can also cause it | Try a smaller request first. If that also fails, requeue and retry later — see below |
 

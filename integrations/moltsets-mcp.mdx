@@ -135,6 +135,7 @@ A genuine error comes back with `isError: true` and an `error.code`. What the ag
 | `plan_restricted` | The tool isn't on your plan | A plan condition, not a data miss — switch tools or contact support |
 | `fair_use_limit_exceeded` / `fair_use_requests_exceeded` | A Fair Use window is exhausted | Wait `metadata.retry_after` seconds, then resume |
 | `rate_limited` | Too many calls too quickly | Back off briefly |
+| `search_concurrency_exceeded` | Too many searches running at once | Wait 1 second, then retry with fewer `search_people` / `search_companies` calls in parallel |
 | `unauthorized` / `account_inactive` | Credentials or account problem | Recheck the connector; if the account is inactive, log in at [app.moltsets.com](https://app.moltsets.com) and subscribe to a plan |
 | `tool_not_found` | Unknown or retired tool name | Check the name against `tools/list` |
 | `internal_error` | The call couldn't complete | Retry with a smaller request; if that fails too, stop retrying that tool and come back later |

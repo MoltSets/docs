@@ -65,7 +65,7 @@ Expect a low hit rate on lists of very small businesses, such as local shops, co
 
 ## Pace large runs
 
-Even with fewer calls, don't send a whole list at once. Spread the run out so you stay inside your plan's 5-hour window and clear of the burst guard, which returns `429` with `rate_limited`. See [Rate limits](/getting-started/rate-limits) for how to space scheduled runs.
+Even with fewer calls, don't send a whole list at once. Spread the run out so you stay inside your plan's 5-hour window and clear of the burst guard, which returns `429` with `rate_limited`. If you run searches in parallel, stay at or below your plan's [concurrent search limit](/getting-started/rate-limits#concurrent-searches) — going over returns `429` with `search_concurrency_exceeded`, which you can retry after 1 second. See [Rate limits](/getting-started/rate-limits) for how to space scheduled runs.
 
 ## Summary
 

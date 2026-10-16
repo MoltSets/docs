@@ -196,7 +196,7 @@
       },
       "ErrorRateLimit": {
         "type": "object",
-        "description": "Rate or Fair Use limit. `rate_limited` is the burst/IP guard; `fair_use_limit_exceeded` means a Fair Use **record** window is exhausted (or, on the free tier, the one-time search trial); `fair_use_requests_exceeded` means the 5-hour **request** window is exhausted. The Fair Use codes carry `metadata.retry_after` and a `Retry-After` header.",
+        "description": "Rate or Fair Use limit. `rate_limited` is the burst/IP guard; `fair_use_limit_exceeded` means a Fair Use **record** window is exhausted (or, on the free tier, the one-time search trial); `fair_use_requests_exceeded` means the 5-hour **request** window is exhausted; `search_concurrency_exceeded` means too many `search_people` / `search_companies` calls are running at the same time for the plan (Free and $27: 3, $97: 5, $397 and $997: 8). The Fair Use codes carry `metadata.retry_after` and a `Retry-After` header. `search_concurrency_exceeded` carries `Retry-After: 1` — retry after 1 second and run fewer searches in parallel.",
         "properties": {
           "error": {
             "type": "object",
@@ -355,7 +355,7 @@
                         }
                       }
                     ],
-                    "description": "Exact state or region name filter on the person's location. Accepts the full name with standard capitalisation or its abbreviation — \"Texas\" and \"TX\" both work. Combine with `country` for precision. Accepts a single value or a list — a list matches any of its values (OR), so `state: [\"Texas\", \"Florida\"]` returns records matching either.",
+                    "description": "Exact state or region name filter on the person's location. Accepts the full name with standard capitalisation or its abbreviation — \"Texas\" and \"TX\" both work. Canadian provinces match by their two-letter code too — \"Ontario\" or \"ON\", \"British Columbia\" or \"BC\", \"Quebec\" or \"QC\". Combine with `country` for precision. Accepts a single value or a list — a list matches any of its values (OR), so `state: [\"Texas\", \"Florida\"]` returns records matching either.",
                     "example": "Texas"
                   },
                   "city": {
@@ -882,7 +882,7 @@
             }
           },
           "429": {
-            "description": "Too Many Requests — rate limit or Fair Use window exhausted",
+            "description": "Too Many Requests — rate limit, Fair Use window exhausted, or too many concurrent searches",
             "content": {
               "application/json": {
                 "schema": {
@@ -1128,7 +1128,7 @@
                         }
                       }
                     ],
-                    "description": "Exact state or region name filter on the company's location. Accepts the full name with standard capitalisation or its abbreviation — \"Texas\" and \"TX\" both work. Combine with `country` for precision. Location is team-derived in the same way as `country`, so it is most accurate for smaller companies. Accepts a single value or a list — a list matches any of its values (OR), so `state: [\"Texas\", \"Florida\"]` returns records matching either.",
+                    "description": "Exact state or region name filter on the company's location. Accepts the full name with standard capitalisation or its abbreviation — \"Texas\" and \"TX\" both work. Canadian provinces match by their two-letter code too — \"Ontario\" or \"ON\", \"British Columbia\" or \"BC\", \"Quebec\" or \"QC\". Combine with `country` for precision. Location is team-derived in the same way as `country`, so it is most accurate for smaller companies. Accepts a single value or a list — a list matches any of its values (OR), so `state: [\"Texas\", \"Florida\"]` returns records matching either.",
                     "example": "Texas"
                   },
                   "exclude_domain": {
@@ -1359,7 +1359,7 @@
             }
           },
           "429": {
-            "description": "Too Many Requests — rate limit or Fair Use window exhausted",
+            "description": "Too Many Requests — rate limit, Fair Use window exhausted, or too many concurrent searches",
             "content": {
               "application/json": {
                 "schema": {

@@ -27,6 +27,20 @@ To prevent abuse, Unlimited Plans are subject to our [Fair Use Policy](https://m
 | \$397 / month | 75k | 375k | 375k |
 | \$997 / month | 112.5k | 562.5k | 562.5k |
 
+## Concurrent searches
+
+Each account can run a limited number of `search_people` and `search_companies` calls at the same time. The limit is per account, shared across every API key and connector.
+
+| **Plan** | **Concurrent searches** |
+| :-- | :-- |
+| Free | 3 |
+| \$27 / month | 3 |
+| \$97 / month | 5 |
+| \$397 / month | 8 |
+| \$997 / month | 8 |
+
+A search that would go over the limit returns `429` with `search_concurrency_exceeded` and a `Retry-After: 1` header. Wait 1 second and retry, and keep fewer searches running in parallel. If your agent fans out searches — for example, one `search_people` call per company — cap its parallelism at your plan's limit.
+
 ## Phone tokens
 
 `linkedin_to_mobile_phone` spends **phone tokens**. They're separate from your regular token balance and from the Fair Use windows above. One phone token is spent per returned result; a miss costs nothing.
@@ -120,13 +134,14 @@ If you need help adapting your code to work within these limits, any AI coding a
 
 ## Rate limit errors
 
-When you exceed a limit, the API returns `429 Too Many Requests` with one of three codes:
+When you exceed a limit, the API returns `429 Too Many Requests` with one of four codes:
 
 | Code | What ran out |
 | :-- | :-- |
 | `fair_use_limit_exceeded` | A Fair Use **record** window — the records columns in the tables above. On the free tier, also the one-time search trial |
 | `fair_use_requests_exceeded` | The 5-hour **request** window — every call attempted, hits and misses alike |
 | `rate_limited` | The burst guard, which fires on too many requests in too short a time regardless of your plan headroom |
+| `search_concurrency_exceeded` | [Concurrent searches](#concurrent-searches) — too many `search_people` / `search_companies` calls running at once. Carries `Retry-After: 1` |
 
 ```json
 {
@@ -152,7 +167,7 @@ When a batch runs past a Fair Use window, the items beyond your allowance are dr
 
 ## Handling rate limits
 
-When a `429` carries `Retry-After`, honour it — it is the exact number of seconds until the binding window unlocks, and retrying sooner just burns request quota. Where there is no header, fall back to **exponential backoff**:
+When a `429` carries `Retry-After`, honour it — it is the exact number of seconds until the binding window unlocks, and retrying sooner just burns request quota. For `search_concurrency_exceeded`, wait 1 second and lower the number of searches you run in parallel. Where there is no header, fall back to **exponential backoff**:
 
 ```javascript
 async function callWithBackoff(fn, retries = 4) {

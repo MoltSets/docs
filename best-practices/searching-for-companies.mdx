@@ -149,7 +149,7 @@ The others carve out segments you don't sell to:
   This is accurate for the small companies that dominate the index, but **large multinationals are attributed to a single one of their offices**. A global company headquartered in one country may resolve to another entirely. When targeting large or international companies, combine location with other filters rather than relying on it alone.
 </Warning>
 
-`country` requires the exact stored value with standard capitalisation. `state` accepts the full name or its abbreviation — `"Texas"` and `"TX"` both work. Combine `state` with `country` for precision.
+`country` requires the exact stored value with standard capitalisation. `state` accepts the full name or its abbreviation — `"Texas"` and `"TX"` both work. Canadian provinces match by code too — `"ON"`, `"BC"`, and `"QC"` work the same as `"Ontario"`, `"British Columbia"`, and `"Quebec"`. Combine `state` with `country` for precision.
 
 <Note>
   Every company record comes back with a `city`, but there is no `city` filter on `search_companies` — `country` and `state` are the only location filters. To narrow to a city, filter on `state` and read `city` off the results. (`search_people` does have a `city` filter.)
@@ -227,6 +227,8 @@ for (const company of companies.results.results) {
 ```
 
 Run the first iteration of that loop at `limit: 1` on both calls. A chain that looks right at one company per account is safe to fan out; one that isn't costs you the whole fan-out to find that out.
+
+If you run the loop in parallel, keep the number of searches in flight at or below your plan's [concurrent search limit](/getting-started/rate-limits#concurrent-searches). Going over returns `429` with `search_concurrency_exceeded` — wait 1 second, then retry with fewer searches running at once.
 
 If you don't need a set number of contacts per account, skip the loop. `company_domain` accepts a list, so one call searches every account at once and ranks the matches together:
 

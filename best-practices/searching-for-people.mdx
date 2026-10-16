@@ -144,7 +144,7 @@ Three filters describe industry at different resolutions. Pick the one that matc
 `country`, `state`, and `city` all filter the **person's** location.
 
 - `country` and `city` require exact stored values. Use full English names, not abbreviations.
-- `state` accepts the full name or its abbreviation — `"Texas"` and `"TX"` both work.
+- `state` accepts the full name or its abbreviation — `"Texas"` and `"TX"` both work. Canadian provinces match by code too — `"ON"`, `"BC"`, and `"QC"` work the same as `"Ontario"`, `"British Columbia"`, and `"Quebec"`.
 - `"UK"` and `"HK"` exist in the data as dirty values. Prefer `"United Kingdom"` and `"Hong Kong"`.
 - City names repeat across regions. Combine with `state` or `country` to disambiguate — `city: "Portland"`, `state: "Oregon"`.
 - `city` matches the **exact stored city, not its suburbs**. For metro-area coverage, filter on `state` or `country` instead.

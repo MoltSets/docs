@@ -124,6 +124,7 @@ Every error, on REST and MCP alike, uses one shape: `{"error": {"code": "...", "
 | `fair_use_limit_exceeded` | 429 | A fair-use RECORD window is exhausted, or the free-tier search trial is used up | Wait `metadata.retry_after` seconds. The free search trial never refreshes, so it carries no Retry-After |
 | `fair_use_requests_exceeded` | 429 | The 5-hour REQUEST window is exhausted | Wait `metadata.retry_after` seconds |
 | `rate_limited` | 429 | Burst guard — too many requests too quickly | Back off and retry |
+| `search_concurrency_exceeded` | 429 | Too many `search_people` / `search_companies` calls in flight at once (Free and $27: 3, $97: 5, $397 and $997: 8) | Retry after 1 second (`Retry-After: 1`) and run fewer searches in parallel |
 | `tool_not_found` | 404 | Unknown or retired tool name in the URL | Check the tool name. This is the API's ONLY 404 — it never means "no data found" |
 | `internal_error` | 500 | The call could not complete — usually the endpoint is temporarily offline, but an oversized request can also cause it | Retry with a smaller request first (for example, split a batch). If that also fails, the endpoint is offline. The team is alerted automatically. Resolution time varies with when the outage starts, so use no fixed retry delay — requeue and retry later rather than looping |
 
@@ -133,15 +134,15 @@ Every tool response also carries an `X-MoltSets-Outcome` header (`ok` / `not_fou
 
 ## Plans
 
-| **Plan** | **Lifetime Tokens** | **Enrichment records** | **Search records** |
-| :-- | :-- | :-- | :-- |
-| \$0 | 1000 | 1k lifetime | 100 lifetime (5 per call max) |
-| \$27 / month | Unlimited | 1k / 5h · 5k / week | 500 / 5h · 2.5k / week |
-| \$97 / month | Unlimited | 15k / 5h · 75k / week | 7.5k / 5h · 37.5k / week |
-| \$397 / month | Unlimited | 150k / 5h · 750k / week | 75k / 5h · 375k / week |
-| \$997 / month | Unlimited | 225k / 5h · 1.125M / week | 112.5k / 5h · 562.5k / week |
+| **Plan** | **Lifetime Tokens** | **Enrichment records** | **Search records** | **Concurrent searches** |
+| :-- | :-- | :-- | :-- | :-- |
+| \$0 | 1000 | 1k lifetime | 100 lifetime (5 per call max) | 3 |
+| \$27 / month | Unlimited | 1k / 5h · 5k / week | 500 / 5h · 2.5k / week | 3 |
+| \$97 / month | Unlimited | 15k / 5h · 75k / week | 7.5k / 5h · 37.5k / week | 5 |
+| \$397 / month | Unlimited | 150k / 5h · 750k / week | 75k / 5h · 375k / week | 8 |
+| \$997 / month | Unlimited | 225k / 5h · 1.125M / week | 112.5k / 5h · 562.5k / week | 8 |
 
-Records are the data rows returned; requests are capped separately — see https://developer.moltsets.com/getting-started/rate-limits.
+Records are the data rows returned; requests are capped separately. Concurrent searches is how many `search_people` / `search_companies` calls an account can have running at the same time; going over returns 429 `search_concurrency_exceeded` with `Retry-After: 1`. See https://developer.moltsets.com/getting-started/rate-limits.
 
 Phone tokens for `linkedin_to_mobile_phone` are not included in any plan. They are sold as a separate monthly phone token subscription, bought on the Pricing page at app.moltsets.com and available on paid plans only (the free plan has no phone tokens): $27 / month for 180, $97 / month for 646, $197 / month for 1,313 (larger subscriptions via support@moltsets.com). It renews with the main plan, a mid-cycle start prorates both the charge and the tokens, unused tokens roll over, and cancelling either the phone token subscription or the main plan forfeits unused tokens (cancelling the main plan also cancels the phone token subscription). There are no one-off phone token purchases.
 
