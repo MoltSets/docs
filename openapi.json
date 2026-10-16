@@ -321,10 +321,11 @@
                         "type": "array",
                         "items": {
                           "type": "string"
-                        }
+                        },
+                        "maxItems": 100
                       }
                     ],
-                    "description": "Company domain filter — scopes results to people at the company with this website domain. Full URLs are normalised automatically (\"https://www.acme.com/about\" → \"acme.com\"), so there is no need to strip the protocol or path yourself. The most precise way to target a single company — prefer it over `company` whenever you know the domain. Accepts a single value or a list — a list matches any of its values (OR), so `company_domain: [\"acme.com\", \"stripe.com\"]` returns records matching either.",
+                    "description": "Company domain filter — scopes results to people at the company with this website domain. Full URLs are normalised automatically (\"https://www.acme.com/about\" → \"acme.com\"), so there is no need to strip the protocol or path yourself. The most precise way to target a single company — prefer it over `company` whenever you know the domain. Accepts a single value or a list — a list matches any of its values (OR), so `company_domain: [\"acme.com\", \"stripe.com\"]` returns records matching either. A list can hold up to 100 domains.",
                     "example": "moltsets.com"
                   },
                   "country": {
@@ -657,7 +658,8 @@
                     "items": {
                       "type": "string"
                     },
-                    "description": "Company domains to exclude. People at any listed company are dropped from the results — this is the suppression list, so pass the accounts you already have (existing customers, current vendors, your own company) and they never come back. Full URLs are normalised automatically, exactly as with `company_domain`. Excluded records cost you nothing: they consume no tokens and no fair use records, so excluding here is always cheaper than filtering the results yourself.",
+                    "maxItems": 100,
+                    "description": "Company domains to exclude. People at any listed company are dropped from the results — this is the suppression list, so pass the accounts you already have (existing customers, current vendors, your own company) and they never come back. Full URLs are normalised automatically, exactly as with `company_domain`. Excluded records cost you nothing: they consume no tokens and no fair use records, so excluding here is always cheaper than filtering the results yourself. A list can hold up to 100 domains.",
                     "example": [
                       "acme.com",
                       "stripe.com"

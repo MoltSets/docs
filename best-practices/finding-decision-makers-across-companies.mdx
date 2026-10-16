@@ -1,0 +1,88 @@
+---
+title: "Finding decision-makers across a list of companies"
+sidebarTitle: "Decision-makers across companies"
+description: "Find the senior people at hundreds or thousands of companies with as few search_people calls as possible: pass seniority as a list, batch domains, and treat not_found as a final answer."
+---
+
+You have a list of company domains and want the decision-makers at each one. The obvious loop is one `search_people` call per company per seniority level. That loop makes several times the calls it needs, and on a long list it turns into tens of thousands of requests in a few minutes.
+
+Three changes cut it down.
+
+## 1. Pass every seniority level in one call
+
+`seniority` takes a list. A list matches any of its values, so one call returns everyone at those levels, ranked together.
+
+Don't do this. It's six calls for one company:
+
+```json
+{ "company_domain": "example.com", "seniority": "Owner", "limit": 5 }
+{ "company_domain": "example.com", "seniority": "C Suite", "limit": 5 }
+{ "company_domain": "example.com", "seniority": "Partner", "limit": 5 }
+...
+```
+
+Do this. It's one call for the same company:
+
+```json
+{
+  "company_domain": "example.com",
+  "seniority": ["Owner", "C Suite", "Partner", "VP", "Head", "Director"],
+  "limit": 5
+}
+```
+
+You get the same people back from one request instead of six.
+
+<Warning>
+  `seniority` only accepts these values: `Intern`, `Entry`, `Senior`, `Manager`, `Director`, `VP`, `Head`, `C Suite`, `Owner`, `Partner`. `"C Suite"` has a space, not a hyphen. Any other value, such as `"Founder"`, is rejected. To find founders, use `title` instead.
+</Warning>
+
+## 2. Batch domains when you don't need a per-company quota
+
+`company_domain` also takes a list. If you want decision-makers across your list rather than a fixed number per company, send up to 100 domains in one call and raise `limit` to the maximum of 25:
+
+```json
+{
+  "company_domain": ["example.com", "acme.com", "globex.com"],
+  "seniority": ["Owner", "C Suite", "Partner", "VP", "Head", "Director"],
+  "limit": 25
+}
+```
+
+Read `company.domain` on each result to see which company a person belongs to. Page through with `offset` until you've collected `total` results.
+
+<Note>
+  Results across all domains are ranked together, not split per company. A larger company can fill a page on its own. If you need "up to 5 people at every company," keep one call per domain and use step 1.
+</Note>
+
+## 3. Treat `not_found` as the answer
+
+A search that matches nothing returns HTTP `200` with `status: "not_found"` and `total: 0`. It costs no tokens. It still counts as one request against your [Fair Use](/getting-started/rate-limits) requests limit.
+
+`not_found` means nobody at that company is in the index. It isn't a transient error, so don't retry it. Running the same search again returns the same empty result and uses another request.
+
+Expect a low hit rate on lists of very small businesses, such as local shops, contractors, and single-location services. Many of them have no employees in the index at all. A 5% hit rate on a list like that reflects the data, not a bug.
+
+## Pace large runs
+
+Even with fewer calls, don't send a whole list at once. Spread the run out so you stay inside your plan's 5-hour window and clear of the burst guard, which returns `429` with `rate_limited`. See [Rate limits](/getting-started/rate-limits) for how to space scheduled runs.
+
+## Summary
+
+| Instead of | Do this |
+|---|---|
+| One call per seniority level | One call with `seniority` as a list |
+| One call per company, when no per-company quota is needed | Up to 100 domains per call in `company_domain`, `limit: 25` |
+| Retrying `not_found` | Record it as a miss and move on |
+| Firing the whole list at once | Spread the run over time |
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Searching for people" icon="user" href="/best-practices/searching-for-people">
+    Filters, fill rates, and paginating without wasting records.
+  </Card>
+  <Card title="Rate limits" icon="gauge" href="/getting-started/rate-limits">
+    How requests and records count against your plan.
+  </Card>
+</CardGroup>
