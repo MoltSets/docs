@@ -88,11 +88,12 @@ Look up carrier-verified mobile phone numbers from LinkedIn profiles and company
 
 ## Reverse Lookups
 
-Resolve a single identifier — an email address or a LinkedIn URL — into a complete business profile in one call. Returns name, job title, seniority, company, firmographic data, and emails on file. Use these to enrich inbound leads, form fills, or existing CRM records.
+Resolve an email address or a LinkedIn URL into a complete business profile in one call. `reverse_email_lookup` also takes a batch of up to 100 emails. Returns name, job title, seniority, company, firmographic data, and emails on file. Use these to enrich inbound leads, form fills, or existing CRM records.
 
 | I have… | I want… | Type in Claude… | Tool |
 |---|---|---|---|
 | Email | Full business profile (name, title, company, firmographics) | Look up the business profile for john@acme.com | `reverse_email_lookup` |
+| List of emails (up to 100) | Business profile for each email | Look up the business profiles for these emails: [list] | `reverse_email_lookup` |
 | LinkedIn URL | Complete profile (title, skills, company firmographics, business + personal email, optional job history) | Get the full profile for linkedin.com/in/username | `reverse_linkedin_lookup` |
 
 ## Common Workflows

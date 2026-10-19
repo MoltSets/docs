@@ -182,4 +182,4 @@ async function callWithBackoff(fn, retries = 4) {
 }
 ```
 
-**Batch endpoints** where available (e.g. `linkedin_to_mobile_phone` supports up to 100 `linkedin_urls` per call) cut the number of HTTP calls you make — but not your request count. Each item in a batch still counts as one request, so a batch of 100 draws 100 requests from your Fair Use requests limit.
+**Batch endpoints** where available (e.g. `linkedin_to_mobile_phone` supports up to 100 `linkedin_urls` per call, and `reverse_email_lookup` up to 100 `emails`) cut the number of HTTP calls you make — but not your request count. Each item in a batch still counts as one request, so a batch of 100 draws 100 requests from your Fair Use requests limit.

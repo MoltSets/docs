@@ -3120,7 +3120,7 @@
       "post": {
         "summary": "Reverse Email Lookup",
         "operationId": "hemToBusinessProfile",
-        "description": "The Reverse Email Lookup API resolves an email address into a complete business profile, including full name, job title, seniority, company, LinkedIn URL, firmographic data, and any other email addresses on file.\n\n**Use this endpoint to:**\n- Enrich inbound leads and form fills with full contact context\n- Qualify a prospect before you reach out\n- Fill in missing profile data on an existing email list\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**Outcomes:**\nA lookup that finds nothing is not an error. It returns HTTP `200` with `status: \"not_found\"`, empty or null `results`, and the usual `metadata` — and costs no tokens, though it still counts as one request against your Fair Use requests limit. Read `status`, not the HTTP code, to tell a hit from a miss. The API's only `404` is an unknown or retired tool name.",
+        "description": "The Reverse Email Lookup API resolves an email address into a complete business profile, including full name, job title, seniority, company, LinkedIn URL, firmographic data, and any other email addresses on file.\n\nIt supports single lookups (`email`) and batch lookups of up to 100 addresses at once (`emails`). Each address in a batch counts as one request against your Fair Use requests limit.\n\n**Use this endpoint to:**\n- Enrich inbound leads and form fills with full contact context\n- Qualify a prospect before you reach out\n- Fill in missing profile data on an existing email list\n\n**Fair Use Policy:**\nThis API is subject to our <a href=\"https://moltsets.com/fair-use-policy-enrichment/\" target=\"_blank\" rel=\"noopener\">Fair Use Policy for Enrichment</a>.\n\n**Outcomes:**\nA lookup that finds nothing is not an error. It returns HTTP `200` with `status: \"not_found\"`, empty or null `results`, and the usual `metadata` — and costs no tokens, though it still counts as one request against your Fair Use requests limit. Read `status`, not the HTTP code, to tell a hit from a miss. The API's only `404` is an unknown or retired tool name.",
         "tags": [
           "Reverse Lookups"
         ],
@@ -3133,15 +3133,32 @@
                 "properties": {
                   "email": {
                     "type": "string",
-                    "description": "Email address."
+                    "description": "Single email address."
+                  },
+                  "emails": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 100,
+                    "description": "Batch of email addresses, up to 100. Can't be combined with `email`."
                   }
                 }
               },
               "examples": {
                 "email": {
-                  "summary": "Using email",
+                  "summary": "Single lookup",
                   "value": {
                     "email": "john.smith@example.com"
+                  }
+                },
+                "batch": {
+                  "summary": "Batch lookup",
+                  "value": {
+                    "emails": [
+                      "john.smith@example.com",
+                      "jane.doe@example.com"
+                    ]
                   }
                 }
               }

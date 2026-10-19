@@ -86,7 +86,7 @@ Changed: lookups that find nothing used to return HTTP 404. They now return 200 
 
 ### Reverse Lookups
 
-- [POST /reverse_email_lookup](https://developer.moltsets.com/api-reference/reverse-lookups/reverse-email-lookup): Email → full business profile (name, title, seniority, company, LinkedIn, firmographics, emails on file).
+- [POST /reverse_email_lookup](https://developer.moltsets.com/api-reference/reverse-lookups/reverse-email-lookup): Email → full business profile (name, title, seniority, company, LinkedIn, firmographics, emails on file). Pass `email` (single) or `emails` (batch, up to 100).
 - [POST /reverse_linkedin_lookup](https://developer.moltsets.com/api-reference/reverse-lookups/reverse-linkedin-lookup): LinkedIn URL → complete business profile (name, title, seniority, summary, skills, company firmographics incl. NAICS/SIC and revenue, business + personal email, hashed business emails). Optional `include_experience` adds job history. Most complete LinkedIn enrichment.
 
 ### Get Ad Audience
