@@ -81,22 +81,105 @@ The side panel stays open as you move between profiles, so you can work through 
 Turn LinkedIn prospecting into CRM pipeline. Once you've enriched a profile, send the contact straight to HubSpot or Attio from the side panel. No CSV imports, no copy and paste, and no tab switching.
 
 - **Go from LinkedIn to CRM in seconds.** Find a prospect, enrich them, and add them to your CRM in the same flow.
-- **Keep your CRM clean.** Every contact arrives with a validated email, its A–F risk score, and job and company details, so your team works from data it can trust.
+- **No duplicates.** MoltSets checks your CRM for the person's email and the company's domain first, then updates the existing record instead of creating a new one.
+- **Contacts arrive linked to their company.** Each contact is created with their company record and associated to it.
+- **Risk scores travel with the email.** In Attio, every email is recorded with its A–F risk score, and emails graded D (do not send) are never sent.
 - **Use the CRM your team already runs.** Connect HubSpot, Attio, or both.
 
+### Connect your CRM
+
+You connect with an access token you create in your CRM. The extension checks the token, then stores it encrypted in your browser with your passphrase. It's never sent to MoltSets.
+
+<Tabs>
+  <Tab title="HubSpot">
+    You need **Super Admin** access in HubSpot to create the token. Not a Super Admin? Click **Copy these instructions** on the HubSpot page in the extension and send them to an admin.
+
+    <Steps>
+      <Step title="Create a private app in HubSpot">
+        In HubSpot, click the settings icon in the top navigation. In the left sidebar, open **Development > Legacy Apps** or **Integrations > Private Apps**. HubSpot uses different names in different accounts.
+
+        Click **Create legacy app** or **Create a private app**. If HubSpot asks what kind of app, choose **Private**. Name the app "MoltSets" on the **Basic Info** tab.
+      </Step>
+      <Step title="Add the scopes">
+        On the **Scopes** tab, add these scopes:
+
+        - `crm.objects.contacts.read`
+        - `crm.objects.contacts.write`
+        - `crm.objects.companies.read`
+        - `crm.objects.companies.write`
+
+        Click **Create app** and confirm.
+      </Step>
+      <Step title="Copy the access token">
+        On the **Auth** tab, find **Access token**. Click **Show token**, then **Copy**. HubSpot private app tokens start with `pat-`.
+      </Step>
+      <Step title="Connect in the extension">
+        Click the **Integrations** icon in the side panel footer and choose **HubSpot**. Paste the token and click **Connect**. Accept the Chrome prompt to let the extension contact HubSpot.
+      </Step>
+    </Steps>
+
+    Once connected, the HubSpot page shows your Hub ID, the last 4 characters of your token, and the date you connected.
+  </Tab>
+  <Tab title="Attio">
+    You need to be a **workspace admin** in Attio to create the token. Not an admin? Click **Copy these instructions** on the Attio page in the extension and send them to an admin.
+
+    <Steps>
+      <Step title="Open the Developers tab in Attio">
+        In Attio, click the dropdown next to your workspace name and select **Workspace settings**. Open the **Developers** tab.
+      </Step>
+      <Step title="Create an access token">
+        Click **+ New access token** and name it "MoltSets". Set these scopes:
+
+        - **Records:** read-write
+        - **Object configuration:** read
+        - **Notes:** read-write
+
+        Create the token and copy it.
+      </Step>
+      <Step title="Connect in the extension">
+        Click the **Integrations** icon in the side panel footer and choose **Attio**. Paste the token and click **Connect**. Accept the Chrome prompt to let the extension contact Attio.
+      </Step>
+    </Steps>
+
+    Once connected, the Attio page shows your workspace name, the last 4 characters of your token, and the date you connected.
+  </Tab>
+</Tabs>
+
+<Tip>
+  If an admin creates the token for you, ask them to share it privately, such as through a password manager. Don't send tokens over email or chat.
+</Tip>
+
+### Send a contact
+
 <Steps>
-  <Step title="Connect your CRM">
-    Open the **Account** panel and connect HubSpot or Attio. Sign in and approve access when prompted.
-  </Step>
   <Step title="Enrich a profile">
-    Open a LinkedIn profile and run any lookup.
+    Open a LinkedIn profile and run a lookup. HubSpot needs an email. Attio needs the full business profile or an email.
   </Step>
-  <Step title="Send the contact">
-    Click **Send to HubSpot** or **Send to Attio** in the profile view. The contact is added to your CRM with its enriched data.
+  <Step title="Send it">
+    Click the send icon in the profile view and choose **HubSpot** or **Attio**. A confirmation shows when the contact lands in your CRM.
   </Step>
 </Steps>
 
-New users see a **Getting started** checklist that ticks itself off as you open and enrich your first profile. Click the **?** icon in the footer at any time to open the in-panel guide.
+The profile then shows when it was sent, with a link to the record in your CRM. If you refresh the profile and the data changes, the panel marks your CRM record as out of date. Click **Resend** to update it.
+
+To send several contacts to HubSpot at once, select them in your **Enriched contacts** list and click **Send selected**. Attio contacts are sent one at a time.
+
+### What gets sent
+
+| | HubSpot | Attio |
+|---|---|---|
+| **Person** | Name, job title, location, email, and mobile number | Name, job title, location, email, mobile number, and LinkedIn URL |
+| **Company** | Name, domain, description, and employee count | Name, domain, description, LinkedIn page, and employee range |
+| **Extra details** | — | A note on the person with industry, revenue range, employee count, and each email with its risk score and validation date |
+| **Existing records** | Updated with the latest data | Only empty fields are filled in, so your team's edits are never overwritten |
+
+HubSpot gets the business email, or the personal email when there's no business email. Attio gets the same, but skips any email graded D. Fields are only sent when MoltSets found them.
+
+### Change or disconnect
+
+Open **Integrations**, choose the CRM, and click **Change token** to paste a new one. Do this if you rotate the token or change its scopes in your CRM.
+
+Click **Disconnect** to delete the token from your browser. Records already in your CRM aren't affected.
 
 ## Control what you spend
 
@@ -143,7 +226,8 @@ List fields such as `skills` and `interests` are joined with `; `.
 
 - **Reads only the URL.** The extension reads the address of your active LinkedIn tab so it knows which profile you're viewing. It doesn't read page content or add anything to LinkedIn pages.
 - **Sends data only when you click.** A lookup sends the profile URL and your API key to `api.moltsets.com`. Nothing is sent until you click.
-- **Stores data locally.** Your API key and saved results stay in your browser's local extension storage. They aren't synced to other devices or to your MoltSets account.
+- **Stores data locally.** Your API key, saved results, and any HubSpot or Attio tokens stay in your browser's local extension storage. Your API key and CRM tokens are encrypted with your passphrase. Nothing is synced to other devices or to your MoltSets account.
+- **Sends to your CRM only when you click.** HubSpot and Attio are contacted only if you connect them, and contacts are sent only when you click send.
 - **No tracking.** The extension contains no analytics or advertising code.
 
 Permissions the extension requests:
@@ -154,11 +238,14 @@ Permissions the extension requests:
 | Side panel | Shows MoltSets beside the page you're viewing |
 | `linkedin.com` | Reads the address of your active tab so the panel can tell when you're on a profile |
 | `api.moltsets.com` | Runs the lookups you ask for |
+| `api.hubapi.com` (optional) | Checks your HubSpot token and sends contacts to HubSpot. Requested only when you connect HubSpot |
+| `api.attio.com` (optional) | Checks your Attio token and sends contacts to Attio. Requested only when you connect Attio |
 
 ### Remove your data
 
 - Click the sign-out icon in the footer to delete your API key from the browser. Saved lookups remain until you delete them.
 - Delete saved lookups for one profile, selected profiles, or all profiles from the **Enriched contacts** list.
+- Click **Disconnect** on the HubSpot or Attio page to delete that token.
 - Remove the extension from Chrome to delete everything it has stored.
 
 See the [MoltSets Privacy Policy](https://moltsets.com/privacy-policy) for full details.
@@ -178,6 +265,12 @@ See the [MoltSets Privacy Policy](https://moltsets.com/privacy-policy) for full 
   </Accordion>
   <Accordion title="I've used all my free tokens">
     Upgrade to a paid plan from the [MoltSets billing page](https://app.moltsets.com/dashboard/billing) to keep looking people up.
+  </Accordion>
+  <Accordion title="My HubSpot or Attio token is missing scopes">
+    When you connect, the extension lists the scopes your token is missing. Add them to the private app in HubSpot or the access token in Attio. Then open **Integrations**, click **Change token**, and paste the token again.
+  </Accordion>
+  <Accordion title="The send option is unavailable">
+    HubSpot needs an email for the contact. Attio needs the full business profile or an email. Run one of those lookups first.
   </Accordion>
   <Accordion title="The data looks wrong">
     Click **Report a problem** at the bottom of the profile view, or email [support@moltsets.com](mailto:support@moltsets.com).
