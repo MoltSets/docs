@@ -1,15 +1,15 @@
 ---
 title: "MoltSets for LinkedIn Chrome Extension"
 sidebarTitle: "Chrome Extension"
-description: "Enrich any LinkedIn profile in one click and send verified contacts straight to HubSpot or Attio. Get a graded business email, personal email, or carrier-verified mobile number from a side panel in Chrome."
-keywords: ["LinkedIn Chrome extension", "LinkedIn email finder", "LinkedIn to HubSpot", "LinkedIn to Attio", "HubSpot Chrome extension", "Attio Chrome extension", "contact enrichment", "mobile phone finder"]
+description: "Enrich any LinkedIn profile in one click, build lead lists as you prospect, and send verified contacts to HubSpot, Attio, Clay, Make, n8n, Zapier, or any webhook. Get a graded business email, personal email, or carrier-verified mobile number from a side panel in Chrome."
+keywords: ["LinkedIn Chrome extension", "LinkedIn email finder", "LinkedIn lead lists", "LinkedIn to HubSpot", "LinkedIn to Attio", "LinkedIn to Clay", "LinkedIn to Zapier", "LinkedIn to n8n", "LinkedIn to Make", "LinkedIn webhook", "HubSpot Chrome extension", "Attio Chrome extension", "contact enrichment", "mobile phone finder"]
 ---
 
 ## Overview
 
-The MoltSets for LinkedIn Chrome Extension puts MoltSets enrichment in a side panel next to LinkedIn. Open a profile, click a lookup, and get verified contact data from the MoltSets database in seconds. Then send the enriched contact to HubSpot or Attio without leaving the page.
+The MoltSets for LinkedIn Chrome Extension puts MoltSets enrichment in a side panel next to LinkedIn. Open a profile, click a lookup, and get verified contact data from the MoltSets database in seconds. Save the people you want into lead lists, then download them as a CSV or send them to HubSpot, Attio, Clay, Make, n8n, Zapier, or any webhook without leaving the page.
 
-It's built for salespeople, recruiters, and founders who already prospect on LinkedIn and want accurate contact details in their CRM without copying, pasting, or switching tabs.
+It's built for salespeople, recruiters, and founders who already prospect on LinkedIn and want accurate contact details in the tools they already use, without copying, pasting, or switching tabs.
 
 <Card title="Install from the Chrome Web Store" icon="chrome" href="https://chromewebstore.google.com/detail/moltsets-for-linkedin/bfhhpbdldppenlgnebjfpabiiiocfahp">
   Add MoltSets for LinkedIn to Chrome.
@@ -74,7 +74,82 @@ Every email comes with an A–F risk score that rates how safe the mailbox is to
   </Step>
 </Steps>
 
-The side panel stays open as you move between profiles, so you can work through a list without reopening anything.
+The side panel stays open as you move between profiles, so you can build a list as you prospect without reopening anything.
+
+## Build lead lists
+
+Organize enriched contacts into lists as you prospect: by campaign, territory, target account, or hiring role. Lists live in your browser and never use tokens.
+
+- **Create as many lists as you need.** Each list name must be unique and 60 characters or fewer.
+- **Add a contact to one list or several.** A contact can be on any number of lists.
+- **Work through one list at a time.** Open a list to see only the people on it, and search within it.
+- **Download or send a whole list.** Export a list as a CSV, or send every contact on it to a connected integration in one go.
+- **Deleting a list never deletes its contacts.** The contacts stay in your **Enriched contacts** list.
+
+### Add contacts to a list
+
+<Tabs>
+  <Tab title="From a profile">
+    <Steps>
+      <Step title="Open the lists menu">
+        On an enriched profile, click the **Lists** icon.
+      </Step>
+      <Step title="Choose lists">
+        Tick each list you want the contact on. Untick a list to take them off it.
+
+        To make a new list, type a name in the **New list** field and click **Add**. The contact goes on the new list straight away.
+      </Step>
+    </Steps>
+
+    The profile shows which lists the contact is on.
+  </Tab>
+  <Tab title="In bulk">
+    <Steps>
+      <Step title="Select contacts">
+        In **Enriched contacts**, tick the contacts you want. Use **Select all** to tick everyone shown.
+      </Step>
+      <Step title="Open the lists menu">
+        Click the **Lists** icon in the selection bar.
+      </Step>
+      <Step title="Choose lists">
+        Tick a list to add every selected contact to it. A partly filled box means some of the selected contacts are already on that list. Click it to add the rest.
+
+        To make a new list with the selected contacts on it, type a name in the **New list** field and click **Add**.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+### Open, rename, or delete a list
+
+At the top of **Enriched contacts**, click **All contacts** to open the list menu. Choose a list to show only the contacts on it, or choose **All contacts** to see everyone again. Each list shows how many contacts are on it.
+
+With a list open, the same menu has **Rename list** and **Delete list**. You can also create a list there with **New list**.
+
+### Use a list
+
+With a list open, you can:
+
+- **Search** within the list by name, company, or email.
+- **Download** the whole list as a CSV with the download icon.
+- **Send** every contact on the list to HubSpot or a webhook integration with the send icon. See [Send many contacts at once](#send-many-contacts-at-once).
+- **Select** some contacts on the list to download, send, or delete just those.
+
+## Send contacts to your CRM and workflows
+
+Connect your tools from the **Integrations** page, then send enriched contacts in one click. No CSV imports, no copy and paste, and no tab switching. Open **Integrations** from the icon in the side panel footer.
+
+| Integration | Type | Send one | Send selected or a whole list |
+|-------------|------|----------|-------------------------------|
+| [HubSpot](#send-contacts-to-hubspot-and-attio) | CRM | Yes | Yes |
+| [Attio](#send-contacts-to-hubspot-and-attio) | CRM | Yes | No, one at a time |
+| [Clay](#send-contacts-to-clay-make-n8n-zapier-or-a-webhook) | Workflow | Yes | Yes |
+| [Make](#send-contacts-to-clay-make-n8n-zapier-or-a-webhook) | Workflow | Yes | Yes |
+| [n8n](#send-contacts-to-clay-make-n8n-zapier-or-a-webhook) | Workflow | Yes | Yes |
+| [Zapier](#send-contacts-to-clay-make-n8n-zapier-or-a-webhook) | Workflow | Yes | Yes |
+| [Webhook](#send-contacts-to-clay-make-n8n-zapier-or-a-webhook) | Any JSON endpoint | Yes | Yes |
+
+Sending never uses tokens. Contacts go straight from your browser to the service, never through MoltSets. Access tokens and webhook URLs are stored encrypted in your browser with your passphrase, and are never sent to MoltSets.
 
 ## Send contacts to HubSpot and Attio
 
@@ -162,7 +237,7 @@ You connect with an access token you create in your CRM. The extension checks th
 
 The profile then shows when it was sent, with a link to the record in your CRM. If you refresh the profile and the data changes, the panel marks your CRM record as out of date. Click **Resend** to update it.
 
-To send several contacts to HubSpot at once, select them in your **Enriched contacts** list and click **Send selected**. Attio contacts are sent one at a time.
+To send several contacts to HubSpot at once, select them or open a list. See [Send many contacts at once](#send-many-contacts-at-once). Attio contacts are sent one at a time.
 
 ### What gets sent
 
@@ -181,11 +256,170 @@ Open **Integrations**, choose the CRM, and click **Change token** to paste a new
 
 Click **Disconnect** to delete the token from your browser. Records already in your CRM aren't affected.
 
+## Send contacts to Clay, Make, n8n, Zapier, or a webhook
+
+Paste one webhook URL and you're set. There's nothing else to configure. Every contact arrives as the same flat JSON, so you can enrich it further in Clay, route it with Zapier or Make, or run any n8n workflow, cloud or self-hosted.
+
+- **One URL per integration.** No API keys or OAuth. The extension sends one `POST` request per contact.
+- **A field mapping that never breaks.** Every field is always present, set to `null` when MoltSets has no value.
+- **Test before you send anyone real.** **Send a test contact** posts a sample person, "Sam Sample", so you can map fields first.
+- **Emails graded D are never sent.** The email, its risk score, and its validation date are all set to `null`.
+
+### Connect a webhook
+
+<Steps>
+  <Step title="Get a webhook URL">
+    Create the webhook in your tool. See the steps for each tool below.
+  </Step>
+  <Step title="Paste it in the extension">
+    Open **Integrations** and choose the tool. Paste the URL into **Webhook URL** and click **Connect**.
+  </Step>
+  <Step title="Allow access">
+    Accept the Chrome prompt. The permission covers only that URL's website, such as `hooks.zapier.com`, not the pages you browse.
+  </Step>
+  <Step title="Send a test contact">
+    Click **Send a test contact**, then look for "Sam Sample" in your tool and map the fields you need.
+  </Step>
+</Steps>
+
+<Tabs>
+  <Tab title="Clay">
+    1. In Clay, open the table you want contacts to land in, or create one.
+    2. Add a **Webhook** source to the table.
+    3. Copy the webhook URL Clay shows and paste it in the extension.
+
+    Clay URLs must be on `clay.com`, such as `https://api.clay.com/v3/sources/webhook/…`.
+
+    <Tip>
+      To call MoltSets from inside a Clay table instead, use the [Clay HTTP API integration](/integrations/clay).
+    </Tip>
+  </Tab>
+  <Tab title="Make">
+    1. Create a scenario and add the **Webhooks > Custom webhook** trigger.
+    2. Click **Add**, name the webhook "MoltSets", and save.
+    3. Copy the webhook address and paste it in the extension.
+
+    Make URLs look like `https://hook.eu1.make.com/…`.
+  </Tab>
+  <Tab title="n8n">
+    1. Add a **Webhook** node to your workflow and set the HTTP method to **POST**.
+    2. Copy the **Production URL** and paste it in the extension.
+    3. **Activate** the workflow. n8n doesn't accept requests to the production URL until you do.
+
+    n8n Cloud and self-hosted instances both work, on any domain. To test a local instance, you can use `http://localhost` or `http://127.0.0.1`.
+  </Tab>
+  <Tab title="Zapier">
+    1. Create a Zap. For the trigger, choose **Webhooks by Zapier** and the **Catch Hook** event.
+    2. Copy the webhook URL Zapier gives you and paste it in the extension.
+    3. Turn the Zap on once its steps are set up.
+
+    Zapier URLs must be on `hooks.zapier.com`, such as `https://hooks.zapier.com/hooks/catch/…`.
+  </Tab>
+  <Tab title="Webhook">
+    Use any endpoint that accepts a JSON `POST` over HTTPS. Paste its URL in the extension. Each contact arrives as one request.
+
+    `http://localhost` and `http://127.0.0.1` also work, for testing on your own machine. URLs can't include a username and password.
+  </Tab>
+</Tabs>
+
+The extension checks the URL when you save it. Clay, Make, and Zapier URLs must belong to that service, which catches most paste mistakes. It doesn't contact the URL until you send something.
+
+### Send a contact
+
+On an enriched profile, click the send icon and choose the integration. A webhook can take any profile with at least one lookup result.
+
+Like CRM sends, the profile shows when it was sent. If the data changes after you send it, you can resend it.
+
+### Webhook payload
+
+Each request has a `Content-Type: application/json` body. The first five fields describe the send. The rest are the contact's fields, which match the [CSV export](#csv-export) columns.
+
+```json
+{
+  "event": "contact.sent",
+  "source": "moltsets_chrome_extension",
+  "schema_version": 1,
+  "sent_at": "2026-10-20T12:00:00.000Z",
+  "test": false,
+  "linkedin_url": "https://www.linkedin.com/in/sample-contact",
+  "full_name": "Sam Sample",
+  "first_name": "Sam",
+  "last_name": "Sample",
+  "headline": "Head of Growth at Example Co",
+  "title": "Head of Growth",
+  "seniority": "Head",
+  "functional_area": "Marketing",
+  "current_role_start_date": "2024-03",
+  "skills": "Demand generation; Lifecycle marketing",
+  "interests": "B2B SaaS",
+  "connection_count": 500,
+  "city": "Austin",
+  "state": "Texas",
+  "country": "United States",
+  "company_name": "Example Co",
+  "company_website": "example.com",
+  "company_linkedin_url": "https://www.linkedin.com/company/example-co",
+  "company_description": "Example Co makes example products.",
+  "company_industry": "Software Development",
+  "company_employee_count": 120,
+  "company_employee_range": "51-200",
+  "company_revenue_range": "$10M - $20M",
+  "business_email": "sam@example.com",
+  "business_email_risk_score": "A",
+  "business_email_validated_at": "2026-10-01",
+  "personal_email": "sam.sample@example.net",
+  "personal_email_risk_score": "B",
+  "personal_email_validated_at": "2026-09-15",
+  "mobile_phone": "+15125550100",
+  "mobile_phone_validated_at": "2026-09-20",
+  "first_enriched_at": "2026-10-01T12:00:00.000Z",
+  "last_enriched_at": "2026-10-01T12:00:00.000Z"
+}
+```
+
+| Field | Description |
+|-------|-------------|
+| `event` | Always `contact.sent` |
+| `source` | Always `moltsets_chrome_extension` |
+| `schema_version` | Payload format version, currently `1` |
+| `sent_at` | When the contact was sent, in ISO 8601 |
+| `test` | `true` for **Send a test contact**, `false` for real contacts. Filter on it to keep test data out of your workflow |
+
+Requests are sent without cookies and time out after 15 seconds. Any `2xx` response counts as success. The extension doesn't read the response body, and it can't add authentication headers. If your endpoint needs authentication, use a secret in the URL path or query string instead.
+
+### Change or disconnect a webhook
+
+Open **Integrations** and choose the tool. The page shows a shortened form of the URL and the date you connected. The full URL is never shown again.
+
+- Click **Change URL** to paste a new one.
+- Click **Disconnect** to delete the URL from your browser. The extension also gives back permission to reach that website, unless another connected webhook uses it. Contacts already sent aren't affected.
+
+## Send many contacts at once
+
+Send a selection of contacts, or a whole list, to HubSpot or any webhook integration.
+
+<Steps>
+  <Step title="Choose the contacts">
+    In **Enriched contacts**, tick the contacts you want, or open a list to send everyone on it.
+  </Step>
+  <Step title="Send them">
+    Click the send icon in the selection bar, or next to the search box for a whole list. Choose the integration.
+  </Step>
+  <Step title="Watch the progress">
+    A progress bar shows how many have been sent and any failures so far. Keep the panel open until it's done. Click **Stop** to stop after the current contact.
+  </Step>
+</Steps>
+
+Contacts are sent one at a time. Contacts the integration can't take, such as HubSpot contacts with no email, are skipped. If the service rate limits a send, the extension waits 10 seconds and tries that contact again. Errors that would fail every contact, such as a deleted webhook or a revoked token, stop the batch straight away.
+
+When it finishes, a summary shows how many were sent, skipped, and failed.
+
 ## Control what you spend
 
 - **Nothing runs automatically.** Every lookup starts with your click.
 - **Lookups that find nothing are free.** No tokens are charged for a `not_found` result.
 - **Saved results don't cost again.** Results are saved in your browser. Return to a profile you've already enriched and your data is waiting. Click the refresh icon when you want the latest data.
+- **Lists, CSVs, and integrations are free.** Adding contacts to lists, downloading CSVs, and sending to your integrations never use tokens.
 
 ### Track your usage
 
@@ -198,17 +432,17 @@ Click your account name in the footer to open the **Account** panel. It shows yo
 
 ## Enriched contacts
 
-Every profile you enrich lands in your **Enriched contacts** list, most recent first, with what was found for each person.
+Every profile you enrich lands in your **Enriched contacts** list, most recent first, with what was found for each person. Organize them further with [lead lists](#build-lead-lists).
 
 - **Search** by name, company, or email.
-- **Download** a single profile from its page, or your whole list from the list view, as a CSV file.
-- **Delete** profiles one at a time, or select several and delete them in bulk.
+- **Download** a single profile from its page, the contacts you've selected, a list, or everyone, as a CSV file.
+- **Delete** profiles one at a time, or select several and delete them in bulk. Deleting a profile also takes it off every list.
 
 The enriched contacts list reads from your browser only. Opening it never calls the API.
 
 ### CSV export
 
-CSV files open cleanly in Excel and Google Sheets and are ready to import into any CRM. Use HubSpot or Attio? [Send contacts directly](#send-contacts-to-hubspot-and-attio) instead. Each file has one row per profile with these columns:
+CSV files open cleanly in Excel and Google Sheets and are ready to import into any CRM. Use HubSpot, Attio, or a workflow tool? [Send contacts directly](#send-contacts-to-your-crm-and-workflows) instead. Each file has one row per profile with these columns:
 
 | Group | Columns |
 |-------|---------|
@@ -226,26 +460,28 @@ List fields such as `skills` and `interests` are joined with `; `.
 
 - **Reads only the URL.** The extension reads the address of your active LinkedIn tab so it knows which profile you're viewing. It doesn't read page content or add anything to LinkedIn pages.
 - **Sends data only when you click.** A lookup sends the profile URL and your API key to `api.moltsets.com`. Nothing is sent until you click.
-- **Stores data locally.** Your API key, saved results, and any HubSpot or Attio tokens stay in your browser's local extension storage. Your API key and CRM tokens are encrypted with your passphrase. Nothing is synced to other devices or to your MoltSets account.
-- **Sends to your CRM only when you click.** HubSpot and Attio are contacted only if you connect them, and contacts are sent only when you click send.
+- **Stores data locally.** Your API key, saved results, lists, CRM tokens, and webhook URLs stay in your browser's local extension storage. Your API key, tokens, and webhook URLs are encrypted with your passphrase. Nothing is synced to other devices or to your MoltSets account.
+- **Sends to your integrations only when you click.** HubSpot, Attio, and webhooks are contacted only if you connect them, and contacts are sent only when you click send. They go straight from your browser to the service, never through MoltSets.
 - **No tracking.** The extension contains no analytics or advertising code.
 
 Permissions the extension requests:
 
 | Permission | Why |
 |------------|-----|
-| Storage | Keeps your API key and saved results on your device |
+| Storage | Keeps your API key, saved results, and lists on your device |
 | Side panel | Shows MoltSets beside the page you're viewing |
 | `linkedin.com` | Reads the address of your active tab so the panel can tell when you're on a profile |
 | `api.moltsets.com` | Runs the lookups you ask for |
 | `api.hubapi.com` (optional) | Checks your HubSpot token and sends contacts to HubSpot. Requested only when you connect HubSpot |
 | `api.attio.com` (optional) | Checks your Attio token and sends contacts to Attio. Requested only when you connect Attio |
+| Your webhook's website (optional) | Sends contacts to the webhook URL you save. Requested only for that one website when you save the URL, and given back when you disconnect. Never used to read websites you visit |
 
 ### Remove your data
 
 - Click the sign-out icon in the footer to delete your API key from the browser. Saved lookups remain until you delete them.
 - Delete saved lookups for one profile, selected profiles, or all profiles from the **Enriched contacts** list.
-- Click **Disconnect** on the HubSpot or Attio page to delete that token.
+- Click **Disconnect** on an integration's page to delete its token or webhook URL.
+- Delete a list at any time. Its contacts stay saved.
 - Remove the extension from Chrome to delete everything it has stored.
 
 See the [MoltSets Privacy Policy](https://moltsets.com/privacy-policy) for full details.
@@ -270,7 +506,22 @@ See the [MoltSets Privacy Policy](https://moltsets.com/privacy-policy) for full 
     When you connect, the extension lists the scopes your token is missing. Add them to the private app in HubSpot or the access token in Attio. Then open **Integrations**, click **Change token**, and paste the token again.
   </Accordion>
   <Accordion title="The send option is unavailable">
-    HubSpot needs an email for the contact. Attio needs the full business profile or an email. Run one of those lookups first.
+    HubSpot needs an email for the contact. Attio needs the full business profile or an email. Webhooks need at least one lookup result. Run one of those lookups first.
+  </Accordion>
+  <Accordion title="The extension says my webhook URL isn't valid">
+    The URL must start with `https://` and can't include a username or password. Clay, Make, and Zapier URLs must be on that service's domain. Copy the whole URL again from your tool. For any other endpoint, use the **Webhook** integration.
+  </Accordion>
+  <Accordion title="n8n didn't accept the contact">
+    Make sure you pasted the **Production URL**, not the test URL, and that the workflow is **active**.
+  </Accordion>
+  <Accordion title="My webhook refused the request (401 or 403)">
+    The extension can't add authentication headers. Remove header authentication from the webhook, or use a secret in the URL instead.
+  </Accordion>
+  <Accordion title="The extension no longer has permission to reach my webhook">
+    The permission may have been removed in `chrome://extensions`. Open the integration, click **Change URL**, and save the URL again to allow it.
+  </Accordion>
+  <Accordion title="Attio is unavailable when I send selected contacts">
+    Attio shows **Send one contact at a time** in the bulk send menu. Open each profile and send it from there.
   </Accordion>
   <Accordion title="The data looks wrong">
     Click **Report a problem** at the bottom of the profile view, or email [support@moltsets.com](mailto:support@moltsets.com).
@@ -279,7 +530,7 @@ See the [MoltSets Privacy Policy](https://moltsets.com/privacy-policy) for full 
 
 ## Go further with the API
 
-The extension enriches one profile at a time and sends it to HubSpot or Attio. To enrich whole lists, search for people and companies, or connect tools like Claude, ChatGPT, and Clay, use the [MoltSets API](/getting-started/overview), the [MoltSets MCP server](/integrations/moltsets-mcp), or the [Clay integration](/integrations/clay).
+The extension enriches one LinkedIn profile at a time. To enrich whole lists you already have, search for people and companies, or connect tools like Claude, ChatGPT, and Clay, use the [MoltSets API](/getting-started/overview), the [MoltSets MCP server](/integrations/moltsets-mcp), or the [Clay integration](/integrations/clay).
 
 <Note>
   LinkedIn is a trademark of LinkedIn Corporation. MoltSets is not affiliated with, endorsed by, or sponsored by LinkedIn.
