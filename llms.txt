@@ -1,6 +1,6 @@
 # MoltSets
 
-> Go-to-market data platform built for AI agents. Valid business and personal emails, carrier-verified mobile phones, and SHA256 hashes for ad audiences, exposed as MCP- and REST-compatible APIs. API and MCP only, currently in closed beta.
+> Go-to-market data platform built for AI agents. Valid business and personal emails, carrier-verified mobile phones, and SHA256 hashes for ad audiences, exposed as MCP- and REST-compatible APIs. API and MCP only, currently in public beta.
 
 MoltSets returns contact and company data an agent can act on directly. Differentiators that affect output quality:
 
@@ -175,7 +175,7 @@ OAuth (any MCP client, including CLI and desktop clients):
 
 ## More information about MoltSets
 
-- https://moltsets.com/ — Homepage. Unlimited contact data APIs built for Clay and Claude Code, from $27/mo. Enrich your prospect lists with 100% verified contact data. Currently in closed beta — connect your agent and join the closed beta. Beta APIs cover verified business emails, verified personal emails, verified mobile phones, and ad audience identifiers; company search and people search are in alpha.
+- https://moltsets.com/ — Homepage. Unlimited contact data APIs built for Clay and Claude Code, from $27/mo. Enrich your prospect lists with 100% verified contact data. Currently in public beta — connect your agent and join the public beta. Beta APIs cover verified business emails, verified personal emails, verified mobile phones, and ad audience identifiers; company search and people search are in alpha.
 - https://moltsets.com/pricing — Pricing. Every plan includes unlimited API calls (rate limits vary by plan) and 100% verified emails with a last-validation date refreshed on a 90-day freshness window; real-time carrier-validated mobile numbers. Tiers: Free (1,000 lifetime tokens), $27/mo, $97/mo, $397/mo, and $997/mo (all unlimited tokens, with per-plan Fair Use limits).
 - https://moltsets.com/how-it-works — How it works. MoltSets enriches lists in Clay and Claude Code. Sign up and get an API key, try it free or pick an unlimited plan, then connect to Clay or Claude Code. Emails are verified across three sources, mobile numbers are carrier-verified in real time, and emails are revalidated on a 90-day freshness window so you never burn tokens on bad data.
 - https://moltsets.com/our-data — Our data. The data categories MoltSets covers: 100% verified business emails, personal emails, mobile phones, people search, company search, reverse email lookup, email validation, and Sha256 hashes for ad audiences. Multi-provider waterfalls maximize coverage on every call, and every email carries a `last_validated_at` date, refreshed on a 90-day freshness window.
