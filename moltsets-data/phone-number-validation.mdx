@@ -13,6 +13,16 @@ Unlike email, we don't currently assign a risk score or confidence rating to pho
 
 We also don't currently provide **Do Not Call (DNC) status**. No field in the payload tells you whether a number is on a DNC registry, and the last validated date says nothing about it either — a number can be active, in service, and registered on DNC all at once. Screening against the applicable registries before you call or message, and complying with the rules that apply to you, is on your side.
 
+## Compliance beyond DNC
+
+DNC screening is only one part of a compliant outreach program. Make sure yours also accounts for:
+
+- **TCPA consent**: consent requirements for autodialed calls and marketing texts to mobile numbers.
+- **State laws**: many states add their own rules on calling hours, attempt limits, and text messaging.
+- **Opt-outs**: honoring requests, keeping an internal DNC list, and suppressing those numbers going forward.
+
+Review the rules that apply to your use case, and consult your own counsel as needed.
+
 ## How it works
 
 The last validated date is appended to each phone number in the API payload.
