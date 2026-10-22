@@ -251,7 +251,7 @@ Results are ranked by `_score`, so the first page is the strongest.
 | | Limit |
 |---|---|
 | Results per call | 25 max, 10 default |
-| Results per call (Free plan) | 5 max |
+| Results per call (Free plan) | 10 max |
 | Free plan lifetime search records | 100 |
 
 Read the top-level `total` before walking pages (`results.total` in the raw HTTP body), then increment `offset` by your `limit`. Every page you walk draws from the same search-record pool, so confirm the search is right at `limit: 1` before you commit to walking it.
