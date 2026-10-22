@@ -1,13 +1,13 @@
 ---
 title: "MoltSets for LinkedIn Chrome Extension"
 sidebarTitle: "Chrome Extension"
-description: "Enrich any LinkedIn profile in one click, build lead lists as you prospect, and send verified contacts to HubSpot, Attio, Clay, Make, n8n, Zapier, or any webhook. Get a graded business email, personal email, or carrier-verified mobile number from a side panel in Chrome."
-keywords: ["LinkedIn Chrome extension", "LinkedIn email finder", "LinkedIn lead lists", "LinkedIn to HubSpot", "LinkedIn to Attio", "LinkedIn to Clay", "LinkedIn to Zapier", "LinkedIn to n8n", "LinkedIn to Make", "LinkedIn webhook", "HubSpot Chrome extension", "Attio Chrome extension", "contact enrichment", "mobile phone finder"]
+description: "Enrich any LinkedIn profile in one click, build lead lists as you prospect, and send verified contacts to HubSpot, Salesforce, Attio, Clay, Make, n8n, Zapier, or any webhook. Get a graded business email, personal email, or carrier-verified mobile number from a side panel in Chrome."
+keywords: ["LinkedIn Chrome extension", "LinkedIn email finder", "LinkedIn lead lists", "LinkedIn to HubSpot", "LinkedIn to Salesforce", "LinkedIn to Attio", "LinkedIn to Clay", "LinkedIn to Zapier", "LinkedIn to n8n", "LinkedIn to Make", "LinkedIn webhook", "HubSpot Chrome extension", "Salesforce Chrome extension", "Attio Chrome extension", "contact enrichment", "mobile phone finder"]
 ---
 
 ## Overview
 
-The MoltSets for LinkedIn Chrome Extension puts MoltSets enrichment in a side panel next to LinkedIn. Open a profile, click a lookup, and get verified contact data from the MoltSets database in seconds. Save the people you want into lead lists, then download them as a CSV or send them to HubSpot, Attio, Clay, Make, n8n, Zapier, or any webhook without leaving the page.
+The MoltSets for LinkedIn Chrome Extension puts MoltSets enrichment in a side panel next to LinkedIn. Open a profile, click a lookup, and get verified contact data from the MoltSets database in seconds. Save the people you want into lead lists, then download them as a CSV or send them to HubSpot, Salesforce, Attio, Clay, Make, n8n, Zapier, or any webhook without leaving the page.
 
 It's built for salespeople, recruiters, and founders who already prospect on LinkedIn and want accurate contact details in the tools they already use, without copying, pasting, or switching tabs.
 
@@ -141,29 +141,33 @@ Connect your tools from the **Integrations** page, then send enriched contacts i
 
 | Integration | Type | Send one | Send selected or a whole list |
 |-------------|------|----------|-------------------------------|
-| [HubSpot](#send-contacts-to-hubspot-and-attio) | CRM | Yes | Yes |
-| [Attio](#send-contacts-to-hubspot-and-attio) | CRM | Yes | No, one at a time |
+| [HubSpot](#send-contacts-to-hubspot-salesforce-and-attio) | CRM | Yes | Yes |
+| [Salesforce](#send-contacts-to-hubspot-salesforce-and-attio) | CRM | Yes | No, one at a time |
+| [Attio](#send-contacts-to-hubspot-salesforce-and-attio) | CRM | Yes | No, one at a time |
 | [Clay](#send-contacts-to-clay-make-n8n-zapier-or-a-webhook) | Workflow | Yes | Yes |
 | [Make](#send-contacts-to-clay-make-n8n-zapier-or-a-webhook) | Workflow | Yes | Yes |
 | [n8n](#send-contacts-to-clay-make-n8n-zapier-or-a-webhook) | Workflow | Yes | Yes |
 | [Zapier](#send-contacts-to-clay-make-n8n-zapier-or-a-webhook) | Workflow | Yes | Yes |
 | [Webhook](#send-contacts-to-clay-make-n8n-zapier-or-a-webhook) | Any JSON endpoint | Yes | Yes |
 
-Sending never uses tokens. Contacts go straight from your browser to the service, never through MoltSets. Access tokens and webhook URLs are stored encrypted in your browser with your passphrase, and are never sent to MoltSets.
+Sending never uses tokens. Contacts go straight from your browser to the service, never through MoltSets. Access tokens and webhook URLs are stored encrypted in your browser with your passphrase, and are never sent to MoltSets. Salesforce uses your existing Salesforce login instead of a token, and the extension never stores it.
 
-## Send contacts to HubSpot and Attio
+## Send contacts to HubSpot, Salesforce, and Attio
 
-Turn LinkedIn prospecting into CRM pipeline. Once you've enriched a profile, send the contact straight to HubSpot or Attio from the side panel. No CSV imports, no copy and paste, and no tab switching.
+Turn LinkedIn prospecting into CRM pipeline. Once you've enriched a profile, send the contact straight to HubSpot, Salesforce, or Attio from the side panel. No CSV imports, no copy and paste, and no tab switching.
 
 - **Go from LinkedIn to CRM in seconds.** Find a prospect, enrich them, and add them to your CRM in the same flow.
 - **No duplicates.** MoltSets checks your CRM for the person's email and the company's domain first, then updates the existing record instead of creating a new one.
+- **Leads or contacts in Salesforce.** Send each person as a Lead, or as a Contact linked to an Account for their company. You choose once and can change it at any time.
 - **Contacts arrive linked to their company.** Each contact is created with their company record and associated to it.
-- **Risk scores travel with the email.** In Attio, every email is recorded with its A–F risk score, and emails graded D (do not send) are never sent.
-- **Use the CRM your team already runs.** Connect HubSpot, Attio, or both.
+- **Risk scores travel with the email.** In Attio, every email is recorded with its A–F risk score. Salesforce and Attio never get an email graded D (do not send).
+- **Use the CRM your team already runs.** Connect HubSpot, Salesforce, Attio, or any combination.
 
 ### Connect your CRM
 
-You connect with an access token you create in your CRM. The extension checks the token, then stores it encrypted in your browser with your passphrase. It's never sent to MoltSets.
+For HubSpot and Attio, you connect with an access token you create in your CRM. The extension checks the token, then stores it encrypted in your browser with your passphrase. It's never sent to MoltSets.
+
+Salesforce doesn't need a token. The extension uses the Salesforce login already in your Chrome browser.
 
 <Tabs>
   <Tab title="HubSpot">
@@ -194,6 +198,32 @@ You connect with an access token you create in your CRM. The extension checks th
     </Steps>
 
     Once connected, the HubSpot page shows your Hub ID, the last 4 characters of your token, and the date you connected.
+  </Tab>
+  <Tab title="Salesforce">
+    There's no token to create. The extension sends contacts using the Salesforce login already in your Chrome browser. Before you start, check that:
+
+    - Your Salesforce edition includes API access: Enterprise, Unlimited, Performance, Developer, or Professional with the API add-on.
+    - Your Salesforce user has the **API Enabled** permission. Ask your Salesforce admin if you're not sure.
+    - Your org doesn't have **API Access Control** turned on. Orgs that use it aren't supported.
+
+    <Steps>
+      <Step title="Log in to Salesforce">
+        Log in to Salesforce in the same Chrome browser as the extension.
+      </Step>
+      <Step title="Enable Salesforce in the extension">
+        Click the **Integrations** icon in the side panel footer and choose **Salesforce**. Click **Enable Salesforce** and accept the Chrome prompt. It asks for cookie access and access to `salesforce.com` and `force.com`, so the extension can use your Salesforce login.
+      </Step>
+      <Step title="Choose Lead or Contact + Account">
+        Choose how contacts are created in Salesforce:
+
+        - **Lead:** one Lead per person. Best if your team qualifies people before they become contacts.
+        - **Contact + Account:** a Contact linked to an Account for their company. The extension finds the Account or creates it. Best if you work accounts directly.
+
+        You have to choose before you continue. You can change it later.
+      </Step>
+    </Steps>
+
+    Once connected, the Salesforce page shows your org name, your Salesforce user, and your org's domain. If you're logged in to more than one org, choose where contacts go under **Default org**.
   </Tab>
   <Tab title="Attio">
     You need to be a **workspace admin** in Attio to create the token. Not an admin? Click **Copy these instructions** on the Attio page in the extension and send them to an admin.
@@ -228,33 +258,46 @@ You connect with an access token you create in your CRM. The extension checks th
 
 <Steps>
   <Step title="Enrich a profile">
-    Open a LinkedIn profile and run a lookup. HubSpot needs an email. Attio needs the full business profile or an email.
+    Open a LinkedIn profile and run a lookup. HubSpot needs an email. Salesforce needs the full business profile. Attio needs the full business profile or an email.
   </Step>
   <Step title="Send it">
-    Click the send icon in the profile view and choose **HubSpot** or **Attio**. A confirmation shows when the contact lands in your CRM.
+    Click the send icon in the profile view and choose **HubSpot**, **Salesforce**, or **Attio**. A confirmation shows when the contact lands in your CRM.
   </Step>
 </Steps>
 
 The profile then shows when it was sent, with a link to the record in your CRM. If you refresh the profile and the data changes, the panel marks your CRM record as out of date. Click **Resend** to update it.
 
-To send several contacts to HubSpot at once, select them or open a list. See [Send many contacts at once](#send-many-contacts-at-once). Attio contacts are sent one at a time.
+To send several contacts to HubSpot at once, select them or open a list. See [Send many contacts at once](#send-many-contacts-at-once). Salesforce and Attio contacts are sent one at a time.
 
 ### What gets sent
 
-| | HubSpot | Attio |
-|---|---|---|
-| **Person** | Name, job title, location, email, and mobile number | Name, job title, location, email, mobile number, and LinkedIn URL |
-| **Company** | Name, domain, description, and employee count | Name, domain, description, LinkedIn page, and employee range |
-| **Extra details** | — | A note on the person with industry, revenue range, employee count, and each email with its risk score and validation date |
-| **Existing records** | Updated with the latest data | Only empty fields are filled in, so your team's edits are never overwritten |
+| | HubSpot | Salesforce | Attio |
+|---|---|---|---|
+| **Person** | Name, job title, location, email, and mobile number | Name, job title, location, email, and mobile number, with **Lead Source** set to "MoltSets" | Name, job title, location, email, mobile number, and LinkedIn URL |
+| **Company** | Name, domain, description, and employee count | Lead mode: company, website, employee count, and industry on the Lead. Contact + Account mode: an Account with name, website, employee count, and industry | Name, domain, description, LinkedIn page, and employee range |
+| **Extra details** | — | LinkedIn URL and revenue range in the **Description** field | A note on the person with industry, revenue range, employee count, and each email with its risk score and validation date |
+| **Existing records** | Updated with the latest data | Only empty fields are filled in. An existing Account is linked but never edited | Only empty fields are filled in, so your team's edits are never overwritten |
 
-HubSpot gets the business email, or the personal email when there's no business email. Attio gets the same, but skips any email graded D. Fields are only sent when MoltSets found them.
+HubSpot gets the business email, or the personal email when there's no business email. Salesforce and Attio get the same, but skip any email graded D. Fields are only sent when MoltSets found them.
+
+#### How Salesforce matches existing records
+
+- **Lead mode:** If a Contact with the same email already exists, the send stops and links you to that Contact. An unconverted Lead with the same email is filled in. Otherwise, a new Lead is created.
+- **Contact + Account mode:** The Account is matched by website domain, then by exact company name. If there's no match, a new Account is created. A Contact with the same email is filled in and linked to the Account. Otherwise, a new Contact is created.
+
+Some orgs restrict fields with picklists or validation rules. If your org rejects location, industry, lead source, or description, the extension sends the contact without them and tells you what it left out. Your org's duplicate rules still apply. If they flag a record, the extension links you to the existing one.
 
 ### Change or disconnect
 
 Open **Integrations**, choose the CRM, and click **Change token** to paste a new one. Do this if you rotate the token or change its scopes in your CRM.
 
 Click **Disconnect** to delete the token from your browser. Records already in your CRM aren't affected.
+
+For Salesforce, open **Integrations** and choose **Salesforce**:
+
+- Under **Create as**, switch between **Lead** and **Contact + Account**.
+- Under **Default org**, choose a different org. This option only appears when you're logged in to more than one org.
+- Click **Disable Salesforce** to stop sending. The extension gives back its cookie and Salesforce access. Records already in Salesforce aren't affected.
 
 ## Send contacts to Clay, Make, n8n, Zapier, or a webhook
 
@@ -396,7 +439,7 @@ Open **Integrations** and choose the tool. The page shows a shortened form of th
 
 ## Send many contacts at once
 
-Send a selection of contacts, or a whole list, to HubSpot or any webhook integration.
+Send a selection of contacts, or a whole list, to HubSpot or any webhook integration. Salesforce and Attio contacts are sent one at a time from each profile.
 
 <Steps>
   <Step title="Choose the contacts">
@@ -442,7 +485,7 @@ The enriched contacts list reads from your browser only. Opening it never calls 
 
 ### CSV export
 
-CSV files open cleanly in Excel and Google Sheets and are ready to import into any CRM. Use HubSpot, Attio, or a workflow tool? [Send contacts directly](#send-contacts-to-your-crm-and-workflows) instead. Each file has one row per profile with these columns:
+CSV files open cleanly in Excel and Google Sheets and are ready to import into any CRM. Use HubSpot, Salesforce, Attio, or a workflow tool? [Send contacts directly](#send-contacts-to-your-crm-and-workflows) instead. Each file has one row per profile with these columns:
 
 | Group | Columns |
 |-------|---------|
@@ -461,7 +504,8 @@ List fields such as `skills` and `interests` are joined with `; `.
 - **Reads only the URL.** The extension reads the address of your active LinkedIn tab so it knows which profile you're viewing. It doesn't read page content or add anything to LinkedIn pages.
 - **Sends data only when you click.** A lookup sends the profile URL and your API key to `api.moltsets.com`. Nothing is sent until you click.
 - **Stores data locally.** Your API key, saved results, lists, CRM tokens, and webhook URLs stay in your browser's local extension storage. Your API key, tokens, and webhook URLs are encrypted with your passphrase. Nothing is synced to other devices or to your MoltSets account.
-- **Sends to your integrations only when you click.** HubSpot, Attio, and webhooks are contacted only if you connect them, and contacts are sent only when you click send. They go straight from your browser to the service, never through MoltSets.
+- **Sends to your integrations only when you click.** HubSpot, Salesforce, Attio, and webhooks are contacted only if you connect them, and contacts are sent only when you click send. They go straight from your browser to the service, never through MoltSets.
+- **Never stores your Salesforce login.** The extension reads your Salesforce session cookie fresh for each request. It's never saved, logged, or sent to MoltSets.
 - **No tracking.** The extension contains no analytics or advertising code.
 
 Permissions the extension requests:
@@ -474,13 +518,14 @@ Permissions the extension requests:
 | `api.moltsets.com` | Runs the lookups you ask for |
 | `api.hubapi.com` (optional) | Checks your HubSpot token and sends contacts to HubSpot. Requested only when you connect HubSpot |
 | `api.attio.com` (optional) | Checks your Attio token and sends contacts to Attio. Requested only when you connect Attio |
+| Cookies, `salesforce.com`, and `force.com` (optional) | Uses the Salesforce login in your browser to find your org and send contacts to it. Only the Salesforce session cookie is read. Requested only when you enable Salesforce, and given back when you disable it |
 | Your webhook's website (optional) | Sends contacts to the webhook URL you save. Requested only for that one website when you save the URL, and given back when you disconnect. Never used to read websites you visit |
 
 ### Remove your data
 
 - Click the sign-out icon in the footer to delete your API key from the browser. Saved lookups remain until you delete them.
 - Delete saved lookups for one profile, selected profiles, or all profiles from the **Enriched contacts** list.
-- Click **Disconnect** on an integration's page to delete its token or webhook URL.
+- Click **Disconnect** on an integration's page to delete its token or webhook URL. For Salesforce, click **Disable Salesforce**.
 - Delete a list at any time. Its contacts stay saved.
 - Remove the extension from Chrome to delete everything it has stored.
 
@@ -506,7 +551,7 @@ See the [MoltSets Privacy Policy](https://moltsets.com/privacy-policy) for full 
     When you connect, the extension lists the scopes your token is missing. Add them to the private app in HubSpot or the access token in Attio. Then open **Integrations**, click **Change token**, and paste the token again.
   </Accordion>
   <Accordion title="The send option is unavailable">
-    HubSpot needs an email for the contact. Attio needs the full business profile or an email. Webhooks need at least one lookup result. Run one of those lookups first.
+    HubSpot needs an email for the contact. Salesforce needs the full business profile, because Salesforce requires a last name. Attio needs the full business profile or an email. Webhooks need at least one lookup result. Run one of those lookups first.
   </Accordion>
   <Accordion title="The extension says my webhook URL isn't valid">
     The URL must start with `https://` and can't include a username or password. Clay, Make, and Zapier URLs must be on that service's domain. Copy the whole URL again from your tool. For any other endpoint, use the **Webhook** integration.
@@ -520,8 +565,17 @@ See the [MoltSets Privacy Policy](https://moltsets.com/privacy-policy) for full 
   <Accordion title="The extension no longer has permission to reach my webhook">
     The permission may have been removed in `chrome://extensions`. Open the integration, click **Change URL**, and save the URL again to allow it.
   </Accordion>
-  <Accordion title="Attio is unavailable when I send selected contacts">
-    Attio shows **Send one contact at a time** in the bulk send menu. Open each profile and send it from there.
+  <Accordion title="My Salesforce session has expired">
+    The extension uses your Salesforce login, so it stops working when you log out or your session times out. Log in to Salesforce in the same Chrome browser and try again.
+  </Accordion>
+  <Accordion title="Salesforce says I don't have permission or API access">
+    Your Salesforce edition must include API access, and your user needs the **API Enabled** permission. Ask your Salesforce admin to check both. Orgs with **API Access Control** turned on aren't supported.
+  </Accordion>
+  <Accordion title="Salesforce says the person is already a Contact">
+    In Lead mode, the extension won't create a Lead for someone who's already a Contact. Click **View in Salesforce** to open the existing Contact, or switch to **Contact + Account** to update it instead.
+  </Accordion>
+  <Accordion title="Salesforce or Attio is unavailable when I send selected contacts">
+    Salesforce and Attio show **Send one contact at a time** in the bulk send menu. Open each profile and send it from there.
   </Accordion>
   <Accordion title="The data looks wrong">
     Click **Report a problem** at the bottom of the profile view, or email [support@moltsets.com](mailto:support@moltsets.com).
